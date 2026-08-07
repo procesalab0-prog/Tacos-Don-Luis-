@@ -102,7 +102,7 @@
       </div>
     </header>
 
-    <main style="flex:1;min-width:0;padding:{{ showBottomNav ? '18px 14px calc(132px + env(safe-area-inset-bottom))' : '26px 30px' }};overflow-x:hidden">
+    <main style="flex:1;min-width:0;padding:{{ showBottomNav ? '18px 14px 132px' : '26px 30px' }};overflow-x:hidden">
       <div style="max-width:1180px;margin:0 auto">
         <!--SCREENS-->
         <sc-if value="{{ isResumen }}" hint-placeholder-val="{{ true }}">
@@ -653,7 +653,7 @@
   </sc-if>
 
   <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
-    <div style="position:fixed;left:50%;bottom:{{ showBottomNav ? 'calc(96px + env(safe-area-inset-bottom))' : '28px' }};z-index:80;background:#10603A;color:#fff;padding:13px 20px;border-radius:14px;box-shadow:0 14px 34px rgba(0,0,0,.3);display:flex;align-items:center;gap:11px;font-weight:600;font-size:14px;animation:dltoast .3s ease both;max-width:92vw">
+    <div style="position:fixed;left:50%;bottom:{{ showBottomNav ? '96px' : '28px' }};z-index:80;background:#10603A;color:#fff;padding:13px 20px;border-radius:14px;box-shadow:0 14px 34px rgba(0,0,0,.3);display:flex;align-items:center;gap:11px;font-weight:600;font-size:14px;animation:dltoast .3s ease both;max-width:92vw">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8FD694" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
       {{ toast }}
     </div>
