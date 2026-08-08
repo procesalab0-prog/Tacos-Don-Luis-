@@ -541,7 +541,7 @@
               <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,61,36,.92),rgba(15,61,36,.35))"></div>
               <div style="position:relative;padding:24px 26px;color:#fff">
                 <span style="background:#F2C230;color:#3a2c00;font-weight:800;font-size:11px;letter-spacing:.1em;padding:4px 11px;border-radius:999px">PROMO DEL DÍA</span>
-                <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:30px;margin-top:10px;line-height:1">Tacos a $17.00</div>
+                <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:30px;margin-top:10px;line-height:1">Tacos desde $17.00</div>
                 <div style="color:#e9d9a3;font-weight:600;margin-top:4px">Pastor, bistec, chorizo, cabeza o costilla</div>
               </div>
             </div>
@@ -696,7 +696,7 @@ class Component extends DCLogic {
     chat:[], chatBusy:false, invTab:'existencias',
     logoTaps:0, showEasterEgg:false };
   // IMPORTANTE: incrementar esta versión en cada publicación a main.
-  static APP_VERSION = '1.0.3';
+  static APP_VERSION = '1.0.4';
   get propinaActual(){ return this.state.propinaPct!=null?this.state.propinaPct:parseInt(this.props.propinaSugerida||'10',10); }
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2})+' MXN'; }
@@ -722,22 +722,34 @@ class Component extends DCLogic {
 
   // ---------- catálogo ----------
   get menu(){ return [
-    {id:'pastor',nombre:'Taco al pastor',cat:'Tacos',precio:17,desc:'Taco de pastor con cebolla y cilantro',costo:8.5},
-    {id:'bistec',nombre:'Taco de bistec',cat:'Tacos',precio:17,desc:'Taco de bistec con cebolla y cilantro',costo:11},
-    {id:'chorizo',nombre:'Taco de chorizo',cat:'Tacos',precio:17,desc:'Taco de chorizo con cebolla y cilantro',costo:9},
-    {id:'cabeza',nombre:'Taco de cabeza',cat:'Tacos',precio:17,desc:'Taco de cabeza con cebolla y cilantro',costo:10},
-    {id:'costilla',nombre:'Taco de costilla',cat:'Tacos',precio:17,desc:'Taco de costilla con cebolla y cilantro',costo:11},
-    {id:'lengua',nombre:'Taco de lengua',cat:'Especialidades',precio:0,desc:'Precio actual pendiente de confirmar',costo:0,pendiente:true},
-    {id:'sesos',nombre:'Taco de sesos',cat:'Especialidades',precio:0,desc:'Precio actual pendiente de confirmar',costo:0,pendiente:true},
-    {id:'quesadilla',nombre:'Quesadilla',cat:'Especialidades',precio:0,desc:'Precio actual pendiente de confirmar',costo:0,pendiente:true},
-    {id:'volcan',nombre:'Volcán',cat:'Especialidades',precio:0,desc:'Precio actual pendiente de confirmar',costo:0,pendiente:true},
-    {id:'torta',nombre:'Torta',cat:'Especialidades',precio:0,desc:'Precio actual pendiente de confirmar',costo:0,pendiente:true},
-    {id:'torta_queso',nombre:'Torta con queso',cat:'Especialidades',precio:0,desc:'Precio actual pendiente de confirmar',costo:0,pendiente:true},
-    {id:'bebida',nombre:'Bebida',cat:'Bebidas',precio:0,desc:'Precio actual pendiente de confirmar',costo:0,pendiente:true},
-    {id:'litro',nombre:'Bebida de litro',cat:'Bebidas',precio:0,desc:'Precio actual pendiente de confirmar',costo:0,pendiente:true},
+    {id:'pastor',nombre:'Taco al pastor',cat:'Tacos',precio:17,desc:'Con cebolla y cilantro',costo:8.5},
+    {id:'bistec',nombre:'Taco de bistec',cat:'Tacos',precio:17,desc:'Con cebolla y cilantro',costo:11},
+    {id:'chorizo',nombre:'Taco de chorizo',cat:'Tacos',precio:17,desc:'Con cebolla y cilantro',costo:9},
+    {id:'cabeza',nombre:'Taco de cabeza',cat:'Tacos',precio:17,desc:'Con cebolla y cilantro',costo:10},
+    {id:'costilla',nombre:'Taco de costilla',cat:'Tacos',precio:25,desc:'Con cebolla y cilantro',costo:12},
+    {id:'lengua',nombre:'Taco de lengua',cat:'Tacos',precio:25,desc:'Con cebolla y cilantro',costo:14},
+    {id:'sesos',nombre:'Taco de sesos',cat:'Tacos',precio:25,desc:'Con cebolla y cilantro',costo:13},
+
+    {id:'quesadilla',nombre:'Quesadilla clásica',cat:'Quesadillas',precio:34,desc:'Cabeza, pastor, bistec o chorizo',costo:16},
+    {id:'quesadilla_lengua',nombre:'Quesadilla de lengua',cat:'Quesadillas',precio:40,desc:'Preparada con lengua',costo:20},
+    {id:'quesadilla_sesos',nombre:'Quesadilla de sesos',cat:'Quesadillas',precio:40,desc:'Preparada con sesos',costo:19},
+    {id:'quesadilla_costilla',nombre:'Quesadilla de costilla',cat:'Quesadillas',precio:40,desc:'Preparada con costilla',costo:20},
+
+    {id:'torta',nombre:'Torta clásica',cat:'Tortas',precio:40,desc:'Cabeza, pastor, bistec o chorizo',costo:20},
+    {id:'torta_lengua',nombre:'Torta de lengua',cat:'Tortas',precio:45,desc:'Preparada con lengua',costo:24},
+    {id:'torta_sesos',nombre:'Torta de sesos',cat:'Tortas',precio:45,desc:'Preparada con sesos',costo:23},
+    {id:'torta_queso',nombre:'Torta con queso',cat:'Tortas',precio:45,desc:'Con queso',costo:24},
+
+    {id:'light',nombre:'Tacos light clásicos',cat:'Tacos light',precio:80,desc:'Cabeza, pastor, bistec o chorizo',costo:40},
+    {id:'light_lengua',nombre:'Tacos light de lengua',cat:'Tacos light',precio:100,desc:'Preparados con lengua',costo:52},
+    {id:'light_sesos',nombre:'Tacos light de sesos',cat:'Tacos light',precio:100,desc:'Preparados con sesos',costo:50},
+
+    {id:'refresco',nombre:'Refresco',cat:'Bebidas',precio:30,desc:'Refresco embotellado',costo:12},
+    {id:'agua_medio',nombre:'Agua de sabor · 1/2 litro',cat:'Bebidas',precio:30,desc:'Agua fresca del día',costo:9},
+    {id:'agua_litro',nombre:'Agua de sabor · 1 litro',cat:'Bebidas',precio:50,desc:'Agua fresca del día',costo:15},
+
     {id:'gringa',nombre:'Gringa',cat:'Especialidades',precio:60,desc:'Producto de datos históricos de la demo',costo:22,oculto:true},
     {id:'horchata',nombre:'Agua de horchata',cat:'Bebidas',precio:30,desc:'Producto de datos históricos de la demo',costo:9,oculto:true},
-    {id:'refresco',nombre:'Refresco',cat:'Bebidas',precio:28,desc:'Producto de datos históricos de la demo',costo:12,oculto:true},
     {id:'ex_queso',nombre:'Extra queso',cat:'Extras',precio:10,desc:'',costo:3,oculto:true},
     {id:'ex_guac',nombre:'Guacamole',cat:'Extras',precio:15,desc:'',costo:6,oculto:true},
     {id:'ex_doble',nombre:'Doble carne',cat:'Extras',precio:15,desc:'',costo:7,oculto:true},
@@ -933,7 +945,7 @@ class Component extends DCLogic {
 
   vmMenu(){
     const cat=this.state.catSel;
-    const cats=['Tacos','Especialidades','Bebidas'];
+    const cats=['Tacos','Quesadillas','Tortas','Tacos light','Bebidas'];
     const tabs=cats.map(c=>({label:c,active:c===cat,onClick:()=>this.setState({catSel:c}),
       style:`cursor:pointer;padding:9px 18px;border-radius:999px;font-weight:700;font-size:14px;border:none;white-space:nowrap;${c===cat?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35;border:1px solid #E6DCC5'}`}));
     const fotos={pastor:'assets/promo-3tacos.jpg',chorizo:'assets/taco-chorizo.jpg',cabeza:'assets/taco-chorizo.jpg'};
@@ -1121,7 +1133,7 @@ class Component extends DCLogic {
   }
 
   vmComanda(phone){
-    const cats=['Tacos'];
+    const cats=['Tacos','Quesadillas','Tortas','Tacos light','Bebidas'];
     const sel=this.state.catSel;
     const catTabs=cats.map(c=>({label:c,active:c===sel,onClick:()=>this.setState({catSel:c}),
       style:`cursor:pointer;padding:9px 16px;border-radius:999px;font-weight:700;font-size:13.5px;border:none;white-space:nowrap;${c===sel?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35;border:1px solid #E6DCC5'}`}));
