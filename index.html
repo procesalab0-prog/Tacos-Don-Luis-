@@ -541,8 +541,8 @@
               <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,61,36,.92),rgba(15,61,36,.35))"></div>
               <div style="position:relative;padding:24px 26px;color:#fff">
                 <span style="background:#F2C230;color:#3a2c00;font-weight:800;font-size:11px;letter-spacing:.1em;padding:4px 11px;border-radius:999px">PROMO DEL DÍA</span>
-                <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:30px;margin-top:10px;line-height:1">3 tacos por $100.00</div>
-                <div style="color:#e9d9a3;font-weight:600;margin-top:4px">Al pastor, suadero o campechano · válido de 13:00 a 17:00</div>
+                <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:30px;margin-top:10px;line-height:1">Tacos a $17.00</div>
+                <div style="color:#e9d9a3;font-weight:600;margin-top:4px">Pastor, bistec, chorizo, cabeza o costilla</div>
               </div>
             </div>
             <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px">
@@ -696,7 +696,7 @@ class Component extends DCLogic {
     chat:[], chatBusy:false, invTab:'existencias',
     logoTaps:0, showEasterEgg:false };
   // IMPORTANTE: incrementar esta versión en cada publicación a main.
-  static APP_VERSION = '1.0.2';
+  static APP_VERSION = '1.0.3';
   get propinaActual(){ return this.state.propinaPct!=null?this.state.propinaPct:parseInt(this.props.propinaSugerida||'10',10); }
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2})+' MXN'; }
@@ -722,18 +722,26 @@ class Component extends DCLogic {
 
   // ---------- catálogo ----------
   get menu(){ return [
-    {id:'pastor',nombre:'Taco al pastor',cat:'Tacos',precio:22,desc:'Cerdo marinado en achiote, piña, cilantro y cebolla',costo:8.5},
-    {id:'bistec',nombre:'Taco de bistec',cat:'Tacos',precio:26,desc:'Res a la plancha, cebolla y cilantro',costo:11},
-    {id:'suadero',nombre:'Taco de suadero',cat:'Tacos',precio:24,desc:'Suadero dorado en su jugo',costo:10},
-    {id:'campechano',nombre:'Taco campechano',cat:'Tacos',precio:27,desc:'Bistec, chorizo y longaniza',costo:12},
-    {id:'quesadilla',nombre:'Quesadilla',cat:'Especialidades',precio:45,desc:'Queso Oaxaca y guisado a elegir',costo:16},
-    {id:'gringa',nombre:'Gringa',cat:'Especialidades',precio:60,desc:'Tortilla de harina, pastor y queso gratinado',costo:22},
-    {id:'horchata',nombre:'Agua de horchata',cat:'Bebidas',precio:30,desc:'1 L de horchata natural con canela',costo:9},
-    {id:'refresco',nombre:'Refresco',cat:'Bebidas',precio:28,desc:'Lata 355 ml',costo:12},
-    {id:'ex_queso',nombre:'Extra queso',cat:'Extras',precio:10,desc:'',costo:3},
-    {id:'ex_guac',nombre:'Guacamole',cat:'Extras',precio:15,desc:'',costo:6},
-    {id:'ex_doble',nombre:'Doble carne',cat:'Extras',precio:15,desc:'',costo:7},
-    {id:'ex_ceb',nombre:'Cebollitas asadas',cat:'Extras',precio:20,desc:'',costo:5},
+    {id:'pastor',nombre:'Taco al pastor',cat:'Tacos',precio:17,desc:'Taco de pastor con cebolla y cilantro',costo:8.5},
+    {id:'bistec',nombre:'Taco de bistec',cat:'Tacos',precio:17,desc:'Taco de bistec con cebolla y cilantro',costo:11},
+    {id:'chorizo',nombre:'Taco de chorizo',cat:'Tacos',precio:17,desc:'Taco de chorizo con cebolla y cilantro',costo:9},
+    {id:'cabeza',nombre:'Taco de cabeza',cat:'Tacos',precio:17,desc:'Taco de cabeza con cebolla y cilantro',costo:10},
+    {id:'costilla',nombre:'Taco de costilla',cat:'Tacos',precio:17,desc:'Taco de costilla con cebolla y cilantro',costo:11},
+    {id:'lengua',nombre:'Taco de lengua',cat:'Especialidades',precio:0,desc:'Precio actual pendiente de confirmar',costo:0,pendiente:true},
+    {id:'sesos',nombre:'Taco de sesos',cat:'Especialidades',precio:0,desc:'Precio actual pendiente de confirmar',costo:0,pendiente:true},
+    {id:'quesadilla',nombre:'Quesadilla',cat:'Especialidades',precio:0,desc:'Precio actual pendiente de confirmar',costo:0,pendiente:true},
+    {id:'volcan',nombre:'Volcán',cat:'Especialidades',precio:0,desc:'Precio actual pendiente de confirmar',costo:0,pendiente:true},
+    {id:'torta',nombre:'Torta',cat:'Especialidades',precio:0,desc:'Precio actual pendiente de confirmar',costo:0,pendiente:true},
+    {id:'torta_queso',nombre:'Torta con queso',cat:'Especialidades',precio:0,desc:'Precio actual pendiente de confirmar',costo:0,pendiente:true},
+    {id:'bebida',nombre:'Bebida',cat:'Bebidas',precio:0,desc:'Precio actual pendiente de confirmar',costo:0,pendiente:true},
+    {id:'litro',nombre:'Bebida de litro',cat:'Bebidas',precio:0,desc:'Precio actual pendiente de confirmar',costo:0,pendiente:true},
+    {id:'gringa',nombre:'Gringa',cat:'Especialidades',precio:60,desc:'Producto de datos históricos de la demo',costo:22,oculto:true},
+    {id:'horchata',nombre:'Agua de horchata',cat:'Bebidas',precio:30,desc:'Producto de datos históricos de la demo',costo:9,oculto:true},
+    {id:'refresco',nombre:'Refresco',cat:'Bebidas',precio:28,desc:'Producto de datos históricos de la demo',costo:12,oculto:true},
+    {id:'ex_queso',nombre:'Extra queso',cat:'Extras',precio:10,desc:'',costo:3,oculto:true},
+    {id:'ex_guac',nombre:'Guacamole',cat:'Extras',precio:15,desc:'',costo:6,oculto:true},
+    {id:'ex_doble',nombre:'Doble carne',cat:'Extras',precio:15,desc:'',costo:7,oculto:true},
+    {id:'ex_ceb',nombre:'Cebollitas asadas',cat:'Extras',precio:20,desc:'',costo:5,oculto:true},
   ]; }
   itemById(id){ return this.menu.find(m=>m.id===id)||{nombre:id,precio:0}; }
 
@@ -754,18 +762,18 @@ class Component extends DCLogic {
       {n:11,estado:'orden_lista',pax:2,mesero:'Marco',min:12},
       {n:12,estado:'libre',pax:0,mesero:'—',min:0},
     ];
-    this._consumos = {1:[{id:'pastor',q:6,nota:''},{id:'horchata',q:1,nota:''}],3:[{id:'bistec',q:3,nota:''},{id:'refresco',q:1,nota:''}],4:[{id:'gringa',q:2,nota:'Sin cebolla'},{id:'campechano',q:4,nota:''},{id:'horchata',q:1,nota:''}],5:[{id:'campechano',q:6,nota:'Doble carne'},{id:'refresco',q:3,nota:''}],7:[{id:'suadero',q:3,nota:''},{id:'refresco',q:1,nota:''}],8:[{id:'quesadilla',q:2,nota:''},{id:'pastor',q:5,nota:''},{id:'horchata',q:2,nota:''}],10:[{id:'gringa',q:3,nota:''},{id:'pastor',q:8,nota:'Sin cilantro'},{id:'refresco',q:4,nota:''}],11:[{id:'bistec',q:2,nota:''},{id:'refresco',q:1,nota:''}]};
+    this._consumos = {1:[{id:'pastor',q:6,nota:''},{id:'horchata',q:1,nota:''}],3:[{id:'bistec',q:3,nota:''},{id:'refresco',q:1,nota:''}],4:[{id:'gringa',q:2,nota:'Sin cebolla'},{id:'cabeza',q:4,nota:''},{id:'horchata',q:1,nota:''}],5:[{id:'cabeza',q:6,nota:'Doble carne'},{id:'refresco',q:3,nota:''}],7:[{id:'chorizo',q:3,nota:''},{id:'refresco',q:1,nota:''}],8:[{id:'quesadilla',q:2,nota:''},{id:'pastor',q:5,nota:''},{id:'horchata',q:2,nota:''}],10:[{id:'gringa',q:3,nota:''},{id:'pastor',q:8,nota:'Sin cilantro'},{id:'refresco',q:4,nota:''}],11:[{id:'bistec',q:2,nota:''},{id:'refresco',q:1,nota:''}]};
     this._orders = [
       {id:1042,mesa:1,estado:'nueva',min:3,mesero:'Sofía',items:[{id:'pastor',q:4,nota:'Sin cebolla'},{id:'horchata',q:1,nota:''}]},
-      {id:1041,mesa:5,estado:'preparando',min:11,mesero:'Diego',items:[{id:'campechano',q:3,nota:'Doble carne'},{id:'gringa',q:1,nota:''},{id:'refresco',q:2,nota:''}]},
-      {id:1039,mesa:'Para llevar',estado:'preparando',min:22,mesero:'Marco',items:[{id:'suadero',q:6,nota:'Sin cilantro'},{id:'quesadilla',q:2,nota:''}]},
+      {id:1041,mesa:5,estado:'preparando',min:11,mesero:'Diego',items:[{id:'cabeza',q:3,nota:'Doble carne'},{id:'gringa',q:1,nota:''},{id:'refresco',q:2,nota:''}]},
+      {id:1039,mesa:'Para llevar',estado:'preparando',min:22,mesero:'Marco',items:[{id:'chorizo',q:6,nota:'Sin cilantro'},{id:'quesadilla',q:2,nota:''}]},
       {id:1037,mesa:3,estado:'lista',min:2,mesero:'Marco',items:[{id:'bistec',q:2,nota:''},{id:'horchata',q:1,nota:''}]},
     ];
     this._seq = 1043;
     this._inv = [
       {n:'Carne al pastor',u:'kg',hay:14,dia:9,min:8},
       {n:'Bistec de res',u:'kg',hay:6,dia:5,min:6},
-      {n:'Suadero',u:'kg',hay:3,dia:4,min:5},
+      {n:'Chorizo',u:'kg',hay:3,dia:4,min:5},
       {n:'Tortilla de maíz',u:'kg',hay:22,dia:12,min:10},
       {n:'Cebolla',u:'kg',hay:2,dia:3,min:4},
       {n:'Cilantro',u:'manojo',hay:5,dia:8,min:6},
@@ -885,11 +893,11 @@ class Component extends DCLogic {
       {prod:'Carne al pastor',cant:'0.4 kg',motivo:'Caída al piso',hora:'14:05',mesero:'Sofía'},
     ];
     const compras=[
-      {prov:'Carnicería El Torito',items:'Bistec, suadero',monto:this.short(2450),estado:'Recibido',c:'#10603A',bg:'#eaf4ec'},
+      {prov:'Carnicería El Torito',items:'Bistec, chorizo',monto:this.short(2450),estado:'Recibido',c:'#10603A',bg:'#eaf4ec'},
       {prov:'Tortillería La Guadalupana',items:'Tortilla de maíz 30 kg',monto:this.short(690),estado:'En camino',c:'#8a6d12',bg:'#fdf6e3'},
       {prov:'Abarrotes Don Chuy',items:'Refrescos, empaques',monto:this.short(1180),estado:'Pendiente',c:'#b23a32',bg:'#fdeceb'},
     ];
-    const costeo=this.menu.filter(m=>['pastor','bistec','suadero','campechano','quesadilla','gringa'].includes(m.id)).map(m=>{
+    const costeo=this.menu.filter(m=>!m.pendiente&&['pastor','bistec','chorizo','cabeza','costilla','gringa'].includes(m.id)).map(m=>{
       const margen=Math.round((1-m.costo/m.precio)*100);
       return {nombre:m.nombre,precio:this.short(m.precio),costo:this.short(m.costo),util:this.short(m.precio-m.costo),margen:margen+'%',
         margenC: margen>=60?'#10603A':(margen>=50?'#8a6d12':'#b23a32')};
@@ -902,7 +910,7 @@ class Component extends DCLogic {
     const clientes=[
       {nombre:'María Fernanda López',ini:'MF',visitas:34,puntos:680,nivel:'Oro',c:'#E0A526',ultima:'Hace 2 días',fav:'Gringa'},
       {nombre:'Jorge Ramírez',ini:'JR',visitas:21,puntos:420,nivel:'Plata',c:'#8a8a8a',ultima:'Hace 5 días',fav:'Taco al pastor'},
-      {nombre:'Guadalupe Hernández',ini:'GH',visitas:48,puntos:960,nivel:'Oro',c:'#E0A526',ultima:'Ayer',fav:'Campechano'},
+      {nombre:'Guadalupe Hernández',ini:'GH',visitas:48,puntos:960,nivel:'Oro',c:'#E0A526',ultima:'Ayer',fav:'Cabeza'},
       {nombre:'Carlos Mendoza',ini:'CM',visitas:9,puntos:180,nivel:'Bronce',c:'#b07a3a',ultima:'Hace 1 semana',fav:'Quesadilla'},
     ].map(c=>({...c,puntosTxt:c.puntos+' pts'}));
     const recompensas=[
@@ -925,11 +933,11 @@ class Component extends DCLogic {
 
   vmMenu(){
     const cat=this.state.catSel;
-    const cats=['Tacos','Especialidades','Bebidas','Extras'];
+    const cats=['Tacos','Especialidades','Bebidas'];
     const tabs=cats.map(c=>({label:c,active:c===cat,onClick:()=>this.setState({catSel:c}),
       style:`cursor:pointer;padding:9px 18px;border-radius:999px;font-weight:700;font-size:14px;border:none;white-space:nowrap;${c===cat?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35;border:1px solid #E6DCC5'}`}));
-    const fotos={pastor:'assets/promo-3tacos.jpg',suadero:'assets/taco-suadero.jpg',campechano:'assets/taco-suadero.jpg'};
-    const items=this.menu.filter(m=>m.cat===cat).map(m=>({...m,precioTxt:this.short(m.precio),foto:fotos[m.id]||null,noFoto:!fotos[m.id],inicial:m.nombre.slice(0,1)}));
+    const fotos={pastor:'assets/promo-3tacos.jpg',chorizo:'assets/taco-chorizo.jpg',cabeza:'assets/taco-chorizo.jpg'};
+    const items=this.menu.filter(m=>!m.oculto&&m.cat===cat).map(m=>({...m,precioTxt:m.pendiente?'Por confirmar':this.short(m.precio),foto:fotos[m.id]||null,noFoto:!fotos[m.id],inicial:m.nombre.slice(0,1)}));
     const pedidoSteps=[{on:true},{on:true},{on:false},{on:false}];
     return {menuTabs:tabs, menuItems:items, pedidoSteps};
   }
@@ -949,10 +957,10 @@ class Component extends DCLogic {
 
   iaAnswer(q){
     const map={
-      util:{txt:'Los productos con **mayor utilidad** son la Gringa ($38.00 por pieza, 63% de margen) y la Quesadilla ($29.00, 64%). Entre los tacos, el **campechano** deja $15.00 y el **pastor** $13.50. Recomendación: destaca la gringa en el menú digital y ofrécela como combo — un aumento del 10% en su venta suma ~$1,140/semana.',chips:['Gringa 63%','Quesadilla 64%','Campechano $15']},
-      compra:{txt:'Para mañana conviene reforzar: **suadero** (quedan 3 kg, consumo diario 4 kg → compra 6 kg), **cebolla** (2 kg, mínimo 4) y **queso Oaxaca** (4 kg, al límite). El resto está en niveles óptimos. Costo estimado de la compra sugerida: **$1,860.00 MXN** con tus proveedores actuales.',chips:['Suadero +6 kg','Cebolla +4 kg','Queso +3 kg']},
+      util:{txt:'Los productos con **mayor utilidad** son la Gringa ($38.00 por pieza, 63% de margen) y la Quesadilla ($29.00, 64%). Entre los tacos, el **cabeza** deja $15.00 y el **pastor** $13.50. Recomendación: destaca la gringa en el menú digital y ofrécela como combo — un aumento del 10% en su venta suma ~$1,140/semana.',chips:['Gringa 63%','Quesadilla 64%','Cabeza $15']},
+      compra:{txt:'Para mañana conviene reforzar: **chorizo** (quedan 3 kg, consumo diario 4 kg → compra 6 kg), **cebolla** (2 kg, mínimo 4) y **queso Oaxaca** (4 kg, al límite). El resto está en niveles óptimos. Costo estimado de la compra sugerida: **$1,860.00 MXN** con tus proveedores actuales.',chips:['Chorizo +6 kg','Cebolla +4 kg','Queso +3 kg']},
       bajaron:{txt:'Las ventas de esta semana bajaron **8%** frente a la anterior. El 90% de la caída se concentra el **miércoles y jueves por la tarde (16–18 h)**, cuando 2 meseros coincidieron en descanso. Además llovió el jueves. Sugerencia: cubrir ese horario y lanzar una promo de tarde para recuperar ~$3,400.',chips:['−8% semanal','Miér–Jue 16–18h','Falta de personal']},
-      hora:{txt:'Tu **hora más fuerte** es de **13:00 a 15:00** (comida), con un ticket promedio de $205.00 y 34% de las ventas del día. El segundo pico es de 20:00 a 22:00. Recomendación: ten a los 3 meseros en piso de 13 a 15 h y prepara pastor y campechano con anticipación.',chips:['13:00–15:00','34% del día','Ticket $205']},
+      hora:{txt:'Tu **hora más fuerte** es de **13:00 a 15:00** (comida), con un ticket promedio de $205.00 y 34% de las ventas del día. El segundo pico es de 20:00 a 22:00. Recomendación: ten a los 3 meseros en piso de 13 a 15 h y prepara pastor y cabeza con anticipación.',chips:['13:00–15:00','34% del día','Ticket $205']},
     };
     if(/utilidad|dejan m/i.test(q))return map.util;
     if(/comprar|ingredientes/i.test(q))return map.compra;
@@ -1033,7 +1041,7 @@ class Component extends DCLogic {
     const hoyV=[3,5,6,9,10,8,6,7,9,7]; const ayerV=[3,4,7,8,9,7,5,6,8,6];
     const maxV=Math.max(...hoyV,...ayerV);
     const ventasHora=horas.map((h,i)=>({label:h,hoyH:(hoyV[i]/maxV*100)+'%',ayerH:(ayerV[i]/maxV*100)+'%'}));
-    const topRaw=[['Al pastor',182],['Campechano',126],['Suadero',98],['Bistec',71]];
+    const topRaw=[['Al pastor',182],['Cabeza',126],['Chorizo',98],['Bistec',71]];
     const maxT=topRaw[0][1];
     const topTacos=topRaw.map(t=>({nombre:t[0],qty:t[1],pct:(t[1]/maxT*100)+'%'}));
     const utilidad=[
@@ -1113,11 +1121,11 @@ class Component extends DCLogic {
   }
 
   vmComanda(phone){
-    const cats=['Tacos','Especialidades','Bebidas','Extras'];
+    const cats=['Tacos'];
     const sel=this.state.catSel;
     const catTabs=cats.map(c=>({label:c,active:c===sel,onClick:()=>this.setState({catSel:c}),
       style:`cursor:pointer;padding:9px 16px;border-radius:999px;font-weight:700;font-size:13.5px;border:none;white-space:nowrap;${c===sel?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35;border:1px solid #E6DCC5'}`}));
-    const prods=this.menu.filter(m=>m.cat===sel).map(m=>{
+    const prods=this.menu.filter(m=>!m.oculto&&!m.pendiente&&m.cat===sel).map(m=>{
       const q=this.cartQty(m.id);
       return {...m, precioTxt:this.short(m.precio), q, inCart:q>0,
         onAdd:()=>this.addCart(m.id), onDec:()=>this.decCart(m.id)};
