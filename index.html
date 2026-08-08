@@ -24,7 +24,22 @@
   @keyframes dltoast{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translate(-50%,0)}}
   @keyframes dlspin{to{transform:rotate(360deg)}}
   .dl-check{background-image:repeating-conic-gradient(#10603A 0 25%,transparent 0 50%);background-size:16px 16px}
-  @media (max-width:759px){main{padding:18px 14px 132px!important}}
+  @media (max-width:759px){
+    main{padding:18px 14px 132px!important}
+    .dl-comanda-layout{display:flex!important;flex-direction:column!important;gap:14px!important}
+    .dl-comanda-products{min-width:0}
+    .dl-comanda-tabs{position:sticky;top:65px;z-index:12;margin-left:-14px!important;margin-right:-14px!important;padding:9px 14px!important;background:rgba(243,240,230,.96);backdrop-filter:blur(8px);scrollbar-width:none}
+    .dl-comanda-tabs::-webkit-scrollbar{display:none}
+    .dl-product-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+    .dl-product-card{min-width:0;padding:12px!important}
+    .dl-product-card button{min-width:34px;min-height:34px}
+    .dl-order-summary{position:relative!important;top:auto!important;width:100%;margin-top:2px}
+    .dl-order-line{flex-wrap:wrap!important}
+    .dl-order-name{min-width:0;overflow-wrap:anywhere}
+  }
+  @media (max-width:350px){
+    .dl-product-grid{grid-template-columns:1fr!important}
+  }
 </style>
 </helmet>
 
@@ -226,18 +241,18 @@
         </sc-if>
 
         <sc-if value="{{ isComandas }}" hint-placeholder-val="{{ false }}">
-          <div style="animation:dlpop .35s ease both;display:grid;grid-template-columns:{{ comandaGrid }};gap:18px;align-items:start">
-            <div>
+          <div class="dl-comanda-layout" style="animation:dlpop .35s ease both;display:grid;grid-template-columns:{{ comandaGrid }};gap:18px;align-items:start">
+            <div class="dl-comanda-products">
               <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap">
                 <span style="background:#10603A;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;padding:7px 15px;border-radius:12px">{{ comandaMesa }}</span>
                 <span style="font-size:13px;color:#8a7f66;font-weight:600">Toca un producto para agregarlo</span>
               </div>
-              <div style="display:flex;gap:9px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px">
+              <div class="dl-comanda-tabs" style="display:flex;gap:9px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px">
                 <sc-for list="{{ catTabs }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
               </div>
-              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px">
+              <div class="dl-product-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px">
                 <sc-for list="{{ prods }}" as="p" hint-placeholder-count="6">
-                  <div style="background:#FFFDF7;border:2px solid {{ p.inCart ? '#10603A' : '#E6DCC5' }};border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px;box-shadow:0 2px 0 #ece2cc">
+                  <div class="dl-product-card" style="background:#FFFDF7;border:2px solid {{ p.inCart ? '#10603A' : '#E6DCC5' }};border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px;box-shadow:0 2px 0 #ece2cc">
                     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
                       <span style="font-weight:700;font-size:14.5px;color:#211E15;line-height:1.2">{{ p.nombre }}</span>
                       <sc-if value="{{ p.inCart }}" hint-placeholder-val="{{ false }}"><span style="background:#10603A;color:#fff;font-size:12px;font-weight:800;width:22px;height:22px;border-radius:999px;display:flex;align-items:center;justify-content:center;flex:0 0 auto">{{ p.q }}</span></sc-if>
@@ -255,7 +270,7 @@
               </div>
             </div>
 
-            <div style="position:sticky;top:88px;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:20px;box-shadow:0 6px 20px rgba(0,0,0,.08);overflow:hidden">
+            <div class="dl-order-summary" style="position:sticky;top:88px;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:20px;box-shadow:0 6px 20px rgba(0,0,0,.08);overflow:hidden">
               <div style="background:#10603A;color:#fff;padding:14px 18px;display:flex;align-items:center;justify-content:space-between">
                 <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px">Resumen · {{ comandaMesa }}</span>
                 <span style="background:rgba(255,255,255,.18);font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px">{{ comandaCount }} art.</span>
@@ -269,12 +284,12 @@
                 </sc-if>
                 <sc-for list="{{ comandaCart }}" as="l" hint-placeholder-count="0">
                   <div style="padding:12px 0;border-bottom:1px dotted #e6dcc5">
-                    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+                    <div class="dl-order-line" style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
                       <div style="display:flex;align-items:center;gap:9px">
                         <button onClick="{{ l.onDec }}" style="cursor:pointer;width:26px;height:26px;border-radius:8px;border:1.5px solid #E6DCC5;background:#fff;color:#10603A;font-size:15px;font-weight:700;line-height:1">−</button>
                         <span style="font-weight:800;min-width:16px;text-align:center;color:#211E15">{{ l.q }}</span>
                         <button onClick="{{ l.onInc }}" style="cursor:pointer;width:26px;height:26px;border-radius:8px;border:none;background:#10603A;color:#fff;font-size:15px;font-weight:700;line-height:1">+</button>
-                        <span style="font-weight:600;font-size:13.5px;color:#211E15">{{ l.nombre }}</span>
+                        <span class="dl-order-name" style="font-weight:600;font-size:13.5px;color:#211E15">{{ l.nombre }}</span>
                       </div>
                       <span style="font-weight:700;font-size:13.5px;color:#10603A;white-space:nowrap">{{ l.lineTxt }}</span>
                     </div>
@@ -696,7 +711,7 @@ class Component extends DCLogic {
     chat:[], chatBusy:false, invTab:'existencias',
     logoTaps:0, showEasterEgg:false };
   // IMPORTANTE: incrementar esta versión en cada publicación a main.
-  static APP_VERSION = '1.0.4';
+  static APP_VERSION = '1.0.5';
   get propinaActual(){ return this.state.propinaPct!=null?this.state.propinaPct:parseInt(this.props.propinaSugerida||'10',10); }
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2})+' MXN'; }
