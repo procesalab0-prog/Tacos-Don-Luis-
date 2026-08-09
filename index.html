@@ -708,7 +708,7 @@ class Component extends DCLogic {
     chat:[], chatBusy:false, invTab:'existencias',
     logoTaps:0, showEasterEgg:false };
   // IMPORTANTE: incrementar esta versión en cada publicación a main.
-  static APP_VERSION = '2.1.2';
+  static APP_VERSION = '2.1.3';
   get propinaActual(){ return this.state.propinaPct!=null?this.state.propinaPct:parseInt(this.props.propinaSugerida||'10',10); }
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2})+' MXN'; }
