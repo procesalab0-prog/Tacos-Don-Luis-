@@ -410,9 +410,10 @@
             <div style="padding:0 16px 24px">
               <sc-if value="{{ cuPerfil }}" hint-placeholder-val="{{ true }}">
                 <div style="display:flex;flex-direction:column;gap:11px">
-                  <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px"><div style="font-size:11.5px;color:#9a8e70;font-weight:700">NOMBRE</div><div style="font-weight:600;font-size:15px;color:#211E15;margin-top:3px">{{ cuName }}</div></div>
-                  <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px"><div style="font-size:11.5px;color:#9a8e70;font-weight:700">TELÉFONO</div><div style="font-weight:600;font-size:15px;color:#211E15;margin-top:3px">{{ cuPhone }}</div></div>
+                  <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px"><label style="display:block;font-size:11.5px;color:#9a8e70;font-weight:700;margin-bottom:7px">NOMBRE</label><input onInput="{{ onAccountName }}" placeholder="Nombre" autocomplete="name" style="display:block;width:100%;min-width:0;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 12px;font-family:'Rubik',sans-serif;font-size:15px;background:#fff;color:#211E15"></div>
+                  <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px"><label style="display:block;font-size:11.5px;color:#9a8e70;font-weight:700;margin-bottom:7px">TELÉFONO</label><input onInput="{{ onAccountPhone }}" placeholder="Teléfono" type="tel" inputmode="tel" autocomplete="tel" maxlength="15" style="display:block;width:100%;min-width:0;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 12px;font-family:'Rubik',sans-serif;font-size:15px;background:#fff;color:#211E15"><div style="font-size:11.5px;color:#9a8e70;margin-top:6px">Se usará automáticamente en tus pedidos.</div></div>
                   <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px"><div style="font-size:11.5px;color:#9a8e70;font-weight:700">CORREO</div><div style="font-weight:600;font-size:15px;color:#211E15;margin-top:3px">{{ cuEmail }}</div></div>
+                  <button onClick="{{ onSaveProfile }}" style="cursor:pointer;width:100%;border:none;border-radius:12px;padding:13px;background:#10603A;color:#fff;font-weight:700;font-size:14px">Guardar mis datos</button>
                   <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:600;font-size:14.5px;color:#211E15">Notificaciones</div><div style="font-size:12px;color:#9a8e70">Ofertas y estado de pedidos</div></div><span style="width:44px;height:26px;background:#28A54C;border-radius:999px;position:relative"><span style="position:absolute;top:3px;right:3px;width:20px;height:20px;background:#fff;border-radius:50%"></span></span></div>
                   <button onClick="{{ onLogout }}" style="cursor:pointer;background:none;border:none;color:#b23a32;font-weight:700;font-size:13.5px;padding:10px;text-align:center">Cerrar sesión</button>
                   <button style="cursor:pointer;background:none;border:none;color:#b0a488;font-weight:600;font-size:12px;padding:2px;text-align:center">Eliminar mi cuenta</button>
@@ -420,13 +421,12 @@
               </sc-if>
               <sc-if value="{{ cuDir }}" hint-placeholder-val="{{ false }}">
                 <div style="display:flex;flex-direction:column;gap:11px">
-                  <sc-for list="{{ direcciones }}" as="d" hint-placeholder-count="2">
-                    <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start">
-                      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#10603A" stroke-width="2" style="flex:0 0 auto;margin-top:2px"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"></path><circle cx="12" cy="9" r="2.5"></circle></svg>
-                      <div style="flex:1"><div style="display:flex;align-items:center;gap:8px"><span style="font-weight:700;font-size:14.5px;color:#211E15">{{ d.alias }}</span><sc-if value="{{ d.ppal }}" hint-placeholder-val="{{ false }}"><span style="background:#eaf4ec;color:#10603A;font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px">PRINCIPAL</span></sc-if></div><div style="font-size:12.5px;color:#6a5f45;margin-top:3px">{{ d.dir }}</div></div>
-                    </div>
-                  </sc-for>
-                  <button style="cursor:pointer;background:#fff;border:1.5px dashed #10603A;color:#10603A;border-radius:14px;padding:13px;font-weight:700;font-size:13.5px">+ Agregar dirección</button>
+                  <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px">
+                    <div style="font-weight:700;font-size:14.5px;color:#211E15;margin-bottom:10px">Dirección principal</div>
+                    <div style="display:flex;flex-direction:column;gap:9px"><input onInput="{{ onCalle }}" placeholder="Calle" style="width:100%;min-width:0;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"><div class="dl-field-row dl-address-row"><input onInput="{{ onNumero }}" placeholder="Número" style="border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"><input onInput="{{ onColonia }}" placeholder="Colonia" style="border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></div><input onInput="{{ onReferencias }}" placeholder="Referencias (portón, color, entre calles)" style="width:100%;min-width:0;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></div>
+                    <div style="margin-top:12px"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px"><div><div style="font-weight:700;font-size:13.5px;color:#211E15">Ubicación exacta</div><div style="font-size:11.5px;color:#8a7f66">Toca el mapa o usa tu ubicación actual</div></div><button onClick="{{ onUseLocation }}" style="cursor:pointer;border:1.5px solid #10603A;background:#fff;color:#10603A;border-radius:10px;padding:8px 9px;font-weight:700;font-size:11px">Mi ubicación</button></div><div id="delivery-map" style="height:210px;border-radius:13px;overflow:hidden;border:1px solid #d6ccb5;background:#e7e1d3"></div><div id="delivery-coordinates" style="font-size:11.5px;color:#10603A;font-weight:600;margin-top:7px">{{ cuLocationText }}</div></div>
+                  </div>
+                  <button onClick="{{ onSaveAddress }}" style="cursor:pointer;width:100%;background:#10603A;border:none;color:#fff;border-radius:14px;padding:13px;font-weight:700;font-size:13.5px">Guardar dirección y ubicación</button>
                 </div>
               </sc-if>
               <sc-if value="{{ cuPuntos }}" hint-placeholder-val="{{ false }}">
@@ -530,7 +530,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.3.4';
+  static APP_VERSION = '2.3.5';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
@@ -555,7 +555,7 @@ class Component extends DCLogic {
     const session=JSON.parse(localStorage.getItem('donLuisSession')||'null');
     if(session?.access_token){this.setState({session,currentUser:session.user,logged:true});this.loadCustomerData(session);}
   }
-  componentDidUpdate(){ if(this.state.route==='checkout'){this.applySavedFields();if(this.state.entrega==='domicilio')this.scheduleMap();} }
+  componentDidUpdate(){ if(this.state.route==='checkout'){this.applySavedFields();if(this.state.entrega==='domicilio')this.scheduleMap();} if(this.state.route==='cuenta'){this.applySavedFields();if(this.state.cuentaTab==='direcciones')this.scheduleMap();} }
   componentWillUnmount(){ window.removeEventListener('resize',this._onR); clearInterval(this._trk); clearInterval(this._poll); clearTimeout(this._mapTimer);clearTimeout(this._fieldTimer);clearTimeout(this._geocodeTimer); if(this._map)try{this._map.remove();}catch(_){} }
   toast(m){ clearTimeout(this._t); this.setState({toast:m}); this._t=setTimeout(()=>this.setState({toast:null}),2400); }
   go(r){ this.setState({route:r}); if(typeof window!=='undefined') window.scrollTo?.({top:0}); }
@@ -629,6 +629,32 @@ class Component extends DCLogic {
     const row={customer_id:customer.id,label:'Casa',street:d.calle.trim(),exterior_number:(d.num||'').trim(),neighborhood:(d.col||'').trim(),city:'León',state:'Guanajuato',references_text:(d.ref||'').trim()||null,latitude:this._pickedLatLng?.lat||null,longitude:this._pickedLatLng?.lng||null,is_default:true};
     if(d.savedAddressId)await this.api('/rest/v1/customer_addresses?id=eq.'+d.savedAddressId,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(row)});
     else{const saved=await this.api('/rest/v1/customer_addresses',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(row)});if(saved[0])this.setState({dir:{...d,savedAddressId:saved[0].id}});}
+  }
+  async saveAccountProfile(){
+    const name=String(this.state.dir?.nombre||'').trim();
+    const phone=String(this.state.dir?.tel||'').trim();
+    if(!this.state.session?.user?.id){this.toast('Inicia sesión para guardar tus datos');return;}
+    if(!name){this.toast('Escribe tu nombre');return;}
+    if(!/^\d{10}$/.test(phone.replace(/\D/g,''))){this.toast('Escribe un teléfono de 10 dígitos');return;}
+    try{
+      const d={...this.state.dir,nombre:name,tel:phone};this.state.dir=d;this.persistCheckoutDraft(d);
+      await this.api('/rest/v1/customers?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:this.state.session.user.id,full_name:name,phone,email:this.state.currentUser?.email||null,whatsapp_opt_in:true})});
+      await this.api('/rest/v1/profiles?id=eq.'+this.state.session.user.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({full_name:name,phone})}).catch(()=>null);
+      this.setState({dir:d});this.toast('Datos guardados');
+    }catch(error){console.error(error);this.toast(error.message||'No se pudieron guardar tus datos');}
+  }
+  async saveAccountAddress(){
+    const session=this.state.session,d=this.state.dir||{};
+    if(!session?.user?.id){this.toast('Inicia sesión para guardar tu dirección');return;}
+    if(!d.calle?.trim()||!d.col?.trim()){this.toast('Agrega calle y colonia');return;}
+    try{
+      const customers=await this.api('/rest/v1/customers?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=representation'},body:JSON.stringify({user_id:session.user.id,full_name:d.nombre||session.user.email?.split('@')[0]||'Cliente Don Luis',phone:d.tel||null,email:session.user.email||null,whatsapp_opt_in:true})});
+      const customer=customers[0];if(!customer)throw new Error('No fue posible guardar el cliente');
+      const row={customer_id:customer.id,label:'Casa',street:d.calle.trim(),exterior_number:(d.num||'').trim(),neighborhood:d.col.trim(),city:'León',state:'Guanajuato',references_text:(d.ref||'').trim()||null,latitude:this._pickedLatLng?.lat||null,longitude:this._pickedLatLng?.lng||null,is_default:true};
+      if(d.savedAddressId)await this.api('/rest/v1/customer_addresses?id=eq.'+d.savedAddressId,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(row)});
+      else{const saved=await this.api('/rest/v1/customer_addresses',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(row)});if(saved[0])d.savedAddressId=saved[0].id;}
+      this.state.dir=d;this.persistCheckoutDraft(d);this.setState({dir:{...d}});this.toast('Dirección y ubicación guardadas');
+    }catch(error){console.error(error);this.toast(error.message||'No se pudo guardar la dirección');}
   }
   get menu(){ if(this.state.remoteMenu?.length)return this.state.remoteMenu; return [
     {id:'t_pastor',nombre:'Taco al pastor',cat:'Tacos',precio:17,desc:'Cerdo al pastor, cebolla y cilantro',foto:null,tag:'Favorito'},
@@ -899,10 +925,6 @@ class Component extends DCLogic {
   vmCuenta(){
     const tabs=[['perfil','Perfil'],['direcciones','Direcciones'],['puntos','Puntos']].map(([k,l])=>({label:l,active:k===this.state.cuentaTab,onClick:()=>this.setState({cuentaTab:k}),
       style:`cursor:pointer;flex:1;padding:9px;border-radius:11px;font-weight:700;font-size:13px;border:none;${k===this.state.cuentaTab?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35;border:1px solid #E6DCC5'}`}));
-    const direcciones=[
-      {alias:'Casa',dir:'Av. Cañada 120, col. Punto Cañada',ppal:true},
-      {alias:'Oficina',dir:'Blvd. Juan Alonso de Torres 500, Jardines',ppal:false},
-    ];
     const recompensas=[
       {req:'200 pts',premio:'3 tacos de pastor gratis',listo:true},
       {req:'350 pts',premio:'Orden de quesadilla + agua',listo:false},
@@ -913,11 +935,13 @@ class Component extends DCLogic {
     return {cuentaTabs:tabs, cuLogged:this.state.logged, cuNotLogged:!this.state.logged,
       cuPerfil:this.state.cuentaTab==='perfil', cuDir:this.state.cuentaTab==='direcciones', cuPuntos:this.state.cuentaTab==='puntos',
       cuPuntosVal:180, cuNivel:'Plata', cuVisitas:12,
-      cuName:name,cuEmail:email,cuPhone:this.state.currentUser?.phone||'Pendiente',cuInitial:name.slice(0,1).toUpperCase(),
-      direcciones, recompensas,
+      cuName:this.state.dir?.nombre||name,cuNameValue:this.state.dir?.nombre||'',cuEmail:email,cuPhoneValue:this.state.dir?.tel||'',cuInitial:(this.state.dir?.nombre||name).slice(0,1).toUpperCase(),
+      cuLocationText:this._pickedLatLng?'Ubicación guardada: '+this._pickedLatLng.lat+', '+this._pickedLatLng.lng:'Marca la ubicación para guardarla',
+      recompensas,
       authEmail:this.state.authEmail,authPassword:this.state.authPassword,
       onAuthEmail:e=>this.setState({authEmail:e.target.value}),
       onAuthPassword:e=>this.setState({authPassword:e.target.value}),
+      onAccountName:e=>this.setField('nombre',e.target.value),onAccountPhone:e=>this.setField('tel',e.target.value),onSaveProfile:()=>this.saveAccountProfile(),onSaveAddress:()=>this.saveAccountAddress(),
       onLogin:()=>this.signIn(),onSignup:()=>this.signUp(),
       onLogout:()=>this.signOut(),
     };
