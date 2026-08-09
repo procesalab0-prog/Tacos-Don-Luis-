@@ -339,7 +339,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.1.0';
+  static APP_VERSION = '2.1.1';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { rol:null, route:'pedidos', vw:1280, toast:null, sonido:true,
@@ -434,11 +434,11 @@ class Component extends DCLogic {
   aceptar(folio){ this.setState({aceptarFor:folio,aceptarTiempo:this.orders.find(o=>o.folio===folio)?.canal==='domicilio'?35:20}); }
   confirmarAceptar(){ const o=this.orders.find(x=>x.folio===this.state.aceptarFor); this.setState({aceptarFor:null}); if(!o)return; const promised=new Date(Date.now()+this.state.aceptarTiempo*60000).toISOString(); this.patchOrder(o,{local:{estado:'aceptado',tiempo:this.state.aceptarTiempo},remote:{status:'confirmed',promised_at:promised,accepted_at:new Date().toISOString(),accepted_by:this.state.session?.user?.id}},'Pedido aceptado · confirmación registrada'); }
   avanzar(folio){ const o=this.orders.find(x=>x.folio===folio); if(!o)return;
-    const flow=o.canal==='domicilio'?['aceptado','preparando','listo','en_camino','completado']:['aceptado','preparando','listo','completado'];
+    const flow=o.canal==='domicilio'?['nuevo','aceptado','preparando','listo','en_camino','completado']:['nuevo','aceptado','preparando','listo','completado'];
     const i=flow.indexOf(o.estado); if(i<0||i>=flow.length-1)return; const next=flow[i+1];
     const remote={aceptado:'confirmed',preparando:'preparing',listo:'ready',en_camino:'on_the_way',completado:'delivered'}[next];
-    const extra=next==='completado'?{completed_at:new Date().toISOString()}:{};
-    const lbl={preparando:'En preparación',listo:'Listo',en_camino:'En camino',completado:'Completado'}[next]||next;
+    const extra=next==='completado'?{completed_at:new Date().toISOString()}:(next==='aceptado'?{accepted_at:new Date().toISOString(),accepted_by:this.state.session?.user?.id,promised_at:new Date(Date.now()+20*60000).toISOString()}:{});
+    const lbl={aceptado:'Confirmado',preparando:'En preparación',listo:'Listo',en_camino:'En camino',completado:'Completado'}[next]||next;
     this.patchOrder(o,{local:{estado:next,min:0},remote:{status:remote,...extra}},o.folio+' → '+lbl);
   }
   rechazar(folio){ this.setState({rechazoFor:folio}); }
