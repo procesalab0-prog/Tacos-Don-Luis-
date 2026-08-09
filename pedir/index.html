@@ -297,6 +297,12 @@
               <div style="font-size:11.5px;color:#a98c2e;margin-top:8px">Tu pago quedará como <strong>“Pendiente de verificar”</strong> hasta que la sucursal lo confirme.</div>
             </div>
           </sc-if>
+          <sc-if value="{{ chkClip }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#eef4eb;border:1.5px solid #10603A;border-radius:14px;padding:14px;margin-bottom:16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:17px;color:#10603A">Pagar con Clip</div><span style="background:#F2C230;color:#3a2c00;font-size:10px;font-weight:800;letter-spacing:.1em;padding:4px 9px;border-radius:999px">SIMULACIÓN</span></div>
+              <div style="font-size:12.5px;color:#4f634f;line-height:1.45;margin-top:7px">Para esta demo no se solicitarán datos de tarjeta ni se realizará un cobro. Simularemos una aprobación y el pedido aparecerá pagado en administración.</div>
+            </div>
+          </sc-if>
 
           <div style="background:#0f3d24;border-radius:16px;padding:16px 18px;color:#eaf3ec">
             <div style="display:flex;justify-content:space-between;font-size:13.5px;padding:4px 0"><span style="color:#bcd6c1">Subtotal</span><span>{{ chkSubTxt }}</span></div>
@@ -305,7 +311,7 @@
             <div style="display:flex;justify-content:space-between;align-items:baseline;padding:9px 0 2px;border-top:1px dashed rgba(255,255,255,.2);margin-top:6px"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px">Total</span><span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:23px;color:#F2C230">{{ chkTotalTxt }}</span></div>
             <div style="font-size:12px;color:#8FD694;text-align:right;margin-top:2px">Ganas {{ chkPuntos }} puntos ★</div>
           </div>
-          <button onClick="{{ onHacerPedido }}" style="cursor:pointer;width:100%;margin-top:14px;background:#D6453D;color:#fff;border:none;border-radius:15px;padding:16px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;box-shadow:0 8px 20px rgba(214,69,61,.35)">Hacer pedido</button>
+          <button onClick="{{ onHacerPedido }}" style="cursor:pointer;width:100%;margin-top:14px;background:#D6453D;color:#fff;border:none;border-radius:15px;padding:16px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;box-shadow:0 8px 20px rgba(214,69,61,.35)">{{ chkSubmitLabel }}</button>
         </div>
       </sc-if>
 
@@ -527,7 +533,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.4.3';
+  static APP_VERSION = '2.4.4';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
@@ -781,6 +787,7 @@ class Component extends DCLogic {
     if(!this.state.dir.nombre?.trim()||!this.state.dir.tel?.trim()){this.toast('Agrega tu nombre y teléfono');return;}
     if(!this.state.remoteMenu){this.toast('Espera a que termine de cargar el menú');return;}
     if(this.state.submitting)return;
+    if(this.state.pago==='clip'&&!window.confirm('SIMULACIÓN CLIP\n\nNo se realizará ningún cobro ni se pedirán datos de tarjeta. ¿Quieres simular un pago aprobado y crear el pedido?'))return;
     this.setState({submitting:true});
     try{
       const requestId=crypto.randomUUID();
@@ -799,7 +806,8 @@ class Component extends DCLogic {
         body:JSON.stringify({
           requestId,branchSlug:'punto-canada',
           fulfillmentType:this.state.entrega==='domicilio'?'delivery':'pickup',
-          paymentMethod:{efectivo:'cash',transferencia:'transfer',tarjeta:'card_present'}[this.state.pago],
+          paymentMethod:{efectivo:'cash',transferencia:'transfer',tarjeta:'card_present',clip:'clip_simulated'}[this.state.pago],
+          customerNotes:this.state.pago==='clip'?'Pago en línea Clip simulado durante la demostración':'',
           customer:{name:this.state.dir.nombre,phone:this.state.dir.tel},
           deliveryZoneId:selectedZone?.id||null,
           address:this.state.entrega==='domicilio'?{
@@ -844,7 +852,7 @@ class Component extends DCLogic {
     const lines=this.state.cart.map(l=>{const it=this.itemById(l.id);const note=this.lineLabel(l);return l.q+'× '+it.nombre+(note?' ('+note+')':'');});
     const address=this.state.entrega==='domicilio'?[this.state.dir.calle,this.state.dir.num,this.state.dir.col].filter(Boolean).join(', '):'Pasar a recoger en Punto Cañada';
     const map=this._pickedLatLng?'https://www.google.com/maps?q='+this._pickedLatLng.lat+','+this._pickedLatLng.lng:'';
-    return ['Hola, envío la confirmación de mi pedido en Tacos Don Luis 🌮','Folio: '+(this.state.folio||'Pendiente'),'Cliente: '+(this.state.dir.nombre||''),'Teléfono: '+(this.state.dir.tel||''),'','Pedido:',...lines,'','Entrega: '+address,(this.state.dir.ref?'Referencias: '+this.state.dir.ref:''),(map?'Ubicación: '+map:''),'Pago: '+({efectivo:'Efectivo',transferencia:'Transferencia',tarjeta:'Tarjeta al recibir'}[this.state.pago]||this.state.pago),'Total: '+this.MXN(this.state.liveOrder?.total??this.totalFinal())].filter(Boolean).join('\n');
+    return ['Hola, envío la confirmación de mi pedido en Tacos Don Luis 🌮','Folio: '+(this.state.folio||'Pendiente'),'Cliente: '+(this.state.dir.nombre||''),'Teléfono: '+(this.state.dir.tel||''),'','Pedido:',...lines,'','Entrega: '+address,(this.state.dir.ref?'Referencias: '+this.state.dir.ref:''),(map?'Ubicación: '+map:''),'Pago: '+({efectivo:'Efectivo',transferencia:'Transferencia',tarjeta:'Tarjeta al recibir',clip:'Clip en línea (simulación aprobada)'}[this.state.pago]||this.state.pago),'Total: '+this.MXN(this.state.liveOrder?.total??this.totalFinal())].filter(Boolean).join('\n');
   }
   openWhatsApp(){const phone=String(this.state.settings?.whatsapp_phone||'').replace(/\D/g,'');const base=phone?'https://wa.me/'+phone:'https://api.whatsapp.com/send';window.open(base+(base.includes('?')?'&':'?')+'text='+encodeURIComponent(this.whatsappText()),'_blank','noopener');}
   nuevoPedido(){ clearInterval(this._trk); this.setState({cart:[],folio:null,trackStep:0,dir:{},route:'home'}); }
@@ -853,7 +861,7 @@ class Component extends DCLogic {
     const entrega=this.state.entrega;
     const modos=[['recoger','Pasar a recoger','M9 11l3 3 8-8M5 20V9a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v11'],['domicilio','Envío a domicilio','M1 3h15v13H1zM16 8h4l3 3v5h-7M5.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM18.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z']].map(([k,l,ic])=>({key:k,label:l,icon:ic,active:k===entrega,onClick:()=>this.setState({entrega:k}),
       style:`cursor:pointer;flex:1;padding:14px 10px;border-radius:15px;border:2px solid ${k===entrega?'#10603A':'#E6DCC5'};background:${k===entrega?'#eaf4ec':'#fff'};display:flex;flex-direction:column;align-items:center;gap:7px;color:${k===entrega?'#10603A':'#8a7f66'};font-weight:700;font-size:13px`}));
-    const pagos=[['efectivo','Efectivo','M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'],['transferencia','Transferencia','M4 12h16M8 8l-4 4 4 4M16 16l4-4-4-4'],['tarjeta','Tarjeta al recibir','M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 11h20']].map(([k,l,ic])=>({key:k,label:l,icon:ic,active:k===this.state.pago,onClick:()=>this.setState({pago:k}),
+    const pagos=[['efectivo','Efectivo','M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'],['transferencia','Transferencia','M4 12h16M8 8l-4 4 4 4M16 16l4-4-4-4'],['tarjeta','Tarjeta al recibir','M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 11h20'],['clip','Pago en línea con Clip · Demo','M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 11h20M6 16h4']].map(([k,l,ic])=>({key:k,label:l,icon:ic,active:k===this.state.pago,onClick:()=>this.setState({pago:k}),
       style:`cursor:pointer;width:100%;padding:13px 15px;border-radius:13px;border:1.5px solid ${k===this.state.pago?'#10603A':'#E6DCC5'};background:${k===this.state.pago?'#eaf4ec':'#fff'};display:flex;align-items:center;gap:12px;color:#211E15;font-weight:600;font-size:14px`}));
     const zonas=[...this.coberturaTarifas.map(t=>t.label+' · '+this.MXN(t.precio)),'Más de 5 km · fuera de cobertura'];
     const zonaSel=this.state.dir.zona||'';
@@ -867,7 +875,7 @@ class Component extends DCLogic {
     return {
       chkModos:modos, chkPagos:pagos, chkEntrega:entrega,
       chkDomicilio:entrega==='domicilio', chkRecoger:entrega==='recoger',
-      chkTransfer:this.state.pago==='transferencia',
+      chkTransfer:this.state.pago==='transferencia',chkClip:this.state.pago==='clip',chkSubmitLabel:this.state.pago==='clip'?'Simular pago con Clip':'Hacer pedido',
       zonaChips, chkFuera:fuera, chkMinimoTxt:this.MXN(minimum),chkFaltaMinimo:entrega==='domicilio'&&faltante>0,chkFaltanteTxt:this.MXN(faltante),
       chkSubTxt:this.MXN(this.cartSubtotal()),
       chkEnvioTxt:entrega==='domicilio'?(this.envioActual()?this.MXN(this.envioActual()):'Elige zona'):'Gratis',
@@ -887,7 +895,7 @@ class Component extends DCLogic {
     return {
       confFolio:this.state.folio||'DL-0000',
       confEntregaTxt:dom?'Envío a domicilio':'Pasar a recoger',
-      confPagoTxt:{efectivo:'Efectivo',transferencia:'Transferencia (por verificar)',tarjeta:'Tarjeta al recibir'}[this.state.pago],
+      confPagoTxt:{efectivo:'Efectivo',transferencia:'Transferencia (por verificar)',tarjeta:'Tarjeta al recibir',clip:'Clip en línea · pago simulado'}[this.state.pago],
       confTiempo:this.state.liveOrder?.promised_at?new Date(this.state.liveOrder.promised_at).toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}):(dom?'30 – 40 min':'15 – 20 min'),
       confTotalTxt:this.MXN(this.state.liveOrder?.total??this.totalFinal()),
       confPuntos:this.puntosGanados(),
@@ -979,7 +987,7 @@ class Component extends DCLogic {
     ];
     const faqs=[
       {q:'¿Hacen entregas a domicilio?',a:'Sí, en las colonias de la zona norte cercanas a Punto Cañada. El costo depende de la distancia.'},
-      {q:'¿Qué métodos de pago aceptan?',a:'Efectivo, transferencia y tarjeta al recoger o al recibir. Aún no aceptamos pago en línea.'},
+      {q:'¿Qué métodos de pago aceptan?',a:'Efectivo, transferencia y tarjeta al recoger o al recibir. El pago en línea con Clip aparece únicamente como simulación en esta demo.'},
       {q:'¿Puedo programar mi pedido?',a:'Claro, al hacer tu pedido puedes elegir "lo antes posible" o una hora programada.'},
     ];
     const tabs=[
