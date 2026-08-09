@@ -62,7 +62,7 @@
             <div style="position:relative;padding:26px 22px 28px;color:#fff;width:100%">
               <span style="display:inline-flex;align-items:center;gap:7px;background:#F2C230;color:#3a2c00;font-weight:800;font-size:11px;letter-spacing:.12em;padding:5px 12px;border-radius:999px">FRESCO · SABROSO · HECHO CON ORGULLO</span>
               <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:40px;line-height:.95;margin:14px 0 8px;text-shadow:0 2px 12px rgba(0,0,0,.35)">Los mejores tacos<br>de la zona norte</div>
-              <div style="font-size:15px;color:#e9dfc8;max-width:440px;line-height:1.4">Hechos al carbón, con recetas de casa. Pide para recoger o a domicilio en Punto Cañada, León.</div>
+              <div style="font-size:15px;color:#e9dfc8;max-width:440px;line-height:1.4">Preparados al momento, con recetas de casa. Pide para recoger o a domicilio en Punto Cañada, León.</div>
               <div style="display:flex;gap:14px;margin:18px 0 20px;flex-wrap:wrap">
                 <div style="display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:9px 14px">
                   <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#F2C230" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg>
@@ -530,7 +530,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.3.6';
+  static APP_VERSION = '2.3.7';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
@@ -663,7 +663,7 @@ class Component extends DCLogic {
     {id:'t_chorizo',nombre:'Taco de chorizo',cat:'Tacos',precio:17,desc:'Chorizo artesanal dorado',foto:null},
     {id:'t_lengua',nombre:'Taco de lengua',cat:'Tacos',precio:25,desc:'Lengua de res suave',foto:null},
     {id:'t_sesos',nombre:'Taco de sesos',cat:'Tacos',precio:25,desc:'Sesos bien dorados',foto:null},
-    {id:'t_arrachera',nombre:'Taco de arrachera',cat:'Tacos',precio:25,desc:'Arrachera premium al carbón',foto:null,disponible:false},
+    {id:'t_arrachera',nombre:'Taco de arrachera',cat:'Tacos',precio:25,desc:'Arrachera sazonada',foto:null,disponible:false},
     {id:'q_pastor',nombre:'Quesadilla de pastor',cat:'Quesadillas',precio:34,desc:'Queso Oaxaca y pastor',foto:null,tag:'Recomendado'},
     {id:'q_bistec',nombre:'Quesadilla de bistec',cat:'Quesadillas',precio:34,desc:'Queso Oaxaca y bistec',foto:null},
     {id:'q_cabeza',nombre:'Quesadilla de cabeza',cat:'Quesadillas',precio:34,desc:'Queso Oaxaca y cabeza',foto:null},
