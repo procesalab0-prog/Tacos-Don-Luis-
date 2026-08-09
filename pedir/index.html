@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:'Rubik',system-ui,sans-serif;color:#211E15;background:#e7ddc8;-webkit-font-smoothing:antialiased}
+  a{color:#10603A;text-decoration:none}
+  a:hover{color:#0b492c}
+  ::-webkit-scrollbar{width:9px;height:9px}
+  ::-webkit-scrollbar-thumb{background:#c9bb9c;border-radius:8px}
+  @keyframes dlpop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @keyframes dlsheet{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  @keyframes dlfade{from{opacity:0}to{opacity:1}}
+  @keyframes dlspin{to{transform:rotate(360deg)}}
+  @keyframes dlpulse{0%,100%{opacity:1}50%{opacity:.45}}
+  .dl-check{background-image:repeating-conic-gradient(#10603A 0 25%,transparent 0 50%);background-size:14px 14px}
+</style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;justify-content:center;background:#e7ddc8;background-image:radial-gradient(circle at 20% 10%,#efe7d5,#e2d6bd)">
+  <div style="width:100%;max-width:{{ shellMax }};background:#F3F0E6;min-height:100vh;position:relative;box-shadow:0 0 60px rgba(0,0,0,.12);display:flex;flex-direction:column">
+
+    <header style="position:sticky;top:0;z-index:30;background:#10603A;color:#fff;padding:11px 16px;display:flex;align-items:center;gap:12px">
+      <button onClick="{{ goHome }}" style="cursor:pointer;background:none;border:none;display:flex;align-items:center;gap:9px;padding:0">
+        <span style="width:38px;height:38px;border-radius:50%;background:#F3F0E6;color:#10603A;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:14px;flex:0 0 auto">TDL</span>
+        <span style="display:flex;flex-direction:column;line-height:1;text-align:left"><span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:17px;color:#fff">Tacos Don Luis</span><span style="font-size:9.5px;color:#F2C230;font-weight:700;letter-spacing:.14em">PUNTO CAÑADA</span></span>
+      </button>
+      <div style="flex:1"></div>
+      <span style="display:flex;align-items:center;gap:6px;background:{{ estadoBg }};color:{{ estadoC }};font-size:11.5px;font-weight:800;padding:5px 11px;border-radius:999px"><span style="width:7px;height:7px;border-radius:50%;background:{{ estadoDot }};animation:dlpulse 1.6s infinite"></span>{{ estadoTxt }}</span>
+      <button onClick="{{ goCart }}" style="cursor:pointer;position:relative;background:rgba(255,255,255,.14);border:none;color:#fff;width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        <sc-if value="{{ cartCount }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:-5px;right:-5px;background:#F2C230;color:#3a2c00;font-size:11px;font-weight:800;min-width:19px;height:19px;padding:0 5px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ cartCount }}</span></sc-if>
+      </button>
+    </header>
+
+    <main style="flex:1;position:relative">
+      <!--LANDING-->
+      <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+        <div style="animation:dlfade .3s ease both">
+          <div style="position:relative;min-height:420px;display:flex;align-items:flex-end;background:radial-gradient(120% 90% at 80% 0%,#178049 0%,#10603A 46%,#0b4a2d 100%);overflow:hidden">
+            <div style="position:absolute;inset:0;background-image:linear-gradient(45deg,rgba(255,255,255,.05) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.05) 75%),linear-gradient(45deg,rgba(255,255,255,.05) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.05) 75%);background-size:52px 52px;background-position:0 0,26px 26px;opacity:.7"></div>
+            <div style="position:absolute;right:-30px;top:20px;opacity:.14;color:#F2C230"><svg width="230" height="230" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 13c0-3 2.5-5 5.5-5 .5-2 2.3-3.5 4.5-3.5S17.5 6 18 8c1.7.3 3 1.7 3 3.5 0 1.4-.9 2.6-2.2 3H6a3 3 0 0 1-2-5.5"></path><path d="M6 14.5V19a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-4.5"></path></svg></div>
+            <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(11,74,45,.85) 2%,transparent 42%)"></div>
+            <div style="position:absolute;top:0;left:0;right:0;height:12px" class="dl-check"></div>
+            <div style="position:relative;padding:26px 22px 28px;color:#fff;width:100%">
+              <span style="display:inline-flex;align-items:center;gap:7px;background:#F2C230;color:#3a2c00;font-weight:800;font-size:11px;letter-spacing:.12em;padding:5px 12px;border-radius:999px">FRESCO · SABROSO · HECHO CON ORGULLO</span>
+              <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:40px;line-height:.95;margin:14px 0 8px;text-shadow:0 2px 12px rgba(0,0,0,.35)">Los mejores tacos<br>de la zona norte</div>
+              <div style="font-size:15px;color:#e9dfc8;max-width:440px;line-height:1.4">Hechos al carbón, con recetas de casa. Pide para recoger o a domicilio en Punto Cañada, León.</div>
+              <div style="display:flex;gap:14px;margin:18px 0 20px;flex-wrap:wrap">
+                <div style="display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:9px 14px">
+                  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#F2C230" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg>
+                  <span style="line-height:1.1"><span style="display:block;font-size:10.5px;color:#cbe0cf">Recoger</span><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px">{{ tRecoger }}</span></span>
+                </div>
+                <div style="display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:9px 14px">
+                  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#F2C230" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM18.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"></path></svg>
+                  <span style="line-height:1.1"><span style="display:block;font-size:10.5px;color:#cbe0cf">A domicilio</span><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px">{{ tEntrega }}</span></span>
+                </div>
+              </div>
+              <div style="display:flex;gap:11px;flex-wrap:wrap">
+                <button onClick="{{ goMenu }}" style="cursor:pointer;flex:1;min-width:150px;background:#D6453D;color:#fff;border:none;border-radius:14px;padding:15px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;box-shadow:0 8px 20px rgba(214,69,61,.4)">Ordenar ahora</button>
+                <button onClick="{{ openWA }}" style="cursor:pointer;background:#25D366;color:#fff;border:none;border-radius:14px;padding:15px 18px;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:9px">
+                  <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.1 14.9l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 0 1 12 4zm4.3 9.9c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1a6.5 6.5 0 0 1-3.2-2.8c-.2-.4.2-.4.6-1.2l-.1-.4-.7-1.7c-.2-.4-.4-.4-.5-.4h-.5a1 1 0 0 0-.7.3A2.8 2.8 0 0 0 6.8 12a5 5 0 0 0 1 2.6 11 11 0 0 0 4.6 4c2 .8 2.1.5 2.5.5a2.3 2.3 0 0 0 1.5-1c.2-.5.2-1 .1-1.1z"></path></svg>
+                  WhatsApp
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:20px 20px 8px">
+            <div style="display:flex;gap:10px;justify-content:space-between">
+              <sc-for list="{{ valores }}" as="v" hint-placeholder-count="4">
+                <div style="flex:1;text-align:center">
+                  <div style="width:52px;height:52px;margin:0 auto 7px;border-radius:16px;background:#eaf4ec;color:#10603A;display:flex;align-items:center;justify-content:center"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="{{ v.icon }}"></path></svg></div>
+                  <div style="font-size:11.5px;font-weight:800;color:#10603A;letter-spacing:.02em">{{ v.label }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="padding:16px 20px 6px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px"><span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px;color:#10603A">Los favoritos</span><button onClick="{{ goMenu }}" style="cursor:pointer;background:none;border:none;color:#D6453D;font-weight:700;font-size:13.5px">Ver todo →</button></div>
+            <div style="display:flex;gap:13px;overflow-x:auto;padding-bottom:8px;margin:0 -20px;padding-left:20px;padding-right:20px">
+              <sc-for list="{{ destacados }}" as="d" hint-placeholder-count="4">
+                <div style="flex:0 0 auto;width:172px;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,.06)">
+                  <div style="height:112px;background:#f0e8d4;position:relative">
+                    <sc-if value="{{ d.foto }}" hint-placeholder-val="{{ false }}"><img src="{{ d.foto }}" alt="{{ d.nombre }}" style="width:100%;height:100%;object-fit:cover"></sc-if>
+                    <span style="position:absolute;top:8px;left:8px;background:#F2C230;color:#3a2c00;font-size:10px;font-weight:800;padding:3px 8px;border-radius:999px">{{ d.tag }}</span>
+                  </div>
+                  <div style="padding:11px 13px">
+                    <div style="font-weight:700;font-size:14.5px;color:#211E15">{{ d.nombre }}</div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:7px"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#10603A">{{ d.precioTxt }}</span><button onClick="{{ d.onAdd }}" style="cursor:pointer;width:32px;height:32px;border-radius:10px;border:none;background:#10603A;color:#fff;font-size:19px;line-height:1">+</button></div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="padding:14px 20px">
+            <div style="border-radius:20px;overflow:hidden;position:relative;background:#D6453D;padding:20px 22px;color:#fff">
+              <div style="position:absolute;right:-10px;bottom:-10px;opacity:.16"><svg width="130" height="130" viewBox="0 0 24 24" fill="currentColor"><path d="M2 12a10 10 0 0 1 20 0z"></path></svg></div>
+              <span style="background:#F2C230;color:#3a2c00;font-weight:800;font-size:10.5px;letter-spacing:.1em;padding:4px 10px;border-radius:999px">PROMO DEL DÍA</span>
+              <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:26px;margin-top:9px;line-height:1">3 tacos de pastor $45</div>
+              <div style="color:#ffe0dc;font-size:13.5px;margin-top:3px">Válido de 13:00 a 17:00 · para recoger o domicilio</div>
+              <button onClick="{{ goMenu }}" style="cursor:pointer;margin-top:14px;background:#fff;color:#D6453D;border:none;border-radius:12px;padding:11px 18px;font-weight:800;font-size:14px">Aprovechar promo</button>
+            </div>
+          </div>
+
+          <div style="padding:12px 20px 6px">
+            <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px;color:#10603A;margin-bottom:12px">Explora el menú</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+              <sc-for list="{{ categoriasHome }}" as="c" hint-placeholder-count="5">
+                <button onClick="{{ c.onClick }}" style="cursor:pointer;text-align:left;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:15px;display:flex;align-items:center;gap:12px" style-hover="border-color:#10603A">
+                  <span style="width:44px;height:44px;border-radius:12px;background:{{ c.tint }};color:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ c.icon }}"></path></svg></span>
+                  <span><span style="display:block;font-weight:700;font-size:14.5px;color:#211E15">{{ c.label }}</span><span style="font-size:12px;color:#9a8e70">{{ c.count }} productos</span></span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="padding:16px 20px 6px">
+            <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px;color:#10603A;margin-bottom:12px">Lo que dicen</div>
+            <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;margin:0 -20px;padding-left:20px;padding-right:20px">
+              <sc-for list="{{ opiniones }}" as="o" hint-placeholder-count="3">
+                <div style="flex:0 0 auto;width:240px;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:15px">
+                  <div style="color:#F2C230;font-size:15px;letter-spacing:2px">{{ o.stars }}</div>
+                  <div style="font-size:13.5px;color:#3a3120;line-height:1.45;margin:8px 0 10px">{{ o.txt }}</div>
+                  <div style="display:flex;align-items:center;gap:9px"><span style="width:32px;height:32px;border-radius:50%;background:{{ o.c }};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px">{{ o.ini }}</span><span style="font-weight:700;font-size:13px;color:#211E15">{{ o.nombre }}</span></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="padding:16px 20px">
+            <div style="background:#10603A;border-radius:20px;padding:20px;color:#eaf3ec;display:flex;align-items:center;gap:16px">
+              <div style="width:64px;height:64px;flex:0 0 auto;border-radius:16px;background:#F2C230;color:#10603A;display:flex;align-items:center;justify-content:center"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21 8 14 2 9.4h7.6z"></path></svg></div>
+              <div style="flex:1"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:18px;color:#F2C230">Club Don Luis</div><div style="font-size:13px;color:#cfe3d3;line-height:1.4;margin-top:3px">Junta puntos en cada pedido y canjéalos por tacos gratis.</div></div>
+              <button onClick="{{ goCuenta }}" style="cursor:pointer;background:#fff;color:#10603A;border:none;border-radius:12px;padding:11px 15px;font-weight:800;font-size:13px;flex:0 0 auto">Unirme</button>
+            </div>
+          </div>
+
+          <div style="padding:8px 20px 6px">
+            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;overflow:hidden">
+              <div style="padding:16px 18px 8px"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:20px;color:#10603A">Visítanos</div></div>
+              <div style="height:150px;position:relative;background:#dfe8d8;border-top:1px solid #E6DCC5;border-bottom:1px solid #E6DCC5;overflow:hidden">
+                <div style="position:absolute;inset:0;background-image:linear-gradient(#cfe0c6 1px,transparent 1px),linear-gradient(90deg,#cfe0c6 1px,transparent 1px);background-size:26px 26px;opacity:.7"></div>
+                <div style="position:absolute;left:20%;top:30%;width:60%;height:6px;background:#b9cbad;border-radius:3px;transform:rotate(-8deg)"></div>
+                <div style="position:absolute;left:10%;top:60%;width:80%;height:6px;background:#b9cbad;border-radius:3px;transform:rotate(6deg)"></div>
+                <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-100%);color:#D6453D"><svg width="38" height="38" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"></path></svg></div>
+              </div>
+              <div style="padding:14px 18px">
+                <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:11px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10603A" stroke-width="2" style="flex:0 0 auto;margin-top:2px"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"></path><circle cx="12" cy="9" r="2.5"></circle></svg><span style="font-size:13.5px;color:#3a3120;line-height:1.4">Blvd. Juan Alonso de Torres #, col. Punto Cañada, zona norte, León, Gto.</span></div>
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10603A" stroke-width="2" style="flex:0 0 auto"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg><span style="font-size:13.5px;color:#3a3120"><strong>Hoy:</strong> 12:00 – 23:00</span></div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">
+                  <sc-for list="{{ coberturaHome }}" as="z" hint-placeholder-count="4"><span style="font-size:11.5px;font-weight:700;color:#10603A;background:#eaf4ec;border:1px solid #cfe0c6;padding:5px 10px;border-radius:999px">{{ z }}</span></sc-for>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:10px 20px">
+            <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:20px;color:#10603A;margin-bottom:10px">Preguntas frecuentes</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="3">
+                <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:13px;padding:13px 15px"><div style="font-weight:700;font-size:13.5px;color:#211E15;margin-bottom:4px">{{ f.q }}</div><div style="font-size:12.5px;color:#6a5f45;line-height:1.45">{{ f.a }}</div></div>
+              </sc-for>
+            </div>
+          </div>
+
+          <footer style="background:#0d3f26;color:#cfe3d3;padding:24px 20px 30px;margin-top:14px">
+            <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:20px;color:#fff">Tacos Don Luis</div>
+            <div style="font-size:11px;color:#F2C230;font-weight:700;letter-spacing:.14em;margin-top:2px">FRESCO · SABROSO · HECHO CON ORGULLO</div>
+            <div style="display:flex;gap:14px;margin:16px 0;font-size:13px;font-weight:600"><a href="#" style="color:#eaf3ec">Aviso de privacidad</a><a href="#" style="color:#eaf3ec">Términos</a></div>
+            <div style="font-size:12px;color:#8bb193;line-height:1.5">Punto Cañada, León, Gto. · Tel. 477 000 0000<br>© 2026 Tacos Don Luis · Prototipo demo</div>
+          </footer>
+        </div>
+      </sc-if>
+
+      <!--OTHER SCREENS INJECTED BELOW-->
+      <sc-if value="{{ isMenu }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:dlfade .3s ease both">
+          <div style="position:sticky;top:61px;z-index:20;background:#F3F0E6;padding:12px 16px 10px;border-bottom:1px solid #E6DCC5;display:flex;gap:8px;overflow-x:auto">
+            <sc-for list="{{ menuCats }}" as="c" hint-placeholder-count="5"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
+          </div>
+          <div style="padding:14px 16px 20px;display:flex;flex-direction:column;gap:12px">
+            <sc-for list="{{ menuItems }}" as="m" hint-placeholder-count="6">
+              <button onClick="{{ m.onOpen }}" style="cursor:pointer;text-align:left;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:12px;display:flex;gap:13px;align-items:center;box-shadow:0 2px 0 #ece2cc" style-hover="border-color:#10603A">
+                <div style="width:88px;height:88px;flex:0 0 auto;border-radius:13px;overflow:hidden;background:#f0e8d4;display:flex;align-items:center;justify-content:center">
+                  <sc-if value="{{ m.foto }}" hint-placeholder-val="{{ false }}"><img src="{{ m.foto }}" alt="{{ m.nombre }}" style="width:100%;height:100%;object-fit:cover"></sc-if>
+                  <sc-if value="{{ m.noFoto }}" hint-placeholder-val="{{ true }}"><span style="color:#c2b48f;display:flex;flex-direction:column;align-items:center;gap:4px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11a9 9 0 0 1 18 0M2 11h20l-2 4H4zM7 18h10"></path></svg><span style="font-size:8.5px;font-weight:700">Foto pronto</span></span></sc-if>
+                </div>
+                <div style="flex:1;min-width:0">
+                  <div style="display:flex;align-items:center;gap:8px"><span style="font-weight:700;font-size:15.5px;color:#211E15">{{ m.nombre }}</span><sc-if value="{{ m.agotado }}" hint-placeholder-val="{{ false }}"><span style="background:#fdeceb;color:#b23a32;font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px">AGOTADO</span></sc-if></div>
+                  <div style="font-size:12.5px;color:#8a7f66;line-height:1.35;margin:3px 0 8px">{{ m.desc }}</div>
+                  <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#10603A">{{ m.precioTxt }}</span><span style="width:34px;height:34px;border-radius:11px;background:{{ m.agotado ? '#d7ccb0' : '#10603A' }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1">+</span></div>
+                </div>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isCarrito }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:dlfade .3s ease both;padding:16px 16px 24px">
+          <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:24px;color:#10603A;margin-bottom:14px">Tu pedido</div>
+          <sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ true }}">
+            <div style="text-align:center;padding:50px 20px;color:#9a8e70;background:#FFFDF7;border:1px dashed #d7ccb0;border-radius:18px">
+              <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#d0c4a6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:12px"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:18px;color:#10603A">Tu carrito está vacío</div>
+              <div style="font-size:13.5px;margin:6px 0 16px">Agrega unos tacos para empezar 🌮</div>
+              <button onClick="{{ goMenu }}" style="cursor:pointer;background:#D6453D;color:#fff;border:none;border-radius:13px;padding:13px 22px;font-weight:700;font-size:14.5px">Ver el menú</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ false }}"></sc-if>
+          <div style="display:flex;flex-direction:column;gap:11px">
+            <sc-for list="{{ cartLines }}" as="l" hint-placeholder-count="0">
+              <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:15px;padding:13px 14px">
+                <div style="display:flex;justify-content:space-between;gap:10px">
+                  <div style="flex:1"><div style="font-weight:700;font-size:14.5px;color:#211E15">{{ l.nombre }}</div><sc-if value="{{ l.hasLabel }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:#8a7f66;margin-top:3px;line-height:1.35">{{ l.label }}</div></sc-if></div>
+                  <span style="font-weight:700;font-size:14.5px;color:#10603A;white-space:nowrap">{{ l.totalTxt }}</span>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:11px">
+                  <button onClick="{{ l.onRemove }}" style="cursor:pointer;background:none;border:none;color:#b23a32;font-weight:600;font-size:12.5px;display:flex;align-items:center;gap:5px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg>Quitar</button>
+                  <div style="display:flex;align-items:center;gap:11px"><button onClick="{{ l.onDec }}" style="cursor:pointer;width:30px;height:30px;border-radius:9px;border:1.5px solid #E6DCC5;background:#fff;color:#10603A;font-size:17px;line-height:1">−</button><span style="font-weight:800;min-width:16px;text-align:center">{{ l.q }}</span><button onClick="{{ l.onInc }}" style="cursor:pointer;width:30px;height:30px;border-radius:9px;border:none;background:#10603A;color:#fff;font-size:17px;line-height:1">+</button></div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ cartNotEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:16px;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:16px">
+              <div style="display:flex;justify-content:space-between;font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px;color:#211E15"><span>Subtotal</span><span style="color:#10603A">{{ cartSubTxt }}</span></div>
+              <div style="font-size:12px;color:#9a8e70;margin-top:3px">Envío y descuentos se calculan en el siguiente paso</div>
+              <button onClick="{{ goCheckout }}" style="cursor:pointer;width:100%;margin-top:14px;background:#D6453D;color:#fff;border:none;border-radius:14px;padding:15px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;box-shadow:0 6px 16px rgba(214,69,61,.3)">Continuar</button>
+              <button onClick="{{ goMenu }}" style="cursor:pointer;width:100%;margin-top:9px;background:none;border:none;color:#10603A;font-weight:700;font-size:13.5px">+ Agregar más productos</button>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isCheckout }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:dlfade .3s ease both;padding:16px 16px 26px">
+          <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:24px;color:#10603A;margin-bottom:14px">Finalizar pedido</div>
+
+          <div style="font-size:13px;font-weight:800;color:#8a7f66;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">¿Cómo lo quieres?</div>
+          <div style="display:flex;gap:11px;margin-bottom:18px">
+            <sc-for list="{{ chkModos }}" as="m" hint-placeholder-count="2"><button onClick="{{ m.onClick }}" style="{{ m.style }}"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ m.icon }}"></path></svg>{{ m.label }}</button></sc-for>
+          </div>
+
+          <sc-if value="{{ chkDomicilio }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:15px;margin-bottom:16px">
+              <div style="font-weight:700;font-size:14.5px;color:#211E15;margin-bottom:11px">Dirección de entrega</div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px"><sc-for list="{{ zonaChips }}" as="z" hint-placeholder-count="3"><button onClick="{{ z.onClick }}" style="{{ z.style }}"><span style="font-weight:700;font-size:12px;color:#211E15">{{ z.label }}</span><span style="font-size:11.5px;color:#10603A;font-weight:700">{{ z.precio }}</span></button></sc-for></div>
+              <sc-if value="{{ chkFuera }}" hint-placeholder-val="{{ false }}"><div style="background:#fdeceb;border:1px solid #f6cfcc;color:#b23a32;font-weight:600;font-size:12.5px;padding:9px 12px;border-radius:11px;margin-bottom:12px">Esa distancia está fuera de cobertura. Prueba recoger en sucursal.</div></sc-if>
+              <div style="display:flex;flex-direction:column;gap:9px">
+                <input value="{{ dirCalle }}" onChange="{{ onField('calle') }}" placeholder="Calle" style="width:100%;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15">
+                <div style="display:flex;gap:9px"><input value="{{ dirNum }}" onChange="{{ onField('num') }}" placeholder="Número" style="flex:1;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"><input value="{{ dirCol }}" onChange="{{ onField('col') }}" placeholder="Colonia" style="flex:1.4;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></div>
+                <input value="{{ dirRef }}" onChange="{{ onField('ref') }}" placeholder="Referencias (portón, color, entre calles)" style="width:100%;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15">
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ chkRecoger }}" hint-placeholder-val="{{ true }}">
+            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:15px;margin-bottom:16px">
+              <div style="font-weight:700;font-size:14.5px;color:#211E15;margin-bottom:9px">Datos para recoger</div>
+              <input value="{{ dirNombre }}" onChange="{{ onField('nombre') }}" placeholder="Nombre de quien recoge" style="width:100%;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;margin-bottom:9px;background:#fff;color:#211E15">
+              <div style="display:flex;align-items:center;gap:9px;background:#eaf4ec;border:1px solid #cfe0c6;border-radius:11px;padding:11px 13px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#10603A" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg><span style="font-size:13px;color:#10603A;font-weight:600">Lo antes posible · listo en 15–20 min</span></div>
+            </div>
+          </sc-if>
+
+          <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:15px;margin-bottom:16px">
+            <div style="font-weight:700;font-size:14.5px;color:#211E15;margin-bottom:9px">Tus datos</div>
+            <div style="display:flex;gap:9px"><input value="{{ dirNombre }}" onChange="{{ onField('nombre') }}" placeholder="Nombre" style="flex:1;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"><input value="{{ dirTel }}" onChange="{{ onField('tel') }}" placeholder="Teléfono" style="flex:1;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></div>
+          </div>
+
+          <div style="font-size:13px;font-weight:800;color:#8a7f66;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">Método de pago</div>
+          <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:14px">
+            <sc-for list="{{ chkPagos }}" as="p" hint-placeholder-count="3"><button onClick="{{ p.onClick }}" style="{{ p.style }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10603A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ p.icon }}"></path></svg>{{ p.label }}</button></sc-for>
+          </div>
+          <sc-if value="{{ chkTransfer }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#fdf6e3;border:1px solid #f0e3b6;border-radius:13px;padding:14px;margin-bottom:16px">
+              <div style="font-weight:700;font-size:13.5px;color:#8a6d12;margin-bottom:8px">Sube tu comprobante</div>
+              <div style="border:1.5px dashed #d9c583;border-radius:11px;padding:16px;text-align:center;color:#a98c2e;background:#fffdf5"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:6px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"></path></svg><div style="font-size:12.5px;font-weight:600">Toca para adjuntar imagen</div></div>
+              <div style="font-size:11.5px;color:#a98c2e;margin-top:8px">Tu pago quedará como <strong>“Pendiente de verificar”</strong> hasta que la sucursal lo confirme.</div>
+            </div>
+          </sc-if>
+
+          <div style="background:#0f3d24;border-radius:16px;padding:16px 18px;color:#eaf3ec">
+            <div style="display:flex;justify-content:space-between;font-size:13.5px;padding:4px 0"><span style="color:#bcd6c1">Subtotal</span><span>{{ chkSubTxt }}</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13.5px;padding:4px 0"><span style="color:#bcd6c1">Envío</span><span>{{ chkEnvioTxt }}</span></div>
+            <sc-if value="{{ chkHasDesc }}" hint-placeholder-val="{{ false }}"><div style="display:flex;justify-content:space-between;font-size:13.5px;padding:4px 0;color:#8FD694"><span>Descuento</span><span>{{ chkDescTxt }}</span></div></sc-if>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;padding:9px 0 2px;border-top:1px dashed rgba(255,255,255,.2);margin-top:6px"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px">Total</span><span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:23px;color:#F2C230">{{ chkTotalTxt }}</span></div>
+            <div style="font-size:12px;color:#8FD694;text-align:right;margin-top:2px">Ganas {{ chkPuntos }} puntos ★</div>
+          </div>
+          <button onClick="{{ onHacerPedido }}" style="cursor:pointer;width:100%;margin-top:14px;background:#D6453D;color:#fff;border:none;border-radius:15px;padding:16px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;box-shadow:0 8px 20px rgba(214,69,61,.35)">Hacer pedido</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isConfirmacion }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:dlfade .3s ease both;padding:26px 18px 26px;text-align:center">
+          <div style="width:84px;height:84px;margin:0 auto 16px;border-radius:50%;background:#eaf4ec;display:flex;align-items:center;justify-content:center;animation:dlpop .4s"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#10603A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></div>
+          <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:26px;color:#10603A">¡Pedido recibido!</div>
+          <div style="font-size:14px;color:#8a7f66;margin-top:5px">Tu folio es</div>
+          <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:34px;color:#D6453D;letter-spacing:.04em;margin:2px 0 18px">{{ confFolio }}</div>
+          <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:6px 18px;text-align:left;margin-bottom:14px">
+            <div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px dotted #e6dcc5"><span style="color:#8a7f66;font-size:13.5px">Entrega</span><span style="font-weight:700;font-size:13.5px">{{ confEntregaTxt }}</span></div>
+            <div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px dotted #e6dcc5"><span style="color:#8a7f66;font-size:13.5px">Pago</span><span style="font-weight:700;font-size:13.5px">{{ confPagoTxt }}</span></div>
+            <div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px dotted #e6dcc5"><span style="color:#8a7f66;font-size:13.5px">Tiempo estimado</span><span style="font-weight:700;font-size:13.5px;color:#10603A">{{ confTiempo }}</span></div>
+            <div style="display:flex;justify-content:space-between;padding:11px 0"><span style="color:#8a7f66;font-size:13.5px">Total</span><span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:17px;color:#10603A">{{ confTotalTxt }}</span></div>
+          </div>
+          <sc-if value="{{ confPendPago }}" hint-placeholder-val="{{ false }}"><div style="background:#fdf6e3;border:1px solid #f0e3b6;color:#8a6d12;font-weight:600;font-size:12.5px;padding:11px 14px;border-radius:12px;margin-bottom:14px">Pago por transferencia <strong>pendiente de verificar</strong> por la sucursal.</div></sc-if>
+          <button onClick="{{ onSeguir }}" style="cursor:pointer;width:100%;background:#10603A;color:#fff;border:none;border-radius:14px;padding:15px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px">Seguir mi pedido</button>
+          <button onClick="{{ onWA }}" style="cursor:pointer;width:100%;margin-top:10px;background:#25D366;color:#fff;border:none;border-radius:14px;padding:14px;font-weight:700;font-size:14.5px;display:flex;align-items:center;justify-content:center;gap:9px"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2z"></path></svg>Recibir confirmación por WhatsApp</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isSeguimiento }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:dlfade .3s ease both;padding:16px 16px 26px">
+          <div style="background:#10603A;border-radius:20px;padding:20px;color:#fff;margin-bottom:16px;position:relative;overflow:hidden">
+            <div style="position:absolute;top:0;left:0;right:0;height:10px" class="dl-check"></div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-top:6px"><div><div style="font-size:12px;color:#9ec5a6;font-weight:600">Pedido {{ trkFolio }}</div><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:24px;margin-top:2px">{{ trkActual }}</div></div><span style="background:rgba(255,255,255,.16);border-radius:12px;padding:8px 12px;text-align:center"><span style="display:block;font-size:10px;color:#cbe0cf">Código</span><span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:17px;color:#F2C230">{{ trkCodigo }}</span></span></div>
+            <div style="margin-top:14px;height:8px;background:rgba(255,255,255,.16);border-radius:999px;overflow:hidden"><div style="height:100%;width:{{ trkPct }};background:#F2C230;border-radius:999px;transition:width .6s"></div></div>
+            <div style="font-size:13px;color:#e9dfc8;margin-top:9px;font-weight:600">{{ trkTiempo }}</div>
+          </div>
+
+          <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:8px 18px;margin-bottom:16px">
+            <sc-for list="{{ trkItems }}" as="s" hint-placeholder-count="6">
+              <div style="display:flex;gap:14px;padding:6px 0">
+                <div style="display:flex;flex-direction:column;align-items:center"><span style="width:28px;height:28px;border-radius:50%;background:{{ s.dot }};color:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="{{ s.icon }}"></path></svg></span><span style="flex:1;width:2px;background:{{ s.line }};min-height:14px"></span></div>
+                <span style="padding-top:4px;font-weight:{{ s.current ? '700' : '600' }};font-size:14.5px;color:{{ s.txtC }}">{{ s.label }}</span>
+              </div>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ trkRepartidor }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:15px;margin-bottom:16px;display:flex;align-items:center;gap:13px">
+              <span style="width:48px;height:48px;border-radius:50%;background:#28A54C;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;flex:0 0 auto">RG</span>
+              <div style="flex:1"><div style="font-weight:700;font-size:14.5px;color:#211E15">Ricardo G. · Repartidor</div><div style="font-size:12.5px;color:#8a7f66">Moto · placa GTO-4482</div></div>
+              <button onClick="{{ onLlamar }}" style="cursor:pointer;width:42px;height:42px;border-radius:12px;border:none;background:#10603A;color:#fff;display:flex;align-items:center;justify-content:center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7l.5 3a2 2 0 0 1-.5 1.9L7.6 10a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 1.9-.5l3 .5a2 2 0 0 1 1.7 2z"></path></svg></button>
+            </div>
+          </sc-if>
+
+          <div style="display:flex;gap:11px;margin-bottom:14px">
+            <button onClick="{{ onLlamar }}" style="cursor:pointer;flex:1;background:#fff;border:1.5px solid #E6DCC5;border-radius:13px;padding:13px;font-weight:700;font-size:13.5px;color:#10603A;display:flex;align-items:center;justify-content:center;gap:8px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7l.5 3a2 2 0 0 1-.5 1.9L7.6 10a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 1.9-.5l3 .5a2 2 0 0 1 1.7 2z"></path></svg>Llamar</button>
+            <button onClick="{{ onWA }}" style="cursor:pointer;flex:1;background:#25D366;border:none;border-radius:13px;padding:13px;font-weight:700;font-size:13.5px;color:#fff;display:flex;align-items:center;justify-content:center;gap:8px"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2z"></path></svg>WhatsApp</button>
+          </div>
+
+          <sc-if value="{{ trkEntregado }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#eaf4ec;border:1px solid #cfe0c6;border-radius:16px;padding:18px;text-align:center">
+              <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:18px;color:#10603A">¡Gracias por elegirnos! 🌮</div>
+              <div style="font-size:13px;color:#5a6f52;margin:5px 0 12px">Sumaste puntos a tu Club Don Luis.</div>
+              <button onClick="{{ onNuevo }}" style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:13px;padding:13px 22px;font-weight:700;font-size:14px">Hacer otro pedido</button>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isPedidos }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:dlfade .3s ease both;padding:16px 16px 24px">
+          <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:24px;color:#10603A;margin-bottom:14px">Mis pedidos</div>
+          <sc-if value="{{ pedHasActivo }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#10603A;border-radius:16px;padding:16px;color:#fff;margin-bottom:16px">
+              <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;color:#9ec5a6;font-weight:600">Pedido en curso</span><span style="background:#F2C230;color:#3a2c00;font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px">{{ pedActivo.estado }}</span></div>
+              <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px;margin:5px 0 2px">{{ pedActivo.folio }}</div>
+              <div style="font-size:13px;color:#cfe3d3">Tiempo estimado {{ pedActivo.tiempo }}</div>
+              <button onClick="{{ pedActivo.onVer }}" style="cursor:pointer;margin-top:12px;width:100%;background:#fff;color:#10603A;border:none;border-radius:12px;padding:12px;font-weight:700;font-size:14px">Ver seguimiento</button>
+            </div>
+          </sc-if>
+          <div style="font-size:13px;font-weight:800;color:#8a7f66;margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em">Historial</div>
+          <div style="display:flex;flex-direction:column;gap:11px">
+            <sc-for list="{{ pedHistorial }}" as="p" hint-placeholder-count="3">
+              <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:15px;padding:14px">
+                <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-weight:700;font-size:14.5px;color:#211E15">{{ p.folio }}</span><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:#10603A">{{ p.total }}</span></div>
+                <div style="font-size:12px;color:#9a8e70;margin:2px 0 6px">{{ p.fecha }}</div>
+                <div style="font-size:12.5px;color:#6a5f45;line-height:1.35">{{ p.items }}</div>
+                <button onClick="{{ p.onRepetir }}" style="cursor:pointer;margin-top:10px;background:#eaf4ec;border:1px solid #cfe0c6;color:#10603A;border-radius:11px;padding:9px 15px;font-weight:700;font-size:13px;display:flex;align-items:center;gap:7px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6M20.5 9a9 9 0 0 0-15-3.4L1 10M23 14l-4.5 4.4A9 9 0 0 1 3.5 15"></path></svg>Repetir pedido</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isCuenta }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:dlfade .3s ease both">
+          <sc-if value="{{ cuLogged }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#10603A;padding:22px 18px;color:#fff;position:relative;overflow:hidden">
+              <div style="position:absolute;top:0;left:0;right:0;height:10px" class="dl-check"></div>
+              <div style="display:flex;align-items:center;gap:14px;margin-top:6px">
+                <span style="width:56px;height:56px;border-radius:50%;background:#F2C230;color:#10603A;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px">{{ cuInitial }}</span>
+                <div style="flex:1"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:20px">{{ cuName }}</div><div style="font-size:12.5px;color:#cfe3d3">Miembro Club Don Luis · Nivel {{ cuNivel }}</div></div>
+              </div>
+            </div>
+            <div style="padding:14px 16px;display:flex;gap:8px"><sc-for list="{{ cuentaTabs }}" as="t" hint-placeholder-count="3"><button onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}</button></sc-for></div>
+            <div style="padding:0 16px 24px">
+              <sc-if value="{{ cuPerfil }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;flex-direction:column;gap:11px">
+                  <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px"><div style="font-size:11.5px;color:#9a8e70;font-weight:700">NOMBRE</div><div style="font-weight:600;font-size:15px;color:#211E15;margin-top:3px">{{ cuName }}</div></div>
+                  <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px"><div style="font-size:11.5px;color:#9a8e70;font-weight:700">TELÉFONO</div><div style="font-weight:600;font-size:15px;color:#211E15;margin-top:3px">{{ cuPhone }}</div></div>
+                  <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px"><div style="font-size:11.5px;color:#9a8e70;font-weight:700">CORREO</div><div style="font-weight:600;font-size:15px;color:#211E15;margin-top:3px">{{ cuEmail }}</div></div>
+                  <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:600;font-size:14.5px;color:#211E15">Notificaciones</div><div style="font-size:12px;color:#9a8e70">Ofertas y estado de pedidos</div></div><span style="width:44px;height:26px;background:#28A54C;border-radius:999px;position:relative"><span style="position:absolute;top:3px;right:3px;width:20px;height:20px;background:#fff;border-radius:50%"></span></span></div>
+                  <button onClick="{{ onLogout }}" style="cursor:pointer;background:none;border:none;color:#b23a32;font-weight:700;font-size:13.5px;padding:10px;text-align:center">Cerrar sesión</button>
+                  <button style="cursor:pointer;background:none;border:none;color:#b0a488;font-weight:600;font-size:12px;padding:2px;text-align:center">Eliminar mi cuenta</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ cuDir }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:11px">
+                  <sc-for list="{{ direcciones }}" as="d" hint-placeholder-count="2">
+                    <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start">
+                      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#10603A" stroke-width="2" style="flex:0 0 auto;margin-top:2px"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"></path><circle cx="12" cy="9" r="2.5"></circle></svg>
+                      <div style="flex:1"><div style="display:flex;align-items:center;gap:8px"><span style="font-weight:700;font-size:14.5px;color:#211E15">{{ d.alias }}</span><sc-if value="{{ d.ppal }}" hint-placeholder-val="{{ false }}"><span style="background:#eaf4ec;color:#10603A;font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px">PRINCIPAL</span></sc-if></div><div style="font-size:12.5px;color:#6a5f45;margin-top:3px">{{ d.dir }}</div></div>
+                    </div>
+                  </sc-for>
+                  <button style="cursor:pointer;background:#fff;border:1.5px dashed #10603A;color:#10603A;border-radius:14px;padding:13px;font-weight:700;font-size:13.5px">+ Agregar dirección</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ cuPuntos }}" hint-placeholder-val="{{ false }}">
+                <div>
+                  <div style="background:#10603A;border-radius:16px;padding:18px;color:#fff;text-align:center;margin-bottom:14px">
+                    <div style="font-size:12.5px;color:#9ec5a6;font-weight:600">Tienes</div>
+                    <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:40px;color:#F2C230;line-height:1">{{ cuPuntosVal }}</div>
+                    <div style="font-size:12.5px;color:#cfe3d3">puntos · Nivel {{ cuNivel }} · {{ cuVisitas }} visitas</div>
+                  </div>
+                  <div style="font-size:13px;font-weight:800;color:#8a7f66;margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em">Recompensas</div>
+                  <div style="display:flex;flex-direction:column;gap:10px">
+                    <sc-for list="{{ recompensas }}" as="r" hint-placeholder-count="3">
+                      <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:13px 15px;display:flex;align-items:center;gap:12px">
+                        <span style="background:#F2C230;color:#3a2c00;font-weight:800;font-size:12px;padding:5px 10px;border-radius:999px;white-space:nowrap;min-width:62px;text-align:center">{{ r.req }}</span>
+                        <span style="flex:1;font-weight:600;font-size:13.5px;color:#3a3120">{{ r.premio }}</span>
+                        <sc-if value="{{ r.listo }}" hint-placeholder-val="{{ false }}"><button style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:10px;padding:8px 13px;font-weight:700;font-size:12px">Canjear</button></sc-if>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ cuNotLogged }}" hint-placeholder-val="{{ true }}">
+            <div style="padding:26px 20px">
+              <div style="width:70px;height:70px;margin:0 auto 14px;border-radius:22px;background:#10603A;color:#F3F0E6;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px">TDL</div>
+              <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:24px;color:#10603A;text-align:center">Tu cuenta</div>
+              <div style="font-size:13.5px;color:#8a7f66;text-align:center;margin:5px 0 20px">Junta puntos, guarda direcciones y repite pedidos.</div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <input value="{{ authEmail }}" onChange="{{ onAuthEmail }}" placeholder="Correo electrónico" type="email" autocomplete="email" style="width:100%;border:1.5px solid #e0d6bf;border-radius:12px;padding:13px 14px;font-family:'Rubik',sans-serif;font-size:14.5px;background:#fff;color:#211E15">
+                <input value="{{ authPassword }}" onChange="{{ onAuthPassword }}" placeholder="Contraseña" type="password" autocomplete="current-password" style="width:100%;border:1.5px solid #e0d6bf;border-radius:12px;padding:13px 14px;font-family:'Rubik',sans-serif;font-size:14.5px;background:#fff;color:#211E15">
+                <button onClick="{{ onLogin }}" style="cursor:pointer;background:#D6453D;color:#fff;border:none;border-radius:13px;padding:15px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px">Iniciar sesión</button>
+                <button onClick="{{ onSignup }}" style="cursor:pointer;background:#fff;color:#10603A;border:1.5px solid #10603A;border-radius:13px;padding:14px;font-weight:700;font-size:14.5px">Crear cuenta nueva</button>
+                <button style="cursor:pointer;background:none;border:none;color:#8a7f66;font-weight:600;font-size:13px;padding:6px">¿Olvidaste tu contraseña?</button>
+              </div>
+              <div style="margin-top:16px;background:#fdf6e3;border:1px solid #f0e3b6;border-radius:12px;padding:12px 14px;font-size:12.5px;color:#8a6d12;text-align:center">También puedes pedir <strong>como invitado</strong> desde el menú, sin registrarte.</div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isStub }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:60px 24px;text-align:center;color:#9a8e70;animation:dlfade .3s"><div style="width:56px;height:56px;border:4px solid #E6DCC5;border-top-color:#10603A;border-radius:50%;animation:dlspin .9s linear infinite;margin:0 auto 14px"></div>Preparando…</div>
+      </sc-if>
+
+      <sc-if value="{{ sheetOpen }}" hint-placeholder-val="{{ false }}">
+        <div onClick="{{ sheet.onClose }}" style="position:fixed;inset:0;z-index:60;background:rgba(20,15,5,.5);animation:dlfade .2s;display:flex;align-items:flex-end;justify-content:center">
+          <div onClick="{{ stop }}" style="width:100%;max-width:480px;max-height:92vh;overflow-y:auto;background:#F3F0E6;border-radius:24px 24px 0 0;animation:dlsheet .28s ease both">
+            <div style="height:150px;background:#f0e8d4;position:relative;display:flex;align-items:center;justify-content:center">
+              <sc-if value="{{ sheet.foto }}" hint-placeholder-val="{{ false }}"><img src="{{ sheet.foto }}" alt="{{ sheet.nombre }}" style="width:100%;height:100%;object-fit:cover"></sc-if>
+              <sc-if value="{{ sheet.noFoto }}" hint-placeholder-val="{{ true }}"><span style="color:#c2b48f;display:flex;flex-direction:column;align-items:center;gap:6px"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11a9 9 0 0 1 18 0M2 11h20l-2 4H4zM7 18h10"></path></svg><span style="font-size:11px;font-weight:700">Foto próximamente</span></span></sc-if>
+              <button onClick="{{ sheet.onClose }}" style="cursor:pointer;position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.92);color:#211E15;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
+            </div>
+            <div style="padding:18px 18px 4px">
+              <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:23px;color:#211E15">{{ sheet.nombre }}</div>
+              <div style="font-size:13.5px;color:#8a7f66;line-height:1.4;margin:5px 0 8px">{{ sheet.desc }}</div>
+              <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;color:#10603A">{{ sheet.precioTxt }}</div>
+            </div>
+            <div style="padding:6px 18px">
+              <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:12px 0 8px;text-transform:uppercase;letter-spacing:.04em">Modificar</div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ sheet.mods }}" as="m" hint-placeholder-count="4"><button onClick="{{ m.onClick }}" style="{{ m.style }}">{{ m.label }}</button></sc-for></div>
+              <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:16px 0 8px;text-transform:uppercase;letter-spacing:.04em">Extras con costo</div>
+              <div style="display:flex;flex-direction:column;gap:8px"><sc-for list="{{ sheet.extras }}" as="e" hint-placeholder-count="4"><button onClick="{{ e.onClick }}" style="{{ e.style }}"><span style="font-weight:600;font-size:14px;color:#211E15">{{ e.label }}</span><span style="font-weight:700;font-size:13px;color:#10603A">{{ e.precioTxt }}</span></button></sc-for></div>
+              <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:16px 0 8px;text-transform:uppercase;letter-spacing:.04em">Nota especial</div>
+              <textarea value="{{ sheet.nota }}" onChange="{{ sheet.onNota }}" placeholder="Ej. bien doradito, salsa aparte…" style="width:100%;min-height:64px;resize:none;border:1.5px solid #e0d6bf;border-radius:12px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></textarea>
+            </div>
+            <div style="position:sticky;bottom:0;background:#F3F0E6;padding:14px 18px calc(16px + env(safe-area-inset-bottom));border-top:1px solid #E6DCC5;display:flex;gap:12px;align-items:center">
+              <div style="display:flex;align-items:center;gap:11px;background:#fff;border:1.5px solid #E6DCC5;border-radius:13px;padding:7px 8px"><button onClick="{{ sheet.onDec }}" style="cursor:pointer;width:32px;height:32px;border-radius:9px;border:none;background:#f0e8d4;color:#10603A;font-size:19px;line-height:1">−</button><span style="font-weight:800;min-width:18px;text-align:center;font-size:16px">{{ sheet.qty }}</span><button onClick="{{ sheet.onInc }}" style="cursor:pointer;width:32px;height:32px;border-radius:9px;border:none;background:#10603A;color:#fff;font-size:19px;line-height:1">+</button></div>
+              <button onClick="{{ sheet.onAdd }}" style="cursor:pointer;flex:1;background:#D6453D;color:#fff;border:none;border-radius:13px;padding:14px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:15.5px">{{ sheet.addTxt }}</button>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+    </main>
+
+    <nav style="position:sticky;bottom:0;z-index:30;background:#fff;border-top:1px solid #E6DCC5;display:flex;padding:7px 6px calc(7px + env(safe-area-inset-bottom))">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+        <button onClick="{{ t.onClick }}" style="{{ t.style }}">
+          <span style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ t.icon }}"></path></svg><sc-if value="{{ t.badge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-5px;right:-8px;background:#D6453D;color:#fff;font-size:9px;font-weight:800;min-width:15px;height:15px;padding:0 3px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ t.badge }}</span></sc-if></span>
+          <span style="font-size:10.5px;font-weight:700">{{ t.label }}</span>
+        </button>
+      </sc-for>
+    </nav>
+
+    <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+      <div style="position:fixed;left:50%;transform:translateX(-50%);bottom:78px;z-index:90;background:#10603A;color:#fff;padding:12px 20px;border-radius:13px;box-shadow:0 12px 30px rgba(0,0,0,.3);font-weight:600;font-size:14px;display:flex;align-items:center;gap:10px;animation:dlpop .3s;max-width:90vw">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#8FD694" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>{{ toast }}
+      </div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
+class Component extends DCLogic {
+  static APP_VERSION = '2.0.0';
+  static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
+  static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
+  state = { route:'home', vw:1280, toast:null, cat:'Tacos',
+    sheetItem:null, sheetQty:1, sheetMods:[], sheetExtras:[], sheetNota:'',
+    cart:[], entrega:'recoger', pago:'efectivo', dir:{}, prog:false,
+    folio:null, trackStep:0, cuentaTab:'perfil', logged:false,
+    remoteMenu:null, remoteCategories:null, remoteZones:null, modifierOptions:null, branchId:null,
+    settings:null, submitting:false, trackingToken:null, liveOrder:null,
+    authEmail:'',authPassword:'',session:null,currentUser:null };
+
+  MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  componentDidMount(){
+    this._onR=()=>this.setState({vw:window.innerWidth});
+    this.setState({vw:window.innerWidth});
+    window.addEventListener('resize',this._onR);
+    this.loadPublicData();
+    const saved=localStorage.getItem('donLuisTrackingToken');
+    if(saved)this.setState({trackingToken:saved});
+    const session=JSON.parse(localStorage.getItem('donLuisSession')||'null');
+    if(session?.access_token)this.setState({session,currentUser:session.user,logged:true});
+  }
+  componentWillUnmount(){ window.removeEventListener('resize',this._onR); clearInterval(this._trk); clearInterval(this._poll); }
+  toast(m){ clearTimeout(this._t); this.setState({toast:m}); this._t=setTimeout(()=>this.setState({toast:null}),2400); }
+  go(r){ this.setState({route:r}); if(typeof window!=='undefined') window.scrollTo?.({top:0}); }
+
+  async api(path,options={}){
+    const headers={apikey:Component.SUPABASE_KEY,'Content-Type':'application/json',...(options.headers||{})};
+    const res=await fetch(Component.SUPABASE_URL+path,{...options,headers});
+    const data=await res.json().catch(()=>null);
+    if(!res.ok)throw new Error(data?.error||'No fue posible conectar con Don Luis');
+    return data;
+  }
+  async loadPublicData(){
+    try{
+      const branches=await this.api('/rest/v1/branches?slug=eq.punto-canada&is_active=eq.true&select=id,name');
+      const branch=branches[0]; if(!branch)throw new Error('Sucursal no disponible');
+      const bid=branch.id;
+      const [cats,products,zones,settings,modifierOptions]=await Promise.all([
+        this.api('/rest/v1/categories?branch_id=eq.'+bid+'&is_active=eq.true&select=id,name,slug,sort_order&order=sort_order'),
+        this.api('/rest/v1/products?branch_id=eq.'+bid+'&is_active=eq.true&select=id,category_id,name,description,price,image_url,is_available,is_featured,sort_order&order=sort_order'),
+        this.api('/rest/v1/delivery_zones?branch_id=eq.'+bid+'&is_active=eq.true&select=id,name,min_distance_km,max_distance_km,fee,minimum_order,sort_order&order=sort_order'),
+        this.api('/rest/v1/business_settings?branch_id=eq.'+bid+'&select=*'),
+        this.api('/rest/v1/modifier_options?is_available=eq.true&select=id,name,price_delta,modifier_group_id,modifier_groups!inner(branch_id)&modifier_groups.branch_id=eq.'+bid)
+      ]);
+      const catById=Object.fromEntries(cats.map(c=>[c.id,c.name]));
+      const remoteMenu=products.map(p=>({id:p.id,nombre:p.name,cat:catById[p.category_id]||'Tacos',precio:Number(p.price),desc:p.description||'',foto:p.image_url||null,tag:p.is_featured?'Favorito':null,featured:p.is_featured,disponible:p.is_available}));
+      this.setState({branchId:bid,remoteCategories:cats.map(c=>c.name),remoteMenu,remoteZones:zones,modifierOptions,settings:settings[0]||null});
+    }catch(error){ console.error(error); this.toast('Mostrando menú sin conexión'); }
+  }
+  async signIn(){
+    try{
+      const session=await this.api('/auth/v1/token?grant_type=password',{method:'POST',body:JSON.stringify({email:this.state.authEmail.trim(),password:this.state.authPassword})});
+      localStorage.setItem('donLuisSession',JSON.stringify(session));
+      this.setState({session,currentUser:session.user,logged:true,authPassword:''});
+      this.toast('Sesión iniciada');
+    }catch(error){this.toast(error.message||'No fue posible iniciar sesión');}
+  }
+  async signUp(){
+    try{
+      const result=await this.api('/auth/v1/signup',{method:'POST',body:JSON.stringify({email:this.state.authEmail.trim(),password:this.state.authPassword})});
+      if(result.access_token){
+        localStorage.setItem('donLuisSession',JSON.stringify(result));
+        this.setState({session:result,currentUser:result.user,logged:true,authPassword:''});
+      }
+      this.toast(result.access_token?'Cuenta creada':'Revisa tu correo para confirmar la cuenta');
+    }catch(error){this.toast(error.message||'No fue posible crear la cuenta');}
+  }
+  signOut(){localStorage.removeItem('donLuisSession');this.setState({session:null,currentUser:null,logged:false});this.toast('Sesión cerrada');}
+  get menu(){ if(this.state.remoteMenu?.length)return this.state.remoteMenu; return [
+    {id:'t_pastor',nombre:'Taco al pastor',cat:'Tacos',precio:17,desc:'Cerdo al pastor, cebolla y cilantro',foto:null,tag:'Favorito'},
+    {id:'t_bistec',nombre:'Taco de bistec',cat:'Tacos',precio:17,desc:'Res a la plancha, cebolla y cilantro',foto:null,tag:'Top'},
+    {id:'t_cabeza',nombre:'Taco de cabeza',cat:'Tacos',precio:17,desc:'Cabeza suave en su jugo',foto:null},
+    {id:'t_chorizo',nombre:'Taco de chorizo',cat:'Tacos',precio:17,desc:'Chorizo artesanal dorado',foto:null},
+    {id:'t_lengua',nombre:'Taco de lengua',cat:'Tacos',precio:25,desc:'Lengua de res suave',foto:null},
+    {id:'t_sesos',nombre:'Taco de sesos',cat:'Tacos',precio:25,desc:'Sesos bien dorados',foto:null},
+    {id:'t_arrachera',nombre:'Taco de arrachera',cat:'Tacos',precio:25,desc:'Arrachera premium al carbón',foto:null,disponible:false},
+    {id:'q_pastor',nombre:'Quesadilla de pastor',cat:'Quesadillas',precio:34,desc:'Queso Oaxaca y pastor',foto:null,tag:'Recomendado'},
+    {id:'q_bistec',nombre:'Quesadilla de bistec',cat:'Quesadillas',precio:34,desc:'Queso Oaxaca y bistec',foto:null},
+    {id:'q_cabeza',nombre:'Quesadilla de cabeza',cat:'Quesadillas',precio:34,desc:'Queso Oaxaca y cabeza',foto:null},
+    {id:'q_chorizo',nombre:'Quesadilla de chorizo',cat:'Quesadillas',precio:34,desc:'Queso Oaxaca y chorizo',foto:null},
+    {id:'q_lengua',nombre:'Quesadilla de lengua',cat:'Quesadillas',precio:40,desc:'Queso Oaxaca y lengua',foto:null},
+    {id:'q_sesos',nombre:'Quesadilla de sesos',cat:'Quesadillas',precio:40,desc:'Queso Oaxaca y sesos',foto:null},
+    {id:'to_pastor',nombre:'Torta de pastor',cat:'Tortas',precio:40,desc:'Pan telera, pastor, aguacate y frijol',foto:null,tag:'Favorito'},
+    {id:'to_bistec',nombre:'Torta de bistec',cat:'Tortas',precio:40,desc:'Pan telera, bistec, aguacate y frijol',foto:null},
+    {id:'to_cabeza',nombre:'Torta de cabeza',cat:'Tortas',precio:40,desc:'Pan telera, cabeza, aguacate y frijol',foto:null},
+    {id:'to_chorizo',nombre:'Torta de chorizo',cat:'Tortas',precio:40,desc:'Pan telera, chorizo, aguacate y frijol',foto:null},
+    {id:'to_lengua',nombre:'Torta de lengua',cat:'Tortas',precio:45,desc:'Pan telera, lengua, aguacate y frijol',foto:null},
+    {id:'to_sesos',nombre:'Torta de sesos',cat:'Tortas',precio:45,desc:'Pan telera, sesos, aguacate y frijol',foto:null},
+    {id:'l_pastor',nombre:'Taco light de pastor',cat:'Tacos light',precio:80,desc:'Orden light de pastor, tortilla especial',foto:null,tag:'Light'},
+    {id:'l_bistec',nombre:'Taco light de bistec',cat:'Tacos light',precio:80,desc:'Orden light de bistec, tortilla especial',foto:null},
+    {id:'l_cabeza',nombre:'Taco light de cabeza',cat:'Tacos light',precio:80,desc:'Orden light de cabeza, tortilla especial',foto:null},
+    {id:'l_chorizo',nombre:'Taco light de chorizo',cat:'Tacos light',precio:80,desc:'Orden light de chorizo, tortilla especial',foto:null},
+    {id:'l_lengua',nombre:'Taco light de lengua',cat:'Tacos light',precio:100,desc:'Orden light de lengua, tortilla especial',foto:null},
+    {id:'l_sesos',nombre:'Taco light de sesos',cat:'Tacos light',precio:100,desc:'Orden light de sesos, tortilla especial',foto:null},
+    {id:'refresco',nombre:'Refresco',cat:'Bebidas',precio:30,desc:'Lata / botella',foto:null},
+    {id:'agua_medio',nombre:'Agua de sabor ½ litro',cat:'Bebidas',precio:30,desc:'Horchata, jamaica o del día',foto:null},
+    {id:'agua_litro',nombre:'Agua de sabor 1 litro',cat:'Bebidas',precio:50,desc:'Horchata, jamaica o del día',foto:null},
+  ]; }
+  get cats(){ return this.state.remoteCategories?.length?this.state.remoteCategories:['Tacos','Quesadillas','Tortas','Tacos light','Bebidas']; }
+  itemById(id){ return this.menu.find(m=>m.id===id)||{nombre:id,precio:0}; }
+  get extras(){
+    if(this.state.modifierOptions?.length)return this.state.modifierOptions.filter(o=>Number(o.price_delta)>0).map(o=>({id:o.id,n:o.name,p:Number(o.price_delta)}));
+    return [{id:'queso',n:'Queso',p:10},{id:'aguacate',n:'Aguacate',p:10},{id:'pina',n:'Piña',p:10},{id:'doble',n:'Doble carne',p:15}];
+  }
+  get modsLibres(){
+    if(this.state.modifierOptions?.length)return this.state.modifierOptions.filter(o=>Number(o.price_delta)===0).map(o=>o.name);
+    return ['Sin cebolla','Sin cilantro','Sin picante','Bien dorado','Con todo'];
+  }
+
+  catIcon(c){ return {Tacos:'M3 11a9 9 0 0 1 18 0M2 11h20l-2 4H4zM7 18h10',Quesadillas:'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM12 2v20',Tortas:'M4 11h16a0 0 0 0 1 0 0v2a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-2zM6 11a6 6 0 0 1 12 0',['Tacos light']:'M7 20s-3-2-3-8a8 8 0 0 1 16 0c0 6-3 8-3 8M12 4v16',Bebidas:'M5 3h14l-1.5 17a1 1 0 0 1-1 .9H7.5a1 1 0 0 1-1-.9zM5 8h14'}[c]; }
+  catTint(c){ return {Tacos:'#D6453D',Quesadillas:'#E0A526',Tortas:'#10603A',['Tacos light']:'#28A54C',Bebidas:'#1f6f8b'}[c]; }
+
+  cartCount(){ return this.state.cart.reduce((s,l)=>s+l.q,0); }
+  addQuick(id){ const it=this.itemById(id); if(it.disponible===false){ this.toast(it.nombre+' está agotado hoy'); return; } const c=[...this.state.cart]; c.push({uid:Date.now()+Math.random(),id,q:1,mods:[],extras:[],nota:''}); this.setState({cart:c}); this.toast(it.nombre+' agregado'); }
+
+  // ---- product sheet ----
+  openSheet(id){ this.setState({sheetItem:id,sheetQty:1,sheetMods:[],sheetExtras:[],sheetNota:''}); }
+  closeSheet(){ this.setState({sheetItem:null}); }
+  toggleMod(m){ const a=[...this.state.sheetMods]; const i=a.indexOf(m); if(i>-1)a.splice(i,1); else a.push(m); this.setState({sheetMods:a}); }
+  toggleExtra(id){ const a=[...this.state.sheetExtras]; const i=a.indexOf(id); if(i>-1)a.splice(i,1); else a.push(id); this.setState({sheetExtras:a}); }
+  sheetUnit(){ const it=this.itemById(this.state.sheetItem); const ex=this.state.sheetExtras.reduce((s,id)=>s+(this.extras.find(e=>e.id===id)?.p||0),0); return it.precio+ex; }
+  addSheet(){ const c=[...this.state.cart]; c.push({uid:Date.now()+Math.random(),id:this.state.sheetItem,q:this.state.sheetQty,mods:[...this.state.sheetMods],extras:[...this.state.sheetExtras],nota:this.state.sheetNota}); this.setState({cart:c,sheetItem:null}); this.toast('Agregado al carrito'); }
+
+  lineUnit(l){ const it=this.itemById(l.id); const ex=(l.extras||[]).reduce((s,id)=>s+(this.extras.find(e=>e.id===id)?.p||0),0); return it.precio+ex; }
+  lineTotal(l){ return this.lineUnit(l)*l.q; }
+  cartSubtotal(){ return this.state.cart.reduce((s,l)=>s+this.lineTotal(l),0); }
+  cartInc(uid){ const c=this.state.cart.map(l=>l.uid===uid?{...l,q:l.q+1}:l); this.setState({cart:c}); }
+  cartDec(uid){ let c=this.state.cart.map(l=>l.uid===uid?{...l,q:l.q-1}:l).filter(l=>l.q>0); this.setState({cart:c}); }
+  cartRemove(uid){ this.setState({cart:this.state.cart.filter(l=>l.uid!==uid)}); }
+  lineLabel(l){ const parts=[...(l.mods||[])]; (l.extras||[]).forEach(id=>parts.push('+ '+(this.extras.find(e=>e.id===id)?.n||id))); if(l.nota)parts.push('“'+l.nota+'”'); return parts.join(' · '); }
+
+  // ---- checkout / cobertura ----
+  get coberturaTarifas(){
+    if(this.state.remoteZones?.length)return this.state.remoteZones.map(z=>({
+      id:z.id,max:Number(z.max_distance_km),
+      label:Number(z.min_distance_km)===0?'Hasta '+Number(z.max_distance_km)+' km':Number(z.min_distance_km)+' – '+Number(z.max_distance_km)+' km',
+      precio:Number(z.fee)
+    }));
+    return [{max:2,label:'Hasta 2 km',precio:25},{max:4,label:'2 – 4 km',precio:35},{max:5,label:'4 – 5 km',precio:45}];
+  }
+  envioActual(){ if(this.state.entrega!=='domicilio') return 0; const z=this.state.dir.zona; const t=this.coberturaTarifas.find(x=>x.label===z); return t?t.precio:0; }
+  fueraCobertura(){ return this.state.entrega==='domicilio' && this.state.dir.zona==='Más de 5 km · fuera de cobertura'; }
+  setField(k,v){ this.setState({dir:{...this.state.dir,[k]:v}}); }
+  descuento(){ return this.state.cart.length && this.cartSubtotal()>=200 ? 20 : 0; }
+  totalFinal(){ return Math.max(0,this.cartSubtotal()+this.envioActual()-this.descuento()); }
+  puntosGanados(){ return Math.round(this.totalFinal()/10); }
+
+  async hacerPedido(){
+    if(this.fueraCobertura()){ this.toast('Esa dirección está fuera de cobertura'); return; }
+    if(this.state.entrega==='domicilio' && !this.state.dir.calle){ this.toast('Agrega tu dirección de entrega'); return; }
+    if(!this.state.dir.nombre?.trim()||!this.state.dir.tel?.trim()){this.toast('Agrega tu nombre y teléfono');return;}
+    if(!this.state.remoteMenu){this.toast('Espera a que termine de cargar el menú');return;}
+    if(this.state.submitting)return;
+    this.setState({submitting:true});
+    try{
+      const requestId=crypto.randomUUID();
+      const selectedZone=this.coberturaTarifas.find(z=>z.label===this.state.dir.zona);
+      const freeOptions=this.state.modifierOptions||[];
+      const items=this.state.cart.map(l=>({
+        productId:l.id,
+        quantity:l.q,
+        notes:[...(l.mods||[]),l.nota||''].filter(Boolean).join(' · '),
+        modifierOptionIds:[
+          ...(l.extras||[]),
+          ...(l.mods||[]).map(name=>freeOptions.find(o=>o.name===name)?.id).filter(Boolean)
+        ]
+      }));
+      const result=await this.api('/functions/v1/create-guest-order',{
+        method:'POST',
+        body:JSON.stringify({
+          requestId,branchSlug:'punto-canada',
+          fulfillmentType:this.state.entrega==='domicilio'?'delivery':'pickup',
+          paymentMethod:{efectivo:'cash',transferencia:'transfer',tarjeta:'card_present'}[this.state.pago],
+          customer:{name:this.state.dir.nombre,phone:this.state.dir.tel},
+          deliveryZoneId:selectedZone?.id||null,
+          address:this.state.entrega==='domicilio'?{
+            street:this.state.dir.calle,exteriorNumber:this.state.dir.num,
+            neighborhood:this.state.dir.col,references:this.state.dir.ref
+          }:null,
+          items
+        })
+      });
+      const folio='DL-'+result.order.folio;
+      localStorage.setItem('donLuisTrackingToken',result.trackingToken);
+      this.setState({folio,trackingToken:result.trackingToken,liveOrder:result.order,route:'confirmacion',trackStep:0,prog:false,submitting:false});
+      this.toast('¡Pedido recibido! 🌮');
+    }catch(error){this.setState({submitting:false});this.toast(error.message||'No se pudo crear el pedido');}
+  }
+  async refreshTracking(){
+    if(!this.state.trackingToken)return;
+    try{
+      const result=await this.api('/functions/v1/track-order',{method:'POST',body:JSON.stringify({token:this.state.trackingToken})});
+      const order=result.order;
+      const dom=order.fulfillment_type==='delivery';
+      const steps=dom?['pending_acceptance','pending_acceptance','confirmed','preparing','ready','assigned','on_the_way','delivered']:['pending_acceptance','pending_acceptance','confirmed','preparing','ready','ready'];
+      let index=steps.lastIndexOf(order.status);
+      if(index<0)index=0;
+      this.setState({liveOrder:order,trackStep:index,folio:'DL-'+order.folio,entrega:dom?'domicilio':'recoger'});
+      if(['delivered','cancelled','rejected','failed_delivery'].includes(order.status))clearInterval(this._poll);
+    }catch(error){console.error(error);}
+  }
+  iniciarSeguimiento(){
+    this.setState({route:'seguimiento'});
+    this.refreshTracking();
+    clearInterval(this._poll);
+    this._poll=setInterval(()=>this.refreshTracking(),12000);
+  }
+  nuevoPedido(){ clearInterval(this._trk); this.setState({cart:[],folio:null,trackStep:0,dir:{},route:'home'}); }
+
+  vmCheckout(){
+    const entrega=this.state.entrega;
+    const modos=[['recoger','Pasar a recoger','M9 11l3 3 8-8M5 20V9a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v11'],['domicilio','Envío a domicilio','M1 3h15v13H1zM16 8h4l3 3v5h-7M5.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM18.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z']].map(([k,l,ic])=>({key:k,label:l,icon:ic,active:k===entrega,onClick:()=>this.setState({entrega:k}),
+      style:`cursor:pointer;flex:1;padding:14px 10px;border-radius:15px;border:2px solid ${k===entrega?'#10603A':'#E6DCC5'};background:${k===entrega?'#eaf4ec':'#fff'};display:flex;flex-direction:column;align-items:center;gap:7px;color:${k===entrega?'#10603A':'#8a7f66'};font-weight:700;font-size:13px`}));
+    const pagos=[['efectivo','Efectivo','M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'],['transferencia','Transferencia','M4 12h16M8 8l-4 4 4 4M16 16l4-4-4-4'],['tarjeta','Tarjeta al recibir','M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 11h20']].map(([k,l,ic])=>({key:k,label:l,icon:ic,active:k===this.state.pago,onClick:()=>this.setState({pago:k}),
+      style:`cursor:pointer;width:100%;padding:13px 15px;border-radius:13px;border:1.5px solid ${k===this.state.pago?'#10603A':'#E6DCC5'};background:${k===this.state.pago?'#eaf4ec':'#fff'};display:flex;align-items:center;gap:12px;color:#211E15;font-weight:600;font-size:14px`}));
+    const zonas=[...this.coberturaTarifas.map(t=>t.label+' · '+this.MXN(t.precio)),'Más de 5 km · fuera de cobertura'];
+    const zonaSel=this.state.dir.zona||'';
+    const zonaChips=this.coberturaTarifas.map(t=>({label:t.label,precio:this.MXN(t.precio),active:zonaSel===t.label,onClick:()=>this.setField('zona',t.label),
+      style:`cursor:pointer;flex:1;min-width:96px;padding:11px;border-radius:12px;border:1.5px solid ${zonaSel===t.label?'#10603A':'#E6DCC5'};background:${zonaSel===t.label?'#eaf4ec':'#fff'};display:flex;flex-direction:column;gap:2px;align-items:center`}));
+    const fuera=this.fueraCobertura();
+    const desc=this.descuento();
+    return {
+      chkModos:modos, chkPagos:pagos, chkEntrega:entrega,
+      chkDomicilio:entrega==='domicilio', chkRecoger:entrega==='recoger',
+      chkTransfer:this.state.pago==='transferencia',
+      zonaChips, chkFuera:fuera,
+      chkSubTxt:this.MXN(this.cartSubtotal()),
+      chkEnvioTxt:entrega==='domicilio'?(this.envioActual()?this.MXN(this.envioActual()):'Elige zona'):'Gratis',
+      chkDescTxt:'−'+this.MXN(desc), chkHasDesc:desc>0,
+      chkTotalTxt:this.MXN(this.totalFinal()),
+      chkPuntos:this.puntosGanados(),
+      onField:(k)=>(e)=>this.setField(k,e.target.value),
+      dirCalle:this.state.dir.calle||'', dirNum:this.state.dir.num||'', dirCol:this.state.dir.col||'', dirRef:this.state.dir.ref||'', dirNombre:this.state.dir.nombre||'', dirTel:this.state.dir.tel||'',
+      onHacerPedido:()=>this.hacerPedido(),
+    };
+  }
+  vmConfirm(){
+    const dom=this.state.entrega==='domicilio';
+    return {
+      confFolio:this.state.folio||'DL-0000',
+      confEntregaTxt:dom?'Envío a domicilio':'Pasar a recoger',
+      confPagoTxt:{efectivo:'Efectivo',transferencia:'Transferencia (por verificar)',tarjeta:'Tarjeta al recibir'}[this.state.pago],
+      confTiempo:this.state.liveOrder?.promised_at?new Date(this.state.liveOrder.promised_at).toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}):(dom?'30 – 40 min':'15 – 20 min'),
+      confTotalTxt:this.MXN(this.state.liveOrder?.total??this.totalFinal()),
+      confPuntos:this.puntosGanados(),
+      confPendPago:this.state.pago==='transferencia',
+      onSeguir:()=>this.iniciarSeguimiento(),
+      onWA:()=>this.toast('Confirmación enviada por WhatsApp (demo)'),
+    };
+  }
+  vmTrack(){
+    const dom=this.state.entrega==='domicilio';
+    const pasosRecoger=['Recibido','Pendiente de aceptación','Confirmado','En preparación','Listo','Listo para recoger'];
+    const pasosDom=['Recibido','Pendiente de aceptación','Confirmado','En preparación','Listo','Asignado a repartidor','En camino','Entregado'];
+    const pasos=dom?pasosDom:pasosRecoger;
+    const step=Math.min(this.state.trackStep,pasos.length-1);
+    const iconos=['M20 6 9 17l-5-5','M12 8v4l3 2','M9 11l3 3L22 4','M8 3v6M12 3v6M10 9v12','M20 6 9 17l-5-5','M16 3h5v5M21 3l-7 7','M1 3h15v13H1zM16 8h4l3 3v5h-7','M20 6 9 17l-5-5'];
+    const items=pasos.map((p,i)=>({label:p,done:i<step,current:i===step,pending:i>step,icon:iconos[i]||'M12 8v4l3 2',
+      dot:i<step?'#10603A':(i===step?'#D6453D':'#e0d6bf'),
+      txtC:i<=step?'#211E15':'#a99d80',
+      line:i<step?'#10603A':'#e0d6bf'}));
+    const pct=Math.round(step/(pasos.length-1)*100);
+    const entregado=step>=pasos.length-1;
+    return {
+      trkItems:items, trkPct:pct+'%', trkEntregado:entregado, trkDom:dom,
+      trkActual:pasos[step], trkFolio:this.state.folio||'DL-0000',
+      trkTiempo:entregado?'¡Entregado!':(dom?'Llega en ~'+(40-step*5)+' min':'Listo en ~'+(20-step*4)+' min'),
+      trkCodigo:(this.state.folio||'DL-0000').slice(-4),
+      trkRepartidor:dom&&step>=5,
+      onNuevo:()=>this.nuevoPedido(), onWA:()=>this.toast('Abriendo WhatsApp… (demo)'), onLlamar:()=>this.toast('Llamando… (demo)'),
+    };
+  }
+
+  vmCuenta(){
+    const tabs=[['perfil','Perfil'],['direcciones','Direcciones'],['puntos','Puntos']].map(([k,l])=>({label:l,active:k===this.state.cuentaTab,onClick:()=>this.setState({cuentaTab:k}),
+      style:`cursor:pointer;flex:1;padding:9px;border-radius:11px;font-weight:700;font-size:13px;border:none;${k===this.state.cuentaTab?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35;border:1px solid #E6DCC5'}`}));
+    const direcciones=[
+      {alias:'Casa',dir:'Av. Cañada 120, col. Punto Cañada',ppal:true},
+      {alias:'Oficina',dir:'Blvd. Juan Alonso de Torres 500, Jardines',ppal:false},
+    ];
+    const recompensas=[
+      {req:'200 pts',premio:'3 tacos de pastor gratis',listo:true},
+      {req:'350 pts',premio:'Orden de quesadilla + agua',listo:false},
+      {req:'500 pts',premio:'20% en toda tu cuenta',listo:false},
+    ];
+    const email=this.state.currentUser?.email||'';
+    const name=this.state.currentUser?.user_metadata?.full_name||email.split('@')[0]||'Cliente Don Luis';
+    return {cuentaTabs:tabs, cuLogged:this.state.logged, cuNotLogged:!this.state.logged,
+      cuPerfil:this.state.cuentaTab==='perfil', cuDir:this.state.cuentaTab==='direcciones', cuPuntos:this.state.cuentaTab==='puntos',
+      cuPuntosVal:180, cuNivel:'Plata', cuVisitas:12,
+      cuName:name,cuEmail:email,cuPhone:this.state.currentUser?.phone||'Pendiente',cuInitial:name.slice(0,1).toUpperCase(),
+      direcciones, recompensas,
+      authEmail:this.state.authEmail,authPassword:this.state.authPassword,
+      onAuthEmail:e=>this.setState({authEmail:e.target.value}),
+      onAuthPassword:e=>this.setState({authPassword:e.target.value}),
+      onLogin:()=>this.signIn(),onSignup:()=>this.signUp(),
+      onLogout:()=>this.signOut(),
+    };
+  }
+  vmPedidos(){
+    const activo=this.state.folio?{folio:this.state.folio,estado:'En preparación',tiempo:this.state.entrega==='domicilio'?'30–40 min':'15–20 min',onVer:()=>this.go('seguimiento')}:null;
+    const historial=[
+      {folio:'DL-3980',fecha:'5 ago · 21:14',total:this.MXN(102),items:'3 tacos pastor, 1 quesadilla, agua',onRepetir:()=>this.toast('Pedido agregado al carrito (demo)')},
+      {folio:'DL-3902',fecha:'2 ago · 14:40',total:this.MXN(85),items:'2 tortas, 1 refresco',onRepetir:()=>this.toast('Pedido agregado al carrito (demo)')},
+      {folio:'DL-3811',fecha:'28 jul · 20:02',total:this.MXN(51),items:'3 tacos de bistec',onRepetir:()=>this.toast('Pedido agregado al carrito (demo)')},
+    ];
+    return {pedActivo:activo, pedHasActivo:!!activo, pedHistorial:historial};
+  }
+
+  renderVals(){
+    const vw=this.state.vw, phone=vw>0&&vw<760;
+    const route=this.state.route;
+    const estados={abierto:{txt:'Abierto',c:'#dff5e4',bg:'rgba(255,255,255,.16)',dot:'#8FD694'}};
+    const est=estados.abierto;
+    const valores=[
+      {label:'FRESCO',icon:'M12 2a7 7 0 0 0-7 7c0 3 2 5 2 5h10s2-2 2-5a7 7 0 0 0-7-7zM9 21h6'},
+      {label:'SABROSO',icon:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM8 13a4 4 0 0 0 8 0'},
+      {label:'CON ORGULLO',icon:'M12 2l2.4 7.4H22l-6 4.6 2.3 7.4L12 16.8 5.7 21.4 8 14 2 9.4h7.6z'},
+    ];
+    const favoritosRemotos=this.menu.filter(m=>m.featured);
+    const destacados=(favoritosRemotos.length?favoritosRemotos:(this.state.remoteMenu?this.menu.slice(0,4):this.menu.filter(m=>['t_pastor','t_bistec','q_pastor','to_pastor'].includes(m.id)))).slice(0,4).map(m=>({...m,precioTxt:this.MXN(m.precio),tag:m.tag||'Favorito',onAdd:()=>this.addQuick(m.id)}));
+    const categoriasHome=this.cats.map(c=>({label:c,count:this.menu.filter(m=>m.cat===c).length,icon:this.catIcon(c),tint:this.catTint(c),onClick:()=>{this.setState({cat:c});this.go('menu');}}));
+    const opiniones=[
+      {nombre:'Andrea G.',ini:'A',stars:'★★★★★',txt:'Los tacos al pastor son los mejores de la zona norte. Llegó rapidísimo.',c:'#D6453D'},
+      {nombre:'Luis M.',ini:'L',stars:'★★★★★',txt:'Pedí por WhatsApp y estuvo listo en 15 min. Muy buen sabor.',c:'#10603A'},
+      {nombre:'Paola R.',ini:'P',stars:'★★★★☆',txt:'La gringa está deliciosa y las salsas bien picositas.',c:'#E0A526'},
+    ];
+    const faqs=[
+      {q:'¿Hacen entregas a domicilio?',a:'Sí, en las colonias de la zona norte cercanas a Punto Cañada. El costo depende de la distancia.'},
+      {q:'¿Qué métodos de pago aceptan?',a:'Efectivo, transferencia y tarjeta al recoger o al recibir. Aún no aceptamos pago en línea.'},
+      {q:'¿Puedo programar mi pedido?',a:'Claro, al hacer tu pedido puedes elegir "lo antes posible" o una hora programada.'},
+    ];
+    const tabs=[
+      {id:'home',label:'Inicio',icon:'M3 12l9-9 9 9M5 10v10h14V10'},
+      {id:'menu',label:'Menú',icon:'M3 3h18v4H3zM3 10h18v11H3zM8 14h8'},
+      {id:'pedidos',label:'Pedidos',icon:'M9 2h6a2 2 0 0 1 2 2v0H7a2 2 0 0 1 2-2zM7 4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2M9 12h6M9 16h4',badge:this.state.folio?'1':null},
+      {id:'cuenta',label:'Cuenta',icon:'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z'},
+    ].map(t=>{
+      const active=(route===t.id)||(t.id==='pedidos'&&['seguimiento'].includes(route))||(t.id==='menu'&&['carrito','checkout','confirmacion'].includes(route));
+      return {...t,onClick:()=>this.go(t.id==='pedidos'?(this.state.folio?'seguimiento':'pedidos'):t.id),
+        style:`flex:1;cursor:pointer;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;font-family:'Rubik',sans-serif;color:${active?'#10603A':'#a99d80'};font-weight:${active?'700':'600'}`};
+    });
+
+    // ---- menú ----
+    const menuCats=this.cats.map(c=>({label:c,active:c===this.state.cat,onClick:()=>this.setState({cat:c}),
+      style:`cursor:pointer;padding:9px 15px;border-radius:999px;font-weight:700;font-size:13.5px;border:none;white-space:nowrap;${c===this.state.cat?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35;border:1px solid #E6DCC5'}`}));
+    const menuItems=this.menu.filter(m=>m.cat===this.state.cat).map(m=>({...m,precioTxt:this.MXN(m.precio),noFoto:!m.foto,agotado:m.disponible===false,onOpen:()=>{ if(m.disponible===false){this.toast(m.nombre+' está agotado hoy');return;} this.openSheet(m.id); }}));
+
+    // ---- product sheet ----
+    const sheetOpen=this.state.sheetItem!=null;
+    let sheet=null;
+    if(sheetOpen){
+      const it=this.itemById(this.state.sheetItem);
+      sheet={...it,noFoto:!it.foto,qty:this.state.sheetQty,precioTxt:this.MXN(it.precio),
+        onClose:()=>this.closeSheet(),
+        onInc:()=>this.setState({sheetQty:this.state.sheetQty+1}),
+        onDec:()=>this.setState({sheetQty:Math.max(1,this.state.sheetQty-1)}),
+        onNota:e=>this.setState({sheetNota:e.target.value}), nota:this.state.sheetNota,
+        mods:this.modsLibres.map(m=>({label:m,active:this.state.sheetMods.includes(m),onClick:()=>this.toggleMod(m),
+          style:`cursor:pointer;font-size:13px;font-weight:600;padding:9px 13px;border-radius:11px;border:1.5px solid ${this.state.sheetMods.includes(m)?'#10603A':'#e0d6bf'};${this.state.sheetMods.includes(m)?'background:#eaf4ec;color:#10603A':'background:#fff;color:#6a5f45'}`})),
+        extras:this.extras.map(e=>({label:e.n,precioTxt:'+'+this.MXN(e.p),active:this.state.sheetExtras.includes(e.id),onClick:()=>this.toggleExtra(e.id),
+          style:`cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-radius:12px;border:1.5px solid ${this.state.sheetExtras.includes(e.id)?'#10603A':'#e0d6bf'};${this.state.sheetExtras.includes(e.id)?'background:#eaf4ec':'background:#fff'}`})),
+        addTxt:'Agregar '+this.MXN(this.sheetUnit()*this.state.sheetQty), onAdd:()=>this.addSheet()};
+    }
+
+    // ---- carrito ----
+    const cartLines=this.state.cart.map(l=>({...l,nombre:this.itemById(l.id).nombre,label:this.lineLabel(l),
+      totalTxt:this.MXN(this.lineTotal(l)),hasLabel:this.lineLabel(l).length>0,
+      onInc:()=>this.cartInc(l.uid),onDec:()=>this.cartDec(l.uid),onRemove:()=>this.cartRemove(l.uid)}));
+    const sub=this.cartSubtotal();
+
+    return {
+      shellMax: phone?'100%':'480px',
+      isHome: route==='home',
+      isMenu: route==='menu',
+      isCarrito: route==='carrito',
+      isCheckout: route==='checkout',
+      isConfirmacion: route==='confirmacion',
+      isSeguimiento: route==='seguimiento',
+      isCuenta: route==='cuenta',
+      isPedidos: route==='pedidos',
+      isStub: !['home','menu','carrito','checkout','confirmacion','seguimiento','cuenta','pedidos'].includes(route),
+      ...this.vmCheckout(), ...this.vmConfirm(), ...this.vmTrack(), ...this.vmCuenta(), ...this.vmPedidos(),
+      menuCats, menuItems,
+      sheetOpen, sheet,
+      cartLines, cartEmpty:cartLines.length===0, cartNotEmpty:cartLines.length>0, cartSubTxt:this.MXN(sub),
+      goCheckout:()=>{ if(!this.state.cart.length){this.toast('Tu carrito está vacío');return;} this.go('checkout'); },
+      goHome:()=>this.go('home'), goMenu:()=>this.go('menu'), goCart:()=>this.go('carrito'), goCuenta:()=>this.go('cuenta'),
+      stop:(e)=>{ e&&e.stopPropagation&&e.stopPropagation(); },
+      openWA:()=>this.toast('Abriendo WhatsApp… (demo)'),
+      estadoTxt:est.txt, estadoC:est.c, estadoBg:est.bg, estadoDot:est.dot,
+      tRecoger:'15–20 min', tEntrega:'30–40 min',
+      cartCount:this.cartCount()||null,
+      valores, destacados, categoriasHome, opiniones, faqs, tabs,
+      coberturaHome:['Punto Cañada','Jardines de Oriente','Valle del Campestre','San Isidro'],
+      toast:this.state.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>
