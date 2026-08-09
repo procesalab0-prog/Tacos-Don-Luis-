@@ -39,7 +39,7 @@
 
     <header style="position:sticky;top:0;z-index:30;background:#10603A;color:#fff;padding:11px 16px;display:flex;align-items:center;gap:12px">
       <button onClick="{{ onTapLogo }}" style="cursor:pointer;background:none;border:none;display:flex;align-items:center;gap:9px;padding:0">
-        <span style="width:38px;height:38px;border-radius:50%;background:#F3F0E6;color:#10603A;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:14px;flex:0 0 auto">TDL</span>
+        <span style="width:42px;height:42px;border-radius:13px;background:#F3F0E6;display:flex;align-items:center;justify-content:center;flex:0 0 auto;padding:3px"><img src="../assets/logo-don-luis-oficial.svg" alt="Tacos Don Luis" style="display:block;width:100%;height:100%;object-fit:contain"></span>
         <span style="display:flex;flex-direction:column;line-height:1;text-align:left"><span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:17px;color:#fff">Tacos Don Luis</span><span style="font-size:9.5px;color:#F2C230;font-weight:700;letter-spacing:.14em">PUNTO CAÑADA</span></span>
       </button>
       <div style="flex:1"></div>
@@ -452,7 +452,7 @@
           </sc-if>
           <sc-if value="{{ cuNotLogged }}" hint-placeholder-val="{{ true }}">
             <div style="padding:26px 20px">
-              <div style="width:70px;height:70px;margin:0 auto 14px;border-radius:22px;background:#10603A;color:#F3F0E6;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px">TDL</div>
+              <div style="width:112px;height:112px;margin:0 auto 14px;border-radius:24px;background:#F3F0E6;padding:5px;display:flex;align-items:center;justify-content:center"><img src="../assets/logo-don-luis-oficial.svg" alt="Tacos Don Luis" style="display:block;width:100%;height:100%;object-fit:contain"></div>
               <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:24px;color:#10603A;text-align:center">Tu cuenta</div>
               <div style="font-size:13.5px;color:#8a7f66;text-align:center;margin:5px 0 20px">Junta puntos, guarda direcciones y repite pedidos.</div>
               <div style="display:flex;flex-direction:column;gap:10px">
@@ -530,7 +530,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.3.5';
+  static APP_VERSION = '2.3.6';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
