@@ -19,51 +19,40 @@
   a:hover{color:#0b492c}
   ::-webkit-scrollbar{width:10px;height:10px}
   ::-webkit-scrollbar-thumb{background:#d7cfb8;border-radius:8px}
-  ::-webkit-scrollbar-track{background:transparent}
-  @keyframes dlpop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
-  @keyframes dltoast{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translate(-50%,0)}}
+  @keyframes dlpop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @keyframes dlfade{from{opacity:0}to{opacity:1}}
   @keyframes dlspin{to{transform:rotate(360deg)}}
-  .dl-check{background-image:repeating-conic-gradient(#10603A 0 25%,transparent 0 50%);background-size:16px 16px}
-  @media (max-width:759px){
-    main{padding:18px 14px 132px!important}
-    .dl-comanda-layout{display:flex!important;flex-direction:column!important;gap:14px!important;width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden}
-    .dl-comanda-products{width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden}
-    .dl-comanda-tabs{position:sticky;top:65px;z-index:12;margin-left:-14px!important;margin-right:-14px!important;padding:9px 14px!important;background:rgba(243,240,230,.96);backdrop-filter:blur(8px);scrollbar-width:none}
-    .dl-comanda-tabs::-webkit-scrollbar{display:none}
-    .dl-product-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;width:100%!important;max-width:100%!important;min-width:0!important}
-    .dl-product-card{min-width:0!important;width:100%!important;max-width:100%!important;min-height:138px;padding:12px!important;overflow:hidden}
-    .dl-product-card button{min-width:34px;min-height:34px}
-    .dl-order-summary{position:relative!important;top:auto!important;width:100%;margin-top:2px}
-    .dl-order-line{flex-wrap:wrap!important}
-    .dl-order-name{min-width:0;overflow-wrap:anywhere}
-  }
+  @keyframes dlpulse{0%,100%{opacity:1}50%{opacity:.4}}
+  @keyframes dlring{0%{box-shadow:0 0 0 0 rgba(214,69,61,.5)}70%{box-shadow:0 0 0 12px rgba(214,69,61,0)}100%{box-shadow:0 0 0 0 rgba(214,69,61,0)}}
 </style>
 </helmet>
 
 <sc-if value="{{ isLogin }}" hint-placeholder-val="{{ true }}">
-<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(1100px 620px at 50% -8%,#178049 0%,#10603A 52%,#0b4a2d 100%);position:relative;overflow:hidden">
-  <div style="position:absolute;top:0;left:0;right:0;height:14px" class="dl-check"></div>
-  <div style="position:absolute;bottom:0;left:0;right:0;height:14px" class="dl-check"></div>
-  <div style="width:100%;max-width:480px;background:#FFFDF7;border-radius:26px;box-shadow:0 34px 80px rgba(0,0,0,.4);overflow:hidden;position:relative;z-index:1;animation:dlpop .5s ease both">
-    <div style="padding:32px 30px 24px;text-align:center;position:relative;border-bottom:3px dotted #e0d6bf">
-      <sc-if value="{{ mostrarDemo }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;top:14px;right:16px;background:#F2C230;color:#3a2c00;font-size:11px;font-weight:800;letter-spacing:.14em;padding:5px 11px;border-radius:999px">DEMO</div></sc-if>
-      <img src="../assets/logo-don-luis.jpg" alt="Tacos Don Luis" style="width:236px;max-width:80%;height:auto;display:block;margin:2px auto 8px;mix-blend-mode:multiply">
-      <div style="color:#10603A;font-size:15.5px;font-weight:700">Control total de tu taquería</div>
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(1100px 620px at 50% -8%,#178049 0%,#10603A 52%,#0b4a2d 100%)">
+  <div style="width:100%;max-width:520px;background:#FFFDF7;border-radius:24px;box-shadow:0 34px 80px rgba(0,0,0,.4);overflow:hidden;animation:dlpop .5s ease both">
+    <div style="padding:28px 28px 22px;text-align:center;border-bottom:3px dotted #e0d6bf;position:relative">
+      <span style="position:absolute;top:14px;right:16px;background:#F2C230;color:#3a2c00;font-size:11px;font-weight:800;letter-spacing:.14em;padding:5px 11px;border-radius:999px">DEMO</span>
+      <span style="width:60px;height:60px;border-radius:50%;background:#10603A;color:#F3F0E6;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:20px;margin:0 auto 12px">TDL</span>
+      <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:26px;color:#10603A">Panel de operación</div>
+      <div style="font-size:13.5px;color:#8a7f66;margin-top:3px">Tacos Don Luis · Punto Cañada</div>
     </div>
-    <div style="padding:22px 26px 26px">
-      <div style="font-size:12.5px;font-weight:800;letter-spacing:.08em;color:#8a7f66;text-transform:uppercase;margin-bottom:14px;text-align:center">Entra con un perfil de demostración</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <sc-for list="{{ perfiles }}" as="p" hint-placeholder-count="4">
-          <button onClick="{{ p.onClick }}" style="cursor:pointer;text-align:left;border:2px solid #EADFC8;background:#fff;border-radius:16px;padding:15px 14px;display:flex;flex-direction:column;gap:9px;transition:all .15s" style-hover="border-color:#10603A;box-shadow:0 10px 24px rgba(16,96,58,.16);transform:translateY(-2px)">
-            <span style="width:42px;height:42px;border-radius:12px;background:{{ p.bg }};color:#fff;display:flex;align-items:center;justify-content:center">
-              <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ p.icon }}"></path></svg>
-            </span>
-            <span style="font-weight:700;font-size:16.5px;color:#211E15">{{ p.rol }}</span>
-            <span style="font-size:12.5px;color:#8a7f66;line-height:1.35">{{ p.desc }}</span>
+    <div style="padding:22px 24px 26px">
+      <div style="font-size:12.5px;font-weight:800;letter-spacing:.06em;color:#8a7f66;text-transform:uppercase;margin-bottom:10px;text-align:center">Acceso del personal</div>
+      <div style="display:grid;gap:9px;margin-bottom:12px">
+        <input type="email" value="{{ authEmail }}" onChange="{{ setAuthEmail }}" placeholder="Correo del personal" autocomplete="username" style="width:100%;padding:12px 14px;border:1.5px solid #E6DCC5;border-radius:12px;background:#fff;font:500 14px 'Rubik',sans-serif;color:#211E15;outline:none">
+        <input type="password" value="{{ authPassword }}" onChange="{{ setAuthPassword }}" placeholder="Contraseña" autocomplete="current-password" style="width:100%;padding:12px 14px;border:1.5px solid #E6DCC5;border-radius:12px;background:#fff;font:500 14px 'Rubik',sans-serif;color:#211E15;outline:none">
+        <button onClick="{{ signIn }}" disabled="{{ authBusy }}" style="cursor:pointer;width:100%;background:#10603A;color:#fff;border:none;border-radius:12px;padding:13px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px">{{ authButton }}</button>
+      </div>
+      <div style="font-size:11.5px;color:#8a7f66;text-align:center;margin-bottom:16px">El acceso real usa cuentas autorizadas en Punto Cañada.</div>
+      <div style="display:flex;align-items:center;gap:10px;margin:2px 0 14px"><span style="height:1px;background:#E6DCC5;flex:1"></span><span style="font-size:11px;font-weight:800;color:#9a8e70;letter-spacing:.08em">O ABRIR VISTA DEMO</span><span style="height:1px;background:#E6DCC5;flex:1"></span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+        <sc-for list="{{ roles }}" as="r" hint-placeholder-count="6">
+          <button onClick="{{ r.onClick }}" style="cursor:pointer;text-align:left;border:2px solid #EADFC8;background:#fff;border-radius:15px;padding:14px;display:flex;align-items:center;gap:12px;transition:all .15s" style-hover="border-color:#10603A;box-shadow:0 8px 20px rgba(16,96,58,.14);transform:translateY(-1px)">
+            <span style="width:42px;height:42px;flex:0 0 auto;border-radius:12px;background:{{ r.bg }};color:#fff;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ r.icon }}"></path></svg></span>
+            <span><span style="display:block;font-weight:700;font-size:15px;color:#211E15">{{ r.label }}</span><span style="font-size:11.5px;color:#8a7f66">{{ r.desc }}</span></span>
           </button>
         </sc-for>
       </div>
-      <div style="margin-top:18px;padding-top:16px;border-top:1px solid #eee3cc;font-size:12px;color:#a99d80;text-align:center;line-height:1.5;font-weight:600;letter-spacing:.04em">FRESCO · SABROSO · HECHO CON ORGULLO<br><span style="font-weight:500;color:#b8ac8e">Sin contraseñas reales · Datos simulados</span></div>
     </div>
   </div>
 </div>
@@ -74,1168 +63,594 @@
   <sc-if value="{{ showSidebar }}" hint-placeholder-val="{{ true }}">
     <aside style="width:{{ sidebarW }};flex:0 0 auto;background:#10603A;color:#EAF3EC;display:flex;flex-direction:column;position:sticky;top:0;height:100vh">
       <div style="padding:18px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.12)">
-        <span onClick="{{ onTapLogo }}" style="cursor:pointer;user-select:none;width:46px;height:46px;border-radius:50%;background:#F3F0E6;color:#10603A;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:17px;letter-spacing:.02em;flex:0 0 auto;border:2px solid #F3F0E6">TDL</span>
-        <sc-if value="{{ sidebarWide }}" hint-placeholder-val="{{ true }}">
-          <span style="display:flex;flex-direction:column;line-height:1.05"><span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:19px;color:#fff">Tacos Don Luis</span><span style="font-size:10.5px;color:#9ec5a6;font-weight:700;letter-spacing:.14em">NUEVA SUCURSAL</span></span>
-        </sc-if>
+        <span style="width:44px;height:44px;flex:0 0 auto;border-radius:50%;background:#F3F0E6;color:#10603A;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:15px">TDL</span>
+        <sc-if value="{{ sidebarWide }}" hint-placeholder-val="{{ true }}"><span style="display:flex;flex-direction:column;line-height:1.05"><span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:17px;color:#fff">Operación</span><span style="font-size:10px;color:#9ec5a6;font-weight:700;letter-spacing:.1em">PUNTO CAÑADA</span></span></sc-if>
       </div>
       <nav style="flex:1;overflow-y:auto;padding:12px 10px;display:flex;flex-direction:column;gap:3px">
-        <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="10">
+        <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="6">
           <button onClick="{{ n.onClick }}" title="{{ n.label }}" style="{{ n.sideStyle }}">
             <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto"><path d="{{ n.icon }}"></path></svg>
-            <sc-if value="{{ sidebarWide }}" hint-placeholder-val="{{ true }}"><span style="font-weight:600;font-size:14.5px">{{ n.label }}</span></sc-if>
+            <sc-if value="{{ sidebarWide }}" hint-placeholder-val="{{ true }}"><span style="font-weight:600;font-size:14px">{{ n.label }}</span></sc-if>
             <sc-if value="{{ n.showBadge }}" hint-placeholder-val="{{ false }}"><span style="margin-left:auto;background:#D6453D;color:#fff;font-size:11px;font-weight:800;min-width:20px;height:20px;padding:0 6px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ n.badge }}</span></sc-if>
           </button>
         </sc-for>
       </nav>
       <div style="padding:12px;border-top:1px solid rgba(255,255,255,.12)">
-        <button onClick="{{ onLogout }}" style="width:100%;cursor:pointer;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:#EAF3EC;border-radius:12px;padding:10px;display:flex;align-items:center;gap:10px;justify-content:{{ sidebarWide ? 'flex-start' : 'center' }};font-weight:600;font-size:13.5px" style-hover="background:rgba(255,255,255,.14)">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"></path></svg>
-          <sc-if value="{{ sidebarWide }}" hint-placeholder-val="{{ true }}"><span>Salir · {{ profile }}</span></sc-if>
+        <button onClick="{{ onLogout }}" style="width:100%;cursor:pointer;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:#EAF3EC;border-radius:12px;padding:10px;display:flex;align-items:center;gap:10px;justify-content:{{ sidebarWide ? 'flex-start' : 'center' }};font-weight:600;font-size:13px" style-hover="background:rgba(255,255,255,.14)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"></path></svg>
+          <sc-if value="{{ sidebarWide }}" hint-placeholder-val="{{ true }}"><span>Cambiar rol · {{ rol }}</span></sc-if>
         </button>
       </div>
     </aside>
   </sc-if>
 
   <div style="flex:1;min-width:0;display:flex;flex-direction:column">
-    <header style="position:sticky;top:0;z-index:20;background:rgba(243,240,230,.9);backdrop-filter:blur(8px);border-bottom:1px solid #E6DCC5;padding:13px 20px;display:flex;align-items:center;gap:14px">
-      <sc-if value="{{ showBottomNav }}" hint-placeholder-val="{{ false }}">
-        <span onClick="{{ onTapLogo }}" style="cursor:pointer;user-select:none;width:38px;height:38px;border-radius:50%;background:#10603A;color:#F3F0E6;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:14px;flex:0 0 auto">TDL</span>
-      </sc-if>
-      <div style="flex:1;min-width:0">
-        <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:{{ showBottomNav ? '20px' : '24px' }};color:#10603A;line-height:1.05">{{ currentTitle }}</div>
-        <div style="font-size:12.5px;color:#9a8e70;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ currentSub }}</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;flex:0 0 auto">
-        <sc-if value="{{ mostrarDemo }}" hint-placeholder-val="{{ true }}"><span style="background:#F2C230;color:#3a2c00;font-size:10.5px;font-weight:800;letter-spacing:.12em;padding:5px 10px;border-radius:999px">DEMO</span></sc-if>
-        <span style="display:flex;align-items:center;gap:8px;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:999px;padding:4px 5px 4px 12px">
-          <span style="font-size:13px;font-weight:600;color:#4a3d28">{{ profile }}</span>
-          <span style="width:30px;height:30px;border-radius:50%;background:#10603A;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">{{ profileIni }}</span>
-        </span>
-      </div>
+    <header style="position:sticky;top:0;z-index:20;background:rgba(243,240,230,.92);backdrop-filter:blur(8px);border-bottom:1px solid #E6DCC5;padding:12px 20px;display:flex;align-items:center;gap:14px">
+      <sc-if value="{{ showBottomNav }}" hint-placeholder-val="{{ false }}"><span style="width:36px;height:36px;border-radius:50%;background:#10603A;color:#F3F0E6;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:13px;flex:0 0 auto">TDL</span></sc-if>
+      <div style="flex:1;min-width:0"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:{{ showBottomNav ? '19px' : '23px' }};color:#10603A;line-height:1.05">{{ currentTitle }}</div><div style="font-size:12px;color:#9a8e70;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ currentSub }}</div></div>
+      <button onClick="{{ toggleSonido }}" title="Alerta sonora" style="cursor:pointer;width:38px;height:38px;border-radius:11px;border:1px solid #E6DCC5;background:{{ sonido ? '#eaf4ec' : '#FFFDF7' }};color:{{ sonido ? '#10603A' : '#a99d80' }};display:flex;align-items:center;justify-content:center;flex:0 0 auto">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ sonidoIcon }}"></path></svg>
+      </button>
+      <span title="Versión {{ appVersion }}" style="background:{{ modeBg }};color:{{ modeColor }};font-size:10.5px;font-weight:800;letter-spacing:.12em;padding:5px 10px;border-radius:999px">{{ modeLabel }}</span>
+      <span style="display:flex;align-items:center;gap:8px;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:999px;padding:4px 5px 4px 12px"><span style="font-size:13px;font-weight:600;color:#4a3d28">{{ rol }}</span><span style="width:30px;height:30px;border-radius:50%;background:#10603A;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px">{{ rolIni }}</span></span>
     </header>
 
-    <main style="flex:1;min-width:0;padding:{{ showBottomNav ? '18px 14px calc(96px + env(safe-area-inset-bottom))' : '26px 30px' }};overflow-x:hidden">
-      <div style="max-width:1180px;margin:0 auto">
-        <!--SCREENS-->
-        <sc-if value="{{ isResumen }}" hint-placeholder-val="{{ true }}">
-          <div style="animation:dlpop .35s ease both">
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:16px">
-              <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
-                <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:16px 17px;box-shadow:0 2px 0 #ece2cc;position:relative;overflow:hidden">
-                  <div style="position:absolute;top:0;right:0;width:56px;height:56px;background:{{ k.tint }};opacity:.14;border-radius:0 0 0 56px"></div>
-                  <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">
-                    <span style="width:34px;height:34px;border-radius:10px;background:{{ k.tint }};color:#fff;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ k.icon }}"></path></svg></span>
-                    <span style="font-size:12.5px;color:#8a7f66;font-weight:600">{{ k.label }}</span>
-                  </div>
-                  <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:26px;color:#211E15;line-height:1">{{ k.value }}</div>
-                  <div style="margin-top:6px;font-size:12px;font-weight:700;color:{{ k.deltaColor }}">{{ k.delta }}</div>
-                </div>
-              </sc-for>
+    <main style="flex:1;min-width:0;padding:{{ showBottomNav ? '16px 12px 92px' : '22px 24px' }};overflow-x:hidden">
+      <!--SECTIONS-->
+      <sc-if value="{{ isPedidos }}" hint-placeholder-val="{{ true }}">
+        <div style="animation:dlfade .3s ease both">
+          <sc-if value="{{ hayNuevos }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;gap:12px;background:#fdeceb;border:1.5px solid #f3b6b1;border-radius:14px;padding:12px 16px;margin-bottom:16px;animation:dlring 1.6s infinite">
+              <span style="width:36px;height:36px;border-radius:10px;background:#D6453D;color:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"></path></svg></span>
+              <div style="flex:1"><div style="font-weight:800;font-size:14.5px;color:#b23a32">{{ nuevosCount }} pedido(s) nuevo(s) por aceptar</div><div style="font-size:12.5px;color:#8a5551">Revísalos antes de que el cliente espere de más.</div></div>
             </div>
+          </sc-if>
 
-            <div style="display:grid;grid-template-columns:{{ chartCols }};gap:16px;margin-bottom:16px">
-              <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:18px 20px;box-shadow:0 2px 0 #ece2cc">
-                <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#10603A">Ventas por hora</span><span style="font-size:12px;color:#9a8e70;font-weight:600">vs. ayer</span></div>
-                <div style="display:flex;align-items:flex-end;gap:2.5%;height:180px;padding-top:8px">
-                  <sc-for list="{{ ventasHora }}" as="h" hint-placeholder-count="10">
-                    <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end">
-                      <div style="width:100%;position:relative;display:flex;align-items:flex-end;justify-content:center;gap:3px;height:100%">
-                        <div title="Ayer" style="width:34%;background:#e7dcc4;border-radius:5px 5px 0 0;height:{{ h.ayerH }}"></div>
-                        <div title="Hoy" style="width:44%;background:linear-gradient(#28A54C,#10603A);border-radius:5px 5px 0 0;height:{{ h.hoyH }}"></div>
-                      </div>
-                      <span style="font-size:10.5px;color:#9a8e70;font-weight:600">{{ h.label }}</span>
-                    </div>
-                  </sc-for>
-                </div>
-                <div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:#8a7f66;font-weight:600"><span style="display:flex;align-items:center;gap:6px"><span style="width:11px;height:11px;border-radius:3px;background:#10603A"></span>Hoy</span><span style="display:flex;align-items:center;gap:6px"><span style="width:11px;height:11px;border-radius:3px;background:#e7dcc4"></span>Ayer</span></div>
-              </div>
-
-              <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:18px 20px;box-shadow:0 2px 0 #ece2cc">
-                <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#10603A;margin-bottom:14px">Tacos más vendidos</div>
-                <div style="display:flex;flex-direction:column;gap:13px">
-                  <sc-for list="{{ topTacos }}" as="t" hint-placeholder-count="4">
-                    <div>
-                      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span style="font-weight:600;color:#3a3120">{{ t.nombre }}</span><span style="color:#8a7f66;font-weight:700">{{ t.qty }}</span></div>
-                      <div style="height:9px;background:#efe6d2;border-radius:999px;overflow:hidden"><div style="height:100%;width:{{ t.pct }};background:linear-gradient(90deg,#28A54C,#10603A);border-radius:999px"></div></div>
-                    </div>
-                  </sc-for>
-                </div>
-              </div>
-            </div>
-
-            <div style="display:grid;grid-template-columns:{{ chartCols }};gap:16px">
-              <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:18px 20px;box-shadow:0 2px 0 #ece2cc">
-                <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#10603A;margin-bottom:14px">Productos con mayor utilidad</div>
-                <div style="display:flex;flex-direction:column;gap:2px">
-                  <sc-for list="{{ utilidad }}" as="u" hint-placeholder-count="4">
-                    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px dotted #e6dcc5">
-                      <span style="font-weight:600;font-size:13.5px;color:#3a3120">{{ u.nombre }}</span>
-                      <span style="display:flex;align-items:center;gap:12px"><span style="font-size:12px;color:#8a7f66">margen {{ u.margen }}</span><span style="background:#eaf4ec;color:#10603A;font-weight:700;font-size:12.5px;padding:3px 9px;border-radius:8px">{{ u.util }}</span></span>
-                    </div>
-                  </sc-for>
-                </div>
-                <div style="margin-top:14px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:#10603A;margin-bottom:8px">Horas pico</div>
-                <div style="display:flex;gap:8px;flex-wrap:wrap">
-                  <sc-for list="{{ horasPico }}" as="hp" hint-placeholder-count="3">
-                    <span style="background:#10603A;color:#fff;font-weight:700;font-size:12.5px;padding:6px 12px;border-radius:999px">{{ hp }}</span>
-                  </sc-for>
-                </div>
-              </div>
-
-              <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:18px 20px;box-shadow:0 2px 0 #ece2cc">
-                <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#D6453D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4M12 17h.01"></path></svg><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#10603A">Alertas de inventario</span></div>
-                <div style="display:flex;flex-direction:column;gap:10px">
-                  <sc-for list="{{ alertasInv }}" as="a" hint-placeholder-count="3">
-                    <div style="display:flex;align-items:center;gap:11px;background:{{ a.bg }};border:1px solid {{ a.bd }};border-radius:12px;padding:11px 13px">
-                      <span style="width:9px;height:9px;border-radius:50%;background:{{ a.dot }};flex:0 0 auto"></span>
-                      <span style="flex:1;font-weight:600;font-size:13.5px;color:#3a3120">{{ a.nombre }}</span>
-                      <span style="font-size:12.5px;font-weight:700;color:{{ a.dot }}">{{ a.txt }}</span>
-                    </div>
-                  </sc-for>
-                </div>
-                <button onClick="{{ goInv }}" style="margin-top:14px;width:100%;cursor:pointer;background:#fff;border:1.5px solid #10603A;color:#10603A;font-weight:700;font-size:13.5px;padding:10px;border-radius:12px" style-hover="background:#eaf4ec">Ir a inventario →</button>
-              </div>
-            </div>
+          <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:6px">
+            <sc-for list="{{ canalFiltros }}" as="c" hint-placeholder-count="5"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}<sc-if value="{{ c.count }}" hint-placeholder-val="{{ false }}"><span style="margin-left:7px;opacity:.7">{{ c.count }}</span></sc-if></button></sc-for>
           </div>
-        </sc-if>
 
-        <sc-if value="{{ isMesas }}" hint-placeholder-val="{{ false }}">
-          <div style="animation:dlpop .35s ease both">
-            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
-              <sc-for list="{{ resumenMesas }}" as="r" hint-placeholder-count="4">
-                <div style="flex:1;min-width:120px;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:11px">
-                  <span style="width:12px;height:12px;border-radius:50%;background:{{ r.c }}"></span>
-                  <span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px;color:#211E15">{{ r.v }}</span>
-                  <span style="font-size:12.5px;color:#8a7f66;font-weight:600">{{ r.k }}</span>
-                </div>
-              </sc-for>
-            </div>
-            <div style="display:grid;grid-template-columns:{{ mesasCols }};gap:14px">
-              <sc-for list="{{ mesas }}" as="m" hint-placeholder-count="12">
-                <div style="{{ m.cardStyle }}">
-                  <div style="position:absolute;top:0;right:0;width:44px;height:44px;background:{{ m.sDot }};opacity:.12;border-radius:0 0 0 44px"></div>
-                  <div style="display:flex;align-items:center;justify-content:space-between">
-                    <span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:26px;color:#10603A;line-height:1">Mesa {{ m.n }}</span>
-                    <span style="display:flex;align-items:center;gap:6px;background:{{ m.sBg }};color:{{ m.sC }};font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:999px"><span style="width:7px;height:7px;border-radius:50%;background:{{ m.sDot }}"></span>{{ m.sTxt }}</span>
-                  </div>
-                  <div style="display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:#6a5f45">
-                    <span style="display:flex;justify-content:space-between"><span style="color:#9a8e70">Personas</span><span style="font-weight:700;color:#3a3120">{{ m.paxTxt }}</span></span>
-                    <span style="display:flex;justify-content:space-between"><span style="color:#9a8e70">Mesero</span><span style="font-weight:700;color:#3a3120">{{ m.mesero }}</span></span>
-                    <span style="display:flex;justify-content:space-between"><span style="color:#9a8e70">Consumo</span><span style="font-weight:700;color:#10603A">{{ m.consumoTxt }}</span></span>
-                    <span style="display:flex;justify-content:space-between"><span style="color:#9a8e70">Tiempo</span><span style="font-weight:700;color:#3a3120">{{ m.tiempoTxt }}</span></span>
-                  </div>
-                  <button onClick="{{ m.onPrimary }}" style="{{ m.primaryStyle }}">
-                    <sc-if value="{{ m.libre }}" hint-placeholder-val="{{ true }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg></sc-if>{{ m.primaryTxt }}
-                  </button>
-                  <sc-if value="{{ m.showCobrar }}" hint-placeholder-val="{{ false }}">
-                    <button onClick="{{ m.onCobrar }}" style="cursor:pointer;width:100%;background:transparent;color:#8a7f66;border:none;font-weight:600;font-size:12.5px;padding:2px;margin-top:-4px">Ir a caja</button>
-                  </sc-if>
-                </div>
-              </sc-for>
-            </div>
-          </div>
-        </sc-if>
-
-        <sc-if value="{{ isComandas }}" hint-placeholder-val="{{ false }}">
-          <div class="dl-comanda-layout" style="animation:dlpop .35s ease both;display:grid;grid-template-columns:{{ comandaGrid }};gap:18px;align-items:start">
-            <div class="dl-comanda-products">
-              <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap">
-                <span style="background:#10603A;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;padding:7px 15px;border-radius:12px">{{ comandaMesa }}</span>
-                <span style="font-size:13px;color:#8a7f66;font-weight:600">Toca un producto para agregarlo</span>
-              </div>
-              <div class="dl-comanda-tabs" style="display:flex;gap:9px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px">
-                <sc-for list="{{ catTabs }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
-              </div>
-              <div class="dl-product-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px">
-                <sc-for list="{{ prods }}" as="p" hint-placeholder-count="6">
-                  <div class="dl-product-card" style="background:#FFFDF7;border:2px solid {{ p.inCart ? '#10603A' : '#E6DCC5' }};border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px;box-shadow:0 2px 0 #ece2cc">
-                    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
-                      <span style="font-weight:700;font-size:14.5px;color:#211E15;line-height:1.2">{{ p.nombre }}</span>
-                      <sc-if value="{{ p.inCart }}" hint-placeholder-val="{{ false }}"><span style="background:#10603A;color:#fff;font-size:12px;font-weight:800;width:22px;height:22px;border-radius:999px;display:flex;align-items:center;justify-content:center;flex:0 0 auto">{{ p.q }}</span></sc-if>
-                    </div>
-                    <span style="font-size:11.5px;color:#9a8e70;line-height:1.35;min-height:16px">{{ p.desc }}</span>
-                    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto">
-                      <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#10603A">{{ p.precioTxt }}</span>
-                      <div style="display:flex;align-items:center;gap:7px">
-                        <sc-if value="{{ p.inCart }}" hint-placeholder-val="{{ false }}"><button onClick="{{ p.onDec }}" style="cursor:pointer;width:32px;height:32px;border-radius:9px;border:1.5px solid #E6DCC5;background:#fff;color:#10603A;font-size:18px;font-weight:700;line-height:1">−</button></sc-if>
-                        <button onClick="{{ p.onAdd }}" style="cursor:pointer;width:32px;height:32px;border-radius:9px;border:none;background:#10603A;color:#fff;font-size:18px;font-weight:700;line-height:1">+</button>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px;align-items:start">
+            <sc-for list="{{ pedidosCols }}" as="col" hint-placeholder-count="4">
+              <div style="{{ col.colStyle }}">
+                <div style="{{ col.headStyle }}"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px">{{ col.title }}</span><span style="background:rgba(255,255,255,.25);font-weight:800;font-size:12.5px;min-width:23px;height:23px;padding:0 7px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ col.count }}</span></div>
+                <div style="display:flex;flex-direction:column;gap:11px;padding:12px 11px">
+                  <sc-if value="{{ col.empty }}" hint-placeholder-val="{{ false }}"><div style="text-align:center;color:#b0a488;font-size:12.5px;padding:18px 6px">Sin pedidos</div></sc-if>
+                  <sc-for list="{{ col.pedidos }}" as="p" hint-placeholder-count="0">
+                    <div style="background:#fff;border-radius:13px;border:2px solid {{ p.late ? '#D6453D' : '#eadfca' }};box-shadow:0 3px 9px rgba(0,0,0,.06);overflow:hidden">
+                      <div style="display:flex;align-items:center;gap:8px;padding:11px 13px 8px">
+                        <span style="width:26px;height:26px;border-radius:8px;background:{{ p.canalBg }};color:{{ p.canalC }};display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ p.canalIcon }}"></path></svg></span>
+                        <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:#211E15">{{ p.folio }}</span>
+                        <span style="margin-left:auto;font-size:11.5px;font-weight:700;color:{{ p.late ? '#D6453D' : '#9a8e70' }}">{{ p.minTxt }}</span>
                       </div>
-                    </div>
-                  </div>
-                </sc-for>
-              </div>
-            </div>
-
-            <div class="dl-order-summary" style="position:sticky;top:88px;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:20px;box-shadow:0 6px 20px rgba(0,0,0,.08);overflow:hidden">
-              <div style="background:#10603A;color:#fff;padding:14px 18px;display:flex;align-items:center;justify-content:space-between">
-                <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px">Resumen · {{ comandaMesa }}</span>
-                <span style="background:rgba(255,255,255,.18);font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px">{{ comandaCount }} art.</span>
-              </div>
-              <div style="padding:6px 16px;max-height:340px;overflow-y:auto">
-                <sc-if value="{{ comandaEmpty }}" hint-placeholder-val="{{ true }}">
-                  <div style="text-align:center;padding:34px 10px;color:#b0a488">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d7ccb0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:10px"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                    <div style="font-weight:600;font-size:13.5px">Aún no hay productos</div>
-                  </div>
-                </sc-if>
-                <sc-for list="{{ comandaCart }}" as="l" hint-placeholder-count="0">
-                  <div style="padding:12px 0;border-bottom:1px dotted #e6dcc5">
-                    <div class="dl-order-line" style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
-                      <div style="display:flex;align-items:center;gap:9px">
-                        <button onClick="{{ l.onDec }}" style="cursor:pointer;width:26px;height:26px;border-radius:8px;border:1.5px solid #E6DCC5;background:#fff;color:#10603A;font-size:15px;font-weight:700;line-height:1">−</button>
-                        <span style="font-weight:800;min-width:16px;text-align:center;color:#211E15">{{ l.q }}</span>
-                        <button onClick="{{ l.onInc }}" style="cursor:pointer;width:26px;height:26px;border-radius:8px;border:none;background:#10603A;color:#fff;font-size:15px;font-weight:700;line-height:1">+</button>
-                        <span class="dl-order-name" style="font-weight:600;font-size:13.5px;color:#211E15">{{ l.nombre }}</span>
+                      <div style="padding:0 13px 8px">
+                        <div style="font-size:12.5px;color:#6a5f45;font-weight:600">{{ p.canalTxt }} · {{ p.cliente }}</div>
+                        <div style="font-size:12px;color:#9a8e70;margin-top:1px">{{ p.tel }}</div>
                       </div>
-                      <span style="font-weight:700;font-size:13.5px;color:#10603A;white-space:nowrap">{{ l.lineTxt }}</span>
-                    </div>
-                    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;padding-left:2px">
-                      <sc-for list="{{ l.notas }}" as="nt" hint-placeholder-count="3"><button onClick="{{ nt.onClick }}" style="{{ nt.style }}">{{ nt.label }}</button></sc-for>
-                    </div>
-                  </div>
-                </sc-for>
-              </div>
-              <div style="padding:16px 18px;border-top:2px dotted #e0d6bf;background:#fbf7ec">
-                <div style="display:flex;justify-content:space-between;font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px;color:#211E15;margin-bottom:12px"><span>Subtotal</span><span style="color:#10603A">{{ comandaSub }}</span></div>
-                <button onClick="{{ onEnviar }}" style="cursor:pointer;width:100%;background:#D6453D;color:#fff;border:none;border-radius:14px;padding:15px;font-weight:800;font-size:15.5px;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 6px 16px rgba(214,69,61,.3)">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"></path></svg>
-                  Enviar a cocina
-                </button>
-              </div>
-            </div>
-          </div>
-        </sc-if>
-
-        <sc-if value="{{ isCocina }}" hint-placeholder-val="{{ false }}">
-          <div style="animation:dlpop .35s ease both">
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;align-items:start">
-              <sc-for list="{{ kanban }}" as="col" hint-placeholder-count="3">
-                <div style="{{ col.colStyle }}">
-                  <div style="{{ col.headStyle }}">
-                    <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px">{{ col.title }}</span>
-                    <span style="background:rgba(255,255,255,.25);font-weight:800;font-size:13px;min-width:24px;height:24px;padding:0 7px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ col.count }}</span>
-                  </div>
-                  <div style="display:flex;flex-direction:column;gap:11px;padding:12px 12px 0">
-                    <sc-for list="{{ col.list }}" as="o" hint-placeholder-count="2">
-                      <div style="{{ o.cardStyle }}">
-                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px">
-                          <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#211E15">{{ o.mesaTxt }}</span>
-                          <span style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:800;color:{{ o.late ? '#D6453D' : '#8a7f66' }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg>{{ o.minTxt }}</span>
+                      <div style="padding:0 13px 8px;display:flex;flex-direction:column;gap:3px">
+                        <sc-for list="{{ p.items }}" as="it" hint-placeholder-count="2"><div style="font-size:12.5px;color:#3a3120"><span style="font-weight:800;color:#10603A">{{ it.q }}×</span> {{ it.nombre }}<sc-if value="{{ it.nota }}" hint-placeholder-val="{{ false }}"><span style="color:#D6453D;font-weight:600"> · {{ it.nota }}</span></sc-if></div></sc-for>
+                      </div>
+                      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 13px;border-top:1px dotted #ece2cc;background:#fbf7ec">
+                        <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;color:#10603A">{{ p.totalTxt }}</span>
+                        <span style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:{{ p.pagoC }}"><span style="width:7px;height:7px;border-radius:50%;background:{{ p.pagoC }}"></span>{{ p.pagoTxt }}</span>
+                      </div>
+                      <sc-if value="{{ p.acciones }}" hint-placeholder-val="{{ true }}">
+                        <div style="display:flex;gap:8px;padding:10px 13px 12px">
+                          <sc-if value="{{ p.esNuevo }}" hint-placeholder-val="{{ true }}"><button onClick="{{ p.onRechazar }}" style="cursor:pointer;flex:0 0 auto;background:#fff;border:1.5px solid #f3b6b1;color:#b23a32;border-radius:10px;padding:9px 12px;font-weight:700;font-size:12.5px">Rechazar</button></sc-if>
+                          <button onClick="{{ p.onPrimary }}" style="cursor:pointer;flex:1;background:{{ p.primaryBg }};color:#fff;border:none;border-radius:10px;padding:9px;font-weight:700;font-size:12.5px">{{ p.primaryTxt }}</button>
                         </div>
-                        <sc-if value="{{ o.late }}" hint-placeholder-val="{{ false }}"><div style="background:#fdeceb;color:#b23a32;font-size:11px;font-weight:800;padding:4px 9px;border-radius:8px;margin-bottom:9px;display:inline-block">⚠ ORDEN ATRASADA</div></sc-if>
-                        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px">
-                          <sc-for list="{{ o.items }}" as="it" hint-placeholder-count="2">
-                            <div style="display:flex;gap:8px;font-size:13.5px">
-                              <span style="font-weight:800;color:#10603A;flex:0 0 auto">{{ it.q }}×</span>
-                              <span style="color:#3a3120">{{ it.nombre }}<sc-if value="{{ it.nota }}" hint-placeholder-val="{{ false }}"><span style="display:block;font-size:11.5px;font-weight:700;color:#D6453D">↳ {{ it.nota }}</span></sc-if></span>
-                            </div>
-                          </sc-for>
-                        </div>
-                        <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px dotted #e6dcc5;padding-top:9px">
-                          <span style="font-size:12px;color:#9a8e70;font-weight:600">{{ o.mesero }}</span>
-                          <div style="display:flex;gap:6px">
-                            <sc-if value="{{ o.canPrev }}" hint-placeholder-val="{{ false }}"><button onClick="{{ o.onPrev }}" style="cursor:pointer;width:30px;height:30px;border-radius:9px;border:1.5px solid #E6DCC5;background:#fff;color:#8a7f66;font-size:16px;line-height:1">←</button></sc-if>
-                            <sc-if value="{{ o.canNext }}" hint-placeholder-val="{{ true }}"><button onClick="{{ o.onNext }}" style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:9px;padding:0 12px;height:30px;font-weight:700;font-size:12.5px">{{ o.nextTxt }}</button></sc-if>
-                          </div>
-                        </div>
-                      </div>
-                    </sc-for>
-                  </div>
-                </div>
-              </sc-for>
-            </div>
-          </div>
-        </sc-if>
-
-        <sc-if value="{{ isCaja }}" hint-placeholder-val="{{ false }}">
-          <div style="animation:dlpop .35s ease both">
-            <div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:8px;margin-bottom:16px">
-              <sc-for list="{{ cajaChips }}" as="c" hint-placeholder-count="3">
-                <button onClick="{{ c.onClick }}" style="{{ c.style }}"><span style="font-weight:700;font-size:13.5px;color:#211E15">{{ c.label }}</span><span style="font-size:12px;color:#10603A;font-weight:700">{{ c.sub }}</span></button>
-              </sc-for>
-            </div>
-            <sc-if value="{{ cajaEmpty }}" hint-placeholder-val="{{ false }}">
-              <div style="text-align:center;padding:50px 20px;color:#9a8e70;background:#FFFDF7;border:1px dashed #d7ccb0;border-radius:18px">
-                <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#c9bd9f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:12px"><path d="M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 7l2-4h16l2 4M12 11v5"></path></svg>
-                <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:18px;color:#10603A">Selecciona una mesa para cobrar</div>
-              </div>
-            </sc-if>
-            <sc-if value="{{ cuenta }}" hint-placeholder-val="{{ false }}">
-              <div style="display:grid;grid-template-columns:{{ cajaGrid }};gap:16px;align-items:start">
-                <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:20px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.06)">
-                  <div style="background:#10603A;color:#fff;padding:15px 20px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:18px;display:flex;justify-content:space-between align-items:center">
-                    <span>Cuenta · {{ cuenta.mesaTxt }}</span>
-                  </div>
-                  <div style="padding:8px 20px">
-                    <sc-for list="{{ cuenta.items }}" as="it" hint-placeholder-count="3">
-                      <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:11px 0;border-bottom:1px dotted #e6dcc5">
-                        <span style="font-size:14px;color:#3a3120"><span style="font-weight:800;color:#10603A">{{ it.q }}×</span> {{ it.nombre }}<sc-if value="{{ it.nota }}" hint-placeholder-val="{{ false }}"><span style="display:block;font-size:11.5px;color:#D6453D;font-weight:600">{{ it.nota }}</span></sc-if></span>
-                        <span style="font-weight:700;font-size:14px;color:#211E15;white-space:nowrap">{{ it.lineTxt }}</span>
-                      </div>
-                    </sc-for>
-                  </div>
-                  <div style="padding:6px 20px 18px">
-                    <div style="font-size:12.5px;font-weight:700;color:#8a7f66;margin:10px 0 8px">DIVISIÓN DE CUENTA</div>
-                    <div style="display:flex;gap:8px;margin-bottom:16px"><sc-for list="{{ cuenta.splits }}" as="s" hint-placeholder-count="3"><button onClick="{{ s.onClick }}" style="{{ s.style }}">{{ s.label }}</button></sc-for></div>
-                    <div style="font-size:12.5px;font-weight:700;color:#8a7f66;margin:0 0 8px">PROPINA</div>
-                    <div style="display:flex;gap:8px"><sc-for list="{{ cuenta.propinas }}" as="p" hint-placeholder-count="3"><button onClick="{{ p.onClick }}" style="{{ p.style }}">{{ p.label }}</button></sc-for></div>
-                  </div>
-                </div>
-
-                <div style="display:flex;flex-direction:column;gap:14px">
-                  <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:20px;padding:18px 20px;box-shadow:0 4px 14px rgba(0,0,0,.06)">
-                    <div style="display:flex;justify-content:space-between;font-size:14px;color:#6a5f45;padding:5px 0"><span>Subtotal</span><span style="font-weight:600">{{ cuenta.subTxt }}</span></div>
-                    <div style="display:flex;justify-content:space-between;font-size:14px;color:#6a5f45;padding:5px 0"><span>Descuentos</span><span style="font-weight:600">−{{ cuenta.descTxt }}</span></div>
-                    <div style="display:flex;justify-content:space-between;font-size:14px;color:#6a5f45;padding:5px 0;border-bottom:2px dotted #e0d6bf"><span>Propina</span><span style="font-weight:600">{{ cuenta.propTxt }}</span></div>
-                    <div style="display:flex;justify-content:space-between;align-items:baseline;padding:12px 0 4px"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;color:#211E15">Total</span><span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:24px;color:#10603A">{{ cuenta.totalMXN }}</span></div>
-                    <div style="font-size:12px;color:#9a8e70;text-align:right">{{ cuenta.splitTxt }}</div>
-                  </div>
-                  <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:20px;padding:16px 18px;box-shadow:0 4px 14px rgba(0,0,0,.06)">
-                    <div style="font-size:12.5px;font-weight:700;color:#8a7f66;margin-bottom:10px">MÉTODO DE PAGO</div>
-                    <div style="display:flex;gap:9px"><sc-for list="{{ cuenta.pagos }}" as="pg" hint-placeholder-count="3"><button onClick="{{ pg.onClick }}" style="{{ pg.style }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ pg.icon }}"></path></svg>{{ pg.label }}</button></sc-for></div>
-                  </div>
-                  <button onClick="{{ cuenta.onCobrar }}" style="cursor:pointer;width:100%;background:#10603A;color:#fff;border:none;border-radius:16px;padding:17px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;box-shadow:0 8px 20px rgba(16,96,58,.3);display:flex;align-items:center;justify-content:center;gap:10px">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
-                    Cobrar y cerrar mesa
-                  </button>
-                </div>
-              </div>
-
-              <div style="margin-top:20px;background:#0f3d24;border-radius:20px;padding:20px 22px;color:#eaf3ec">
-                <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#F2C230;margin-bottom:14px">Corte de caja · turno actual</div>
-                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
-                  <sc-for list="{{ corte }}" as="c" hint-placeholder-count="5">
-                    <div style="background:{{ c.big ? 'rgba(242,194,48,.15)' : 'rgba(255,255,255,.06)' }};border:1px solid {{ c.big ? 'rgba(242,194,48,.4)' : 'rgba(255,255,255,.12)' }};border-radius:14px;padding:13px 15px">
-                      <div style="font-size:12px;color:#9ec5a6;font-weight:600;margin-bottom:6px">{{ c.k }}</div>
-                      <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:20px;color:{{ c.big ? '#F2C230' : '#fff' }}">{{ c.v }}</div>
-                      <div style="font-size:11px;color:#8bb193;margin-top:3px">{{ c.sub }}</div>
+                      </sc-if>
                     </div>
                   </sc-for>
                 </div>
-              </div>
-            </sc-if>
-          </div>
-        </sc-if>
-
-        <sc-if value="{{ isInventario }}" hint-placeholder-val="{{ false }}">
-          <div style="animation:dlpop .35s ease both">
-            <div style="display:flex;gap:9px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px">
-              <sc-for list="{{ invTabs }}" as="t" hint-placeholder-count="4"><button onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}</button></sc-for>
-            </div>
-            <sc-if value="{{ showExist }}" hint-placeholder-val="{{ true }}">
-              <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;overflow:hidden;box-shadow:0 2px 0 #ece2cc">
-                <div style="display:grid;grid-template-columns:1.6fr .8fr .9fr .8fr 1.4fr;gap:8px;padding:13px 18px;background:#f3ead6;font-size:11.5px;font-weight:800;color:#8a7f66;letter-spacing:.03em;text-transform:uppercase">
-                  <span>Insumo</span><span>Existencia</span><span>Consumo hoy</span><span>Mínimo</span><span>Estado</span>
-                </div>
-                <sc-for list="{{ invRows }}" as="r" hint-placeholder-count="9">
-                  <div style="display:grid;grid-template-columns:1.6fr .8fr .9fr .8fr 1.4fr;gap:8px;padding:14px 18px;border-top:1px solid #efe6d2;align-items:center">
-                    <span style="font-weight:700;font-size:14px;color:#211E15">{{ r.n }}</span>
-                    <span style="font-weight:700;color:#10603A">{{ r.hay }} {{ r.u }}</span>
-                    <span style="color:#6a5f45">{{ r.dia }} {{ r.u }}</span>
-                    <span style="color:#9a8e70">{{ r.min }} {{ r.u }}</span>
-                    <span style="display:flex;align-items:center;gap:10px">
-                      <span style="flex:1;height:8px;background:#efe6d2;border-radius:999px;overflow:hidden;max-width:90px"><span style="display:block;height:100%;width:{{ r.pct }};background:{{ r.barC }};border-radius:999px"></span></span>
-                      <span style="background:{{ r.stBg }};color:{{ r.stC }};font-size:11.5px;font-weight:800;padding:3px 9px;border-radius:8px;white-space:nowrap">{{ r.st }}</span>
-                    </span>
-                  </div>
-                </sc-for>
-              </div>
-            </sc-if>
-            <sc-if value="{{ showMermas }}" hint-placeholder-val="{{ false }}">
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <sc-for list="{{ invMermas }}" as="m" hint-placeholder-count="3">
-                  <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-left:4px solid #D6453D;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-                    <span style="font-weight:700;font-size:14.5px;color:#211E15;min-width:150px">{{ m.prod }}</span>
-                    <span style="background:#fdeceb;color:#b23a32;font-weight:700;font-size:13px;padding:3px 10px;border-radius:8px">−{{ m.cant }}</span>
-                    <span style="color:#6a5f45;font-size:13.5px;flex:1;min-width:160px">{{ m.motivo }}</span>
-                    <span style="color:#9a8e70;font-size:12.5px">{{ m.hora }} · {{ m.mesero }}</span>
-                  </div>
-                </sc-for>
-              </div>
-            </sc-if>
-            <sc-if value="{{ showCompras }}" hint-placeholder-val="{{ false }}">
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <sc-for list="{{ invCompras }}" as="c" hint-placeholder-count="3">
-                  <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:15px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-                    <div style="flex:1;min-width:180px"><div style="font-weight:700;font-size:14.5px;color:#211E15">{{ c.prov }}</div><div style="color:#8a7f66;font-size:12.5px;margin-top:2px">{{ c.items }}</div></div>
-                    <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#10603A">{{ c.monto }}</span>
-                    <span style="background:{{ c.bg }};color:{{ c.c }};font-weight:800;font-size:12px;padding:5px 11px;border-radius:999px">{{ c.estado }}</span>
-                  </div>
-                </sc-for>
-              </div>
-            </sc-if>
-            <sc-if value="{{ showCosteo }}" hint-placeholder-val="{{ false }}">
-              <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;overflow:hidden">
-                <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;gap:8px;padding:13px 18px;background:#f3ead6;font-size:11.5px;font-weight:800;color:#8a7f66;text-transform:uppercase"><span>Platillo</span><span>Precio</span><span>Costo</span><span>Utilidad</span><span>Margen</span></div>
-                <sc-for list="{{ invCosteo }}" as="c" hint-placeholder-count="6">
-                  <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;gap:8px;padding:14px 18px;border-top:1px solid #efe6d2;align-items:center">
-                    <span style="font-weight:700;font-size:14px;color:#211E15">{{ c.nombre }}</span>
-                    <span style="color:#6a5f45">{{ c.precio }}</span>
-                    <span style="color:#b23a32">{{ c.costo }}</span>
-                    <span style="font-weight:700;color:#10603A">{{ c.util }}</span>
-                    <span style="font-weight:800;color:{{ c.margenC }}">{{ c.margen }}</span>
-                  </div>
-                </sc-for>
-              </div>
-            </sc-if>
-          </div>
-        </sc-if>
-
-        <sc-if value="{{ isClientes }}" hint-placeholder-val="{{ false }}">
-          <div style="animation:dlpop .35s ease both;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;align-items:start">
-            <div style="grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px">
-              <div style="background:#10603A;border-radius:20px;padding:22px;color:#eaf3ec;display:flex;align-items:center;gap:18px">
-                <div style="width:96px;height:96px;background:#fff;border-radius:16px;padding:10px;flex:0 0 auto;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);gap:2px">
-                  <sc-for list="{{ qrCells }}" as="c" hint-placeholder-count="25"><span style="background:{{ c }};border-radius:1px"></span></sc-for>
-                </div>
-                <div><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px;color:#F2C230">Registro con QR</div><div style="font-size:13.5px;color:#cfe3d3;margin-top:6px;line-height:1.4;max-width:210px">El cliente escanea y acumula puntos automáticamente en cada visita.</div></div>
-              </div>
-              <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:20px;padding:20px">
-                <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#10603A;margin-bottom:14px">Recompensas</div>
-                <div style="display:flex;flex-direction:column;gap:11px">
-                  <sc-for list="{{ recompensas }}" as="r" hint-placeholder-count="3">
-                    <div style="display:flex;align-items:center;gap:12px">
-                      <span style="background:#F2C230;color:#3a2c00;font-weight:800;font-size:12.5px;padding:5px 11px;border-radius:999px;white-space:nowrap;min-width:66px;text-align:center">{{ r.req }}</span>
-                      <span style="font-size:14px;color:#3a3120;font-weight:600">{{ r.premio }}</span>
-                    </div>
-                  </sc-for>
-                </div>
-              </div>
-            </div>
-
-            <div style="grid-column:1/-1">
-              <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:18px;color:#10603A;margin-bottom:12px">Clientes frecuentes</div>
-              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px">
-                <sc-for list="{{ clientes }}" as="c" hint-placeholder-count="4">
-                  <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:16px;box-shadow:0 2px 0 #ece2cc">
-                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-                      <span style="width:46px;height:46px;border-radius:50%;background:{{ c.c }};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px">{{ c.ini }}</span>
-                      <div><div style="font-weight:700;font-size:14.5px;color:#211E15;line-height:1.2">{{ c.nombre }}</div><div style="font-size:12px;color:#9a8e70">Nivel {{ c.nivel }} · {{ c.ultima }}</div></div>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;padding:10px 0;border-top:1px dotted #e6dcc5">
-                      <span style="text-align:center;flex:1"><span style="display:block;font-family:'Fredoka',sans-serif;font-weight:700;font-size:18px;color:#10603A">{{ c.visitas }}</span><span style="font-size:11px;color:#9a8e70">visitas</span></span>
-                      <span style="text-align:center;flex:1;border-left:1px solid #efe6d2"><span style="display:block;font-family:'Fredoka',sans-serif;font-weight:700;font-size:18px;color:#E0A526">{{ c.puntos }}</span><span style="font-size:11px;color:#9a8e70">puntos</span></span>
-                    </div>
-                    <div style="margin-top:8px;font-size:12px;color:#8a7f66">Favorito: <span style="font-weight:700;color:#3a3120">{{ c.fav }}</span></div>
-                  </div>
-                </sc-for>
-              </div>
-            </div>
-
-            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:18px 20px">
-              <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#10603A;margin-bottom:12px">Promociones activas</div>
-              <div style="display:flex;flex-direction:column;gap:11px">
-                <sc-for list="{{ promosCli }}" as="p" hint-placeholder-count="2">
-                  <div style="border-left:4px solid {{ p.c }};background:#fbf7ec;border-radius:0 12px 12px 0;padding:12px 15px"><div style="font-weight:700;font-size:14px;color:#211E15">{{ p.t }}</div><div style="font-size:12.5px;color:#6a5f45;margin-top:2px">{{ p.d }}</div></div>
-                </sc-for>
-              </div>
-            </div>
-            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:18px 20px">
-              <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#10603A;margin-bottom:12px">Próximos cumpleaños</div>
-              <div style="display:flex;flex-direction:column;gap:11px">
-                <sc-for list="{{ cumples }}" as="c" hint-placeholder-count="2">
-                  <div style="display:flex;align-items:center;gap:12px">
-                    <span style="width:40px;height:40px;border-radius:50%;background:#fdeecec;background:#fdf0e0;color:#D6453D;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px">{{ c.ini }}</span>
-                    <div style="flex:1"><div style="font-weight:700;font-size:14px;color:#211E15">{{ c.nombre }}</div><div style="font-size:12.5px;color:#9a8e70">{{ c.fecha }}</div></div>
-                    <span style="background:#fdf3d3;color:#8a6d12;font-weight:700;font-size:12px;padding:4px 10px;border-radius:999px">{{ c.dias }}</span>
-                  </div>
-                </sc-for>
-              </div>
-            </div>
-          </div>
-        </sc-if>
-
-        <sc-if value="{{ isMenu }}" hint-placeholder-val="{{ false }}">
-          <div style="animation:dlpop .35s ease both">
-            <div style="border-radius:22px;overflow:hidden;position:relative;margin-bottom:18px;background:#10603A;min-height:190px;display:flex;align-items:flex-end">
-              <img src="../assets/promo-3tacos.jpg" alt="Promo 3 tacos" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55">
-              <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,61,36,.92),rgba(15,61,36,.35))"></div>
-              <div style="position:relative;padding:24px 26px;color:#fff">
-                <span style="background:#F2C230;color:#3a2c00;font-weight:800;font-size:11px;letter-spacing:.1em;padding:4px 11px;border-radius:999px">PROMO DEL DÍA</span>
-                <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:30px;margin-top:10px;line-height:1">Tacos desde $17.00</div>
-                <div style="color:#e9d9a3;font-weight:600;margin-top:4px">Pastor, bistec, chorizo, cabeza o costilla</div>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px">
-              <div style="display:flex;gap:9px;overflow-x:auto;padding-bottom:4px"><sc-for list="{{ menuTabs }}" as="t" hint-placeholder-count="4"><button onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}</button></sc-for></div>
-              <span style="font-size:12.5px;color:#9a8e70;font-weight:600">Vista pública · así lo ve tu cliente</span>
-            </div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px">
-              <sc-for list="{{ menuItems }}" as="i" hint-placeholder-count="4">
-                <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,.06)">
-                  <div style="height:140px;background:#f0e8d4;position:relative;display:flex;align-items:center;justify-content:center">
-                    <sc-if value="{{ i.foto }}" hint-placeholder-val="{{ true }}"><img src="{{ i.foto }}" alt="{{ i.nombre }}" style="width:100%;height:100%;object-fit:cover"></sc-if>
-                    <sc-if value="{{ i.noFoto }}" hint-placeholder-val="{{ false }}"><span style="display:flex;flex-direction:column;align-items:center;gap:8px;color:#c2b48f"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11a9 9 0 0 1 18 0M2 11h20l-2 3H4zM7 17h10"></path></svg><span style="font-size:11.5px;font-weight:700;letter-spacing:.03em">Foto próximamente</span></span></sc-if>
-                    <span style="position:absolute;top:10px;right:10px;background:#10603A;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;padding:4px 11px;border-radius:999px">{{ i.precioTxt }}</span>
-                  </div>
-                  <div style="padding:14px 16px">
-                    <div style="font-weight:700;font-size:15.5px;color:#211E15">{{ i.nombre }}</div>
-                    <div style="font-size:12.5px;color:#8a7f66;line-height:1.4;margin-top:4px;min-height:34px">{{ i.desc }}</div>
-                    <button style="cursor:pointer;margin-top:10px;width:100%;background:#25D366;color:#fff;border:none;border-radius:11px;padding:10px;font-weight:700;font-size:13.5px;display:flex;align-items:center;justify-content:center;gap:8px" style-hover="opacity:.92">
-                      <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.1 14.9l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 0 1 12 4zm4.3 9.9c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1a6.5 6.5 0 0 1-3.2-2.8c-.2-.4.2-.4.6-1.2l-.1-.4-.7-1.7c-.2-.4-.4-.4-.5-.4h-.5a1 1 0 0 0-.7.3A2.8 2.8 0 0 0 6.8 12a5 5 0 0 0 1 2.6 11 11 0 0 0 4.6 4c2 .8 2.1.5 2.5.5a2.3 2.3 0 0 0 1.5-1c.2-.5.2-1 .1-1.1z"></path></svg>
-                      Pedir por WhatsApp
-                    </button>
-                  </div>
-                </div>
-              </sc-for>
-            </div>
-
-            <div style="margin-top:20px;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:20px;padding:20px 22px">
-              <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><span style="width:40px;height:40px;border-radius:12px;background:#eaf4ec;color:#10603A;display:flex;align-items:center;justify-content:center"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M9 2h6v4H9z"></path></svg></span><div><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#10603A">Pedido para recoger</div><div style="font-size:12.5px;color:#9a8e70">Pedido #A-238 · Jorge Ramírez</div></div><span style="margin-left:auto;background:#e6f4f8;color:#1f6f8b;font-weight:800;font-size:12.5px;padding:6px 13px;border-radius:999px">Preparando</span></div>
-              <div style="display:flex;align-items:center;gap:6px;margin:10px 0 14px">
-                <sc-for list="{{ pedidoSteps }}" as="s" hint-placeholder-count="4"><span style="flex:1;height:7px;border-radius:999px;background:{{ s.on ? '#10603A' : '#e7dcc4' }}"></span></sc-for>
-              </div>
-              <div style="display:flex;justify-content:space-between;font-size:12px;color:#8a7f66;font-weight:600"><span>Recibido</span><span>En cocina</span><span>Listo</span><span>Entregado</span></div>
-              <div style="margin-top:14px;text-align:center;background:#fbf7ec;border-radius:12px;padding:12px;font-weight:700;color:#10603A">⏱ Tiempo estimado: <span style="font-family:'Fredoka',sans-serif">12 min</span></div>
-            </div>
-          </div>
-        </sc-if>
-
-        <sc-if value="{{ isEmpleados }}" hint-placeholder-val="{{ false }}">
-          <div style="animation:dlpop .35s ease both;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px">
-            <sc-for list="{{ empleados }}" as="e" hint-placeholder-count="5">
-              <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:17px 19px;box-shadow:0 2px 0 #ece2cc">
-                <div style="display:flex;align-items:center;gap:13px;margin-bottom:14px">
-                  <span style="width:50px;height:50px;border-radius:14px;background:{{ e.c }};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px">{{ e.ini }}</span>
-                  <div style="flex:1"><div style="font-weight:700;font-size:15.5px;color:#211E15">{{ e.nombre }}</div><div style="font-size:12.5px;color:#8a7f66">{{ e.rol }} · {{ e.turno }}</div></div>
-                  <span style="background:{{ e.estadoBg }};color:{{ e.estadoC }};font-weight:700;font-size:11.5px;padding:4px 10px;border-radius:999px;white-space:nowrap">{{ e.estadoTxt }}</span>
-                </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
-                  <div style="background:#fbf7ec;border-radius:11px;padding:9px;text-align:center"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:16px;color:#10603A">{{ e.ventasTxt }}</div><div style="font-size:10.5px;color:#9a8e70">ventas</div></div>
-                  <div style="background:#fbf7ec;border-radius:11px;padding:9px;text-align:center"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:16px;color:#E0A526">{{ e.propinasTxt }}</div><div style="font-size:10.5px;color:#9a8e70">propinas</div></div>
-                  <div style="background:#fbf7ec;border-radius:11px;padding:9px;text-align:center"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:16px;color:#211E15">{{ e.ordenes }}</div><div style="font-size:10.5px;color:#9a8e70">órdenes</div></div>
-                </div>
-                <div style="display:flex;align-items:center;justify-content:space-between;font-size:12.5px;margin-bottom:8px"><span style="color:#8a7f66">Tiempo promedio de atención</span><span style="font-weight:700;color:#3a3120">{{ e.tiempo }}</span></div>
-                <div style="display:flex;align-items:center;gap:10px"><span style="font-size:12.5px;color:#8a7f66">Rendimiento</span><span style="flex:1;height:9px;background:#efe6d2;border-radius:999px;overflow:hidden"><span style="display:block;height:100%;width:{{ e.perfTxt }};background:{{ e.perfC }};border-radius:999px"></span></span><span style="font-weight:800;font-size:13px;color:{{ e.perfC }}">{{ e.perfTxt }}</span></div>
               </div>
             </sc-for>
           </div>
-        </sc-if>
+        </div>
+      </sc-if>
 
-        <sc-if value="{{ isIA }}" hint-placeholder-val="{{ false }}">
-          <div style="animation:dlpop .35s ease both;max-width:760px;margin:0 auto">
-            <div style="display:flex;align-items:center;gap:13px;background:#10603A;border-radius:20px 20px 0 0;padding:16px 20px;color:#fff">
-              <span style="width:46px;height:46px;border-radius:14px;background:#F2C230;color:#10603A;display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 2 1 3.5 2 4.5V17a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-3.5c1-1 2-2.5 2-4.5a7 7 0 0 0-7-7zM9 21h6"></path></svg></span>
-              <div><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px">Asistente Don Luis</div><div style="font-size:12.5px;color:#cfe3d3">Analiza tus datos y da recomendaciones</div></div>
-              <span style="margin-left:auto;display:flex;align-items:center;gap:6px;font-size:12px;color:#9ec5a6"><span style="width:8px;height:8px;border-radius:50%;background:#8FD694"></span>En línea</span>
-            </div>
-            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-top:none;padding:18px 20px;min-height:280px;display:flex;flex-direction:column;gap:14px">
-              <sc-if value="{{ iaEmpty }}" hint-placeholder-val="{{ true }}">
-                <div style="text-align:center;padding:24px 10px;color:#8a7f66">
-                  <div style="font-size:15px;font-weight:600;color:#3a3120">¡Hola! Soy tu asistente. 👨‍🍳</div>
-                  <div style="font-size:13.5px;margin-top:6px">Pregúntame sobre ventas, utilidad, inventario u horas pico. Prueba una sugerencia:</div>
+      <sc-if value="{{ isCocina }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:dlfade .3s ease both">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;align-items:start">
+            <sc-for list="{{ cocinaBoard }}" as="col" hint-placeholder-count="4">
+              <div style="{{ col.colStyle }}">
+                <div style="{{ col.headStyle }}"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px">{{ col.title }}</span><span style="background:rgba(255,255,255,.25);font-weight:800;font-size:13px;min-width:24px;height:24px;padding:0 7px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ col.count }}</span></div>
+                <div style="display:flex;flex-direction:column;gap:11px;padding:12px 11px">
+                  <sc-if value="{{ col.empty }}" hint-placeholder-val="{{ false }}"><div style="text-align:center;color:#b0a488;font-size:12.5px;padding:20px 6px">Sin órdenes</div></sc-if>
+                  <sc-for list="{{ col.list }}" as="o" hint-placeholder-count="0">
+                    <div style="background:#fff;border-radius:13px;border:2px solid {{ o.late ? '#D6453D' : '#eadfca' }};box-shadow:0 3px 9px rgba(0,0,0,.06);padding:13px">
+                      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                        <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#211E15">{{ o.folio }}</span>
+                        <span style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:800;color:{{ o.late ? '#D6453D' : '#8a7f66' }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg>{{ o.minTxt }}</span>
+                      </div>
+                      <div style="display:flex;align-items:center;gap:7px;margin-bottom:9px">
+                        <span style="font-size:12px;font-weight:700;color:#10603A;background:#eaf4ec;padding:3px 9px;border-radius:8px">{{ o.mesaTxt }}</span>
+                        <sc-if value="{{ o.prio }}" hint-placeholder-val="{{ false }}"><span style="font-size:10.5px;font-weight:800;color:#b23a32;background:#fdeceb;padding:3px 8px;border-radius:8px">PRIORIDAD</span></sc-if>
+                        <sc-if value="{{ o.promTxt }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;color:#9a8e70;margin-left:auto">{{ o.promTxt }}</span></sc-if>
+                      </div>
+                      <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:11px">
+                        <sc-for list="{{ o.items }}" as="it" hint-placeholder-count="2"><div style="font-size:14px"><span style="font-weight:800;color:#10603A">{{ it.q }}×</span> <span style="color:#211E15">{{ it.nombre }}</span><sc-if value="{{ it.nota }}" hint-placeholder-val="{{ false }}"><span style="display:block;font-size:12px;font-weight:700;color:#D6453D;padding-left:20px">↳ {{ it.nota }}</span></sc-if></div></sc-for>
+                      </div>
+                      <sc-if value="{{ o.canAvanzar }}" hint-placeholder-val="{{ true }}"><button onClick="{{ o.onNext }}" style="cursor:pointer;width:100%;background:#10603A;color:#fff;border:none;border-radius:11px;padding:12px;font-weight:700;font-size:14px">{{ o.nextTxt }} →</button></sc-if>
+                      <sc-if value="{{ o.canAvanzar }}" hint-placeholder-val="{{ false }}"><div style="text-align:center;color:#10603A;font-weight:700;font-size:13px;padding:8px;background:#eaf4ec;border-radius:11px">✓ Lista para entregar</div></sc-if>
+                    </div>
+                  </sc-for>
                 </div>
-              </sc-if>
-              <sc-for list="{{ iaChat }}" as="m" hint-placeholder-count="0">
-                <sc-if value="{{ m.isUser }}" hint-placeholder-val="{{ false }}">
-                  <div style="align-self:flex-end;max-width:80%;background:#10603A;color:#fff;padding:11px 15px;border-radius:16px 16px 4px 16px;font-size:14px;font-weight:500">{{ m.txt }}</div>
-                </sc-if>
-                <sc-if value="{{ m.isBot }}" hint-placeholder-val="{{ false }}">
-                  <div style="align-self:flex-start;max-width:88%;background:#f3ead6;color:#2a2418;padding:13px 16px;border-radius:16px 16px 16px 4px;font-size:14px;line-height:1.55">
-                    <span>{{ m.txt }}</span>
-                    <sc-if value="{{ m.hasChips }}" hint-placeholder-val="{{ false }}"><span style="display:flex;gap:7px;flex-wrap:wrap;margin-top:11px"><sc-for list="{{ m.chips }}" as="ch" hint-placeholder-count="2"><span style="background:#10603A;color:#fff;font-weight:700;font-size:11.5px;padding:4px 10px;border-radius:999px">{{ ch }}</span></sc-for></span></sc-if>
-                  </div>
-                </sc-if>
-              </sc-for>
-              <sc-if value="{{ iaBusy }}" hint-placeholder-val="{{ false }}">
-                <div style="align-self:flex-start;background:#f3ead6;padding:14px 18px;border-radius:16px;display:flex;gap:5px"><span style="width:8px;height:8px;border-radius:50%;background:#b0a488;animation:dltoast 1s infinite"></span><span style="width:8px;height:8px;border-radius:50%;background:#b0a488;opacity:.6"></span><span style="width:8px;height:8px;border-radius:50%;background:#b0a488;opacity:.3"></span></div>
-              </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isCaja }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:dlfade .3s ease both;display:grid;grid-template-columns:{{ cajaGrid }};gap:16px;align-items:start">
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:18px 20px;box-shadow:0 2px 0 #ece2cc">
+              <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#10603A;margin-bottom:14px">Ventas por canal · hoy</div>
+              <div style="display:flex;flex-direction:column;gap:13px">
+                <sc-for list="{{ cajaCanales }}" as="c" hint-placeholder-count="4">
+                  <div><div style="display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:5px"><span style="font-weight:600;color:#3a3120">{{ c.canal }}</span><span style="font-weight:700;color:#10603A">{{ c.montoTxt }} · {{ c.pctTxt }}</span></div><div style="height:9px;background:#efe6d2;border-radius:999px;overflow:hidden"><div style="height:100%;width:{{ c.pctTxt }};background:{{ c.c }};border-radius:999px"></div></div></div>
+                </sc-for>
+              </div>
             </div>
-            <div style="background:#fbf7ec;border:1px solid #E6DCC5;border-top:none;border-radius:0 0 20px 20px;padding:14px 18px">
-              <div style="font-size:11.5px;font-weight:800;color:#9a8e70;text-transform:uppercase;letter-spacing:.05em;margin-bottom:9px">Preguntas sugeridas</div>
-              <div style="display:flex;flex-wrap:wrap;gap:9px">
-                <sc-for list="{{ iaSug }}" as="s" hint-placeholder-count="4"><button onClick="{{ s.onClick }}" style="cursor:pointer;background:#fff;border:1.5px solid #d7e6da;color:#10603A;font-weight:600;font-size:13px;padding:9px 14px;border-radius:12px;text-align:left" style-hover="border-color:#10603A;background:#eaf4ec">{{ s.q }}</button></sc-for>
+            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:18px 20px;box-shadow:0 2px 0 #ece2cc">
+              <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#10603A;margin-bottom:14px">Métodos de pago</div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:11px">
+                <sc-for list="{{ cajaMetodos }}" as="m" hint-placeholder-count="3">
+                  <div style="background:#fbf7ec;border:1px solid #eee3cc;border-radius:13px;padding:13px 14px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:7px"><span style="width:28px;height:28px;border-radius:8px;background:#10603A;color:#fff;display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ m.icon }}"></path></svg></span><span style="font-size:12.5px;font-weight:700;color:#3a3120">{{ m.m }}</span></div><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:19px;color:#211E15">{{ m.vTxt }}</div><div style="font-size:11px;color:#9a8e70;margin-top:2px">{{ m.n }}</div></div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:18px 20px;box-shadow:0 2px 0 #ece2cc">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#10603A">Liquidación de repartidores</span><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#1f6f8b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM18.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"></path></svg></div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <sc-for list="{{ cajaReps }}" as="r" hint-placeholder-count="2">
+                  <div style="display:flex;align-items:center;gap:12px;background:#fbf7ec;border:1px solid #eee3cc;border-radius:13px;padding:12px 14px">
+                    <span style="width:40px;height:40px;border-radius:50%;background:#1f6f8b;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex:0 0 auto">{{ r.ini }}</span>
+                    <div style="flex:1"><div style="font-weight:700;font-size:14px;color:#211E15">{{ r.nombre }}</div><div style="font-size:12px;color:#9a8e70">{{ r.entregas }} entregas · efectivo {{ r.efectivoTxt }}</div></div>
+                    <sc-if value="{{ r.liquidado }}" hint-placeholder-val="{{ false }}"><span style="background:#eaf4ec;color:#10603A;font-weight:800;font-size:12px;padding:6px 12px;border-radius:999px">Liquidado ✓</span></sc-if>
+                    <sc-if value="{{ r.liquidado }}" hint-placeholder-val="{{ true }}"><button style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:10px;padding:9px 14px;font-weight:700;font-size:12.5px">Liquidar</button></sc-if>
+                  </div>
+                </sc-for>
               </div>
             </div>
           </div>
-        </sc-if>
-      </div>
+
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="background:#0f3d24;border-radius:18px;padding:18px 20px;color:#eaf3ec">
+              <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#F2C230;margin-bottom:14px">Corte de caja · turno</div>
+              <div style="display:flex;flex-direction:column;gap:11px">
+                <sc-for list="{{ cajaCorte }}" as="c" hint-placeholder-count="4"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:600">{{ c.k }}</div><div style="font-size:11px;color:#8bb193">{{ c.sub }}</div></div><span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:16px">{{ c.v }}</span></div></sc-for>
+              </div>
+              <div style="border-top:1px dashed rgba(255,255,255,.2);margin-top:12px;padding-top:12px;display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#bcd6c1">Efectivo esperado</span><span style="font-weight:700">{{ cajaEsperado }}</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#bcd6c1">Efectivo recibido</span><span style="font-weight:700">{{ cajaRecibido }}</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:800;color:#F2C230"><span>Diferencia</span><span>{{ cajaDif }}</span></div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <button style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:13px;padding:14px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px">Cerrar caja y generar corte</button>
+              <button style="cursor:pointer;background:#fff;color:#10603A;border:1.5px solid #10603A;border-radius:13px;padding:12px;font-weight:700;font-size:13.5px">Registrar movimiento de efectivo</button>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isInventario }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:dlfade .3s ease both">
+          <div style="display:flex;gap:9px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px"><sc-for list="{{ invTabs }}" as="t" hint-placeholder-count="4"><button onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}</button></sc-for></div>
+          <sc-if value="{{ invExist }}" hint-placeholder-val="{{ true }}">
+            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;overflow:hidden">
+              <div style="display:grid;grid-template-columns:1.6fr .8fr .9fr .8fr 1.3fr;gap:8px;padding:12px 18px;background:#f3ead6;font-size:11px;font-weight:800;color:#8a7f66;text-transform:uppercase"><span>Insumo</span><span>Existencia</span><span>Consumo hoy</span><span>Mínimo</span><span>Estado</span></div>
+              <sc-for list="{{ invRows }}" as="r" hint-placeholder-count="10"><div style="display:grid;grid-template-columns:1.6fr .8fr .9fr .8fr 1.3fr;gap:8px;padding:13px 18px;border-top:1px solid #efe6d2;align-items:center"><span style="font-weight:700;font-size:13.5px;color:#211E15">{{ r.n }}</span><span style="font-weight:700;color:#10603A">{{ r.hay }} {{ r.u }}</span><span style="color:#6a5f45">{{ r.dia }} {{ r.u }}</span><span style="color:#9a8e70">{{ r.min }} {{ r.u }}</span><span style="display:flex;align-items:center;gap:9px"><span style="flex:1;height:8px;background:#efe6d2;border-radius:999px;overflow:hidden;max-width:70px"><span style="display:block;height:100%;width:{{ r.pct }};background:{{ r.barC }}"></span></span><span style="background:{{ r.stBg }};color:{{ r.stC }};font-size:11px;font-weight:800;padding:3px 8px;border-radius:8px;white-space:nowrap">{{ r.stT }}</span></span></div></sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ invRec }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#eaf4ec;border:1px solid #cfe0c6;border-radius:12px;padding:11px 15px;font-size:12.5px;color:#10603A;font-weight:600;margin-bottom:12px">Al confirmar un pedido, el inventario descuenta los ingredientes según la receta.</div>
+            <div style="display:flex;flex-direction:column;gap:10px"><sc-for list="{{ invRecetas }}" as="r" hint-placeholder-count="4"><div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap"><span style="font-weight:700;font-size:14.5px;color:#211E15;min-width:160px">{{ r.plato }}</span><span style="flex:1;font-size:12.5px;color:#6a5f45;min-width:180px">{{ r.ing }}</span><span style="font-size:12px;color:#9a8e70">venta {{ r.venta }}</span><span style="background:#eaf4ec;color:#10603A;font-weight:700;font-size:12.5px;padding:4px 10px;border-radius:8px">costo {{ r.costo }}</span></div></sc-for></div>
+          </sc-if>
+          <sc-if value="{{ invMov }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:9px"><sc-for list="{{ invMovs }}" as="m" hint-placeholder-count="5"><div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:13px;padding:13px 16px;display:flex;align-items:center;gap:13px"><span style="width:9px;height:9px;border-radius:50%;background:{{ m.c }};flex:0 0 auto"></span><div style="flex:1"><div style="font-weight:700;font-size:13.5px;color:#211E15">{{ m.tipo }}</div><div style="font-size:12px;color:#8a7f66">{{ m.det }}</div></div><span style="font-weight:700;font-size:13px;color:{{ m.c }};white-space:nowrap">{{ m.cant }}</span><span style="font-size:11.5px;color:#9a8e70">{{ m.hora }}</span></div></sc-for></div>
+            <button style="cursor:pointer;margin-top:12px;background:#fff;border:1.5px solid #10603A;color:#10603A;border-radius:12px;padding:11px 16px;font-weight:700;font-size:13px">+ Registrar ajuste manual</button>
+          </sc-if>
+          <sc-if value="{{ invComp }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:10px"><sc-for list="{{ invCompras }}" as="c" hint-placeholder-count="3"><div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div style="flex:1;min-width:170px"><div style="font-weight:700;font-size:14px;color:#211E15">{{ c.prov }}</div><div style="font-size:12px;color:#8a7f66;margin-top:2px">{{ c.items }}</div></div><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:#10603A">{{ c.monto }}</span><span style="background:{{ c.bg }};color:{{ c.c }};font-weight:800;font-size:12px;padding:5px 11px;border-radius:999px">{{ c.estado }}</span></div></sc-for></div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isReportes }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:dlfade .3s ease both">
+          <div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:11px;padding:10px 16px;font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg>Exportar</button></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:13px;margin-bottom:16px"><sc-for list="{{ repKpis }}" as="k" hint-placeholder-count="4"><div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:15px 17px;box-shadow:0 2px 0 #ece2cc"><div style="display:flex;align-items:center;gap:9px;margin-bottom:9px"><span style="width:32px;height:32px;border-radius:9px;background:{{ k.t }};color:#fff;display:flex;align-items:center;justify-content:center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ k.icon }}"></path></svg></span><span style="font-size:12px;color:#8a7f66;font-weight:600">{{ k.l }}</span></div><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:24px;color:#211E15">{{ k.v }}</div><div style="font-size:11.5px;font-weight:700;color:{{ k.dc }};margin-top:3px">{{ k.d }}</div></div></sc-for></div>
+          <div style="display:grid;grid-template-columns:{{ repGrid }};gap:16px">
+            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:18px 20px"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#10603A;margin-bottom:14px">Ventas por hora</div><div style="display:flex;align-items:flex-end;gap:3%;height:150px"><sc-for list="{{ repHora }}" as="h" hint-placeholder-count="10"><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><div style="width:70%;background:linear-gradient(#28A54C,#10603A);border-radius:5px 5px 0 0;height:{{ h.ht }}"></div><span style="font-size:10px;color:#9a8e70;font-weight:600">{{ h.h }}</span></div></sc-for></div></div>
+            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:18px 20px"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#10603A;margin-bottom:14px">Más vendidos</div><div style="display:flex;flex-direction:column;gap:12px"><sc-for list="{{ repTop }}" as="t" hint-placeholder-count="4"><div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span style="font-weight:600;color:#3a3120">{{ t.n }}</span><span style="color:#8a7f66;font-weight:700">{{ t.q }}</span></div><div style="height:8px;background:#efe6d2;border-radius:999px;overflow:hidden"><div style="height:100%;width:{{ t.pct }};background:linear-gradient(90deg,#28A54C,#10603A)"></div></div></div></sc-for></div></div>
+            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:18px 20px"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#10603A;margin-bottom:14px">Ventas por canal</div><div style="display:flex;flex-direction:column;gap:10px"><sc-for list="{{ repCanal }}" as="c" hint-placeholder-count="4"><div style="display:flex;align-items:center;gap:11px"><span style="width:11px;height:11px;border-radius:3px;background:{{ c.c }}"></span><span style="flex:1;font-size:13px;color:#3a3120;font-weight:600">{{ c.n }}</span><span style="font-weight:700;color:#10603A">{{ c.p }}</span></div></sc-for></div></div>
+            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:18px 20px"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#10603A;margin-bottom:14px">Repartidores</div><div style="display:flex;flex-direction:column;gap:10px"><sc-for list="{{ repReps }}" as="r" hint-placeholder-count="2"><div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px dotted #e6dcc5"><span style="font-weight:600;font-size:13.5px;color:#3a3120">{{ r.n }}</span><span style="font-size:12.5px;color:#8a7f66">{{ r.e }} entregas · {{ r.t }} prom.</span></div></sc-for></div></div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isConfig }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:dlfade .3s ease both">
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px">
+            <div style="flex:1;min-width:220px;background:{{ pausado ? '#fdeceb' : '#FFFDF7' }};border:1.5px solid {{ pausado ? '#f3b6b1' : '#E6DCC5' }};border-radius:16px;padding:15px 17px;display:flex;align-items:center;gap:13px"><div style="flex:1"><div style="font-weight:700;font-size:14.5px;color:#211E15">Pausar pedidos en línea</div><div style="font-size:12px;color:#8a7f66">Deja de recibir pedidos temporalmente</div></div><button onClick="{{ togglePausa }}" style="cursor:pointer;width:48px;height:28px;border-radius:999px;border:none;background:{{ pausado ? '#D6453D' : '#cbbf9f' }};position:relative"><span style="position:absolute;top:3px;{{ pausado ? 'right:3px' : 'left:3px' }};width:22px;height:22px;background:#fff;border-radius:50%"></span></button></div>
+            <div style="flex:1;min-width:220px;background:{{ saturado ? '#fdf6e3' : '#FFFDF7' }};border:1.5px solid {{ saturado ? '#f0e3b6' : '#E6DCC5' }};border-radius:16px;padding:15px 17px;display:flex;align-items:center;gap:13px"><div style="flex:1"><div style="font-weight:700;font-size:14.5px;color:#211E15">Modo saturado</div><div style="font-size:12px;color:#8a7f66">Aumenta tiempos y avisa al cliente</div></div><button onClick="{{ toggleSat }}" style="cursor:pointer;width:48px;height:28px;border-radius:999px;border:none;background:{{ saturado ? '#E0A526' : '#cbbf9f' }};position:relative"><span style="position:absolute;top:3px;{{ saturado ? 'right:3px' : 'left:3px' }};width:22px;height:22px;background:#fff;border-radius:50%"></span></button></div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px">
+            <sc-for list="{{ configGrupos }}" as="g" hint-placeholder-count="5">
+              <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:16px 18px">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><span style="width:34px;height:34px;border-radius:10px;background:#eaf4ec;color:#10603A;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ g.icon }}"></path></svg></span><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#10603A">{{ g.titulo }}</span></div>
+                <div style="display:flex;flex-direction:column">
+                  <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="3"><div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dotted #e6dcc5"><span style="font-size:12.5px;color:#9a8e70;flex:0 0 auto">{{ it.k }}</span><span style="font-size:12.5px;font-weight:600;color:#211E15;text-align:right">{{ it.v }}</span></div></sc-for>
+                </div>
+                <button style="cursor:pointer;margin-top:12px;width:100%;background:#fff;border:1.5px solid #10603A;color:#10603A;border-radius:11px;padding:9px;font-weight:700;font-size:13px">Editar</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isOtro }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:64px 20px;text-align:center;animation:dlfade .3s"><div style="width:70px;height:70px;border-radius:20px;background:#eaf4ec;display:flex;align-items:center;justify-content:center;margin-bottom:14px"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10603A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"></path></svg></div><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px;color:#10603A">{{ currentTitle }}</div></div>
+      </sc-if>
     </main>
   </div>
 
   <sc-if value="{{ showBottomNav }}" hint-placeholder-val="{{ true }}">
-    <nav style="position:fixed;left:0;right:0;bottom:0;z-index:40;background:#10603A;display:flex;align-items:stretch;padding:8px 6px calc(8px + env(safe-area-inset-bottom));gap:2px">
-      <div style="flex:1;min-width:0;display:flex;overflow-x:auto;gap:2px">
-        <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="10">
-          <button onClick="{{ n.onClick }}" style="{{ n.botStyle }}">
-            <span style="position:relative"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ n.icon }}"></path></svg><sc-if value="{{ n.showBadge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-6px;right:-9px;background:#D6453D;color:#fff;font-size:9px;font-weight:800;min-width:15px;height:15px;padding:0 3px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ n.badge }}</span></sc-if></span>
-            <span style="font-size:10px;font-weight:600;white-space:nowrap">{{ n.short }}</span>
-          </button>
-        </sc-for>
-      </div>
-      <span style="flex:0 0 auto;width:1px;align-self:stretch;margin:4px 2px;background:rgba(255,255,255,.14)"></span>
-      <button onClick="{{ onLogout }}" style="flex:0 0 auto;min-width:56px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 8px;border-radius:12px;border:none;font-family:'Rubik',sans-serif;background:transparent;color:#f3b3ae">
-        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"></path></svg>
-        <span style="font-size:10px;font-weight:600;white-space:nowrap">Salir</span>
-      </button>
+    <nav style="position:fixed;left:0;right:0;bottom:0;z-index:40;background:#10603A;display:flex;overflow-x:auto;padding:8px 6px calc(8px + env(safe-area-inset-bottom));gap:2px">
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="6"><button onClick="{{ n.onClick }}" style="{{ n.botStyle }}"><span style="position:relative"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ n.icon }}"></path></svg><sc-if value="{{ n.showBadge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-6px;right:-9px;background:#D6453D;color:#fff;font-size:9px;font-weight:800;min-width:15px;height:15px;padding:0 3px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ n.badge }}</span></sc-if></span><span style="font-size:10px;font-weight:600;white-space:nowrap">{{ n.short }}</span></button></sc-for>
     </nav>
   </sc-if>
 
-  <sc-if value="{{ showEasterEgg }}" hint-placeholder-val="{{ false }}">
-    <div style="position:fixed;inset:0;z-index:90;background:rgba(16,20,14,.6);display:flex;align-items:center;justify-content:center;padding:24px;animation:dlpop .2s ease both">
-      <div style="width:100%;max-width:340px;background:#FFFDF7;border-radius:22px;box-shadow:0 30px 70px rgba(0,0,0,.4);overflow:hidden;text-align:center;animation:dlpop .3s ease both">
-        <div style="background:linear-gradient(#178049,#10603A);padding:26px 20px 20px;color:#fff">
-          <div style="font-size:34px;line-height:1">🌮✨</div>
-          <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:18px;margin-top:8px">¡Encontraste el Easter egg!</div>
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;left:50%;transform:translateX(-50%);bottom:{{ showBottomNav ? '86px' : '28px' }};z-index:80;background:#10603A;color:#fff;padding:13px 20px;border-radius:14px;box-shadow:0 14px 34px rgba(0,0,0,.3);display:flex;align-items:center;gap:11px;font-weight:600;font-size:14px;animation:dlpop .3s;max-width:92vw"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#8FD694" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>{{ toast }}</div>
+  </sc-if>
+
+  <sc-if value="{{ rechazoOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ cerrarRechazo }}" style="position:fixed;inset:0;z-index:90;background:rgba(20,15,5,.5);display:flex;align-items:center;justify-content:center;padding:20px;animation:dlfade .2s">
+      <div onClick="{{ stop }}" style="width:100%;max-width:380px;background:#FFFDF7;border-radius:20px;overflow:hidden;animation:dlpop .25s">
+        <div style="padding:18px 20px 10px"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px;color:#211E15">Rechazar pedido</div><div style="font-size:13px;color:#8a7f66;margin-top:2px">Elige un motivo</div></div>
+        <div style="padding:4px 16px 8px;display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ motivos }}" as="m" hint-placeholder-count="4"><button onClick="{{ m.onClick }}" style="cursor:pointer;text-align:left;background:#fff;border:1.5px solid #E6DCC5;border-radius:12px;padding:12px 14px;font-weight:600;font-size:13.5px;color:#3a3120" style-hover="border-color:#D6453D;background:#fdeceb">{{ m.label }}</button></sc-for>
         </div>
-        <div style="padding:22px 24px 24px">
-          <div style="font-size:14px;color:#4a3d28;line-height:1.6">
-            Esta demo fue hecha por<br>
-            <a href="https://procesalab0-prog.github.io/ProcesaLabWeb/" target="_blank" rel="noopener" style="color:#10603A;font-weight:800;font-size:16px;text-decoration:underline">ProcesaLab</a>
-          </div>
-          <div style="margin-top:14px;display:inline-block;background:#F3F0E6;color:#8a7f66;font-size:12px;font-weight:700;letter-spacing:.06em;padding:6px 14px;border-radius:999px">VERSIÓN {{ appVersion }}</div>
-          <button onClick="{{ onCloseEasterEgg }}" style="cursor:pointer;margin-top:18px;width:100%;background:#10603A;color:#fff;border:none;border-radius:12px;padding:11px;font-weight:700;font-size:14px">Cerrar</button>
-        </div>
+        <div style="padding:8px 16px 16px"><button onClick="{{ cerrarRechazo }}" style="cursor:pointer;width:100%;background:none;border:none;color:#8a7f66;font-weight:700;font-size:13.5px;padding:8px">Cancelar</button></div>
       </div>
     </div>
   </sc-if>
 
-  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
-    <div style="position:fixed;left:50%;bottom:{{ showBottomNav ? 'calc(88px + env(safe-area-inset-bottom))' : '28px' }};z-index:80;background:#10603A;color:#fff;padding:13px 20px;border-radius:14px;box-shadow:0 14px 34px rgba(0,0,0,.3);display:flex;align-items:center;gap:11px;font-weight:600;font-size:14px;animation:dltoast .3s ease both;max-width:92vw">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8FD694" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
-      {{ toast }}
+  <sc-if value="{{ aceptarOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ cerrarAceptar }}" style="position:fixed;inset:0;z-index:90;background:rgba(20,15,5,.5);display:flex;align-items:center;justify-content:center;padding:20px;animation:dlfade .2s">
+      <div onClick="{{ stop }}" style="width:100%;max-width:400px;background:#FFFDF7;border-radius:20px;overflow:hidden;animation:dlpop .25s">
+        <div style="background:#10603A;color:#fff;padding:16px 20px"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px">Aceptar {{ aceptarFolio }}</div><div style="font-size:12.5px;color:#cfe3d3">Confirma el tiempo estimado</div></div>
+        <div style="padding:18px 20px">
+          <div style="font-size:12.5px;font-weight:800;color:#8a7f66;text-transform:uppercase;letter-spacing:.04em;margin-bottom:9px">Tiempo estimado</div>
+          <div style="display:flex;gap:8px;margin-bottom:16px"><sc-for list="{{ tiempoOpts }}" as="t" hint-placeholder-count="4"><button onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}</button></sc-for></div>
+          <div style="background:#eaf4ec;border:1px solid #cfe0c6;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:16px"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color:#25D366;flex:0 0 auto"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2z"></path></svg><span style="font-size:12.5px;color:#10603A;font-weight:600">Se enviará confirmación por WhatsApp al cliente (demo).</span></div>
+          <button onClick="{{ confirmarAceptar }}" style="cursor:pointer;width:100%;background:#10603A;color:#fff;border:none;border-radius:13px;padding:14px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px">Aceptar y confirmar</button>
+          <button onClick="{{ cerrarAceptar }}" style="cursor:pointer;width:100%;margin-top:8px;background:none;border:none;color:#8a7f66;font-weight:700;font-size:13.5px;padding:6px">Cancelar</button>
+        </div>
+      </div>
     </div>
   </sc-if>
 </div>
 </sc-if>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:800},&quot;mostrarDemo&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Demo&quot;},&quot;propinaSugerida&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;10%&quot;,&quot;options&quot;:[&quot;0%&quot;,&quot;10%&quot;,&quot;15%&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Caja&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
-  state = { route:'login', profile:null, vw:1280, toast:null,
-    mesaActiva:null, cart:[], catSel:'Tacos',
-    cajaMesa:null, splitMode:'total', pago:'efectivo', propinaPct:null,
-    chat:[], chatBusy:false, invTab:'existencias',
-    logoTaps:0, showEasterEgg:false };
-  // IMPORTANTE: incrementar esta versión en cada publicación a main.
-  static APP_VERSION = '2.0.0';
-  get propinaActual(){ return this.state.propinaPct!=null?this.state.propinaPct:parseInt(this.props.propinaSugerida||'10',10); }
+  static APP_VERSION = '2.1.0';
+  static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
+  static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
+  state = { rol:null, route:'pedidos', vw:1280, toast:null, sonido:true,
+    canal:'todos', rechazoFor:null, aceptarFor:null, aceptarTiempo:20,
+    authEmail:'',authPassword:'',authBusy:false,session:null,live:false,branchId:null };
 
-  MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2})+' MXN'; }
-  short(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-
+  MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
   componentDidMount(){
-    this._onR = ()=>this.setState({vw:window.innerWidth});
-    this.setState({vw:window.innerWidth});
-    window.addEventListener('resize',this._onR);
+    this._onR=()=>this.setState({vw:window.innerWidth}); this.setState({vw:window.innerWidth}); window.addEventListener('resize',this._onR);
+    const saved=JSON.parse(localStorage.getItem('donLuisStaffSession')||'null');
+    if(saved?.access_token)this.restoreSession(saved);
   }
-  componentWillUnmount(){ window.removeEventListener('resize',this._onR); }
+  componentWillUnmount(){ window.removeEventListener('resize',this._onR); clearInterval(this._livePoll); }
   toast(m){ clearTimeout(this._t); this.setState({toast:m}); this._t=setTimeout(()=>this.setState({toast:null}),2600); }
   go(r){ this.setState({route:r}); if(typeof window!=='undefined') window.scrollTo?.({top:0}); }
 
-  // ---------- easter egg: 6 toques en el logo TDL ----------
-  tapLogo(){
-    clearTimeout(this._logoTapTimer);
-    const taps = (this.state.logoTaps||0)+1;
-    if(taps>=6){ this.setState({logoTaps:0, showEasterEgg:true}); return; }
-    this.setState({logoTaps:taps});
-    this._logoTapTimer=setTimeout(()=>this.setState({logoTaps:0}),1200);
+  async api(path,options={}){
+    const token=options.token||this.state.session?.access_token;
+    const headers={apikey:Component.SUPABASE_KEY,'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{}),...(options.headers||{})};
+    const res=await fetch(Component.SUPABASE_URL+path,{...options,headers});
+    const data=await res.json().catch(()=>null);
+    if(!res.ok)throw new Error(data?.msg||data?.message||data?.error_description||data?.error||'No fue posible conectar con Don Luis');
+    return data;
   }
-
-  // ---------- catálogo ----------
-  get menu(){ return [
-    {id:'pastor',nombre:'Taco al pastor',cat:'Tacos',precio:17,desc:'Con cebolla y cilantro',costo:8.5},
-    {id:'bistec',nombre:'Taco de bistec',cat:'Tacos',precio:17,desc:'Con cebolla y cilantro',costo:11},
-    {id:'chorizo',nombre:'Taco de chorizo',cat:'Tacos',precio:17,desc:'Con cebolla y cilantro',costo:9},
-    {id:'cabeza',nombre:'Taco de cabeza',cat:'Tacos',precio:17,desc:'Con cebolla y cilantro',costo:10},
-    {id:'costilla',nombre:'Taco de costilla',cat:'Tacos',precio:25,desc:'Con cebolla y cilantro',costo:12},
-    {id:'lengua',nombre:'Taco de lengua',cat:'Tacos',precio:25,desc:'Con cebolla y cilantro',costo:14},
-    {id:'sesos',nombre:'Taco de sesos',cat:'Tacos',precio:25,desc:'Con cebolla y cilantro',costo:13},
-
-    {id:'quesadilla',nombre:'Quesadilla clásica',cat:'Quesadillas',precio:34,desc:'Cabeza, pastor, bistec o chorizo',costo:16},
-    {id:'quesadilla_lengua',nombre:'Quesadilla de lengua',cat:'Quesadillas',precio:40,desc:'Preparada con lengua',costo:20},
-    {id:'quesadilla_sesos',nombre:'Quesadilla de sesos',cat:'Quesadillas',precio:40,desc:'Preparada con sesos',costo:19},
-    {id:'quesadilla_costilla',nombre:'Quesadilla de costilla',cat:'Quesadillas',precio:40,desc:'Preparada con costilla',costo:20},
-
-    {id:'torta',nombre:'Torta clásica',cat:'Tortas',precio:40,desc:'Cabeza, pastor, bistec o chorizo',costo:20},
-    {id:'torta_lengua',nombre:'Torta de lengua',cat:'Tortas',precio:45,desc:'Preparada con lengua',costo:24},
-    {id:'torta_sesos',nombre:'Torta de sesos',cat:'Tortas',precio:45,desc:'Preparada con sesos',costo:23},
-    {id:'torta_queso',nombre:'Torta con queso',cat:'Tortas',precio:45,desc:'Con queso',costo:24},
-
-    {id:'light',nombre:'Tacos light clásicos',cat:'Tacos light',precio:80,desc:'Cabeza, pastor, bistec o chorizo',costo:40},
-    {id:'light_lengua',nombre:'Tacos light de lengua',cat:'Tacos light',precio:100,desc:'Preparados con lengua',costo:52},
-    {id:'light_sesos',nombre:'Tacos light de sesos',cat:'Tacos light',precio:100,desc:'Preparados con sesos',costo:50},
-
-    {id:'refresco',nombre:'Refresco',cat:'Bebidas',precio:30,desc:'Refresco embotellado',costo:12},
-    {id:'agua_medio',nombre:'Agua de sabor · 1/2 litro',cat:'Bebidas',precio:30,desc:'Agua fresca del día',costo:9},
-    {id:'agua_litro',nombre:'Agua de sabor · 1 litro',cat:'Bebidas',precio:50,desc:'Agua fresca del día',costo:15},
-
-    {id:'gringa',nombre:'Gringa',cat:'Especialidades',precio:60,desc:'Producto de datos históricos de la demo',costo:22,oculto:true},
-    {id:'horchata',nombre:'Agua de horchata',cat:'Bebidas',precio:30,desc:'Producto de datos históricos de la demo',costo:9,oculto:true},
-    {id:'ex_queso',nombre:'Extra queso',cat:'Extras',precio:10,desc:'',costo:3,oculto:true},
-    {id:'ex_guac',nombre:'Guacamole',cat:'Extras',precio:15,desc:'',costo:6,oculto:true},
-    {id:'ex_doble',nombre:'Doble carne',cat:'Extras',precio:15,desc:'',costo:7,oculto:true},
-    {id:'ex_ceb',nombre:'Cebollitas asadas',cat:'Extras',precio:20,desc:'',costo:5,oculto:true},
-  ]; }
-  itemById(id){ return this.menu.find(m=>m.id===id)||{nombre:id,precio:0}; }
-
-  // ---------- estado persistente de sesión ----------
-  ensureData(){
-    if(this._mesas) return;
-    this._mesas = [
-      {n:1,estado:'ocupada',pax:4,mesero:'Sofía',min:18},
-      {n:2,estado:'libre',pax:0,mesero:'—',min:0},
-      {n:3,estado:'orden_lista',pax:2,mesero:'Marco',min:9},
-      {n:4,estado:'por_cobrar',pax:3,mesero:'Sofía',min:41},
-      {n:5,estado:'ocupada',pax:5,mesero:'Diego',min:26},
-      {n:6,estado:'libre',pax:0,mesero:'—',min:0},
-      {n:7,estado:'ocupada',pax:2,mesero:'Marco',min:6},
-      {n:8,estado:'por_cobrar',pax:4,mesero:'Diego',min:53},
-      {n:9,estado:'libre',pax:0,mesero:'—',min:0},
-      {n:10,estado:'ocupada',pax:6,mesero:'Sofía',min:15},
-      {n:11,estado:'orden_lista',pax:2,mesero:'Marco',min:12},
-      {n:12,estado:'libre',pax:0,mesero:'—',min:0},
-    ];
-    this._consumos = {1:[{id:'pastor',q:6,nota:''},{id:'horchata',q:1,nota:''}],3:[{id:'bistec',q:3,nota:''},{id:'refresco',q:1,nota:''}],4:[{id:'gringa',q:2,nota:'Sin cebolla'},{id:'cabeza',q:4,nota:''},{id:'horchata',q:1,nota:''}],5:[{id:'cabeza',q:6,nota:'Doble carne'},{id:'refresco',q:3,nota:''}],7:[{id:'chorizo',q:3,nota:''},{id:'refresco',q:1,nota:''}],8:[{id:'quesadilla',q:2,nota:''},{id:'pastor',q:5,nota:''},{id:'horchata',q:2,nota:''}],10:[{id:'gringa',q:3,nota:''},{id:'pastor',q:8,nota:'Sin cilantro'},{id:'refresco',q:4,nota:''}],11:[{id:'bistec',q:2,nota:''},{id:'refresco',q:1,nota:''}]};
-    this._orders = [
-      {id:1042,mesa:1,estado:'nueva',min:3,mesero:'Sofía',items:[{id:'pastor',q:4,nota:'Sin cebolla'},{id:'horchata',q:1,nota:''}]},
-      {id:1041,mesa:5,estado:'preparando',min:11,mesero:'Diego',items:[{id:'cabeza',q:3,nota:'Doble carne'},{id:'gringa',q:1,nota:''},{id:'refresco',q:2,nota:''}]},
-      {id:1039,mesa:'Para llevar',estado:'preparando',min:22,mesero:'Marco',items:[{id:'chorizo',q:6,nota:'Sin cilantro'},{id:'quesadilla',q:2,nota:''}]},
-      {id:1037,mesa:3,estado:'lista',min:2,mesero:'Marco',items:[{id:'bistec',q:2,nota:''},{id:'horchata',q:1,nota:''}]},
-    ];
-    this._seq = 1043;
-    this._inv = [
-      {n:'Carne al pastor',u:'kg',hay:14,dia:9,min:8},
-      {n:'Bistec de res',u:'kg',hay:6,dia:5,min:6},
-      {n:'Chorizo',u:'kg',hay:3,dia:4,min:5},
-      {n:'Tortilla de maíz',u:'kg',hay:22,dia:12,min:10},
-      {n:'Cebolla',u:'kg',hay:2,dia:3,min:4},
-      {n:'Cilantro',u:'manojo',hay:5,dia:8,min:6},
-      {n:'Queso Oaxaca',u:'kg',hay:4,dia:3,min:3},
-      {n:'Refrescos',u:'pzas',hay:38,dia:22,min:24},
-      {n:'Empaques',u:'pzas',hay:60,dia:30,min:40},
-    ];
-    this._ventasHoy = 8420; this._ordenesHoy = 47;
+  async signIn(){
+    if(!this.state.authEmail.trim()||!this.state.authPassword){this.toast('Escribe correo y contraseña');return;}
+    this.setState({authBusy:true});
+    try{
+      const session=await this.api('/auth/v1/token?grant_type=password',{method:'POST',body:JSON.stringify({email:this.state.authEmail.trim(),password:this.state.authPassword})});
+      await this.restoreSession(session,true);
+    }catch(error){this.toast(error.message||'No fue posible iniciar sesión');}
+    finally{this.setState({authBusy:false,authPassword:''});}
   }
-  get mesas(){ this.ensureData(); return this._mesas; }
-  get orders(){ this.ensureData(); return this._orders; }
-  get inv(){ this.ensureData(); return this._inv; }
-  mesaItems(n){ this.ensureData(); return this._consumos[n]||[]; }
-  mesaTotal(n){ return this.mesaItems(n).reduce((s,i)=>s+this.itemById(i.id).precio*i.q,0); }
+  async restoreSession(session,notify=false){
+    try{
+      const memberships=await this.api('/rest/v1/branch_memberships?user_id=eq.'+session.user.id+'&is_active=eq.true&select=branch_id,role&limit=1',{token:session.access_token});
+      const membership=memberships[0]; if(!membership)throw new Error('Esta cuenta no tiene acceso de personal');
+      const roleName={owner:'Dueño',admin:'Administrador',cashier:'Caja',kitchen:'Cocina',waiter:'Mesero',driver:'Repartidor'}[membership.role]||'Administrador';
+      localStorage.setItem('donLuisStaffSession',JSON.stringify(session));
+      this.setState({session,branchId:membership.branch_id,rol:roleName,route:membership.role==='kitchen'?'cocina':'pedidos',live:true});
+      await this.loadLiveOrders(session.access_token,membership.branch_id);
+      clearInterval(this._livePoll); this._livePoll=setInterval(()=>this.loadLiveOrders(),10000);
+      if(notify)this.toast('Sesión real iniciada');
+    }catch(error){localStorage.removeItem('donLuisStaffSession');this.setState({session:null,live:false,rol:null});if(notify)this.toast(error.message);}
+  }
+  async loadLiveOrders(token=this.state.session?.access_token,branchId=this.state.branchId){
+    if(!token||!branchId)return;
+    try{
+      const rows=await this.api('/rest/v1/orders?branch_id=eq.'+branchId+'&select=id,folio,channel,fulfillment_type,status,payment_method,payment_status,guest_name,guest_phone,delivery_address,table_number,total,created_at,promised_at,customer_notes,order_items(product_name,quantity,notes,line_total)&order=created_at.desc&limit=100',{token});
+      this._orders=rows.map(o=>this.mapRemoteOrder(o)); this.forceUpdate();
+    }catch(error){console.error(error);}
+  }
+  mapRemoteOrder(o){
+    const status={pending_acceptance:'nuevo',confirmed:'aceptado',preparing:'preparando',ready:'listo',assigned:'listo',on_the_way:'en_camino',delivered:'completado',rejected:'rechazado',cancelled:'cancelado'}[o.status]||o.status;
+    const canal=o.fulfillment_type==='delivery'?'domicilio':o.fulfillment_type==='dine_in'?'establecimiento':(o.channel==='whatsapp'?'whatsapp':'recoger');
+    const created=new Date(o.created_at); const min=Math.max(0,Math.floor((Date.now()-created.getTime())/60000));
+    const addr=o.delivery_address||{}; const dir=canal==='domicilio'?[addr.street,addr.exterior_number,addr.neighborhood].filter(Boolean).join(' '):(canal==='establecimiento'?'Mesa '+(o.table_number||''):'Recoger en sucursal');
+    return {id:o.id,remoteStatus:o.status,folio:'DL-'+o.folio,canal,estado:status,min,cliente:o.guest_name||(canal==='establecimiento'?'Mesa '+(o.table_number||''):'Cliente'),tel:o.guest_phone||'—',dir,pago:{metodo:o.payment_method==='transfer'?'transferencia':o.payment_method==='card_present'?'tarjeta':'efectivo',estado:o.payment_status==='paid'?'pagado':o.payment_status==='verification_pending'?'por_verificar':'pendiente'},items:(o.order_items||[]).map(i=>({q:i.quantity,nombre:i.product_name,nota:i.notes||'',lineTotal:Number(i.line_total)})),total:Number(o.total),tiempo:o.promised_at?Math.max(0,Math.round((new Date(o.promised_at)-created)/60000)):null};
+  }
+  async patchOrder(o,changes,success){
+    if(!this.state.live){Object.assign(o,changes.local||{});this.forceUpdate();this.toast(success);return;}
+    try{await this.api('/rest/v1/orders?id=eq.'+o.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(changes.remote||{})});await this.loadLiveOrders();this.toast(success);}catch(error){this.toast(error.message);}
+  }
+  async logout(){localStorage.removeItem('donLuisStaffSession');clearInterval(this._livePoll);this._orders=null;this.setState({rol:null,session:null,live:false,branchId:null});}
 
-  // ---------- nav ----------
+  ensure(){
+    if(this._orders) return;
+    this._orders=[
+      {folio:'DL-4207',canal:'domicilio',estado:'nuevo',min:1,cliente:'Paola Ramírez',tel:'477 123 4567',dir:'Av. Cañada 120, Punto Cañada',pago:{metodo:'transferencia',estado:'por_verificar'},items:[{q:3,nombre:'Taco al pastor',nota:'Sin cebolla'},{q:1,nombre:'Quesadilla de pastor',nota:''},{q:1,nombre:'Agua ½ L',nota:''}]},
+      {folio:'DL-4206',canal:'whatsapp',estado:'nuevo',min:3,cliente:'Jorge M.',tel:'477 555 0199',dir:'Recoger en sucursal',pago:{metodo:'efectivo',estado:'pendiente'},items:[{q:5,nombre:'Taco de bistec',nota:''},{q:2,nombre:'Refresco',nota:''}]},
+      {folio:'DL-4205',canal:'recoger',estado:'aceptado',min:6,cliente:'Andrea G.',tel:'477 222 1188',dir:'Recoger 13:20',pago:{metodo:'tarjeta',estado:'pendiente'},tiempo:20,items:[{q:4,nombre:'Taco de cabeza',nota:'Bien dorado'},{q:1,nombre:'Torta de pastor',nota:''}]},
+      {folio:'DL-4204',canal:'establecimiento',estado:'preparando',min:9,cliente:'Mesa 5',tel:'—',dir:'Consumo en mesa',pago:{metodo:'efectivo',estado:'pendiente'},tiempo:15,items:[{q:6,nombre:'Taco campechano',nota:'Doble carne'},{q:3,nombre:'Refresco',nota:''}]},
+      {folio:'DL-4203',canal:'domicilio',estado:'preparando',min:14,cliente:'Luis Ángel',tel:'477 888 4410',dir:'Jardines de Oriente 44',pago:{metodo:'efectivo',estado:'pendiente'},tiempo:35,items:[{q:6,nombre:'Taco de suadero',nota:'Sin cilantro'},{q:2,nombre:'Quesadilla de lengua',nota:''}]},
+      {folio:'DL-4202',canal:'recoger',estado:'listo',min:2,cliente:'Marcela T.',tel:'477 401 7788',dir:'Recoger ahora',pago:{metodo:'tarjeta',estado:'pagado'},tiempo:18,items:[{q:2,nombre:'Torta de bistec',nota:''},{q:1,nombre:'Agua 1 L',nota:''}]},
+      {folio:'DL-4200',canal:'domicilio',estado:'en_camino',min:8,cliente:'Diana R.',tel:'477 300 5521',dir:'Valle del Campestre 210',pago:{metodo:'efectivo',estado:'pendiente'},repartidor:'Ricardo G.',tiempo:35,items:[{q:8,nombre:'Taco al pastor',nota:''},{q:2,nombre:'Agua 1 L',nota:''}]},
+      {folio:'DL-4198',canal:'domicilio',estado:'completado',min:26,cliente:'Sr. Beto',tel:'477 610 9922',dir:'San Isidro 8',pago:{metodo:'efectivo',estado:'pagado'},repartidor:'Ricardo G.',tiempo:32,items:[{q:6,nombre:'Taco de chorizo',nota:''}]},
+      {folio:'DL-4197',canal:'recoger',estado:'completado',min:34,cliente:'Nadia P.',tel:'477 120 3344',dir:'Recogido',pago:{metodo:'tarjeta',estado:'pagado'},tiempo:16,items:[{q:3,nombre:'Quesadilla de bistec',nota:''}]},
+    ];
+  }
+  get orders(){ this.ensure(); return this._orders; }
+  itemTotal(p){ if(Number.isFinite(p.total))return p.total; const price={'Taco al pastor':17,'Taco de bistec':17,'Taco de cabeza':17,'Taco de chorizo':17,'Taco de suadero':17,'Taco campechano':17,'Quesadilla de pastor':34,'Quesadilla de bistec':34,'Quesadilla de lengua':40,'Torta de pastor':40,'Torta de bistec':40,'Refresco':30,'Agua ½ L':30,'Agua 1 L':50}; return p.items.reduce((s,i)=>s+(i.lineTotal||(price[i.nombre]||20)*i.q),0); }
+
+  canalMeta(c){ return {
+    domicilio:{txt:'Domicilio',c:'#1f6f8b',bg:'#e6f4f8',icon:'M1 3h15v13H1zM16 8h4l3 3v5h-7M5.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM18.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z'},
+    recoger:{txt:'Recoger',c:'#8a6d12',bg:'#fdf6e3',icon:'M9 11l3 3 8-8M5 20V9a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v11'},
+    establecimiento:{txt:'En mesa',c:'#10603A',bg:'#eaf4ec',icon:'M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2M3 9v8M21 9v8M6 17v3M18 17v3'},
+    whatsapp:{txt:'WhatsApp',c:'#128C4B',bg:'#e4f7ec',icon:'M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2z'},
+  }[c]; }
+  pagoMeta(p){ if(p.estado==='pagado')return{txt:'Pagado',c:'#10603A'}; if(p.estado==='por_verificar')return{txt:'Transf. por verificar',c:'#E0A526'}; return{txt:'Por cobrar',c:'#b23a32'}; }
+
+  // acciones
+  aceptar(folio){ this.setState({aceptarFor:folio,aceptarTiempo:this.orders.find(o=>o.folio===folio)?.canal==='domicilio'?35:20}); }
+  confirmarAceptar(){ const o=this.orders.find(x=>x.folio===this.state.aceptarFor); this.setState({aceptarFor:null}); if(!o)return; const promised=new Date(Date.now()+this.state.aceptarTiempo*60000).toISOString(); this.patchOrder(o,{local:{estado:'aceptado',tiempo:this.state.aceptarTiempo},remote:{status:'confirmed',promised_at:promised,accepted_at:new Date().toISOString(),accepted_by:this.state.session?.user?.id}},'Pedido aceptado · confirmación registrada'); }
+  avanzar(folio){ const o=this.orders.find(x=>x.folio===folio); if(!o)return;
+    const flow=o.canal==='domicilio'?['aceptado','preparando','listo','en_camino','completado']:['aceptado','preparando','listo','completado'];
+    const i=flow.indexOf(o.estado); if(i<0||i>=flow.length-1)return; const next=flow[i+1];
+    const remote={aceptado:'confirmed',preparando:'preparing',listo:'ready',en_camino:'on_the_way',completado:'delivered'}[next];
+    const extra=next==='completado'?{completed_at:new Date().toISOString()}:{};
+    const lbl={preparando:'En preparación',listo:'Listo',en_camino:'En camino',completado:'Completado'}[next]||next;
+    this.patchOrder(o,{local:{estado:next,min:0},remote:{status:remote,...extra}},o.folio+' → '+lbl);
+  }
+  rechazar(folio){ this.setState({rechazoFor:folio}); }
+  confirmarRechazo(motivo){ const o=this.orders.find(x=>x.folio===this.state.rechazoFor); this.setState({rechazoFor:null}); if(o)this.patchOrder(o,{local:{estado:'rechazado'},remote:{status:'rejected',cancellation_reason:motivo}},'Pedido rechazado: '+motivo); }
+
   get nav(){ return [
-    {id:'resumen',label:'Resumen',short:'Resumen',icon:'M3 13h8V3H3zM13 21h8V3h-8zM3 21h8v-6H3z'},
-    {id:'mesas',label:'Mesas',short:'Mesas',icon:'M3 9h18M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2M3 9v8M21 9v8M6 17v3M18 17v3'},
-    {id:'comandas',label:'Comandas',short:'Comanda',icon:'M9 2h6a2 2 0 0 1 2 2v0H7v0a2 2 0 0 1 2-2zM7 4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2M9 12h6M9 16h4'},
+    {id:'pedidos',label:'Centro de pedidos',short:'Pedidos',icon:'M9 2h6a2 2 0 0 1 2 2v0H7a2 2 0 0 1 2-2zM7 4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2M9 12h6M9 16h4'},
     {id:'cocina',label:'Cocina',short:'Cocina',icon:'M8 3v6M12 3v6M10 9v12M17 3c-1.5 0-3 1.5-3 4v5h3zM17 12v9'},
     {id:'caja',label:'Caja',short:'Caja',icon:'M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 7l2-4h16l2 4M12 11v5M9 13h6'},
-    {id:'inventario',label:'Inventario',short:'Invent.',icon:'M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3M21 8H3M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8M9 12h6'},
-    {id:'clientes',label:'Clientes',short:'Clientes',icon:'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75'},
-    {id:'menu',label:'Menú digital',short:'Menú',icon:'M3 3h18v4H3zM3 10h18v11H3zM8 14h8M8 17h5'},
-    {id:'empleados',label:'Empleados',short:'Equipo',icon:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 11l-3 3-1.5-1.5'},
-    {id:'ia',label:'Asistente IA',short:'IA',icon:'M12 2a7 7 0 0 0-7 7c0 2 1 3.5 2 4.5V17a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-3.5c1-1 2-2.5 2-4.5a7 7 0 0 0-7-7zM9 21h6M10 18v3M14 18v3'},
+    {id:'inventario',label:'Inventario',short:'Invent.',icon:'M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3M21 8H3M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8'},
+    {id:'reportes',label:'Reportes',short:'Reportes',icon:'M3 3v18h18M7 14l4-4 3 3 5-6'},
+    {id:'config',label:'Configuración',short:'Config',icon:'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 0 1-4 0v-.1A1.6 1.6 0 0 0 6.6 19l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 4 12.6H3.9a2 2 0 0 1 0-4H4a1.6 1.6 0 0 0 1.5-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 11 3.9V3.9a2 2 0 0 1 4 0V4a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V12a1.6 1.6 0 0 0 1.5 1h.1a2 2 0 0 1 0 4H21a1.6 1.6 0 0 0-1.5 1z'},
   ]; }
-
-  navBadge(id){
-    if(id==='cocina'){ const c=this.orders.filter(o=>o.estado!=='lista').length; return c?String(c):null; }
-    if(id==='mesas'){ const c=this.mesas.filter(m=>m.estado==='por_cobrar').length; return c?String(c):null; }
-    return null;
-  }
-
-  // ---------- estados de mesa ----------
-  estadoMesa(e){
-    const m={libre:{txt:'Libre',c:'#10603A',bg:'#eaf4ec',bd:'#cfe6d5',dot:'#28A54C'},
-      ocupada:{txt:'Ocupada',c:'#8a6d12',bg:'#fdf6e3',bd:'#f0e3b6',dot:'#E0A526'},
-      orden_lista:{txt:'Orden lista',c:'#1f6f8b',bg:'#e6f4f8',bd:'#bfe2ec',dot:'#2b9fc4'},
-      por_cobrar:{txt:'Por cobrar',c:'#b23a32',bg:'#fdeceb',bd:'#f6cfcc',dot:'#D6453D'}};
-    return m[e]||m.libre;
-  }
-  estadoOrden(e){
-    const m={nueva:{txt:'Nueva',c:'#8a6d12',bg:'#FDF3D3',bd:'#F2C230',head:'#E0A526'},
-      preparando:{txt:'Preparando',c:'#1f5f8b',bg:'#E4F1FA',bd:'#5FA8DA',head:'#2b7fc4'},
-      lista:{txt:'Lista',c:'#10603A',bg:'#E7F5EB',bd:'#28A54C',head:'#28A54C'}};
-    return m[e]||m.nueva;
-  }
-
-  // ---------- acciones de flujo ----------
-  abrirMesa(n){
-    this.ensureData();
-    const m=this._mesas.find(x=>x.n===n);
-    if(m && m.estado==='libre'){ m.estado='ocupada'; m.pax=m.pax||2; m.mesero=this.state.profile==='Mesero'?'Tú':'Sofía'; m.min=0; if(!this._consumos[n])this._consumos[n]=[]; }
-    this.setState({mesaActiva:n,cart:[],catSel:'Tacos',route:'comandas'});
-    this.toast('Mesa '+n+' abierta');
-  }
-  irComanda(n){ this.ensureData(); if(!this._consumos[n])this._consumos[n]=[]; this.setState({mesaActiva:n,cart:[],catSel:'Tacos',route:'comandas'}); }
-  cartQty(id){ const l=this.state.cart.find(c=>c.id===id&&!c.nota); return l?l.q:0; }
-  addCart(id){ const c=[...this.state.cart]; const l=c.find(x=>x.id===id&&!x.nota); if(l)l.q++; else c.push({id,q:1,nota:''}); this.setState({cart:c}); }
-  decCart(id){ let c=[...this.state.cart]; const i=c.findIndex(x=>x.id===id&&!x.nota); if(i>-1){ c[i].q--; if(c[i].q<=0)c.splice(i,1);} this.setState({cart:c}); }
-  addExtra(id){ const c=[...this.state.cart]; c.push({id,q:1,nota:''}); this.setState({cart:c}); }
-  toggleNota(idx,nota){ const c=[...this.state.cart]; if(!c[idx])return; const parts=(c[idx].nota?c[idx].nota.split(', '):[]).filter(Boolean); const i=parts.indexOf(nota); if(i>-1)parts.splice(i,1); else parts.push(nota); c[idx].nota=parts.join(', '); this.setState({cart:c}); }
-  removeCartIdx(idx){ const c=[...this.state.cart]; c.splice(idx,1); this.setState({cart:c}); }
-  cartSubtotal(){ return this.state.cart.reduce((s,l)=>s+this.itemById(l.id).precio*l.q,0); }
-  enviarComanda(){
-    this.ensureData();
-    const mesa=this.state.mesaActiva;
-    if(!this.state.cart.length){ this.toast('Agrega productos primero'); return; }
-    const cart=this.state.cart.map(l=>({...l}));
-    this._orders.unshift({id:this._seq++,mesa:mesa||'Para llevar',estado:'nueva',min:0,mesero:this.state.profile==='Mesero'?'Tú':'Sofía',items:cart});
-    if(mesa){ const cons=this._consumos[mesa]||[]; cart.forEach(l=>cons.push({...l})); this._consumos[mesa]=cons;
-      const m=this._mesas.find(x=>x.n===mesa); if(m&&m.estado==='libre')m.estado='ocupada'; }
-    this._ordenesHoy=(this._ordenesHoy||47); 
-    this.setState({cart:[],route:'cocina'});
-    this.toast('Comanda enviada a cocina ✓');
-  }
-  moverOrden(id,dir){
-    this.ensureData();
-    const flow=['nueva','preparando','lista'];
-    const o=this._orders.find(x=>x.id===id); if(!o)return;
-    let i=flow.indexOf(o.estado)+dir; i=Math.max(0,Math.min(2,i)); o.estado=flow[i];
-    if(o.estado==='lista'&&typeof o.mesa==='number'){ const m=this._mesas.find(x=>x.n===o.mesa); if(m&&m.estado==='ocupada')m.estado='orden_lista'; }
-    this.forceUpdate();
-    this.toast('Orden #'+id+' → '+this.estadoOrden(o.estado).txt);
-  }
-  // ---------- caja ----------
-  abrirCaja(n){ this.setState({cajaMesa:n,route:'caja',splitMode:'total',pago:'efectivo',propinaPct:null}); }
-  cobrarMesa(){
-    this.ensureData();
-    const n=this.state.cajaMesa; if(n==null)return;
-    const total=this.mesaTotal(n);
-    this._ventasHoy=(this._ventasHoy||8420)+total;
-    this._ordenesHoy=(this._ordenesHoy||47)+1;
-    const m=this._mesas.find(x=>x.n===n); if(m){ m.estado='libre'; m.pax=0; m.mesero='—'; m.min=0; }
-    this._consumos[n]=[];
-    this._orders=this._orders.filter(o=>o.mesa!==n);
-    this.setState({cajaMesa:null});
-    this.toast('Mesa '+n+' cobrada y cerrada · '+this.short(total*(1+this.propinaActual/100)));
-  }
-
-  vmInventario(){
-    const tab=this.state.invTab;
-    const rows=this.inv.map(i=>{
-      const crit=i.hay<i.min, low=i.hay===i.min || i.hay<=i.min*1.2;
-      const st=crit?{txt:'Crítico',c:'#b23a32',bg:'#fdeceb'}:(i.hay<=i.min?{txt:'Al mínimo',c:'#8a6d12',bg:'#fdf6e3'}:(low?{txt:'Bajo',c:'#8a6d12',bg:'#fdf6e3'}:{txt:'Óptimo',c:'#10603A',bg:'#eaf4ec'}));
-      const pct=Math.min(100,Math.round(i.hay/Math.max(i.min*2,1)*100));
-      return {...i, st:st.txt, stC:st.c, stBg:st.bg, pct:pct+'%',
-        barC: crit?'#D6453D':(i.hay<=i.min?'#E0A526':'#28A54C')};
-    });
-    const invTabs=[['existencias','Existencias'],['mermas','Mermas'],['compras','Compras'],['costeo','Costeo']].map(([k,l])=>({label:l,active:k===tab,onClick:()=>this.setState({invTab:k}),
-      style:`cursor:pointer;padding:9px 16px;border-radius:11px;font-weight:700;font-size:13.5px;border:none;${k===tab?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35;border:1px solid #E6DCC5'}`}));
-    const mermas=[
-      {prod:'Tortilla de maíz',cant:'1.5 kg',motivo:'Quemadas en comal',hora:'12:40',mesero:'Cocina'},
-      {prod:'Cilantro',cant:'2 manojos',motivo:'En mal estado',hora:'09:15',mesero:'Diego'},
-      {prod:'Carne al pastor',cant:'0.4 kg',motivo:'Caída al piso',hora:'14:05',mesero:'Sofía'},
-    ];
-    const compras=[
-      {prov:'Carnicería El Torito',items:'Bistec, chorizo',monto:this.short(2450),estado:'Recibido',c:'#10603A',bg:'#eaf4ec'},
-      {prov:'Tortillería La Guadalupana',items:'Tortilla de maíz 30 kg',monto:this.short(690),estado:'En camino',c:'#8a6d12',bg:'#fdf6e3'},
-      {prov:'Abarrotes Don Chuy',items:'Refrescos, empaques',monto:this.short(1180),estado:'Pendiente',c:'#b23a32',bg:'#fdeceb'},
-    ];
-    const costeo=this.menu.filter(m=>!m.pendiente&&['pastor','bistec','chorizo','cabeza','costilla','gringa'].includes(m.id)).map(m=>{
-      const margen=Math.round((1-m.costo/m.precio)*100);
-      return {nombre:m.nombre,precio:this.short(m.precio),costo:this.short(m.costo),util:this.short(m.precio-m.costo),margen:margen+'%',
-        margenC: margen>=60?'#10603A':(margen>=50?'#8a6d12':'#b23a32')};
-    });
-    return {invTab:tab, invTabs, invRows:rows, invMermas:mermas, invCompras:compras, invCosteo:costeo,
-      showExist:tab==='existencias', showMermas:tab==='mermas', showCompras:tab==='compras', showCosteo:tab==='costeo'};
-  }
-
-  vmClientes(){
-    const clientes=[
-      {nombre:'María Fernanda López',ini:'MF',visitas:34,puntos:680,nivel:'Oro',c:'#E0A526',ultima:'Hace 2 días',fav:'Gringa'},
-      {nombre:'Jorge Ramírez',ini:'JR',visitas:21,puntos:420,nivel:'Plata',c:'#8a8a8a',ultima:'Hace 5 días',fav:'Taco al pastor'},
-      {nombre:'Guadalupe Hernández',ini:'GH',visitas:48,puntos:960,nivel:'Oro',c:'#E0A526',ultima:'Ayer',fav:'Cabeza'},
-      {nombre:'Carlos Mendoza',ini:'CM',visitas:9,puntos:180,nivel:'Bronce',c:'#b07a3a',ultima:'Hace 1 semana',fav:'Quesadilla'},
-    ].map(c=>({...c,puntosTxt:c.puntos+' pts'}));
-    const recompensas=[
-      {req:'500 pts',premio:'Orden de 5 tacos gratis',emoji:''},
-      {req:'800 pts',premio:'Gringa + agua fresca',emoji:''},
-      {req:'1000 pts',premio:'20% en toda la cuenta',emoji:''},
-    ];
-    const promos=[
-      {t:'Martes de pastor',d:'2×1 en tacos al pastor todo el día',c:'#D6453D'},
-      {t:'Combo familiar',d:'12 tacos + 2 aguas por $210.00',c:'#10603A'},
-    ];
-    const cumples=[
-      {nombre:'Ana Torres',fecha:'8 de agosto',dias:'mañana',ini:'AT'},
-      {nombre:'Luis Ángel Ruiz',fecha:'11 de agosto',dias:'en 4 días',ini:'LR'},
-    ];
-    const seed=[1,0,1,1,0, 0,1,1,0,1, 1,1,0,1,0, 0,1,0,1,1, 1,0,1,0,1];
-    const qrCells=seed.map(v=>v?'#10603A':'#fff');
-    return {clientes, recompensas, promosCli:promos, cumples, qrCells};
-  }
-
-  vmMenu(){
-    const cat=this.state.catSel;
-    const cats=['Tacos','Quesadillas','Tortas','Tacos light','Bebidas'];
-    const tabs=cats.map(c=>({label:c,active:c===cat,onClick:()=>this.setState({catSel:c}),
-      style:`cursor:pointer;padding:9px 18px;border-radius:999px;font-weight:700;font-size:14px;border:none;white-space:nowrap;${c===cat?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35;border:1px solid #E6DCC5'}`}));
-    const fotos={pastor:'../assets/promo-3tacos.jpg',chorizo:'../assets/taco-suadero.jpg',cabeza:'../assets/taco-suadero.jpg'};
-    const items=this.menu.filter(m=>!m.oculto&&m.cat===cat).map(m=>({...m,precioTxt:m.pendiente?'Por confirmar':this.short(m.precio),foto:fotos[m.id]||null,noFoto:!fotos[m.id],inicial:m.nombre.slice(0,1)}));
-    const pedidoSteps=[{on:true},{on:true},{on:false},{on:false}];
-    return {menuTabs:tabs, menuItems:items, pedidoSteps};
-  }
-
-  vmEmpleados(){
-    const emp=[
-      {nombre:'Sofía Castillo',rol:'Mesera',ini:'SC',c:'#10603A',turno:'10:00 – 18:00',ventas:3120,propinas:410,ordenes:19,tiempo:'7 min',perf:92,activo:true},
-      {nombre:'Diego Morales',rol:'Mesero',ini:'DM',c:'#28A54C',turno:'10:00 – 18:00',ventas:2680,propinas:355,ordenes:16,tiempo:'8 min',perf:84,activo:true},
-      {nombre:'Marco Pérez',rol:'Mesero',ini:'MP',c:'#E0A526',turno:'12:00 – 20:00',ventas:1940,propinas:270,ordenes:12,tiempo:'9 min',perf:78,activo:true},
-      {nombre:'Rosa Jiménez',rol:'Cocina',ini:'RJ',c:'#D6453D',turno:'09:00 – 17:00',ventas:0,propinas:0,ordenes:41,tiempo:'11 min',perf:88,activo:true},
-      {nombre:'Beto Guzmán',rol:'Caja',ini:'BG',c:'#1f6f8b',turno:'08:00 – 16:00',ventas:8420,propinas:0,ordenes:47,tiempo:'2 min',perf:95,activo:false},
-    ].map(e=>({...e,ventasTxt:this.short(e.ventas),propinasTxt:this.short(e.propinas),
-      perfTxt:e.perf+'%',perfC:e.perf>=90?'#10603A':(e.perf>=80?'#28A54C':'#E0A526'),
-      estadoTxt:e.activo?'En turno':'Turno terminado',estadoC:e.activo?'#10603A':'#9a8e70',estadoBg:e.activo?'#eaf4ec':'#f0ece0'}));
-    return {empleados:emp};
-  }
-
-  iaAnswer(q){
-    const map={
-      util:{txt:'Los productos con **mayor utilidad** son la Gringa ($38.00 por pieza, 63% de margen) y la Quesadilla ($29.00, 64%). Entre los tacos, el **cabeza** deja $15.00 y el **pastor** $13.50. Recomendación: destaca la gringa en el menú digital y ofrécela como combo — un aumento del 10% en su venta suma ~$1,140/semana.',chips:['Gringa 63%','Quesadilla 64%','Cabeza $15']},
-      compra:{txt:'Para mañana conviene reforzar: **chorizo** (quedan 3 kg, consumo diario 4 kg → compra 6 kg), **cebolla** (2 kg, mínimo 4) y **queso Oaxaca** (4 kg, al límite). El resto está en niveles óptimos. Costo estimado de la compra sugerida: **$1,860.00 MXN** con tus proveedores actuales.',chips:['Chorizo +6 kg','Cebolla +4 kg','Queso +3 kg']},
-      bajaron:{txt:'Las ventas de esta semana bajaron **8%** frente a la anterior. El 90% de la caída se concentra el **miércoles y jueves por la tarde (16–18 h)**, cuando 2 meseros coincidieron en descanso. Además llovió el jueves. Sugerencia: cubrir ese horario y lanzar una promo de tarde para recuperar ~$3,400.',chips:['−8% semanal','Miér–Jue 16–18h','Falta de personal']},
-      hora:{txt:'Tu **hora más fuerte** es de **13:00 a 15:00** (comida), con un ticket promedio de $205.00 y 34% de las ventas del día. El segundo pico es de 20:00 a 22:00. Recomendación: ten a los 3 meseros en piso de 13 a 15 h y prepara pastor y cabeza con anticipación.',chips:['13:00–15:00','34% del día','Ticket $205']},
-    };
-    if(/utilidad|dejan m/i.test(q))return map.util;
-    if(/comprar|ingredientes/i.test(q))return map.compra;
-    if(/bajaron|ventas.*semana/i.test(q))return map.bajaron;
-    if(/hora|fuerte/i.test(q))return map.hora;
-    return {txt:'Buena pregunta. Con los datos de la demo puedo analizar utilidad por platillo, compras sugeridas, horas pico y variaciones de venta. Prueba una de las preguntas sugeridas para ver un análisis con cifras.',chips:[]};
-  }
-  preguntarIA(q){
-    const chat=[...this.state.chat,{rol:'user',txt:q}];
-    this.setState({chat,chatBusy:true});
-    clearTimeout(this._ia);
-    this._ia=setTimeout(()=>{
-      const a=this.iaAnswer(q);
-      this.setState({chat:[...this.state.chat,{rol:'bot',txt:a.txt,chips:a.chips}],chatBusy:false});
-    },900);
-  }
-  vmIA(){
-    const sug=['¿Qué tacos dejan más utilidad?','¿Qué ingredientes debo comprar mañana?','¿Por qué bajaron las ventas esta semana?','¿Cuál es nuestra hora más fuerte?'];
-    const chat=this.state.chat.map(m=>{
-      const plain=m.txt.replace(/\*\*(.+?)\*\*/g,'$1');
-      const chips=m.chips||[];
-      return {...m,txt:plain,isUser:m.rol==='user',isBot:m.rol==='bot',chips,hasChips:chips.length>0};
-    });
-    return {iaSug:sug.map(q=>({q,onClick:()=>this.preguntarIA(q)})), iaChat:chat, iaEmpty:chat.length===0,
-      iaBusy:this.state.chatBusy, onSug:(q)=>this.preguntarIA(q)};
-  }
+  rolNav(){ const perms={
+    'Dueño':['pedidos','cocina','caja','inventario','reportes','config'],
+    'Administrador':['pedidos','cocina','caja','inventario','reportes','config'],
+    'Caja':['pedidos','caja','inventario'],
+    'Cocina':['pedidos','cocina','inventario'],
+    'Mesero':['pedidos','cocina'],
+  }; return perms[this.state.rol]||['pedidos']; }
 
   renderVals(){
-    const isLogin = this.state.route==='login';
-    const vw = this.state.vw;
-    const phone = vw>0 && vw<760;
-    const tablet = vw>=760 && vw<1120;
-    const route = this.state.route;
-    const showBottomNav = phone;
-    const showSidebar = !phone;
-    const sidebarWide = vw>=1120;
-
-    const cur = this.nav.find(n=>n.id===route);
-    const subs = {
-      resumen:'Domingo · Servicio del día · Actualizado ahora',
-      mesas:'Salón principal · 12 mesas',
-      comandas:'Toma rápida de pedidos',
-      cocina:'Tablero de preparación',
-      caja:'Cobro y corte de caja',
-      inventario:'Existencias y compras',
-      clientes:'Programa de lealtad',
-      menu:'Vista pública para clientes',
-      empleados:'Turno actual',
-      ia:'Análisis y recomendaciones',
-    };
-
-    const navItems = this.nav.map(n=>{
-      const active = n.id===route;
-      const badge = this.navBadge(n.id);
-      return { ...n, showBadge:!!badge, badge,
-        onClick:()=>this.go(n.id),
-        sideStyle:`width:100%;cursor:pointer;display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;border:none;text-align:left;font-family:'Rubik',sans-serif;transition:all .12s;${active?'background:#F3F0E6;color:#10603A;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.12)':'background:transparent;color:#cfe3d3'}`,
-        botStyle:`flex:0 0 auto;min-width:60px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 8px;border-radius:12px;border:none;font-family:'Rubik',sans-serif;${active?'background:#F3F0E6;color:#10603A':'background:transparent;color:#bcd6c1'}`,
-      };
-    });
-
-    const perfiles = [
-      {rol:'Dueño',desc:'Dashboard, reportes y control total',bg:'#10603A',icon:'M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6',onClick:()=>{this.setState({profile:'Dueño'});this.go('resumen');}},
-      {rol:'Mesero',desc:'Mesas y toma de comandas',bg:'#28A54C',icon:'M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4zM6 1v3M10 1v3M14 1v3',onClick:()=>{this.setState({profile:'Mesero'});this.go('mesas');}},
-      {rol:'Cocina',desc:'Tablero de preparación',bg:'#D6453D',icon:'M8 3v6M12 3v6M10 9v12M17 3c-1.5 0-3 1.5-3 4v5h3zM17 12v9',onClick:()=>{this.setState({profile:'Cocina'});this.go('cocina');}},
-      {rol:'Caja',desc:'Cobro y corte de caja',bg:'#E0A526',icon:'M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 7l2-4h16l2 4M12 11v5M9 13h6',onClick:()=>{this.setState({profile:'Caja'});this.go('caja');}},
+    const vw=this.state.vw, phone=vw>0&&vw<820, route=this.state.route;
+    const roles=[
+      {label:'Dueño',desc:'Todo el panel',bg:'#10603A',icon:'M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6',onClick:()=>this.setState({rol:'Dueño',route:'pedidos'})},
+      {label:'Administrador',desc:'Operación y reportes',bg:'#178049',icon:'M12 2 2 7l10 5 10-5zM2 17l10 5 10-5M2 12l10 5 10-5',onClick:()=>this.setState({rol:'Administrador',route:'pedidos'})},
+      {label:'Caja',desc:'Aceptar y cobrar',bg:'#E0A526',icon:'M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 7l2-4h16l2 4M12 11v5',onClick:()=>this.setState({rol:'Caja',route:'pedidos'})},
+      {label:'Cocina',desc:'Tablero de preparación',bg:'#D6453D',icon:'M8 3v6M12 3v6M10 9v12M17 3c-1.5 0-3 1.5-3 4v5h3zM17 12v9',onClick:()=>this.setState({rol:'Cocina',route:'cocina'})},
+      {label:'Mesero',desc:'Comandas en mesa',bg:'#28A54C',icon:'M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4zM6 1v3M10 1v3M14 1v3',onClick:()=>this.setState({rol:'Mesero',route:'pedidos'})},
+      {label:'Repartidor',desc:'Entregas (Fase 3)',bg:'#1f6f8b',icon:'M1 3h15v13H1zM16 8h4l3 3v5h-7M5.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM18.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z',onClick:()=>this.toast('El portal del repartidor llega en la Fase 3')},
     ];
 
-    // KPIs dashboard
-    const ventasHoy=this._ventasHoy!=null?this._ventasHoy:8420;
-    const kpis=[
-      {label:'Ventas de hoy',value:this.short(ventasHoy),delta:'▲ 12% vs. ayer',deltaColor:'#10603A',tint:'#10603A',icon:'M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'},
-      {label:'Órdenes completadas',value:String(this._ordenesHoy!=null?this._ordenesHoy:47),delta:'▲ 6 más que ayer',deltaColor:'#10603A',tint:'#28A54C',icon:'M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'},
-      {label:'Ticket promedio',value:this.short(Math.round((ventasHoy/(this._ordenesHoy||47))*100)/100),delta:'▲ 4% vs. ayer',deltaColor:'#10603A',tint:'#E0A526',icon:'M3 3v18h18M7 14l4-4 3 3 5-6'},
-      {label:'Mesas ocupadas',value:this.mesas.filter(m=>m.estado!=='libre').length+' / 12',delta:this.mesas.filter(m=>m.estado==='por_cobrar').length+' por cobrar',deltaColor:'#D6453D',tint:'#D6453D',icon:'M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8M3 9v8M6 17v3M18 17v3'},
-    ];
-    const horas=['9','10','11','12','13','14','15','16','17','18'];
-    const hoyV=[3,5,6,9,10,8,6,7,9,7]; const ayerV=[3,4,7,8,9,7,5,6,8,6];
-    const maxV=Math.max(...hoyV,...ayerV);
-    const ventasHora=horas.map((h,i)=>({label:h,hoyH:(hoyV[i]/maxV*100)+'%',ayerH:(ayerV[i]/maxV*100)+'%'}));
-    const topRaw=[['Al pastor',182],['Cabeza',126],['Chorizo',98],['Bistec',71]];
-    const maxT=topRaw[0][1];
-    const topTacos=topRaw.map(t=>({nombre:t[0],qty:t[1],pct:(t[1]/maxT*100)+'%'}));
-    const utilidad=[
-      {nombre:'Gringa',util:'$38.00',margen:'63%'},
-      {nombre:'Quesadilla',util:'$29.00',margen:'64%'},
-      {nombre:'Taco al pastor',util:'$13.50',margen:'61%'},
-      {nombre:'Agua de horchata',util:'$21.00',margen:'70%'},
-    ];
-    const horasPico=['13:00 – 15:00','20:00 – 22:00','Sáb 14:00'];
-    const alertasInv=this.inv.filter(i=>i.hay<=i.min).map(i=>{
-      const crit=i.hay<i.min;
-      return {nombre:i.n,txt:i.hay+' '+i.u+(crit?' · crítico':' · al mínimo'),
-        dot:crit?'#D6453D':'#E0A526',bg:crit?'#fdeceb':'#fdf6e3',bd:crit?'#f6cfcc':'#f2e2b0'};
+    const allowed=this.rolNav();
+    const cur=this.nav.find(n=>n.id===route);
+    const subs={pedidos:'Todos los canales en un solo lugar',cocina:'Tablero de preparación',caja:'Cobro, cortes y liquidación',inventario:'Existencias y recetas',reportes:'Ventas y desempeño',config:'Negocio, horarios y usuarios'};
+    const nuevosCount=this.orders.filter(o=>o.estado==='nuevo').length;
+    const navItems=this.nav.filter(n=>allowed.includes(n.id)).map(n=>{
+      const active=n.id===route; const badge=n.id==='pedidos'&&nuevosCount?String(nuevosCount):null;
+      return {...n,showBadge:!!badge,badge,onClick:()=>this.go(n.id),
+        sideStyle:`width:100%;cursor:pointer;display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;border:none;text-align:left;font-family:'Rubik',sans-serif;${active?'background:#F3F0E6;color:#10603A;font-weight:700':'background:transparent;color:#cfe3d3'}`,
+        botStyle:`flex:0 0 auto;min-width:62px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 8px;border-radius:12px;border:none;font-family:'Rubik',sans-serif;${active?'background:#F3F0E6;color:#10603A':'background:transparent;color:#bcd6c1'}`};
     });
 
     return {
-      isLogin, isApp:!isLogin, perfiles,
-      mostrarDemo: this.props.mostrarDemo!==false,
-      profile:this.state.profile||'Dueño',
-      profileIni:(this.state.profile||'D').slice(0,1),
-      showBottomNav, showSidebar, sidebarWide,
-      sidebarW: sidebarWide?'244px':'76px',
-      navItems, onLogout:()=>{this.setState({profile:null});this.go('login');},
-      onTapLogo:()=>this.tapLogo(),
-      showEasterEgg:this.state.showEasterEgg,
-      onCloseEasterEgg:()=>this.setState({showEasterEgg:false}),
-      appVersion:Component.APP_VERSION,
-      currentTitle: cur?cur.label:'Resumen',
-      currentSub: subs[route]||'',
+      isLogin: this.state.rol==null, isApp: this.state.rol!=null,
+      roles, rol:this.state.rol||'Dueño', rolIni:(this.state.rol||'D').slice(0,1),
+      showSidebar:!phone, showBottomNav:phone, sidebarWide:vw>=1180, sidebarW:vw>=1180?'234px':'74px',
+      navItems, onLogout:()=>this.logout(),
+      authEmail:this.state.authEmail,authPassword:this.state.authPassword,authBusy:this.state.authBusy,
+      setAuthEmail:(e)=>this.setState({authEmail:e?.target?.value||''}),setAuthPassword:(e)=>this.setState({authPassword:e?.target?.value||''}),
+      signIn:()=>this.signIn(),authButton:this.state.authBusy?'Entrando…':'Entrar al panel',
+      appVersion:Component.APP_VERSION,modeLabel:this.state.live?'EN VIVO':'DEMO',modeBg:this.state.live?'#10603A':'#F2C230',modeColor:this.state.live?'#fff':'#3a2c00',
+      currentTitle:cur?cur.label:'Centro de pedidos', currentSub:subs[route]||'',
+      sonido:this.state.sonido, toggleSonido:()=>this.setState({sonido:!this.state.sonido}),
+      sonidoIcon:this.state.sonido?'M11 5 6 9H2v6h4l5 4zM19 12a7 7 0 0 0-2-5M15.5 12a3 3 0 0 0-1-2':'M11 5 6 9H2v6h4l5 4zM23 9l-6 6M17 9l6 6',
       toast:this.state.toast,
-      chartCols: (phone||tablet)?'1fr':'1.5fr 1fr',
-      isResumen: route==='resumen',
-      isMesas: route==='mesas',
-      isComandas: route==='comandas',
+      isPedidos: route==='pedidos',
       isCocina: route==='cocina',
       isCaja: route==='caja',
       isInventario: route==='inventario',
-      isClientes: route==='clientes',
-      isMenu: route==='menu',
-      isEmpleados: route==='empleados',
-      isIA: route==='ia',
-      screenPlaceholder: false,
-      kpis, ventasHora, topTacos, utilidad, horasPico, alertasInv,
-      goInv:()=>this.go('inventario'),
-      ...this.vmMesas(phone), ...this.vmComanda(phone), ...this.vmCocina(), ...this.vmCaja(phone),
-      ...this.vmInventario(), ...this.vmClientes(), ...this.vmMenu(), ...this.vmEmpleados(), ...this.vmIA(),
+      isReportes: route==='reportes',
+      isConfig: route==='config',
+      isOtro: !['pedidos','cocina','caja','inventario','reportes','config'].includes(route),
+      ...this.vmPedidos(), ...this.vmCocina(), ...this.vmCaja(phone), ...this.vmInventario(), ...this.vmReportes(phone), ...this.vmConfig(),
     };
   }
 
-  vmMesas(phone){
-    const mesas=this.mesas.map(m=>{
-      const s=this.estadoMesa(m.estado);
-      const consumo=this.mesaTotal(m.n);
-      const libre=m.estado==='libre';
-      return {...m, sTxt:s.txt, sC:s.c, sBg:s.bg, sBd:s.bd, sDot:s.dot, libre,
-        consumoTxt:this.short(consumo), tiempoTxt:libre?'—':m.min+' min',
-        paxTxt:libre?'—':m.pax+' pers.',
-        cardStyle:`background:#FFFDF7;border:2px solid ${s.bd};border-radius:18px;padding:15px;box-shadow:0 2px 0 #ece2cc;display:flex;flex-direction:column;gap:11px;position:relative;overflow:hidden`,
-        onPrimary: libre?(()=>this.abrirMesa(m.n)):(m.estado==='por_cobrar'?(()=>this.abrirCaja(m.n)):(()=>this.irComanda(m.n))),
-        primaryTxt: libre?'Abrir mesa':(m.estado==='por_cobrar'?'Cobrar':'Agregar'),
-        primaryStyle: libre
-          ? "cursor:pointer;width:100%;background:#10603A;color:#fff;border:none;border-radius:12px;padding:11px;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;gap:7px"
-          : (m.estado==='por_cobrar'
-            ? "cursor:pointer;width:100%;background:#D6453D;color:#fff;border:none;border-radius:12px;padding:11px;font-weight:700;font-size:14px"
-            : "cursor:pointer;width:100%;background:#fff;color:#10603A;border:1.5px solid #10603A;border-radius:12px;padding:11px;font-weight:700;font-size:14px"),
-        showCobrar: !libre && m.estado!=='por_cobrar',
-        onCobrar:()=>this.abrirCaja(m.n),
-      };
-    });
-    const resumenMesas=[
-      {k:'Libres',v:this.mesas.filter(m=>m.estado==='libre').length,c:'#28A54C'},
-      {k:'Ocupadas',v:this.mesas.filter(m=>m.estado==='ocupada').length,c:'#E0A526'},
-      {k:'Orden lista',v:this.mesas.filter(m=>m.estado==='orden_lista').length,c:'#2b9fc4'},
-      {k:'Por cobrar',v:this.mesas.filter(m=>m.estado==='por_cobrar').length,c:'#D6453D'},
-    ];
-    return {mesas, resumenMesas, mesasCols: phone?'1fr 1fr':'repeat(auto-fill,minmax(210px,1fr))'};
-  }
-
-  vmComanda(phone){
-    const cats=['Tacos','Quesadillas','Tortas','Tacos light','Bebidas'];
-    const sel=this.state.catSel;
-    const catTabs=cats.map(c=>({label:c,active:c===sel,onClick:()=>this.setState({catSel:c}),
-      style:`cursor:pointer;padding:9px 16px;border-radius:999px;font-weight:700;font-size:13.5px;border:none;white-space:nowrap;${c===sel?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35;border:1px solid #E6DCC5'}`}));
-    const prods=this.menu.filter(m=>!m.oculto&&!m.pendiente&&m.cat===sel).map(m=>{
-      const q=this.cartQty(m.id);
-      return {...m, precioTxt:this.short(m.precio), q, inCart:q>0,
-        onAdd:()=>this.addCart(m.id), onDec:()=>this.decCart(m.id)};
-    });
-    const notasOpts=['Sin cebolla','Sin cilantro','Doble carne','Sin picante','Bien dorado'];
-    const cart=this.state.cart.map((l,idx)=>{
-      const it=this.itemById(l.id);
-      return {idx, nombre:it.nombre, q:l.q, nota:l.nota,
-        lineTxt:this.short(it.precio*l.q),
-        onInc:()=>{const c=[...this.state.cart];c[idx].q++;this.setState({cart:c});},
-        onDec:()=>{const c=[...this.state.cart];c[idx].q--;if(c[idx].q<=0)c.splice(idx,1);this.setState({cart:c});},
-        onRemove:()=>this.removeCartIdx(idx),
-        notas:notasOpts.map(nt=>({label:nt,active:(l.nota||'').includes(nt),onClick:()=>this.toggleNota(idx,nt),
-          style:`cursor:pointer;font-size:11px;font-weight:600;padding:4px 9px;border-radius:999px;border:1px solid ${(l.nota||'').includes(nt)?'#10603A':'#e0d6bf'};${(l.nota||'').includes(nt)?'background:#10603A;color:#fff':'background:#fff;color:#8a7f66'}`}))
-      };
-    });
-    const sub=this.cartSubtotal();
-    return {catTabs, prods, comandaCart:cart, comandaEmpty:cart.length===0,
-      comandaMesa:this.state.mesaActiva?('Mesa '+this.state.mesaActiva):'Para llevar',
-      comandaCount:cart.reduce((s,l)=>s+l.q,0),
-      comandaSub:this.short(sub), comandaSubRaw:sub,
-      onEnviar:()=>this.enviarComanda(),
-      comandaGrid: phone?'1fr':'1.4fr .9fr'};
-  }
-
   vmCocina(){
-    const cols=[['nueva','Nueva orden'],['preparando','Preparando'],['lista','Lista']];
-    const board=cols.map(([key,title])=>{
-      const s=this.estadoOrden(key);
-      const list=this.orders.filter(o=>o.estado===key).map(o=>{
-        const late=o.min>15 && key!=='lista';
-        return {...o,
-          mesaTxt: typeof o.mesa==='number'?('Mesa '+o.mesa):o.mesa,
-          minTxt:o.min+' min', late,
-          items:o.items.map(i=>({q:i.q,nombre:this.itemById(i.id).nombre,nota:i.nota})),
-          cardStyle:`background:#fff;border-radius:14px;padding:13px;border:2px solid ${late?'#D6453D':s.bd};box-shadow:0 3px 10px rgba(0,0,0,.07)`,
-          canPrev:key!=='nueva', canNext:key!=='lista',
-          onPrev:()=>this.moverOrden(o.id,-1), onNext:()=>this.moverOrden(o.id,1),
-          nextTxt:key==='nueva'?'Preparar →':'Marcar lista →'};
+    const cols=[['nuevo','Nueva','#D6453D'],['aceptado','Confirmada','#E0A526'],['preparando','Preparando','#1f6f8b'],['listo','Lista','#10603A']];
+    const cocinables=this.orders.filter(o=>['nuevo','aceptado','preparando','listo'].includes(o.estado));
+    const board=cols.map(([key,title,color])=>{
+      const list=cocinables.filter(o=>o.estado===key).map(o=>{
+        const cm=this.canalMeta(o.canal); const late=o.min>15&&key!=='listo'; const prio=late||o.canal==='domicilio';
+        return {folio:o.folio,mesaTxt:o.canal==='establecimiento'?o.cliente:cm.txt,minTxt:o.min===0?'ahora':o.min+' min',late,prio,
+          promTxt:o.tiempo?('promesa '+o.tiempo+' min'):'',
+          items:o.items,
+          canAvanzar:key!=='listo', canRetro:false,
+          nextTxt:{nuevo:'Confirmar',aceptado:'Empezar',preparando:'¡Lista!'}[key]||'Avanzar',
+          onNext:()=>this.avanzar(o.folio)};
       });
-      return {key,title,count:list.length,list,
-        headStyle:`background:${s.head};color:#fff;border-radius:14px 14px 0 0;padding:12px 15px;display:flex;align-items:center;justify-content:space-between`,
-        colStyle:`background:${s.bg};border:1px solid ${s.bd};border-radius:16px;padding:0 0 12px;display:flex;flex-direction:column`};
+      return {key,title,count:list.length,list,empty:list.length===0,
+        headStyle:`background:${color};color:#fff;border-radius:14px 14px 0 0;padding:12px 15px;display:flex;align-items:center;justify-content:space-between`,
+        colStyle:`background:#efe7d4;border:1px solid #e2d6bd;border-radius:16px`};
     });
-    return {kanban:board};
+    return {cocinaBoard:board};
   }
 
   vmCaja(phone){
-    const cobrables=this.mesas.filter(m=>m.estado!=='libre');
-    const chips=cobrables.map(m=>{
-      const active=m.n===this.state.cajaMesa;
-      return {label:'Mesa '+m.n, sub:this.short(this.mesaTotal(m.n)), active,
-        onClick:()=>this.setState({cajaMesa:m.n}),
-        style:`cursor:pointer;text-align:left;padding:10px 14px;border-radius:13px;border:2px solid ${active?'#10603A':'#E6DCC5'};background:${active?'#eaf4ec':'#fff'};display:flex;flex-direction:column;gap:2px;min-width:110px`};
-    });
-    const n=this.state.cajaMesa;
-    let cuenta=null;
-    if(n!=null){
-      const items=this.mesaItems(n).map(i=>({q:i.q,nombre:this.itemById(i.id).nombre,nota:i.nota,lineTxt:this.short(this.itemById(i.id).precio*i.q)}));
-      const sub=this.mesaTotal(n);
-      const desc=0;
-      const prop=Math.round(sub*this.propinaActual/100*100)/100;
-      const total=sub-desc+prop;
-      const pers=Math.max(1,this.mesas.find(m=>m.n===n)?.pax||1);
-      cuenta={mesaTxt:'Mesa '+n, items, empty:items.length===0,
-        subTxt:this.short(sub), descTxt:this.short(desc),
-        propTxt:this.short(prop), totalTxt:this.short(total),
-        totalMXN:this.MXN(total),
-        splitTxt: this.state.splitMode==='persona'?(this.short(total/pers)+' × '+pers+' personas'):'Cuenta completa',
-        pers,
-        propinas:[0,10,15].map(p=>({label:p+'%',active:p===this.propinaActual,onClick:()=>this.setState({propinaPct:p}),
-          style:`cursor:pointer;flex:1;padding:9px;border-radius:11px;font-weight:700;font-size:13px;border:1.5px solid ${p===this.state.propinaPct?'#10603A':'#E6DCC5'};background:${p===this.state.propinaPct?'#10603A':'#fff'};color:${p===this.state.propinaPct?'#fff':'#5a4e35'}`})),
-        splits:[['total','Total'],['persona','Por persona'],['producto','Por productos']].map(([k,l])=>({label:l,active:k===this.state.splitMode,onClick:()=>this.setState({splitMode:k}),
-          style:`cursor:pointer;flex:1;padding:8px;border-radius:10px;font-weight:600;font-size:12.5px;border:1.5px solid ${k===this.state.splitMode?'#10603A':'#E6DCC5'};background:${k===this.state.splitMode?'#eaf4ec':'#fff'};color:${k===this.state.splitMode?'#10603A':'#8a7f66'}`})),
-        pagos:[['efectivo','Efectivo','M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'],['tarjeta','Tarjeta','M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 11h20'],['transferencia','Transferencia','M4 12h16M4 12l4-4M4 12l4 4M20 6l-4-4M20 6l-4 4']].map(([k,l,ic])=>({label:l,icon:ic,active:k===this.state.pago,onClick:()=>this.setState({pago:k}),
-          style:`cursor:pointer;flex:1;padding:11px 8px;border-radius:12px;font-weight:600;font-size:12.5px;border:1.5px solid ${k===this.state.pago?'#10603A':'#E6DCC5'};background:${k===this.state.pago?'#eaf4ec':'#fff'};color:${k===this.state.pago?'#10603A':'#5a4e35'};display:flex;flex-direction:column;align-items:center;gap:6px`})),
-        onCobrar:()=>this.cobrarMesa()};
-    }
+    const hoy=this.orders.filter(o=>['completado'].includes(o.estado));
+    const canalVentas=[
+      {canal:'En mesa',monto:3860,pct:38,c:'#10603A'},
+      {canal:'Para recoger',monto:2140,pct:21,c:'#E0A526'},
+      {canal:'Domicilio',monto:2980,pct:29,c:'#1f6f8b'},
+      {canal:'WhatsApp',monto:1240,pct:12,c:'#128C4B'},
+    ].map(x=>({...x,montoTxt:this.MXN(x.monto),pctTxt:x.pct+'%'}));
+    const metodos=[
+      {m:'Efectivo',v:4180,n:'23 tickets',icon:'M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'},
+      {m:'Tarjeta',v:3010,n:'16 tickets',icon:'M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 11h20'},
+      {m:'Transferencia',v:1230,n:'8 tickets · 1 por verificar',icon:'M4 12h16M8 8l-4 4 4 4M16 16l4-4-4-4'},
+    ].map(x=>({...x,vTxt:this.MXN(x.v)}));
     const corte=[
-      {k:'Apertura de caja',v:this.short(2000),sub:'08:00 · fondo inicial'},
-      {k:'Ventas en efectivo',v:this.short(4180),sub:'23 tickets'},
-      {k:'Ventas con tarjeta',v:this.short(3010),sub:'16 tickets'},
-      {k:'Transferencias',v:this.short(1230),sub:'8 tickets'},
-      {k:'Total en caja',v:this.short(10420),sub:'esperado al corte',big:true},
+      {k:'Apertura de caja',v:this.MXN(2000),sub:'08:00 · fondo inicial'},
+      {k:'Total vendido hoy',v:this.MXN(10220),sub:'47 pedidos'},
+      {k:'Cancelaciones',v:this.MXN(180),sub:'2 pedidos'},
+      {k:'Descuentos',v:this.MXN(320),sub:'promos y lealtad'},
     ];
-    return {cajaChips:chips, cajaEmpty:n==null, cuenta, corte, cajaGrid:phone?'1fr':'1fr .8fr'};
+    const repartidores=[
+      {nombre:'Ricardo G.',ini:'RG',entregas:12,efectivo:1840,liquidado:false},
+      {nombre:'Óscar M.',ini:'OM',entregas:7,efectivo:920,liquidado:true},
+    ].map(r=>({...r,efectivoTxt:this.MXN(r.efectivo)}));
+    return {cajaCanales:canalVentas, cajaMetodos:metodos, cajaCorte:corte, cajaReps:repartidores,
+      cajaEsperado:this.MXN(6020), cajaRecibido:this.MXN(5990), cajaDif:'−'+this.MXN(30), cajaGrid:phone?'1fr':'1.4fr 1fr'};
+  }
+
+  vmInventario(){
+    const tab=this.state.invTab||'existencias';
+    const rows=[
+      {n:'Carne al pastor',u:'kg',hay:14,dia:9,min:8},{n:'Bistec de res',u:'kg',hay:6,dia:5,min:6},
+      {n:'Cabeza',u:'kg',hay:5,dia:4,min:4},{n:'Chorizo',u:'kg',hay:7,dia:4,min:4},
+      {n:'Lengua',u:'kg',hay:3,dia:2,min:3},{n:'Tortilla de maíz',u:'kg',hay:22,dia:12,min:10},
+      {n:'Queso Oaxaca',u:'kg',hay:4,dia:3,min:3},{n:'Cebolla',u:'kg',hay:2,dia:3,min:4},
+      {n:'Cilantro',u:'manojo',hay:5,dia:8,min:6},{n:'Refrescos',u:'pzas',hay:38,dia:22,min:24},
+    ].map(i=>{const crit=i.hay<i.min;const st=crit?{t:'Crítico',c:'#b23a32',bg:'#fdeceb'}:(i.hay<=i.min?{t:'Al mínimo',c:'#8a6d12',bg:'#fdf6e3'}:{t:'Óptimo',c:'#10603A',bg:'#eaf4ec'});
+      return {...i,stT:st.t,stC:st.c,stBg:st.bg,barC:crit?'#D6453D':(i.hay<=i.min?'#E0A526':'#28A54C'),pct:Math.min(100,Math.round(i.hay/Math.max(i.min*2,1)*100))+'%'};});
+    const recetas=[
+      {plato:'Taco al pastor',venta:'$17',costo:'$8.50',ing:'80 g pastor · 2 tortillas · cebolla · cilantro'},
+      {plato:'Quesadilla de pastor',venta:'$34',costo:'$14.00',ing:'80 g pastor · 60 g queso · 1 tortilla grande'},
+      {plato:'Torta de pastor',venta:'$40',costo:'$17.00',ing:'100 g pastor · pan · aguacate · frijol'},
+      {plato:'Agua de sabor 1 L',venta:'$50',costo:'$12.00',ing:'concentrado · azúcar · 1 L agua'},
+    ];
+    const movimientos=[
+      {tipo:'Salida automática',det:'Pedido DL-4204 confirmado',cant:'−0.48 kg pastor',c:'#b23a32',hora:'14:12'},
+      {tipo:'Entrada',det:'Compra recibida · Carnicería El Torito',cant:'+8 kg bistec',c:'#10603A',hora:'11:40'},
+      {tipo:'Merma',det:'Tortilla quemada en comal',cant:'−1.5 kg tortilla',c:'#8a6d12',hora:'12:40'},
+      {tipo:'Ajuste manual',det:'Conteo físico · motivo: reconteo',cant:'−0.3 kg queso',c:'#8a6d12',hora:'10:05'},
+      {tipo:'Reversión',det:'Pedido DL-4180 cancelado',cant:'+0.4 kg suadero',c:'#10603A',hora:'09:22'},
+    ];
+    const compras=[
+      {prov:'Carnicería El Torito',items:'Pastor, bistec, cabeza',monto:'$2,450.00',estado:'Recibido',c:'#10603A',bg:'#eaf4ec'},
+      {prov:'Tortillería La Guadalupana',items:'Tortilla 30 kg',monto:'$690.00',estado:'En camino',c:'#8a6d12',bg:'#fdf6e3'},
+      {prov:'Abarrotes Don Chuy',items:'Refrescos, desechables',monto:'$1,180.00',estado:'Pendiente',c:'#b23a32',bg:'#fdeceb'},
+    ];
+    const tabs=[['existencias','Existencias'],['recetas','Recetas'],['movimientos','Movimientos'],['compras','Compras']].map(([k,l])=>({label:l,active:k===tab,onClick:()=>this.setState({invTab:k}),
+      style:`cursor:pointer;padding:9px 15px;border-radius:11px;font-weight:700;font-size:13.5px;border:none;${k===tab?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35;border:1px solid #E6DCC5'}`}));
+    return {invTabs:tabs, invRows:rows, invRecetas:recetas, invMovs:movimientos, invCompras:compras,
+      invExist:tab==='existencias', invRec:tab==='recetas', invMov:tab==='movimientos', invComp:tab==='compras'};
+  }
+
+  vmReportes(phone){
+    const kpis=[
+      {l:'Ventas hoy',v:'$10,220',d:'▲ 12%',dc:'#10603A',t:'#10603A',icon:'M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'},
+      {l:'Pedidos',v:'47',d:'42 aceptados · 3 rechaz.',dc:'#8a7f66',t:'#28A54C',icon:'M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'},
+      {l:'Ticket promedio',v:'$217',d:'▲ 4%',dc:'#10603A',t:'#E0A526',icon:'M3 3v18h18M7 14l4-4 3 3 5-6'},
+      {l:'Tiempo prep. prom.',v:'11 min',d:'entrega 34 min',dc:'#8a7f66',t:'#1f6f8b',icon:'M12 8v4l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z'},
+    ];
+    const horas=['12','13','14','15','16','17','18','19','20','21'];
+    const v=[4,9,10,7,5,6,7,8,10,7]; const mx=Math.max(...v);
+    const ventasHora=horas.map((h,i)=>({h,ht:(v[i]/mx*100)+'%'}));
+    const top=[['Taco al pastor',182],['Taco de bistec',126],['Quesadilla pastor',74],['Torta de pastor',48]];
+    const mxt=top[0][1]; const topProd=top.map(t=>({n:t[0],q:t[1],pct:(t[1]/mxt*100)+'%'}));
+    const canal=[{n:'En mesa',p:'38%',c:'#10603A'},{n:'Domicilio',p:'29%',c:'#1f6f8b'},{n:'Recoger',p:'21%',c:'#E0A526'},{n:'WhatsApp',p:'12%',c:'#128C4B'}];
+    const reps=[{n:'Ricardo G.',e:12,t:'28 min'},{n:'Óscar M.',e:7,t:'31 min'}];
+    return {repKpis:kpis, repHora:ventasHora, repTop:topProd, repCanal:canal, repReps:reps, repGrid:phone?'1fr':'1.4fr 1fr'};
+  }
+
+  vmConfig(){
+    const grupos=[
+      {titulo:'Negocio y sucursales',icon:'M3 21h18M5 21V7l7-4 7 4v14',items:[{k:'Nombre',v:'Tacos Don Luis'},{k:'Sucursal',v:'Punto Cañada (1 de 1)'},{k:'Teléfono / WhatsApp',v:'477 000 0000'},{k:'Redes sociales',v:'@tacosdonluis'}]},
+      {titulo:'Horarios y capacidad',icon:'M12 8v4l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z',items:[{k:'Horario',v:'12:00 – 23:00'},{k:'Días cerrados',v:'Lunes'},{k:'Tiempo recoger',v:'15–20 min'},{k:'Tiempo entrega',v:'30–40 min'},{k:'Capacidad máx.',v:'25 pedidos/hora'}]},
+      {titulo:'Entrega y cobertura',icon:'M1 3h15v13H1zM16 8h4l3 3v5h-7',items:[{k:'Radio de cobertura',v:'5 km'},{k:'Zonas / costos',v:'$25 / $35 / $45'},{k:'Pedido mínimo',v:'$80.00'},{k:'Colonias',v:'6 activas'}]},
+      {titulo:'Pagos y lealtad',icon:'M2 7h20v12H2zM2 11h20',items:[{k:'Métodos',v:'Efectivo, transferencia, tarjeta'},{k:'Puntos por $10',v:'1 punto'},{k:'Recompensas',v:'3 activas'}]},
+      {titulo:'Usuarios y permisos',icon:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',items:[{k:'Usuarios',v:'6 (Dueño, Admin, 2 Caja, Cocina, 2 Repartidores)'},{k:'Roles',v:'6 configurados'}]},
+    ];
+    return {configGrupos:grupos, saturado:this.state.saturado||false, pausado:this.state.pausado||false,
+      toggleSat:()=>this.setState({saturado:!this.state.saturado}), togglePausa:()=>this.setState({pausado:!this.state.pausado})};
+  }
+
+  vmPedidos(){
+    const canales=[['todos','Todos'],['domicilio','Domicilio'],['recoger','Recoger'],['establecimiento','En mesa'],['whatsapp','WhatsApp']];
+    const canalFiltros=canales.map(([k,l])=>{
+      const count=k==='todos'?0:this.orders.filter(o=>o.canal===k&&!['completado','rechazado','cancelado'].includes(o.estado)).length;
+      return {label:l,count:count||null,onClick:()=>this.setState({canal:k}),
+        style:`cursor:pointer;padding:8px 14px;border-radius:999px;font-weight:700;font-size:13px;border:none;white-space:nowrap;${k===this.state.canal?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35;border:1px solid #E6DCC5'}`};
+    });
+    const filt=this.state.canal==='todos'?this.orders:this.orders.filter(o=>o.canal===this.state.canal);
+    const cols=[['nuevo','Nuevos','#D6453D'],['aceptado','Aceptados','#E0A526'],['preparando','En preparación','#1f6f8b'],['listo','Listos','#28A54C'],['en_camino','En camino','#7a5cc4'],['completado','Completados','#10603A']];
+    const pedidosCols=cols.map(([key,title,color])=>{
+      const list=filt.filter(o=>o.estado===key).map(o=>{
+        const cm=this.canalMeta(o.canal), pm=this.pagoMeta(o.pago); const late=o.min>15&&['preparando','aceptado'].includes(key);
+        return {folio:o.folio,cliente:o.cliente,tel:o.tel,minTxt:o.min===0?'ahora':'hace '+o.min+' min',late,
+          canalTxt:cm.txt,canalC:cm.c,canalBg:cm.bg,canalIcon:cm.icon,
+          items:o.items,totalTxt:this.MXN(this.itemTotal(o)),pagoTxt:pm.txt,pagoC:pm.c,
+          acciones:key!=='completado',esNuevo:key==='nuevo',
+          primaryTxt:{nuevo:'Aceptar',aceptado:'Enviar a cocina',preparando:'Marcar listo',listo:o.canal==='domicilio'?'Asignar repartidor':'Entregar',en_camino:'Marcar entregado'}[key]||'Avanzar',
+          primaryBg:key==='nuevo'?'#10603A':'#178049',
+          onPrimary:key==='nuevo'?(()=>this.aceptar(o.folio)):(()=>this.avanzar(o.folio)),
+          onRechazar:()=>this.rechazar(o.folio)};
+      });
+      return {key,title,count:list.length,pedidos:list,empty:list.length===0,
+        headStyle:`background:${color};color:#fff;border-radius:13px 13px 0 0;padding:11px 14px;display:flex;align-items:center;justify-content:space-between`,
+        colStyle:`background:#efe7d4;border:1px solid #e2d6bd;border-radius:15px;min-width:0`};
+    });
+
+    const motivos=['Producto agotado','Fuera de horario','Zona fuera de cobertura','Saturación de cocina'].map(m=>({label:m,onClick:()=>this.confirmarRechazo(m)}));
+    const tiempoOpts=[15,20,30,45].map(t=>({label:t+' min',onClick:()=>this.setState({aceptarTiempo:t}),
+      style:`cursor:pointer;flex:1;padding:11px;border-radius:11px;font-weight:700;font-size:14px;border:1.5px solid ${t===this.state.aceptarTiempo?'#10603A':'#E6DCC5'};background:${t===this.state.aceptarTiempo?'#10603A':'#fff'};color:${t===this.state.aceptarTiempo?'#fff':'#5a4e35'}`}));
+
+    return {pedidosCols, canalFiltros, hayNuevos:pedidosCols[0].count>0, nuevosCount:pedidosCols[0].count,
+      rechazoOpen:this.state.rechazoFor!=null, cerrarRechazo:()=>this.setState({rechazoFor:null}), motivos,
+      aceptarOpen:this.state.aceptarFor!=null, cerrarAceptar:()=>this.setState({aceptarFor:null}),
+      aceptarFolio:this.state.aceptarFor||'', tiempoOpts, confirmarAceptar:()=>this.confirmarAceptar(),
+      stop:(e)=>{e&&e.stopPropagation&&e.stopPropagation();}};
   }
 }
 </script>
