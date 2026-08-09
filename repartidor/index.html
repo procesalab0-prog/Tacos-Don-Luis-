@@ -20,7 +20,7 @@
     <p>La ruta ya está reservada. El acceso, los pedidos asignados, la navegación y la liquidación se activarán con el diseño de la fase 2.</p>
     <span class="tag">FASE 2 EN PREPARACIÓN</span>
   </main>
-  <div class="egg" id="egg"><div class="egg-card"><div class="egg-head">🌮✨<br>¡Encontraste el Easter egg!</div><div class="egg-body">Esta plataforma fue hecha por<br><a href="https://procesalab0-prog.github.io/ProcesaLabWeb/" target="_blank" rel="noopener"><strong>ProcesaLab</strong></a><br><span class="version">VERSIÓN 2.1.5</span><button class="close" id="close">Cerrar</button></div></div></div>
+  <div class="egg" id="egg"><div class="egg-card"><div class="egg-head">🌮✨<br>¡Encontraste el Easter egg!</div><div class="egg-body">Esta plataforma fue hecha por<br><a href="https://procesalab0-prog.github.io/ProcesaLabWeb/" target="_blank" rel="noopener"><strong>ProcesaLab</strong></a><br><span class="version">VERSIÓN 2.1.6</span><button class="close" id="close">Cerrar</button></div></div></div>
   <script>let taps=0,timer;const logo=document.getElementById('logo'),egg=document.getElementById('egg');logo.addEventListener('click',()=>{clearTimeout(timer);taps++;if(taps>=6){taps=0;egg.classList.add('open')}timer=setTimeout(()=>taps=0,1200)});document.getElementById('close').addEventListener('click',()=>egg.classList.remove('open'));</script>
 </body>
 </html>
