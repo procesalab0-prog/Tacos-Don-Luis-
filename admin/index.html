@@ -221,7 +221,7 @@
                     <span style="width:40px;height:40px;border-radius:50%;background:#1f6f8b;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex:0 0 auto">{{ r.ini }}</span>
                     <div style="flex:1"><div style="font-weight:700;font-size:14px;color:#211E15">{{ r.nombre }}</div><div style="font-size:12px;color:#9a8e70">{{ r.entregas }} entregas · efectivo {{ r.efectivoTxt }}</div></div>
                     <sc-if value="{{ r.liquidado }}" hint-placeholder-val="{{ false }}"><span style="background:#eaf4ec;color:#10603A;font-weight:800;font-size:12px;padding:6px 12px;border-radius:999px">Liquidado ✓</span></sc-if>
-                    <sc-if value="{{ r.liquidado }}" hint-placeholder-val="{{ true }}"><button style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:10px;padding:9px 14px;font-weight:700;font-size:12.5px">Liquidar</button></sc-if>
+                    <sc-if value="{{ r.liquidado }}" hint-placeholder-val="{{ true }}"><button onClick="{{ r.onLiquidar }}" style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:10px;padding:9px 14px;font-weight:700;font-size:12.5px">Liquidar</button></sc-if>
                   </div>
                 </sc-for>
               </div>
@@ -241,8 +241,8 @@
               </div>
             </div>
             <div style="display:flex;flex-direction:column;gap:10px">
-              <button style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:13px;padding:14px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px">Cerrar caja y generar corte</button>
-              <button style="cursor:pointer;background:#fff;color:#10603A;border:1.5px solid #10603A;border-radius:13px;padding:12px;font-weight:700;font-size:13.5px">Registrar movimiento de efectivo</button>
+              <button onClick="{{ onCashAction }}" style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:13px;padding:14px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px">{{ cashActionTxt }}</button>
+              <button onClick="{{ onCashMovement }}" style="cursor:pointer;background:#fff;color:#10603A;border:1.5px solid #10603A;border-radius:13px;padding:12px;font-weight:700;font-size:13.5px">Registrar movimiento de efectivo</button>
             </div>
           </div>
         </div>
@@ -263,7 +263,7 @@
           </sc-if>
           <sc-if value="{{ invMov }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;flex-direction:column;gap:9px"><sc-for list="{{ invMovs }}" as="m" hint-placeholder-count="5"><div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:13px;padding:13px 16px;display:flex;align-items:center;gap:13px"><span style="width:9px;height:9px;border-radius:50%;background:{{ m.c }};flex:0 0 auto"></span><div style="flex:1"><div style="font-weight:700;font-size:13.5px;color:#211E15">{{ m.tipo }}</div><div style="font-size:12px;color:#8a7f66">{{ m.det }}</div></div><span style="font-weight:700;font-size:13px;color:{{ m.c }};white-space:nowrap">{{ m.cant }}</span><span style="font-size:11.5px;color:#9a8e70">{{ m.hora }}</span></div></sc-for></div>
-            <button style="cursor:pointer;margin-top:12px;background:#fff;border:1.5px solid #10603A;color:#10603A;border-radius:12px;padding:11px 16px;font-weight:700;font-size:13px">+ Registrar ajuste manual</button>
+            <button onClick="{{ onInventoryAdjustment }}" style="cursor:pointer;margin-top:12px;background:#fff;border:1.5px solid #10603A;color:#10603A;border-radius:12px;padding:11px 16px;font-weight:700;font-size:13px">+ Registrar ajuste manual</button>
           </sc-if>
           <sc-if value="{{ invComp }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;flex-direction:column;gap:10px"><sc-for list="{{ invCompras }}" as="c" hint-placeholder-count="3"><div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div style="flex:1;min-width:170px"><div style="font-weight:700;font-size:14px;color:#211E15">{{ c.prov }}</div><div style="font-size:12px;color:#8a7f66;margin-top:2px">{{ c.items }}</div></div><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:#10603A">{{ c.monto }}</span><span style="background:{{ c.bg }};color:{{ c.c }};font-weight:800;font-size:12px;padding:5px 11px;border-radius:999px">{{ c.estado }}</span></div></sc-for></div>
@@ -273,7 +273,7 @@
 
       <sc-if value="{{ isReportes }}" hint-placeholder-val="{{ false }}">
         <div style="animation:dlfade .3s ease both">
-          <div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:11px;padding:10px 16px;font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg>Exportar</button></div>
+          <div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button onClick="{{ onExportReports }}" style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:11px;padding:10px 16px;font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg>Exportar</button></div>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:13px;margin-bottom:16px"><sc-for list="{{ repKpis }}" as="k" hint-placeholder-count="4"><div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:15px 17px;box-shadow:0 2px 0 #ece2cc"><div style="display:flex;align-items:center;gap:9px;margin-bottom:9px"><span style="width:32px;height:32px;border-radius:9px;background:{{ k.t }};color:#fff;display:flex;align-items:center;justify-content:center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ k.icon }}"></path></svg></span><span style="font-size:12px;color:#8a7f66;font-weight:600">{{ k.l }}</span></div><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:24px;color:#211E15">{{ k.v }}</div><div style="font-size:11.5px;font-weight:700;color:{{ k.dc }};margin-top:3px">{{ k.d }}</div></div></sc-for></div>
           <div style="display:grid;grid-template-columns:{{ repGrid }};gap:16px">
             <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:18px 20px"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#10603A;margin-bottom:14px">Ventas por hora</div><div style="display:flex;align-items:flex-end;gap:3%;height:150px"><sc-for list="{{ repHora }}" as="h" hint-placeholder-count="10"><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><div style="width:70%;background:linear-gradient(#28A54C,#10603A);border-radius:5px 5px 0 0;height:{{ h.ht }}"></div><span style="font-size:10px;color:#9a8e70;font-weight:600">{{ h.h }}</span></div></sc-for></div></div>
@@ -297,7 +297,7 @@
                 <div style="display:flex;flex-direction:column">
                   <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="3"><div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dotted #e6dcc5"><span style="font-size:12.5px;color:#9a8e70;flex:0 0 auto">{{ it.k }}</span><span style="font-size:12.5px;font-weight:600;color:#211E15;text-align:right">{{ it.v }}</span></div></sc-for>
                 </div>
-                <button style="cursor:pointer;margin-top:12px;width:100%;background:#fff;border:1.5px solid #10603A;color:#10603A;border-radius:11px;padding:9px;font-weight:700;font-size:13px">Editar</button>
+                <button onClick="{{ g.onEdit }}" style="cursor:pointer;margin-top:12px;width:100%;background:#fff;border:1.5px solid #10603A;color:#10603A;border-radius:11px;padding:9px;font-weight:700;font-size:13px">Editar</button>
               </div>
             </sc-for>
           </div>
@@ -357,13 +357,14 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.1.7';
+  static APP_VERSION = '2.2.2';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { rol:null, route:'pedidos', vw:1280, toast:null, sonido:true,
     canal:'todos', rechazoFor:null, aceptarFor:null, aceptarTiempo:20,
     authEmail:'',authPassword:'',authBusy:false,session:null,live:false,branchId:null,logoTaps:0,showEasterEgg:false,
-    inviteMode:false,invitePassword:'',inviteConfirm:'' };
+    inviteMode:false,invitePassword:'',inviteConfirm:'',liveSettings:null,liveProducts:null,liveStocks:null,
+    liveCashShifts:null,liveCashMovements:null,liveCustomers:null,livePurchases:null,liveSuppliers:null,liveUsers:null };
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
   componentDidMount(){
@@ -416,6 +417,7 @@ class Component extends DCLogic {
       localStorage.setItem('donLuisStaffSession',JSON.stringify(session));
       this.setState({session,branchId:membership.branch_id,rol:roleName,route:membership.role==='kitchen'?'cocina':'pedidos',live:true});
       await this.loadLiveOrders(session.access_token,membership.branch_id);
+      await this.loadSettings(session.access_token,membership.branch_id);
       clearInterval(this._livePoll); this._livePoll=setInterval(()=>this.loadLiveOrders(),10000);
       if(notify)this.toast('Sesión real iniciada');
     }catch(error){localStorage.removeItem('donLuisStaffSession');this.setState({session:null,live:false,rol:null});if(notify)this.toast(error.message);}
@@ -423,20 +425,39 @@ class Component extends DCLogic {
   async loadLiveOrders(token=this.state.session?.access_token,branchId=this.state.branchId){
     if(!token||!branchId)return;
     try{
-      const rows=await this.api('/rest/v1/orders?branch_id=eq.'+branchId+'&select=id,folio,channel,fulfillment_type,status,payment_method,payment_status,guest_name,guest_phone,delivery_address,table_number,total,created_at,promised_at,customer_notes,order_items(product_name,quantity,notes,line_total)&order=created_at.desc&limit=100',{token});
+      const rows=await this.api('/rest/v1/orders?branch_id=eq.'+branchId+'&select=id,folio,channel,fulfillment_type,status,payment_method,payment_status,guest_name,guest_phone,delivery_address,table_number,total,created_at,promised_at,customer_notes,is_demo,assigned_driver_user_id,order_items(product_name,quantity,notes,line_total)&order=created_at.desc&limit=100',{token});
       this._orders=rows.map(o=>this.mapRemoteOrder(o)); this.forceUpdate();
     }catch(error){console.error(error);}
+  }
+  async loadSettings(token=this.state.session?.access_token,branchId=this.state.branchId){
+    if(!token||!branchId)return;
+    try{const rows=await this.api('/rest/v1/business_settings?branch_id=eq.'+branchId+'&select=*',{token});this.setState({liveSettings:rows[0]||null});}catch(error){console.error(error);}
   }
   mapRemoteOrder(o){
     const status={pending_acceptance:'nuevo',confirmed:'aceptado',preparing:'preparando',ready:'listo',assigned:'listo',on_the_way:'en_camino',delivered:'completado',rejected:'rechazado',cancelled:'cancelado'}[o.status]||o.status;
     const canal=o.fulfillment_type==='delivery'?'domicilio':o.fulfillment_type==='dine_in'?'establecimiento':(o.channel==='whatsapp'?'whatsapp':'recoger');
     const created=new Date(o.created_at); const min=Math.max(0,Math.floor((Date.now()-created.getTime())/60000));
     const addr=o.delivery_address||{}; const dir=canal==='domicilio'?[addr.street,addr.exterior_number,addr.neighborhood].filter(Boolean).join(' '):(canal==='establecimiento'?'Mesa '+(o.table_number||''):'Recoger en sucursal');
-    return {id:o.id,remoteStatus:o.status,folio:'DL-'+o.folio,canal,estado:status,min,cliente:o.guest_name||(canal==='establecimiento'?'Mesa '+(o.table_number||''):'Cliente'),tel:o.guest_phone||'—',dir,pago:{metodo:o.payment_method==='transfer'?'transferencia':o.payment_method==='card_present'?'tarjeta':'efectivo',estado:o.payment_status==='paid'?'pagado':o.payment_status==='verification_pending'?'por_verificar':'pendiente'},items:(o.order_items||[]).map(i=>({q:i.quantity,nombre:i.product_name,nota:i.notes||'',lineTotal:Number(i.line_total)})),total:Number(o.total),tiempo:o.promised_at?Math.max(0,Math.round((new Date(o.promised_at)-created)/60000)):null};
+    return {id:o.id,remoteStatus:o.status,isDemo:o.is_demo,assignedDriver:o.assigned_driver_user_id,folio:'DL-'+o.folio,canal,estado:status,min,cliente:o.guest_name||(canal==='establecimiento'?'Mesa '+(o.table_number||''):'Cliente'),tel:o.guest_phone||'—',dir,pago:{metodo:o.payment_method==='transfer'?'transferencia':o.payment_method==='card_present'?'tarjeta':'efectivo',estado:o.payment_status==='paid'?'pagado':o.payment_status==='verification_pending'?'por_verificar':'pendiente'},items:(o.order_items||[]).map(i=>({q:i.quantity,nombre:i.product_name,nota:i.notes||'',lineTotal:Number(i.line_total)})),total:Number(o.total),tiempo:o.promised_at?Math.max(0,Math.round((new Date(o.promised_at)-created)/60000)):null};
   }
   async patchOrder(o,changes,success){
     if(!this.state.live){Object.assign(o,changes.local||{});this.forceUpdate();this.toast(success);return;}
     try{await this.api('/rest/v1/orders?id=eq.'+o.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(changes.remote||{})});await this.loadLiveOrders();this.toast(success);}catch(error){this.toast(error.message);}
+  }
+  async assignDelivery(o){
+    if(!this.state.live){o.estado='en_camino';o.repartidor=this.state.rol;this.forceUpdate();this.toast('Pedido asignado');return;}
+    try{
+      const driverId=this.state.session?.user?.id;
+      await this.api('/rest/v1/driver_assignments',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({order_id:o.id,driver_user_id:driverId,assigned_by:driverId,status:'assigned'})});
+      await this.api('/rest/v1/orders?id=eq.'+o.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({status:'assigned',assigned_driver_user_id:driverId})});
+      await this.loadLiveOrders(); this.toast(o.folio+' asignado · ya aparece en Repartidores');
+    }catch(error){this.toast(error.message||'No fue posible asignar el pedido');}
+  }
+  async demoControl(action){
+    if(!this.state.live){this.toast('Inicia sesión como Dueño');return;}
+    const question=action==='start_live'?'Esto borrará los pedidos de prueba y activará la operación real. ¿Continuar?':action==='reset_demo'?'Se borrarán solamente los pedidos de demostración. ¿Continuar?':'¿Activar nuevamente el modo de demostración?';
+    if(!window.confirm(question))return;
+    try{const result=await this.api('/functions/v1/demo-control',{method:'POST',body:JSON.stringify({branchId:this.state.branchId,action})});await Promise.all([this.loadLiveOrders(),this.loadSettings()]);this.toast(action==='start_live'?'Operación real lista desde cero':action==='reset_demo'?'Datos de prueba reiniciados':'Modo demostración activado');return result;}catch(error){this.toast(error.message);}
   }
   async logout(){localStorage.removeItem('donLuisStaffSession');clearInterval(this._livePoll);this._orders=null;this.setState({rol:null,session:null,live:false,branchId:null});}
 
@@ -469,6 +490,7 @@ class Component extends DCLogic {
   aceptar(folio){ this.setState({aceptarFor:folio,aceptarTiempo:this.orders.find(o=>o.folio===folio)?.canal==='domicilio'?35:20}); }
   confirmarAceptar(){ const o=this.orders.find(x=>x.folio===this.state.aceptarFor); this.setState({aceptarFor:null}); if(!o)return; const promised=new Date(Date.now()+this.state.aceptarTiempo*60000).toISOString(); this.patchOrder(o,{local:{estado:'aceptado',tiempo:this.state.aceptarTiempo},remote:{status:'confirmed',promised_at:promised,accepted_at:new Date().toISOString(),accepted_by:this.state.session?.user?.id}},'Pedido aceptado · confirmación registrada'); }
   avanzar(folio){ const o=this.orders.find(x=>x.folio===folio); if(!o)return;
+    if(o.canal==='domicilio'&&o.estado==='listo'){this.assignDelivery(o);return;}
     const flow=o.canal==='domicilio'?['nuevo','aceptado','preparando','listo','en_camino','completado']:['nuevo','aceptado','preparando','listo','completado'];
     const i=flow.indexOf(o.estado); if(i<0||i>=flow.length-1)return; const next=flow[i+1];
     const remote={aceptado:'confirmed',preparando:'preparing',listo:'ready',en_camino:'on_the_way',completado:'delivered'}[next];
@@ -644,13 +666,15 @@ class Component extends DCLogic {
   }
 
   vmConfig(){
+    const demoMode=this.state.liveSettings?.demo_mode!==false;
     const grupos=[
       {titulo:'Negocio y sucursales',icon:'M3 21h18M5 21V7l7-4 7 4v14',items:[{k:'Nombre',v:'Tacos Don Luis'},{k:'Sucursal',v:'Punto Cañada (1 de 1)'},{k:'Teléfono / WhatsApp',v:'477 000 0000'},{k:'Redes sociales',v:'@tacosdonluis'}]},
       {titulo:'Horarios y capacidad',icon:'M12 8v4l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z',items:[{k:'Horario',v:'12:00 – 23:00'},{k:'Días cerrados',v:'Lunes'},{k:'Tiempo recoger',v:'15–20 min'},{k:'Tiempo entrega',v:'30–40 min'},{k:'Capacidad máx.',v:'25 pedidos/hora'}]},
       {titulo:'Entrega y cobertura',icon:'M1 3h15v13H1zM16 8h4l3 3v5h-7',items:[{k:'Radio de cobertura',v:'5 km'},{k:'Zonas / costos',v:'$25 / $35 / $45'},{k:'Pedido mínimo',v:'$80.00'},{k:'Colonias',v:'6 activas'}]},
       {titulo:'Pagos y lealtad',icon:'M2 7h20v12H2zM2 11h20',items:[{k:'Métodos',v:'Efectivo, transferencia, tarjeta'},{k:'Puntos por $10',v:'1 punto'},{k:'Recompensas',v:'3 activas'}]},
       {titulo:'Usuarios y permisos',icon:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',items:[{k:'Usuarios',v:'6 (Dueño, Admin, 2 Caja, Cocina, 2 Repartidores)'},{k:'Roles',v:'6 configurados'}]},
-    ];
+      {titulo:'Datos de demostración',icon:'M12 3v18M3 12h18',items:[{k:'Estado',v:demoMode?'Modo demo activo':'Operación real'},{k:'Pedidos de prueba',v:String(this.orders.filter(o=>o.isDemo).length)},{k:'Al pasar a real',v:'Se conservan menú, usuarios y configuración'}],onEdit:()=>{const choice=window.prompt('Escribe: REINICIAR para borrar pedidos de prueba, REAL para iniciar desde cero, o DEMO para volver a pruebas.','REINICIAR');if(!choice)return;const value=choice.trim().toUpperCase();if(value==='REINICIAR')this.demoControl('reset_demo');else if(value==='REAL')this.demoControl('start_live');else if(value==='DEMO')this.demoControl('start_demo');else this.toast('Opción no reconocida');}},
+    ].map(g=>({...g,onEdit:g.onEdit||(()=>this.toast('Editor de '+g.titulo+' en preparación'))}));
     return {configGrupos:grupos, saturado:this.state.saturado||false, pausado:this.state.pausado||false,
       toggleSat:()=>this.setState({saturado:!this.state.saturado}), togglePausa:()=>this.setState({pausado:!this.state.pausado})};
   }
