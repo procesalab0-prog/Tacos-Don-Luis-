@@ -27,6 +27,10 @@
   @keyframes dlspin{to{transform:rotate(360deg)}}
   @keyframes dlpulse{0%,100%{opacity:1}50%{opacity:.45}}
   .dl-check{background-image:repeating-conic-gradient(#10603A 0 25%,transparent 0 50%);background-size:14px 14px}
+  .dl-field-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px;width:100%}
+  .dl-field-row.dl-address-row{grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr)}
+  .dl-field-row input{display:block;width:100%;min-width:0;max-width:100%}
+  @media(max-width:360px){.dl-field-row,.dl-field-row.dl-address-row{grid-template-columns:1fr}}
 </style>
 </helmet>
 
@@ -266,7 +270,7 @@
               <sc-if value="{{ chkFuera }}" hint-placeholder-val="{{ false }}"><div style="background:#fdeceb;border:1px solid #f6cfcc;color:#b23a32;font-weight:600;font-size:12.5px;padding:9px 12px;border-radius:11px;margin-bottom:12px">Esa distancia está fuera de cobertura. Prueba recoger en sucursal.</div></sc-if>
               <div style="display:flex;flex-direction:column;gap:9px">
                 <input onInput="{{ onCalle }}" placeholder="Calle" style="width:100%;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15">
-                <div style="display:flex;gap:9px"><input onInput="{{ onNumero }}" placeholder="Número" style="flex:1;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"><input onInput="{{ onColonia }}" placeholder="Colonia" style="flex:1.4;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></div>
+                <div class="dl-field-row dl-address-row"><input onInput="{{ onNumero }}" placeholder="Número" inputmode="text" style="border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"><input onInput="{{ onColonia }}" placeholder="Colonia" style="border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></div>
                 <input onInput="{{ onReferencias }}" placeholder="Referencias (portón, color, entre calles)" style="width:100%;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15">
               </div>
               <div style="margin-top:12px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px"><div><div style="font-weight:700;font-size:13.5px;color:#211E15">Marca el punto de entrega</div><div style="font-size:11.5px;color:#8a7f66">Toca el mapa y llenaremos la dirección</div></div><button onClick="{{ onUseLocation }}" style="cursor:pointer;border:1.5px solid #10603A;background:#fff;color:#10603A;border-radius:10px;padding:8px 10px;font-weight:700;font-size:11.5px">Usar mi dirección actual</button></div><div id="delivery-map" style="height:210px;border-radius:13px;overflow:hidden;border:1px solid #d6ccb5;background:#e7e1d3"></div><div id="delivery-coordinates" style="font-size:11.5px;color:#10603A;font-weight:600;margin-top:7px">Ubicación opcional · puedes marcarla en el mapa</div></div>
@@ -282,7 +286,7 @@
 
           <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:15px;margin-bottom:16px">
             <div style="font-weight:700;font-size:14.5px;color:#211E15;margin-bottom:9px">Tus datos</div>
-            <div style="display:flex;gap:9px"><input onInput="{{ onNombre }}" placeholder="Nombre" style="flex:1;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"><input onInput="{{ onTelefono }}" placeholder="Teléfono" style="flex:1;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></div>
+            <div class="dl-field-row"><input onInput="{{ onNombre }}" placeholder="Nombre" autocomplete="name" style="border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"><input onInput="{{ onTelefono }}" placeholder="Teléfono" type="tel" inputmode="tel" autocomplete="tel" style="border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></div>
           </div>
 
           <div style="font-size:13px;font-weight:800;color:#8a7f66;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">Método de pago</div>
@@ -526,7 +530,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.3.3';
+  static APP_VERSION = '2.3.4';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
@@ -534,7 +538,7 @@ class Component extends DCLogic {
     cart:[], entrega:'recoger', pago:'efectivo', dir:{}, prog:false,
     folio:null, trackStep:0, cuentaTab:'perfil', logged:false,
     remoteMenu:null, remoteCategories:null, remoteZones:null, modifierOptions:null, branchId:null,
-    settings:null, submitting:false, trackingToken:null, liveOrder:null,
+    settings:null, submitting:false, trackingToken:null, liveOrder:null,accountOrders:[],
     authEmail:'',authPassword:'',session:null,currentUser:null,logoTaps:0,showEasterEgg:false };
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
@@ -545,8 +549,9 @@ class Component extends DCLogic {
     this.loadPublicData();
     const draft=JSON.parse(localStorage.getItem('donLuisCheckoutDraft')||'null');
     if(draft?.dir){this._pickedLatLng=draft.location||null;this.setState({dir:draft.dir});}
-    const saved=localStorage.getItem('donLuisTrackingToken');
-    if(saved)this.setState({trackingToken:saved});
+    const savedOrders=JSON.parse(localStorage.getItem('donLuisGuestOrderTokens')||'[]');
+    const saved=localStorage.getItem('donLuisTrackingToken')||savedOrders[0]?.token;
+    if(saved)this.setState({trackingToken:saved},()=>this.refreshTracking());
     const session=JSON.parse(localStorage.getItem('donLuisSession')||'null');
     if(session?.access_token){this.setState({session,currentUser:session.user,logged:true});this.loadCustomerData(session);}
   }
@@ -605,14 +610,15 @@ class Component extends DCLogic {
   async loadCustomerData(session=this.state.session){
     if(!session?.user?.id)return;
     try{
-      const [customers,profiles]=await Promise.all([
+      const [customers,profiles,orders]=await Promise.all([
         this.api('/rest/v1/customers?user_id=eq.'+session.user.id+'&select=id,full_name,phone,customer_addresses(*)&limit=1',{token:session.access_token}),
-        this.api('/rest/v1/profiles?id=eq.'+session.user.id+'&select=full_name,phone&limit=1',{token:session.access_token})
+        this.api('/rest/v1/profiles?id=eq.'+session.user.id+'&select=full_name,phone&limit=1',{token:session.access_token}),
+        this.api('/rest/v1/orders?customer_user_id=eq.'+session.user.id+'&select=id,folio,status,total,fulfillment_type,promised_at,created_at,order_items(product_name,quantity)&order=created_at.desc&limit=20',{token:session.access_token})
       ]);
       const customer=customers[0],profile=profiles[0]||{};const addresses=customer?.customer_addresses||[];const address=addresses.find(a=>a.is_default)||addresses[0];
       const current=this.state.dir||{};const dir={...current,nombre:customer?.full_name||profile.full_name||current.nombre||'',tel:customer?.phone||profile.phone||current.tel||''};
       if(address){Object.assign(dir,{calle:address.street||'',num:address.exterior_number||'',col:address.neighborhood||'',ref:address.references_text||'',savedAddressId:address.id});if(address.latitude!=null&&address.longitude!=null)this._pickedLatLng={lat:Number(address.latitude),lng:Number(address.longitude)};}
-      this.setState({dir});this.persistCheckoutDraft(dir);
+      this.setState({dir,accountOrders:orders||[]});this.persistCheckoutDraft(dir);
     }catch(error){console.error(error);}
   }
   async saveCustomerData(){
@@ -784,12 +790,16 @@ class Component extends DCLogic {
       const folio='DL-'+result.order.folio;
       try{await this.saveCustomerData();}catch(error){console.error(error);}
       localStorage.setItem('donLuisTrackingToken',result.trackingToken);
+      const remembered=JSON.parse(localStorage.getItem('donLuisGuestOrderTokens')||'[]').filter(x=>x?.token!==result.trackingToken);
+      remembered.unshift({token:result.trackingToken,folio,createdAt:new Date().toISOString()});
+      localStorage.setItem('donLuisGuestOrderTokens',JSON.stringify(remembered.slice(0,10)));
       this.setState({folio,trackingToken:result.trackingToken,liveOrder:result.order,route:'confirmacion',trackStep:0,prog:false,submitting:false});
+      if(this.state.session)await this.loadCustomerData(this.state.session);
       this.toast('¡Pedido recibido! 🌮');
     }catch(error){this.setState({submitting:false});this.toast(error.message||'No se pudo crear el pedido');}
   }
   async refreshTracking(){
-    if(!this.state.trackingToken)return;
+    if(!this.state.trackingToken){if(this.state.session)await this.loadCustomerData(this.state.session);return;}
     try{
       const result=await this.api('/functions/v1/track-order',{method:'POST',body:JSON.stringify({token:this.state.trackingToken})});
       const order=result.order;
@@ -913,8 +923,14 @@ class Component extends DCLogic {
     };
   }
   vmPedidos(){
-    const activo=this.state.folio?{folio:this.state.folio,estado:'En preparación',tiempo:this.state.entrega==='domicilio'?'30–40 min':'15–20 min',onVer:()=>this.go('seguimiento')}:null;
-    const historial=[
+    const terminal=['delivered','cancelled','rejected','failed_delivery'];
+    const statusLabel={pending_acceptance:'Por aceptar',confirmed:'Confirmado',preparing:'En preparación',ready:'Listo',assigned:'Repartidor asignado',on_the_way:'En camino',delivered:'Entregado',cancelled:'Cancelado',rejected:'Rechazado',failed_delivery:'No entregado'};
+    const accountActive=this.state.accountOrders.find(o=>!terminal.includes(o.status));
+    const localActive=this.state.liveOrder&&!terminal.includes(this.state.liveOrder.status)?this.state.liveOrder:null;
+    const activeOrder=accountActive||localActive;
+    const activo=activeOrder?{folio:'DL-'+activeOrder.folio,estado:statusLabel[activeOrder.status]||'Pedido en curso',tiempo:activeOrder.fulfillment_type==='delivery'?'30–40 min':'15–20 min',onVer:()=>{this.setState({liveOrder:activeOrder,folio:'DL-'+activeOrder.folio,entrega:activeOrder.fulfillment_type==='delivery'?'domicilio':'recoger'});this.iniciarSeguimiento();}}:null;
+    const realHistory=this.state.accountOrders.filter(o=>terminal.includes(o.status)).map(o=>({folio:'DL-'+o.folio,fecha:new Date(o.created_at).toLocaleDateString('es-MX',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}),total:this.MXN(o.total),items:(o.order_items||[]).map(i=>i.quantity+'× '+i.product_name).join(', '),onRepetir:()=>this.toast('La opción de repetir estará disponible pronto')}));
+    const historial=realHistory.length?realHistory:[
       {folio:'DL-3980',fecha:'5 ago · 21:14',total:this.MXN(102),items:'3 tacos pastor, 1 quesadilla, agua',onRepetir:()=>this.toast('Pedido agregado al carrito (demo)')},
       {folio:'DL-3902',fecha:'2 ago · 14:40',total:this.MXN(85),items:'2 tortas, 1 refresco',onRepetir:()=>this.toast('Pedido agregado al carrito (demo)')},
       {folio:'DL-3811',fecha:'28 jul · 20:02',total:this.MXN(51),items:'3 tacos de bistec',onRepetir:()=>this.toast('Pedido agregado al carrito (demo)')},
