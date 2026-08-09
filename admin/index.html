@@ -695,7 +695,7 @@ class Component extends DCLogic {
         return {folio:o.folio,cliente:o.cliente,tel:o.tel,minTxt:o.min===0?'ahora':'hace '+o.min+' min',late,
           canalTxt:cm.txt,canalC:cm.c,canalBg:cm.bg,canalIcon:cm.icon,
           items:o.items,totalTxt:this.MXN(this.itemTotal(o)),pagoTxt:pm.txt,pagoC:pm.c,
-          acciones:key!=='completado',esNuevo:key==='nuevo',
+          acciones:key!=='completado'&&!(key==='listo'&&o.assignedDriver),esNuevo:key==='nuevo',
           primaryTxt:{nuevo:'Aceptar',aceptado:'Enviar a cocina',preparando:'Marcar listo',listo:o.canal==='domicilio'?'Asignar repartidor':'Entregar',en_camino:'Marcar entregado'}[key]||'Avanzar',
           primaryBg:key==='nuevo'?'#10603A':'#178049',
           onPrimary:key==='nuevo'?(()=>this.aceptar(o.folio)):(()=>this.avanzar(o.folio)),
