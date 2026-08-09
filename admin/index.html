@@ -32,7 +32,7 @@
   <div style="width:100%;max-width:520px;background:#FFFDF7;border-radius:24px;box-shadow:0 34px 80px rgba(0,0,0,.4);overflow:hidden;animation:dlpop .5s ease both">
     <div style="padding:28px 28px 22px;text-align:center;border-bottom:3px dotted #e0d6bf;position:relative">
       <span style="position:absolute;top:14px;right:16px;background:#F2C230;color:#3a2c00;font-size:11px;font-weight:800;letter-spacing:.14em;padding:5px 11px;border-radius:999px">DEMO</span>
-      <span style="width:60px;height:60px;border-radius:50%;background:#10603A;color:#F3F0E6;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:20px;margin:0 auto 12px">TDL</span>
+      <span onClick="{{ onTapLogo }}" style="cursor:pointer;user-select:none;width:60px;height:60px;border-radius:50%;background:#10603A;color:#F3F0E6;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:20px;margin:0 auto 12px">TDL</span>
       <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:26px;color:#10603A">Panel de operación</div>
       <div style="font-size:13.5px;color:#8a7f66;margin-top:3px">Tacos Don Luis · Punto Cañada</div>
     </div>
@@ -63,7 +63,7 @@
   <sc-if value="{{ showSidebar }}" hint-placeholder-val="{{ true }}">
     <aside style="width:{{ sidebarW }};flex:0 0 auto;background:#10603A;color:#EAF3EC;display:flex;flex-direction:column;position:sticky;top:0;height:100vh">
       <div style="padding:18px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.12)">
-        <span style="width:44px;height:44px;flex:0 0 auto;border-radius:50%;background:#F3F0E6;color:#10603A;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:15px">TDL</span>
+        <span onClick="{{ onTapLogo }}" style="cursor:pointer;user-select:none;width:44px;height:44px;flex:0 0 auto;border-radius:50%;background:#F3F0E6;color:#10603A;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:15px">TDL</span>
         <sc-if value="{{ sidebarWide }}" hint-placeholder-val="{{ true }}"><span style="display:flex;flex-direction:column;line-height:1.05"><span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:17px;color:#fff">Operación</span><span style="font-size:10px;color:#9ec5a6;font-weight:700;letter-spacing:.1em">PUNTO CAÑADA</span></span></sc-if>
       </div>
       <nav style="flex:1;overflow-y:auto;padding:12px 10px;display:flex;flex-direction:column;gap:3px">
@@ -86,7 +86,7 @@
 
   <div style="flex:1;min-width:0;display:flex;flex-direction:column">
     <header style="position:sticky;top:0;z-index:20;background:rgba(243,240,230,.92);backdrop-filter:blur(8px);border-bottom:1px solid #E6DCC5;padding:12px 20px;display:flex;align-items:center;gap:14px">
-      <sc-if value="{{ showBottomNav }}" hint-placeholder-val="{{ false }}"><span style="width:36px;height:36px;border-radius:50%;background:#10603A;color:#F3F0E6;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:13px;flex:0 0 auto">TDL</span></sc-if>
+      <sc-if value="{{ showBottomNav }}" hint-placeholder-val="{{ false }}"><span onClick="{{ onTapLogo }}" style="cursor:pointer;user-select:none;width:36px;height:36px;border-radius:50%;background:#10603A;color:#F3F0E6;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:13px;flex:0 0 auto">TDL</span></sc-if>
       <div style="flex:1;min-width:0"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:{{ showBottomNav ? '19px' : '23px' }};color:#10603A;line-height:1.05">{{ currentTitle }}</div><div style="font-size:12px;color:#9a8e70;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ currentSub }}</div></div>
       <button onClick="{{ toggleSonido }}" title="Alerta sonora" style="cursor:pointer;width:38px;height:38px;border-radius:11px;border:1px solid #E6DCC5;background:{{ sonido ? '#eaf4ec' : '#FFFDF7' }};color:{{ sonido ? '#10603A' : '#a99d80' }};display:flex;align-items:center;justify-content:center;flex:0 0 auto">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ sonidoIcon }}"></path></svg>
@@ -304,6 +304,10 @@
     </nav>
   </sc-if>
 
+  <sc-if value="{{ showEasterEgg }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:100;background:rgba(16,20,14,.6);display:flex;align-items:center;justify-content:center;padding:24px;animation:dlfade .2s"><div style="width:100%;max-width:340px;background:#FFFDF7;border-radius:22px;box-shadow:0 30px 70px rgba(0,0,0,.4);overflow:hidden;text-align:center;animation:dlpop .3s"><div style="background:linear-gradient(#178049,#10603A);padding:26px 20px 20px;color:#fff"><div style="font-size:34px">🌮✨</div><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:18px;margin-top:8px">¡Encontraste el Easter egg!</div></div><div style="padding:22px 24px 24px"><div style="font-size:14px;color:#4a3d28;line-height:1.6">Esta plataforma fue hecha por<br><a href="https://procesalab0-prog.github.io/ProcesaLabWeb/" target="_blank" rel="noopener" style="color:#10603A;font-weight:800;font-size:16px;text-decoration:underline">ProcesaLab</a></div><div style="margin-top:14px;display:inline-block;background:#F3F0E6;color:#8a7f66;font-size:12px;font-weight:700;letter-spacing:.06em;padding:6px 14px;border-radius:999px">VERSIÓN {{ appVersion }}</div><button onClick="{{ onCloseEasterEgg }}" style="cursor:pointer;margin-top:18px;width:100%;background:#10603A;color:#fff;border:none;border-radius:12px;padding:11px;font-weight:700;font-size:14px">Cerrar</button></div></div></div>
+  </sc-if>
+
   <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
     <div style="position:fixed;left:50%;transform:translateX(-50%);bottom:{{ showBottomNav ? '86px' : '28px' }};z-index:80;background:#10603A;color:#fff;padding:13px 20px;border-radius:14px;box-shadow:0 14px 34px rgba(0,0,0,.3);display:flex;align-items:center;gap:11px;font-weight:600;font-size:14px;animation:dlpop .3s;max-width:92vw"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#8FD694" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>{{ toast }}</div>
   </sc-if>
@@ -339,12 +343,12 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.1.3';
+  static APP_VERSION = '2.1.4';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { rol:null, route:'pedidos', vw:1280, toast:null, sonido:true,
     canal:'todos', rechazoFor:null, aceptarFor:null, aceptarTiempo:20,
-    authEmail:'',authPassword:'',authBusy:false,session:null,live:false,branchId:null };
+    authEmail:'',authPassword:'',authBusy:false,session:null,live:false,branchId:null,logoTaps:0,showEasterEgg:false };
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
   componentDidMount(){
@@ -355,6 +359,7 @@ class Component extends DCLogic {
   componentWillUnmount(){ window.removeEventListener('resize',this._onR); clearInterval(this._livePoll); }
   toast(m){ clearTimeout(this._t); this.setState({toast:m}); this._t=setTimeout(()=>this.setState({toast:null}),2600); }
   go(r){ this.setState({route:r}); if(typeof window!=='undefined') window.scrollTo?.({top:0}); }
+  tapLogo(){ clearTimeout(this._logoTapTimer); const taps=(this.state.logoTaps||0)+1; if(taps>=6){this.setState({logoTaps:0,showEasterEgg:true});return;} this.setState({logoTaps:taps}); this._logoTapTimer=setTimeout(()=>this.setState({logoTaps:0}),1200); }
 
   async api(path,options={}){
     const token=options.token||this.state.session?.access_token;
@@ -491,6 +496,7 @@ class Component extends DCLogic {
       setAuthEmail:(e)=>this.setState({authEmail:e?.target?.value||''}),setAuthPassword:(e)=>this.setState({authPassword:e?.target?.value||''}),
       signIn:()=>this.signIn(),authButton:this.state.authBusy?'Entrando…':'Entrar al panel',
       appVersion:Component.APP_VERSION,modeLabel:this.state.live?'EN VIVO':'DEMO',modeBg:this.state.live?'#10603A':'#F2C230',modeColor:this.state.live?'#fff':'#3a2c00',
+      onTapLogo:()=>this.tapLogo(),showEasterEgg:this.state.showEasterEgg,onCloseEasterEgg:()=>this.setState({showEasterEgg:false}),
       currentTitle:cur?cur.label:'Centro de pedidos', currentSub:subs[route]||'',
       sonido:this.state.sonido, toggleSonido:()=>this.setState({sonido:!this.state.sonido}),
       sonidoIcon:this.state.sonido?'M11 5 6 9H2v6h4l5 4zM19 12a7 7 0 0 0-2-5M15.5 12a3 3 0 0 0-1-2':'M11 5 6 9H2v6h4l5 4zM23 9l-6 6M17 9l6 6',
