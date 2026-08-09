@@ -339,7 +339,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.1.1';
+  static APP_VERSION = '2.1.2';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { rol:null, route:'pedidos', vw:1280, toast:null, sonido:true,
@@ -617,13 +617,14 @@ class Component extends DCLogic {
   }
 
   vmPedidos(){
-    const canales=[['todos','Todos'],['domicilio','Domicilio'],['recoger','Recoger'],['establecimiento','En mesa'],['whatsapp','WhatsApp']];
+    const canales=[['todos','Todos'],['domicilio','Domicilio'],['recoger','Recoger']];
     const canalFiltros=canales.map(([k,l])=>{
       const count=k==='todos'?0:this.orders.filter(o=>o.canal===k&&!['completado','rechazado','cancelado'].includes(o.estado)).length;
       return {label:l,count:count||null,onClick:()=>this.setState({canal:k}),
         style:`cursor:pointer;padding:8px 14px;border-radius:999px;font-weight:700;font-size:13px;border:none;white-space:nowrap;${k===this.state.canal?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35;border:1px solid #E6DCC5'}`};
     });
-    const filt=this.state.canal==='todos'?this.orders:this.orders.filter(o=>o.canal===this.state.canal);
+    const pedidosWeb=this.orders.filter(o=>['domicilio','recoger'].includes(o.canal));
+    const filt=this.state.canal==='todos'?pedidosWeb:pedidosWeb.filter(o=>o.canal===this.state.canal);
     const cols=[['nuevo','Nuevos','#D6453D'],['aceptado','Aceptados','#E0A526'],['preparando','En preparación','#1f6f8b'],['listo','Listos','#28A54C'],['en_camino','En camino','#7a5cc4'],['completado','Completados','#10603A']];
     const pedidosCols=cols.map(([key,title,color])=>{
       const list=filt.filter(o=>o.estado===key).map(o=>{
