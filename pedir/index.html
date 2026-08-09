@@ -551,7 +551,7 @@ class Component extends DCLogic {
     if(draft?.dir){this._pickedLatLng=draft.location||null;this.setState({dir:draft.dir});}
     const savedOrders=JSON.parse(localStorage.getItem('donLuisGuestOrderTokens')||'[]');
     const saved=localStorage.getItem('donLuisTrackingToken')||savedOrders[0]?.token;
-    if(saved)this.setState({trackingToken:saved},()=>this.refreshTracking());
+    if(saved){this.setState({trackingToken:saved});setTimeout(()=>this.refreshTracking(),0);}
     const session=JSON.parse(localStorage.getItem('donLuisSession')||'null');
     if(session?.access_token){this.setState({session,currentUser:session.user,logged:true});this.loadCustomerData(session);}
   }
