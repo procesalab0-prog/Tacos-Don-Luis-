@@ -537,7 +537,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.5.2';
+  static APP_VERSION = '2.5.3';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
@@ -576,22 +576,29 @@ class Component extends DCLogic {
     if(!res.ok)throw new Error(data?.error||'No fue posible conectar con Don Luis');
     return data;
   }
+  async publicRead(path){
+    try{return await this.api(path);}
+    catch(firstError){
+      await new Promise(resolve=>setTimeout(resolve,700));
+      return this.api(path);
+    }
+  }
   async loadPublicData(){
     try{
-      const branches=await this.api('/rest/v1/branches?slug=eq.punto-canada&is_active=eq.true&select=id,name,address_line,latitude,longitude');
+      const branches=await this.publicRead('/rest/v1/branches?slug=eq.punto-canada&is_active=eq.true&select=id,name,address_line,latitude,longitude');
       const branch=branches[0]; if(!branch)throw new Error('Sucursal no disponible');
       const bid=branch.id;
       const [cats,products,zones,settings,modifierOptions]=await Promise.all([
-        this.api('/rest/v1/categories?branch_id=eq.'+bid+'&is_active=eq.true&select=id,name,slug,sort_order&order=sort_order'),
-        this.api('/rest/v1/products?branch_id=eq.'+bid+'&is_active=eq.true&select=id,category_id,name,description,price,image_url,is_available,is_featured,sort_order&order=sort_order'),
-        this.api('/rest/v1/delivery_zones?branch_id=eq.'+bid+'&is_active=eq.true&select=id,name,min_distance_km,max_distance_km,fee,minimum_order,sort_order&order=sort_order'),
-        this.api('/rest/v1/business_settings?branch_id=eq.'+bid+'&select=*'),
-        this.api('/rest/v1/modifier_options?is_available=eq.true&select=id,name,price_delta,modifier_group_id,modifier_groups!inner(branch_id)&modifier_groups.branch_id=eq.'+bid)
+        this.publicRead('/rest/v1/categories?branch_id=eq.'+bid+'&is_active=eq.true&select=id,name,slug,sort_order&order=sort_order'),
+        this.publicRead('/rest/v1/products?branch_id=eq.'+bid+'&is_active=eq.true&select=id,category_id,name,description,price,image_url,is_available,is_featured,sort_order&order=sort_order'),
+        this.publicRead('/rest/v1/delivery_zones?branch_id=eq.'+bid+'&is_active=eq.true&select=id,name,min_distance_km,max_distance_km,fee,minimum_order,sort_order&order=sort_order').catch(()=>[]),
+        this.publicRead('/rest/v1/business_settings?branch_id=eq.'+bid+'&select=*').catch(()=>[]),
+        this.publicRead('/rest/v1/modifier_options?is_available=eq.true&select=id,name,price_delta,modifier_group_id,modifier_groups!inner(branch_id)&modifier_groups.branch_id=eq.'+bid).catch(()=>[])
       ]);
       const catById=Object.fromEntries(cats.map(c=>[c.id,c.name]));
       const remoteMenu=products.map(p=>({id:p.id,nombre:p.name,cat:catById[p.category_id]||'Tacos',precio:Number(p.price),desc:p.description||'',foto:p.image_url||null,tag:p.is_featured?'Favorito':null,featured:p.is_featured,disponible:p.is_available}));
       this.setState({branchId:bid,branchLocation:branch.latitude!=null&&branch.longitude!=null?{lat:Number(branch.latitude),lng:Number(branch.longitude),address:branch.address_line}:null,remoteCategories:cats.map(c=>c.name),remoteMenu,remoteZones:zones,modifierOptions,settings:settings[0]||null});
-    }catch(error){ console.error(error); this.toast('Mostrando menú sin conexión'); }
+    }catch(error){ console.error('No se pudo cargar el menú en vivo',error); this.toast('No pudimos actualizar el menú. Mostramos una copia disponible.'); }
   }
   async signIn(){
     try{
