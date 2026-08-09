@@ -1,22 +1,18 @@
-# CODING AGENTS: READ THIS FIRST
+# Tacos Don Luis
 
-This is a **handoff bundle** from Claude Design (claude.ai/design).
+Sistema web para la sucursal Punto Cañada.
 
-A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.
+## Rutas
 
-## What you should do — IMPORTANT
+- `/`: demo administrativa original mientras se recibe la landing definitiva.
+- `/pedir/`: menú, carrito, checkout, pedidos como invitado y seguimiento.
+- `/admin/`: acceso directo a la demo administrativa.
+- `/repartidor/`: ruta reservada para el diseño de la fase 2.
 
-**Read `dise-o-y-logo-del-proyecto/project/Don Luis.dc.html` in full.** The user had this file open when they triggered the handoff, so it's almost certainly the primary design they want built. Read it top to bottom — don't skim. Then **follow its imports**: open every file it pulls in (shared components, CSS, scripts) so you understand how the pieces fit together before you start implementing.
+## Servicios
 
-**If anything is ambiguous, ask the user to confirm before you start implementing.** It's much cheaper to clarify scope up front than to build the wrong thing.
+- Vercel: alojamiento web.
+- Supabase: base de datos, autenticación, menú, configuración y pedidos.
 
-## About the design files
-
-The design medium is **HTML/CSS/JS** — these are prototypes, not production code. Your job is to **recreate them pixel-perfectly** in whatever technology makes sense for the target codebase (React, Vue, native, whatever fits). Match the visual output; don't copy the prototype's internal structure unless it happens to fit.
-
-**Don't render these files in a browser or take screenshots unless the user asks you to.** Everything you need — dimensions, colors, layout rules — is spelled out in the source. Read the HTML and CSS directly; a screenshot won't tell you anything they don't.
-
-## Bundle contents
-
-- `dise-o-y-logo-del-proyecto/README.md` — this file
-- `dise-o-y-logo-del-proyecto/project/` — the `Diseño y logo del proyecto` project files (HTML prototypes, assets, components)
+La aplicación del cliente calcula precios y crea pedidos mediante una función
+segura en Supabase. Las claves secretas nunca se incluyen en el navegador.
