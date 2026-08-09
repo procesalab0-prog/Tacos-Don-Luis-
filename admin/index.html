@@ -357,7 +357,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.4.3';
+  static APP_VERSION = '2.4.4';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { rol:null, route:'pedidos', vw:1280, toast:null, sonido:true,
@@ -438,7 +438,7 @@ class Component extends DCLogic {
     const canal=o.fulfillment_type==='delivery'?'domicilio':o.fulfillment_type==='dine_in'?'establecimiento':(o.channel==='whatsapp'?'whatsapp':'recoger');
     const created=new Date(o.created_at); const min=Math.max(0,Math.floor((Date.now()-created.getTime())/60000));
     const addr=o.delivery_address||{}; const dir=canal==='domicilio'?[addr.street,addr.exterior_number,addr.neighborhood].filter(Boolean).join(' '):(canal==='establecimiento'?'Mesa '+(o.table_number||''):'Recoger en sucursal');
-    return {id:o.id,remoteStatus:o.status,isDemo:o.is_demo,assignedDriver:o.assigned_driver_user_id,folio:'DL-'+o.folio,canal,estado:status,min,cliente:o.guest_name||(canal==='establecimiento'?'Mesa '+(o.table_number||''):'Cliente'),tel:o.guest_phone||'—',dir,pago:{metodo:o.payment_method==='transfer'?'transferencia':o.payment_method==='card_present'?'tarjeta':'efectivo',estado:o.payment_status==='paid'?'pagado':o.payment_status==='verification_pending'?'por_verificar':'pendiente'},items:(o.order_items||[]).map(i=>({q:i.quantity,nombre:i.product_name,nota:i.notes||'',lineTotal:Number(i.line_total)})),total:Number(o.total),tiempo:o.promised_at?Math.max(0,Math.round((new Date(o.promised_at)-created)/60000)):null};
+    return {id:o.id,remoteStatus:o.status,isDemo:o.is_demo,assignedDriver:o.assigned_driver_user_id,folio:'DL-'+o.folio,canal,estado:status,min,cliente:o.guest_name||(canal==='establecimiento'?'Mesa '+(o.table_number||''):'Cliente'),tel:o.guest_phone||'—',dir,pago:{metodo:o.payment_method==='clip_simulated'?'clip demo':o.payment_method==='transfer'?'transferencia':o.payment_method==='card_present'?'tarjeta':'efectivo',estado:o.payment_status==='paid'?'pagado':o.payment_status==='verification_pending'?'por_verificar':'pendiente'},items:(o.order_items||[]).map(i=>({q:i.quantity,nombre:i.product_name,nota:i.notes||'',lineTotal:Number(i.line_total)})),total:Number(o.total),tiempo:o.promised_at?Math.max(0,Math.round((new Date(o.promised_at)-created)/60000)):null};
   }
   async patchOrder(o,changes,success){
     if(!this.state.live){Object.assign(o,changes.local||{});this.forceUpdate();this.toast(success);return;}
@@ -671,7 +671,7 @@ class Component extends DCLogic {
       {titulo:'Negocio y sucursales',icon:'M3 21h18M5 21V7l7-4 7 4v14',items:[{k:'Nombre',v:'Tacos Don Luis'},{k:'Sucursal',v:'Punto Cañada (1 de 1)'},{k:'Teléfono / WhatsApp',v:'477 522 2095'},{k:'Redes sociales',v:'@tacosdonluis'}]},
       {titulo:'Horarios y capacidad',icon:'M12 8v4l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z',items:[{k:'Horario',v:'12:00 – 23:00'},{k:'Días cerrados',v:'Lunes'},{k:'Tiempo recoger',v:'15–20 min'},{k:'Tiempo entrega',v:'30–40 min'},{k:'Capacidad máx.',v:'25 pedidos/hora'}]},
       {titulo:'Entrega y cobertura',icon:'M1 3h15v13H1zM16 8h4l3 3v5h-7',items:[{k:'Radio de cobertura',v:'5 km'},{k:'Zonas / costos',v:'$25 / $35 / $45'},{k:'Pedido mínimo',v:'$80.00'},{k:'Colonias',v:'6 activas'}]},
-      {titulo:'Pagos y lealtad',icon:'M2 7h20v12H2zM2 11h20',items:[{k:'Métodos',v:'Efectivo, transferencia, tarjeta'},{k:'Puntos por $10',v:'1 punto'},{k:'Recompensas',v:'3 activas'}]},
+      {titulo:'Pagos y lealtad',icon:'M2 7h20v12H2zM2 11h20',items:[{k:'Métodos',v:'Efectivo, transferencia, tarjeta y Clip (demo)'},{k:'Puntos por $10',v:'1 punto'},{k:'Recompensas',v:'3 activas'}]},
       {titulo:'Usuarios y permisos',icon:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',items:[{k:'Usuarios',v:'6 (Dueño, Admin, 2 Caja, Cocina, 2 Repartidores)'},{k:'Roles',v:'6 configurados'}]},
       {titulo:'Datos de demostración',icon:'M12 3v18M3 12h18',items:[{k:'Estado',v:demoMode?'Modo demo activo':'Operación real'},{k:'Pedidos de prueba',v:String(this.orders.filter(o=>o.isDemo).length)},{k:'Al pasar a real',v:'Se conservan menú, usuarios y configuración'}],onEdit:()=>{const choice=window.prompt('Escribe: REINICIAR para borrar pedidos de prueba, REAL para iniciar desde cero, o DEMO para volver a pruebas.','REINICIAR');if(!choice)return;const value=choice.trim().toUpperCase();if(value==='REINICIAR')this.demoControl('reset_demo');else if(value==='REAL')this.demoControl('start_live');else if(value==='DEMO')this.demoControl('start_demo');else this.toast('Opción no reconocida');}},
     ].map(g=>({...g,onEdit:g.onEdit||(()=>this.toast('Editor de '+g.titulo+' en preparación'))}));
