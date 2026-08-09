@@ -260,6 +260,7 @@
             <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:15px;margin-bottom:16px">
               <div style="font-weight:700;font-size:14.5px;color:#211E15;margin-bottom:11px">Dirección de entrega</div>
               <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px"><sc-for list="{{ zonaChips }}" as="z" hint-placeholder-count="3"><button onClick="{{ z.onClick }}" style="{{ z.style }}"><span style="font-weight:700;font-size:12px;color:#211E15">{{ z.label }}</span><span style="font-size:11.5px;color:#10603A;font-weight:700">{{ z.precio }}</span></button></sc-for></div>
+              <div style="background:#eaf4ec;border:1px solid #cfe0c6;color:#10603A;font-weight:600;font-size:12.5px;padding:9px 12px;border-radius:11px;margin-bottom:12px">Pedido mínimo para envío: {{ chkMinimoTxt }}<sc-if value="{{ chkFaltaMinimo }}" hint-placeholder-val="{{ false }}"> · agrega {{ chkFaltanteTxt }} más</sc-if></div>
               <sc-if value="{{ chkFuera }}" hint-placeholder-val="{{ false }}"><div style="background:#fdeceb;border:1px solid #f6cfcc;color:#b23a32;font-weight:600;font-size:12.5px;padding:9px 12px;border-radius:11px;margin-bottom:12px">Esa distancia está fuera de cobertura. Prueba recoger en sucursal.</div></sc-if>
               <div style="display:flex;flex-direction:column;gap:9px">
                 <input onInput="{{ onField('calle') }}" placeholder="Calle" style="width:100%;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15">
@@ -522,7 +523,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.2.2';
+  static APP_VERSION = '2.2.3';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
@@ -673,6 +674,10 @@ class Component extends DCLogic {
 
   async hacerPedido(){
     if(this.fueraCobertura()){ this.toast('Esa dirección está fuera de cobertura'); return; }
+    const selectedZone=this.coberturaTarifas.find(z=>z.label===this.state.dir.zona);
+    if(this.state.entrega==='domicilio'&&!selectedZone){this.toast('Elige una zona de entrega');return;}
+    const minimum=Number(this.state.remoteZones?.find(z=>z.id===selectedZone?.id)?.minimum_order||this.state.settings?.minimum_delivery_amount||80);
+    if(this.state.entrega==='domicilio'&&this.cartSubtotal()<minimum){this.toast('El pedido mínimo para envío es '+this.MXN(minimum)+' · agrega '+this.MXN(minimum-this.cartSubtotal())+' más');return;}
     if(this.state.entrega==='domicilio' && !this.state.dir.calle){ this.toast('Agrega tu dirección de entrega'); return; }
     if(!this.state.dir.nombre?.trim()||!this.state.dir.tel?.trim()){this.toast('Agrega tu nombre y teléfono');return;}
     if(!this.state.remoteMenu){this.toast('Espera a que termine de cargar el menú');return;}
@@ -680,7 +685,6 @@ class Component extends DCLogic {
     this.setState({submitting:true});
     try{
       const requestId=crypto.randomUUID();
-      const selectedZone=this.coberturaTarifas.find(z=>z.label===this.state.dir.zona);
       const freeOptions=this.state.modifierOptions||[];
       const items=this.state.cart.map(l=>({
         productId:l.id,
@@ -745,11 +749,14 @@ class Component extends DCLogic {
       style:`cursor:pointer;flex:1;min-width:96px;padding:11px;border-radius:12px;border:1.5px solid ${zonaSel===t.label?'#10603A':'#E6DCC5'};background:${zonaSel===t.label?'#eaf4ec':'#fff'};display:flex;flex-direction:column;gap:2px;align-items:center`}));
     const fuera=this.fueraCobertura();
     const desc=this.descuento();
+    const selectedZone=this.coberturaTarifas.find(z=>z.label===zonaSel);
+    const minimum=Number(this.state.remoteZones?.find(z=>z.id===selectedZone?.id)?.minimum_order||this.state.settings?.minimum_delivery_amount||80);
+    const faltante=Math.max(0,minimum-this.cartSubtotal());
     return {
       chkModos:modos, chkPagos:pagos, chkEntrega:entrega,
       chkDomicilio:entrega==='domicilio', chkRecoger:entrega==='recoger',
       chkTransfer:this.state.pago==='transferencia',
-      zonaChips, chkFuera:fuera,
+      zonaChips, chkFuera:fuera, chkMinimoTxt:this.MXN(minimum),chkFaltaMinimo:entrega==='domicilio'&&faltante>0,chkFaltanteTxt:this.MXN(faltante),
       chkSubTxt:this.MXN(this.cartSubtotal()),
       chkEnvioTxt:entrega==='domicilio'?(this.envioActual()?this.MXN(this.envioActual()):'Elige zona'):'Gratis',
       chkDescTxt:'−'+this.MXN(desc), chkHasDesc:desc>0,
