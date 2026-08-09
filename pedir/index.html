@@ -263,23 +263,23 @@
               <div style="background:#eaf4ec;border:1px solid #cfe0c6;color:#10603A;font-weight:600;font-size:12.5px;padding:9px 12px;border-radius:11px;margin-bottom:12px">Pedido mínimo para envío: {{ chkMinimoTxt }}<sc-if value="{{ chkFaltaMinimo }}" hint-placeholder-val="{{ false }}"> · agrega {{ chkFaltanteTxt }} más</sc-if></div>
               <sc-if value="{{ chkFuera }}" hint-placeholder-val="{{ false }}"><div style="background:#fdeceb;border:1px solid #f6cfcc;color:#b23a32;font-weight:600;font-size:12.5px;padding:9px 12px;border-radius:11px;margin-bottom:12px">Esa distancia está fuera de cobertura. Prueba recoger en sucursal.</div></sc-if>
               <div style="display:flex;flex-direction:column;gap:9px">
-                <input onInput="{{ onField('calle') }}" placeholder="Calle" style="width:100%;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15">
-                <div style="display:flex;gap:9px"><input onInput="{{ onField('num') }}" placeholder="Número" style="flex:1;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"><input onInput="{{ onField('col') }}" placeholder="Colonia" style="flex:1.4;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></div>
-                <input onInput="{{ onField('ref') }}" placeholder="Referencias (portón, color, entre calles)" style="width:100%;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15">
+                <input onInput="{{ onCalle }}" placeholder="Calle" style="width:100%;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15">
+                <div style="display:flex;gap:9px"><input onInput="{{ onNumero }}" placeholder="Número" style="flex:1;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"><input onInput="{{ onColonia }}" placeholder="Colonia" style="flex:1.4;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></div>
+                <input onInput="{{ onReferencias }}" placeholder="Referencias (portón, color, entre calles)" style="width:100%;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15">
               </div>
             </div>
           </sc-if>
           <sc-if value="{{ chkRecoger }}" hint-placeholder-val="{{ true }}">
             <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:15px;margin-bottom:16px">
               <div style="font-weight:700;font-size:14.5px;color:#211E15;margin-bottom:9px">Datos para recoger</div>
-              <input onInput="{{ onField('nombre') }}" placeholder="Nombre de quien recoge" style="width:100%;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;margin-bottom:9px;background:#fff;color:#211E15">
+              <input onInput="{{ onNombre }}" placeholder="Nombre de quien recoge" style="width:100%;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;margin-bottom:9px;background:#fff;color:#211E15">
               <div style="display:flex;align-items:center;gap:9px;background:#eaf4ec;border:1px solid #cfe0c6;border-radius:11px;padding:11px 13px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#10603A" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg><span style="font-size:13px;color:#10603A;font-weight:600">Lo antes posible · listo en 15–20 min</span></div>
             </div>
           </sc-if>
 
           <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:15px;margin-bottom:16px">
             <div style="font-weight:700;font-size:14.5px;color:#211E15;margin-bottom:9px">Tus datos</div>
-            <div style="display:flex;gap:9px"><input onInput="{{ onField('nombre') }}" placeholder="Nombre" style="flex:1;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"><input onInput="{{ onField('tel') }}" placeholder="Teléfono" style="flex:1;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></div>
+            <div style="display:flex;gap:9px"><input onInput="{{ onNombre }}" placeholder="Nombre" style="flex:1;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"><input onInput="{{ onTelefono }}" placeholder="Teléfono" style="flex:1;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></div>
           </div>
 
           <div style="font-size:13px;font-weight:800;color:#8a7f66;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">Método de pago</div>
@@ -523,7 +523,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.2.4';
+  static APP_VERSION = '2.2.5';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
@@ -762,7 +762,9 @@ class Component extends DCLogic {
       chkDescTxt:'−'+this.MXN(desc), chkHasDesc:desc>0,
       chkTotalTxt:this.MXN(this.totalFinal()),
       chkPuntos:this.puntosGanados(),
-      onField:(k)=>(e)=>this.setField(k,e.target.value),
+      onCalle:(e)=>this.setField('calle',e?.target?.value||''),onNumero:(e)=>this.setField('num',e?.target?.value||''),
+      onColonia:(e)=>this.setField('col',e?.target?.value||''),onReferencias:(e)=>this.setField('ref',e?.target?.value||''),
+      onNombre:(e)=>this.setField('nombre',e?.target?.value||''),onTelefono:(e)=>this.setField('tel',e?.target?.value||''),
       dirCalle:this.state.dir.calle||'', dirNum:this.state.dir.num||'', dirCol:this.state.dir.col||'', dirRef:this.state.dir.ref||'', dirNombre:this.state.dir.nombre||'', dirTel:this.state.dir.tel||'',
       onHacerPedido:()=>this.hacerPedido(),
     };
