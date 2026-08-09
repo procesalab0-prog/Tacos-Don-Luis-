@@ -7,17 +7,20 @@
   <style>
     *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:#F3F0E6;color:#211E15;font-family:system-ui,sans-serif}
     main{width:min(100%,420px);background:#FFFDF7;border:1px solid #E6DCC5;border-radius:24px;padding:28px;box-shadow:0 18px 50px rgba(16,96,58,.13);text-align:center}
-    .logo{width:62px;height:62px;margin:auto;border-radius:50%;display:grid;place-items:center;background:#10603A;color:#fff;font-weight:800}
+    .logo{cursor:pointer;user-select:none;width:62px;height:62px;margin:auto;border-radius:50%;display:grid;place-items:center;background:#10603A;color:#fff;font-weight:800}
     h1{color:#10603A;margin:16px 0 8px;font-size:25px}p{color:#74694f;line-height:1.5;margin:0}
     .tag{display:inline-block;margin-top:18px;padding:7px 12px;border-radius:999px;background:#F2C230;color:#3a2c00;font-size:12px;font-weight:800}
+    .egg{display:none;position:fixed;inset:0;z-index:10;background:rgba(16,20,14,.6);align-items:center;justify-content:center;padding:24px}.egg.open{display:flex}.egg-card{width:min(100%,340px);background:#FFFDF7;border-radius:22px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.4)}.egg-head{background:linear-gradient(#178049,#10603A);padding:26px 20px 20px;color:#fff;font-weight:800;font-size:18px}.egg-body{padding:22px 24px 24px}.version{display:inline-block;margin:14px 0;background:#F3F0E6;color:#8a7f66;font-size:12px;font-weight:700;padding:6px 14px;border-radius:999px}.close{width:100%;background:#10603A;color:#fff;border:0;border-radius:12px;padding:11px;font-weight:700}
   </style>
 </head>
 <body>
   <main>
-    <div class="logo">TDL</div>
+    <div class="logo" id="logo">TDL</div>
     <h1>Portal del repartidor</h1>
     <p>La ruta ya está reservada. El acceso, los pedidos asignados, la navegación y la liquidación se activarán con el diseño de la fase 2.</p>
     <span class="tag">FASE 2 EN PREPARACIÓN</span>
   </main>
+  <div class="egg" id="egg"><div class="egg-card"><div class="egg-head">🌮✨<br>¡Encontraste el Easter egg!</div><div class="egg-body">Esta plataforma fue hecha por<br><a href="https://procesalab0-prog.github.io/ProcesaLabWeb/" target="_blank" rel="noopener"><strong>ProcesaLab</strong></a><br><span class="version">VERSIÓN 2.1.4</span><button class="close" id="close">Cerrar</button></div></div></div>
+  <script>let taps=0,timer;const logo=document.getElementById('logo'),egg=document.getElementById('egg');logo.addEventListener('click',()=>{clearTimeout(timer);taps++;if(taps>=6){taps=0;egg.classList.add('open')}timer=setTimeout(()=>taps=0,1200)});document.getElementById('close').addEventListener('click',()=>egg.classList.remove('open'));</script>
 </body>
 </html>
