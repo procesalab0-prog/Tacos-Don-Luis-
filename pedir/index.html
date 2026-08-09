@@ -32,7 +32,7 @@
   <div style="width:100%;max-width:{{ shellMax }};background:#F3F0E6;min-height:100vh;position:relative;box-shadow:0 0 60px rgba(0,0,0,.12);display:flex;flex-direction:column">
 
     <header style="position:sticky;top:0;z-index:30;background:#10603A;color:#fff;padding:11px 16px;display:flex;align-items:center;gap:12px">
-      <button onClick="{{ goHome }}" style="cursor:pointer;background:none;border:none;display:flex;align-items:center;gap:9px;padding:0">
+      <button onClick="{{ onTapLogo }}" style="cursor:pointer;background:none;border:none;display:flex;align-items:center;gap:9px;padding:0">
         <span style="width:38px;height:38px;border-radius:50%;background:#F3F0E6;color:#10603A;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:14px;flex:0 0 auto">TDL</span>
         <span style="display:flex;flex-direction:column;line-height:1;text-align:left"><span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:17px;color:#fff">Tacos Don Luis</span><span style="font-size:9.5px;color:#F2C230;font-weight:700;letter-spacing:.14em">PUNTO CAÑADA</span></span>
       </button>
@@ -503,6 +503,15 @@
       </sc-for>
     </nav>
 
+    <sc-if value="{{ showEasterEgg }}" hint-placeholder-val="{{ false }}">
+      <div style="position:fixed;inset:0;z-index:100;background:rgba(16,20,14,.6);display:flex;align-items:center;justify-content:center;padding:24px;animation:dlfade .2s">
+        <div style="width:100%;max-width:340px;background:#FFFDF7;border-radius:22px;box-shadow:0 30px 70px rgba(0,0,0,.4);overflow:hidden;text-align:center;animation:dlpop .3s">
+          <div style="background:linear-gradient(#178049,#10603A);padding:26px 20px 20px;color:#fff"><div style="font-size:34px">🌮✨</div><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:18px;margin-top:8px">¡Encontraste el Easter egg!</div></div>
+          <div style="padding:22px 24px 24px"><div style="font-size:14px;color:#4a3d28;line-height:1.6">Esta plataforma fue hecha por<br><a href="https://procesalab0-prog.github.io/ProcesaLabWeb/" target="_blank" rel="noopener" style="color:#10603A;font-weight:800;font-size:16px;text-decoration:underline">ProcesaLab</a></div><div style="margin-top:14px;display:inline-block;background:#F3F0E6;color:#8a7f66;font-size:12px;font-weight:700;letter-spacing:.06em;padding:6px 14px;border-radius:999px">VERSIÓN {{ appVersion }}</div><button onClick="{{ onCloseEasterEgg }}" style="cursor:pointer;margin-top:18px;width:100%;background:#10603A;color:#fff;border:none;border-radius:12px;padding:11px;font-weight:700;font-size:14px">Cerrar</button></div>
+        </div>
+      </div>
+    </sc-if>
+
     <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
       <div style="position:fixed;left:50%;transform:translateX(-50%);bottom:78px;z-index:90;background:#10603A;color:#fff;padding:12px 20px;border-radius:13px;box-shadow:0 12px 30px rgba(0,0,0,.3);font-weight:600;font-size:14px;display:flex;align-items:center;gap:10px;animation:dlpop .3s;max-width:90vw">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#8FD694" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>{{ toast }}
@@ -513,7 +522,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.1.3';
+  static APP_VERSION = '2.1.4';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
@@ -522,7 +531,7 @@ class Component extends DCLogic {
     folio:null, trackStep:0, cuentaTab:'perfil', logged:false,
     remoteMenu:null, remoteCategories:null, remoteZones:null, modifierOptions:null, branchId:null,
     settings:null, submitting:false, trackingToken:null, liveOrder:null,
-    authEmail:'',authPassword:'',session:null,currentUser:null };
+    authEmail:'',authPassword:'',session:null,currentUser:null,logoTaps:0,showEasterEgg:false };
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
   componentDidMount(){
@@ -538,6 +547,7 @@ class Component extends DCLogic {
   componentWillUnmount(){ window.removeEventListener('resize',this._onR); clearInterval(this._trk); clearInterval(this._poll); }
   toast(m){ clearTimeout(this._t); this.setState({toast:m}); this._t=setTimeout(()=>this.setState({toast:null}),2400); }
   go(r){ this.setState({route:r}); if(typeof window!=='undefined') window.scrollTo?.({top:0}); }
+  tapLogo(){ clearTimeout(this._logoTapTimer); const taps=(this.state.logoTaps||0)+1; if(taps>=6){this.setState({logoTaps:0,showEasterEgg:true});return;} this.setState({logoTaps:taps}); this._logoTapTimer=setTimeout(()=>this.setState({logoTaps:0}),1200); }
 
   async api(path,options={}){
     const headers={apikey:Component.SUPABASE_KEY,'Content-Type':'application/json',...(options.headers||{})};
@@ -902,6 +912,7 @@ class Component extends DCLogic {
       cartLines, cartEmpty:cartLines.length===0, cartNotEmpty:cartLines.length>0, cartSubTxt:this.MXN(sub),
       goCheckout:()=>{ if(!this.state.cart.length){this.toast('Tu carrito está vacío');return;} this.go('checkout'); },
       goHome:()=>this.go('home'), goMenu:()=>this.go('menu'), goCart:()=>this.go('carrito'), goCuenta:()=>this.go('cuenta'),
+      onTapLogo:()=>{this.tapLogo();this.go('home');},showEasterEgg:this.state.showEasterEgg,onCloseEasterEgg:()=>this.setState({showEasterEgg:false}),appVersion:Component.APP_VERSION,
       stop:(e)=>{ e&&e.stopPropagation&&e.stopPropagation(); },
       openWA:()=>this.toast('Abriendo WhatsApp… (demo)'),
       estadoTxt:est.txt, estadoC:est.c, estadoBg:est.bg, estadoDot:est.dot,
