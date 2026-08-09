@@ -265,9 +265,9 @@
               <div style="background:#eaf4ec;border:1px solid #cfe0c6;color:#10603A;font-weight:600;font-size:12.5px;padding:9px 12px;border-radius:11px;margin-bottom:12px">Pedido mínimo para envío: {{ chkMinimoTxt }}<sc-if value="{{ chkFaltaMinimo }}" hint-placeholder-val="{{ false }}"> · agrega {{ chkFaltanteTxt }} más</sc-if></div>
               <sc-if value="{{ chkFuera }}" hint-placeholder-val="{{ false }}"><div style="background:#fdeceb;border:1px solid #f6cfcc;color:#b23a32;font-weight:600;font-size:12.5px;padding:9px 12px;border-radius:11px;margin-bottom:12px">Esa distancia está fuera de cobertura. Prueba recoger en sucursal.</div></sc-if>
               <div style="display:flex;flex-direction:column;gap:9px">
-                <input onInput="{{ onCalle }}" placeholder="Calle" style="width:100%;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15">
-                <div style="display:flex;gap:9px"><input onInput="{{ onNumero }}" placeholder="Número" style="flex:1;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"><input onInput="{{ onColonia }}" placeholder="Colonia" style="flex:1.4;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></div>
-                <input onInput="{{ onReferencias }}" placeholder="Referencias (portón, color, entre calles)" style="width:100%;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15">
+                <input value="{{ dirCalle }}" onInput="{{ onCalle }}" placeholder="Calle" style="width:100%;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15">
+                <div style="display:flex;gap:9px"><input value="{{ dirNum }}" onInput="{{ onNumero }}" placeholder="Número" style="flex:1;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"><input value="{{ dirCol }}" onInput="{{ onColonia }}" placeholder="Colonia" style="flex:1.4;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></div>
+                <input value="{{ dirRef }}" onInput="{{ onReferencias }}" placeholder="Referencias (portón, color, entre calles)" style="width:100%;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15">
               </div>
               <div style="margin-top:12px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px"><div><div style="font-weight:700;font-size:13.5px;color:#211E15">Marca el punto de entrega</div><div style="font-size:11.5px;color:#8a7f66">Toca el mapa o usa tu ubicación actual</div></div><button onClick="{{ onUseLocation }}" style="cursor:pointer;border:1.5px solid #10603A;background:#fff;color:#10603A;border-radius:10px;padding:8px 10px;font-weight:700;font-size:11.5px">Usar mi ubicación</button></div><div id="delivery-map" style="height:210px;border-radius:13px;overflow:hidden;border:1px solid #d6ccb5;background:#e7e1d3"></div><div id="delivery-coordinates" style="font-size:11.5px;color:#10603A;font-weight:600;margin-top:7px">Ubicación opcional · puedes marcarla en el mapa</div></div>
             </div>
@@ -275,14 +275,14 @@
           <sc-if value="{{ chkRecoger }}" hint-placeholder-val="{{ true }}">
             <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:15px;margin-bottom:16px">
               <div style="font-weight:700;font-size:14.5px;color:#211E15;margin-bottom:9px">Datos para recoger</div>
-              <input onInput="{{ onNombre }}" placeholder="Nombre de quien recoge" style="width:100%;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;margin-bottom:9px;background:#fff;color:#211E15">
+              <input value="{{ dirNombre }}" onInput="{{ onNombre }}" placeholder="Nombre de quien recoge" style="width:100%;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;margin-bottom:9px;background:#fff;color:#211E15">
               <div style="display:flex;align-items:center;gap:9px;background:#eaf4ec;border:1px solid #cfe0c6;border-radius:11px;padding:11px 13px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#10603A" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg><span style="font-size:13px;color:#10603A;font-weight:600">Lo antes posible · listo en 15–20 min</span></div>
             </div>
           </sc-if>
 
           <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:15px;margin-bottom:16px">
             <div style="font-weight:700;font-size:14.5px;color:#211E15;margin-bottom:9px">Tus datos</div>
-            <div style="display:flex;gap:9px"><input onInput="{{ onNombre }}" placeholder="Nombre" style="flex:1;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"><input onInput="{{ onTelefono }}" placeholder="Teléfono" style="flex:1;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></div>
+            <div style="display:flex;gap:9px"><input value="{{ dirNombre }}" onInput="{{ onNombre }}" placeholder="Nombre" style="flex:1;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"><input value="{{ dirTel }}" onInput="{{ onTelefono }}" placeholder="Teléfono" style="flex:1;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></div>
           </div>
 
           <div style="font-size:13px;font-weight:800;color:#8a7f66;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">Método de pago</div>
@@ -526,7 +526,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.3.0';
+  static APP_VERSION = '2.3.1';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
@@ -543,10 +543,12 @@ class Component extends DCLogic {
     this.setState({vw:window.innerWidth});
     window.addEventListener('resize',this._onR);
     this.loadPublicData();
+    const draft=JSON.parse(localStorage.getItem('donLuisCheckoutDraft')||'null');
+    if(draft?.dir){this._pickedLatLng=draft.location||null;this.setState({dir:draft.dir});}
     const saved=localStorage.getItem('donLuisTrackingToken');
     if(saved)this.setState({trackingToken:saved});
     const session=JSON.parse(localStorage.getItem('donLuisSession')||'null');
-    if(session?.access_token)this.setState({session,currentUser:session.user,logged:true});
+    if(session?.access_token){this.setState({session,currentUser:session.user,logged:true});this.loadCustomerData(session);}
   }
   componentDidUpdate(){ if(this.state.route==='checkout'&&this.state.entrega==='domicilio')this.scheduleMap(); }
   componentWillUnmount(){ window.removeEventListener('resize',this._onR); clearInterval(this._trk); clearInterval(this._poll); clearTimeout(this._mapTimer); if(this._map)try{this._map.remove();}catch(_){} }
@@ -555,7 +557,8 @@ class Component extends DCLogic {
   tapLogo(){ clearTimeout(this._logoTapTimer); const taps=(this.state.logoTaps||0)+1; if(taps>=6){this.setState({logoTaps:0,showEasterEgg:true});return;} this.setState({logoTaps:taps}); this._logoTapTimer=setTimeout(()=>this.setState({logoTaps:0}),1200); }
 
   async api(path,options={}){
-    const headers={apikey:Component.SUPABASE_KEY,'Content-Type':'application/json',...(options.headers||{})};
+    const token=options.token||this.state.session?.access_token;
+    const headers={apikey:Component.SUPABASE_KEY,'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{}),...(options.headers||{})};
     const res=await fetch(Component.SUPABASE_URL+path,{...options,headers});
     const data=await res.json().catch(()=>null);
     if(!res.ok)throw new Error(data?.error||'No fue posible conectar con Don Luis');
@@ -583,6 +586,7 @@ class Component extends DCLogic {
       const session=await this.api('/auth/v1/token?grant_type=password',{method:'POST',body:JSON.stringify({email:this.state.authEmail.trim(),password:this.state.authPassword})});
       localStorage.setItem('donLuisSession',JSON.stringify(session));
       this.setState({session,currentUser:session.user,logged:true,authPassword:''});
+      await this.loadCustomerData(session);
       this.toast('Sesión iniciada');
     }catch(error){this.toast(error.message||'No fue posible iniciar sesión');}
   }
@@ -592,11 +596,34 @@ class Component extends DCLogic {
       if(result.access_token){
         localStorage.setItem('donLuisSession',JSON.stringify(result));
         this.setState({session:result,currentUser:result.user,logged:true,authPassword:''});
+        await this.loadCustomerData(result);
       }
       this.toast(result.access_token?'Cuenta creada':'Revisa tu correo para confirmar la cuenta');
     }catch(error){this.toast(error.message||'No fue posible crear la cuenta');}
   }
   signOut(){localStorage.removeItem('donLuisSession');this.setState({session:null,currentUser:null,logged:false});this.toast('Sesión cerrada');}
+  async loadCustomerData(session=this.state.session){
+    if(!session?.user?.id)return;
+    try{
+      const [customers,profiles]=await Promise.all([
+        this.api('/rest/v1/customers?user_id=eq.'+session.user.id+'&select=id,full_name,phone,customer_addresses(*)&limit=1',{token:session.access_token}),
+        this.api('/rest/v1/profiles?id=eq.'+session.user.id+'&select=full_name,phone&limit=1',{token:session.access_token})
+      ]);
+      const customer=customers[0],profile=profiles[0]||{};const addresses=customer?.customer_addresses||[];const address=addresses.find(a=>a.is_default)||addresses[0];
+      const current=this.state.dir||{};const dir={...current,nombre:customer?.full_name||profile.full_name||current.nombre||'',tel:customer?.phone||profile.phone||current.tel||''};
+      if(address){Object.assign(dir,{calle:address.street||'',num:address.exterior_number||'',col:address.neighborhood||'',ref:address.references_text||'',savedAddressId:address.id});if(address.latitude!=null&&address.longitude!=null)this._pickedLatLng={lat:Number(address.latitude),lng:Number(address.longitude)};}
+      this.setState({dir});this.persistCheckoutDraft(dir);
+    }catch(error){console.error(error);}
+  }
+  async saveCustomerData(){
+    const session=this.state.session;if(!session?.user?.id)return;
+    const d=this.state.dir;const headers={Prefer:'resolution=merge-duplicates,return=representation'};
+    const customers=await this.api('/rest/v1/customers?on_conflict=user_id',{method:'POST',headers,body:JSON.stringify({user_id:session.user.id,full_name:d.nombre.trim(),phone:d.tel.trim(),email:session.user.email||null,whatsapp_opt_in:true})});
+    const customer=customers[0];if(!customer||this.state.entrega!=='domicilio')return;
+    const row={customer_id:customer.id,label:'Casa',street:d.calle.trim(),exterior_number:(d.num||'').trim(),neighborhood:(d.col||'').trim(),city:'León',state:'Guanajuato',references_text:(d.ref||'').trim()||null,latitude:this._pickedLatLng?.lat||null,longitude:this._pickedLatLng?.lng||null,is_default:true};
+    if(d.savedAddressId)await this.api('/rest/v1/customer_addresses?id=eq.'+d.savedAddressId,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(row)});
+    else{const saved=await this.api('/rest/v1/customer_addresses',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(row)});if(saved[0])this.setState({dir:{...d,savedAddressId:saved[0].id}});}
+  }
   get menu(){ if(this.state.remoteMenu?.length)return this.state.remoteMenu; return [
     {id:'t_pastor',nombre:'Taco al pastor',cat:'Tacos',precio:17,desc:'Cerdo al pastor, cebolla y cilantro',foto:null,tag:'Favorito'},
     {id:'t_bistec',nombre:'Taco de bistec',cat:'Tacos',precio:17,desc:'Res a la plancha, cebolla y cilantro',foto:null,tag:'Top'},
@@ -671,7 +698,8 @@ class Component extends DCLogic {
   }
   envioActual(){ if(this.state.entrega!=='domicilio') return 0; const z=this.state.dir.zona; const t=this.coberturaTarifas.find(x=>x.label===z); return t?t.precio:0; }
   fueraCobertura(){ return this.state.entrega==='domicilio' && this.state.dir.zona==='Más de 5 km · fuera de cobertura'; }
-  setField(k,v){ this.setState({dir:{...this.state.dir,[k]:v}}); }
+  persistCheckoutDraft(dir=this.state.dir){try{localStorage.setItem('donLuisCheckoutDraft',JSON.stringify({dir,location:this._pickedLatLng||null}));}catch(_){}}
+  setField(k,v){ const dir={...this.state.dir,[k]:v};this.state.dir=dir;this.persistCheckoutDraft(dir); }
   scheduleMap(){clearTimeout(this._mapTimer);this._mapTimer=setTimeout(()=>this.initMap(),80);}
   initMap(){
     const el=document.getElementById('delivery-map');if(!el||!window.L)return;
@@ -688,6 +716,7 @@ class Component extends DCLogic {
     this._pickedLatLng={lat:Number(lat.toFixed(6)),lng:Number(lng.toFixed(6))};
     if(this._map){if(this._mapMarker)this._mapMarker.setLatLng([lat,lng]);else this._mapMarker=L.marker([lat,lng]).addTo(this._map);}
     const label=document.getElementById('delivery-coordinates');if(label)label.textContent='Punto marcado: '+this._pickedLatLng.lat+', '+this._pickedLatLng.lng;
+    this.persistCheckoutDraft();
   }
   useLocation(){
     if(!navigator.geolocation){this.toast('Tu navegador no permite obtener ubicación');return;}
@@ -737,6 +766,7 @@ class Component extends DCLogic {
         })
       });
       const folio='DL-'+result.order.folio;
+      try{await this.saveCustomerData();}catch(error){console.error(error);}
       localStorage.setItem('donLuisTrackingToken',result.trackingToken);
       this.setState({folio,trackingToken:result.trackingToken,liveOrder:result.order,route:'confirmacion',trackStep:0,prog:false,submitting:false});
       this.toast('¡Pedido recibido! 🌮');
