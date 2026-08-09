@@ -24,6 +24,8 @@
   @keyframes dlspin{to{transform:rotate(360deg)}}
   @keyframes dlpulse{0%,100%{opacity:1}50%{opacity:.4}}
   @keyframes dlring{0%{box-shadow:0 0 0 0 rgba(214,69,61,.5)}70%{box-shadow:0 0 0 12px rgba(214,69,61,0)}100%{box-shadow:0 0 0 0 rgba(214,69,61,0)}}
+  .dl-admin-main{padding:22px 24px}
+  @media(max-width:819px){.dl-admin-main{padding:16px 12px calc(160px + env(safe-area-inset-bottom))}}
 </style>
 </helmet>
 
@@ -40,16 +42,16 @@
       <sc-if value="{{ inviteMode }}" hint-placeholder-val="{{ false }}">
         <div style="text-align:center;margin-bottom:16px"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:21px;color:#10603A">Crea tu contraseña</div><div style="font-size:12.5px;color:#8a7f66;margin-top:4px">Activa tu acceso de Dueño para Punto Cañada</div></div>
         <div style="display:grid;gap:9px">
-          <input type="password" value="{{ invitePassword }}" onInput="{{ setInvitePassword }}" placeholder="Nueva contraseña (mínimo 8 caracteres)" autocomplete="new-password" style="width:100%;padding:12px 14px;border:1.5px solid #E6DCC5;border-radius:12px;background:#fff;font:500 14px 'Rubik',sans-serif;color:#211E15;outline:none">
-          <input type="password" value="{{ inviteConfirm }}" onInput="{{ setInviteConfirm }}" placeholder="Confirma la contraseña" autocomplete="new-password" style="width:100%;padding:12px 14px;border:1.5px solid #E6DCC5;border-radius:12px;background:#fff;font:500 14px 'Rubik',sans-serif;color:#211E15;outline:none">
+          <input type="password" onInput="{{ setInvitePassword }}" placeholder="Nueva contraseña (mínimo 8 caracteres)" autocomplete="new-password" style="width:100%;padding:12px 14px;border:1.5px solid #E6DCC5;border-radius:12px;background:#fff;font:500 14px 'Rubik',sans-serif;color:#211E15;outline:none">
+          <input type="password" onInput="{{ setInviteConfirm }}" placeholder="Confirma la contraseña" autocomplete="new-password" style="width:100%;padding:12px 14px;border:1.5px solid #E6DCC5;border-radius:12px;background:#fff;font:500 14px 'Rubik',sans-serif;color:#211E15;outline:none">
           <button onClick="{{ finishInvite }}" disabled="{{ authBusy }}" style="cursor:pointer;width:100%;background:#10603A;color:#fff;border:none;border-radius:12px;padding:13px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px">{{ inviteButton }}</button>
         </div>
       </sc-if>
       <sc-if value="{{ showLoginOptions }}" hint-placeholder-val="{{ true }}">
       <div style="font-size:12.5px;font-weight:800;letter-spacing:.06em;color:#8a7f66;text-transform:uppercase;margin-bottom:10px;text-align:center">Acceso del personal</div>
       <div style="display:grid;gap:9px;margin-bottom:12px">
-        <input type="email" value="{{ authEmail }}" onInput="{{ setAuthEmail }}" placeholder="Correo del personal" autocomplete="username" style="width:100%;padding:12px 14px;border:1.5px solid #E6DCC5;border-radius:12px;background:#fff;font:500 14px 'Rubik',sans-serif;color:#211E15;outline:none">
-        <input type="password" value="{{ authPassword }}" onInput="{{ setAuthPassword }}" placeholder="Contraseña" autocomplete="current-password" style="width:100%;padding:12px 14px;border:1.5px solid #E6DCC5;border-radius:12px;background:#fff;font:500 14px 'Rubik',sans-serif;color:#211E15;outline:none">
+        <input type="email" onInput="{{ setAuthEmail }}" placeholder="Correo del personal" autocomplete="username" style="width:100%;padding:12px 14px;border:1.5px solid #E6DCC5;border-radius:12px;background:#fff;font:500 14px 'Rubik',sans-serif;color:#211E15;outline:none">
+        <input type="password" onInput="{{ setAuthPassword }}" placeholder="Contraseña" autocomplete="current-password" style="width:100%;padding:12px 14px;border:1.5px solid #E6DCC5;border-radius:12px;background:#fff;font:500 14px 'Rubik',sans-serif;color:#211E15;outline:none">
         <button onClick="{{ signIn }}" disabled="{{ authBusy }}" style="cursor:pointer;width:100%;background:#10603A;color:#fff;border:none;border-radius:12px;padding:13px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px">{{ authButton }}</button>
       </div>
       <div style="font-size:11.5px;color:#8a7f66;text-align:center;margin-bottom:16px">El acceso real usa cuentas autorizadas en Punto Cañada.</div>
@@ -105,7 +107,7 @@
       <span style="display:flex;align-items:center;gap:8px;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:999px;padding:4px 5px 4px 12px"><span style="font-size:13px;font-weight:600;color:#4a3d28">{{ rol }}</span><span style="width:30px;height:30px;border-radius:50%;background:#10603A;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px">{{ rolIni }}</span></span>
     </header>
 
-    <main style="flex:1;min-width:0;padding:{{ showBottomNav ? '16px 12px calc(152px + env(safe-area-inset-bottom))' : '22px 24px' }};overflow-x:hidden">
+    <main class="dl-admin-main" style="flex:1;min-width:0;overflow-x:hidden">
       <!--SECTIONS-->
       <sc-if value="{{ isPedidos }}" hint-placeholder-val="{{ true }}">
         <div style="animation:dlfade .3s ease both">
@@ -355,7 +357,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.1.6';
+  static APP_VERSION = '2.1.7';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { rol:null, route:'pedidos', vw:1280, toast:null, sonido:true,
