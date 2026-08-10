@@ -188,7 +188,7 @@
             <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:20px;color:#fff">Tacos Don Luis</div>
             <div style="font-size:11px;color:#F2C230;font-weight:700;letter-spacing:.14em;margin-top:2px">FRESCO · SABROSO · HECHO CON ORGULLO</div>
             <div style="display:flex;gap:14px;margin:16px 0;font-size:13px;font-weight:600"><a href="#" style="color:#eaf3ec">Aviso de privacidad</a><a href="#" style="color:#eaf3ec">Términos</a></div>
-            <div style="font-size:12px;color:#8bb193;line-height:1.5">Punto Cañada, León, Gto. · <a href="tel:+524775222095" style="color:#cfe3d3">Tel. 477 522 2095</a><br>© 2026 Tacos Don Luis · Prototipo demo</div>
+            <div style="font-size:12px;color:#8bb193;line-height:1.5">Punto Cañada, León, Gto. · <a href="tel:+524775222095" style="color:#cfe3d3">Tel. 477 522 2095</a><br>© 2026 Tacos Don Luis</div>
           </footer>
         </div>
       </sc-if>
@@ -299,12 +299,6 @@
               <div style="font-weight:700;font-size:13.5px;color:#8a6d12;margin-bottom:8px">Sube tu comprobante</div>
               <div style="border:1.5px dashed #d9c583;border-radius:11px;padding:16px;text-align:center;color:#a98c2e;background:#fffdf5"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:6px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"></path></svg><div style="font-size:12.5px;font-weight:600">Toca para adjuntar imagen</div></div>
               <div style="font-size:11.5px;color:#a98c2e;margin-top:8px">Tu pago quedará como <strong>“Pendiente de verificar”</strong> hasta que la sucursal lo confirme.</div>
-            </div>
-          </sc-if>
-          <sc-if value="{{ chkClip }}" hint-placeholder-val="{{ false }}">
-            <div style="background:#eef4eb;border:1.5px solid #10603A;border-radius:14px;padding:14px;margin-bottom:16px">
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:17px;color:#10603A">Pagar con Clip</div><span style="background:#F2C230;color:#3a2c00;font-size:10px;font-weight:800;letter-spacing:.1em;padding:4px 9px;border-radius:999px">SIMULACIÓN</span></div>
-              <div style="font-size:12.5px;color:#4f634f;line-height:1.45;margin-top:7px">Para esta demo no se solicitarán datos de tarjeta ni se realizará un cobro. Simularemos una aprobación y el pedido aparecerá pagado en administración.</div>
             </div>
           </sc-if>
 
@@ -537,7 +531,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.7.0';
+  static APP_VERSION = '2.8.0';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
@@ -825,7 +819,6 @@ class Component extends DCLogic {
     if(!this.state.dir.nombre?.trim()||!this.state.dir.tel?.trim()){this.toast('Agrega tu nombre y teléfono');return;}
     if(!this.state.remoteMenu){this.toast('Espera a que termine de cargar el menú');return;}
     if(this.state.submitting)return;
-    if(this.state.pago==='clip'&&!window.confirm('SIMULACIÓN CLIP\n\nNo se realizará ningún cobro ni se pedirán datos de tarjeta. ¿Quieres simular un pago aprobado y crear el pedido?'))return;
     this.setState({submitting:true});
     try{
       const pending=JSON.parse(localStorage.getItem('donLuisPendingOrder')||'null');
@@ -846,8 +839,8 @@ class Component extends DCLogic {
         body:JSON.stringify({
           requestId,branchSlug:'punto-canada',
           fulfillmentType:this.state.entrega==='domicilio'?'delivery':'pickup',
-          paymentMethod:{efectivo:'cash',transferencia:'transfer',tarjeta:'card_present',clip:'clip_simulated'}[this.state.pago],
-          customerNotes:this.state.pago==='clip'?'Pago en línea Clip simulado durante la demostración':'',
+          paymentMethod:{efectivo:'cash',transferencia:'transfer',tarjeta:'card_present'}[this.state.pago],
+          customerNotes:'',
           customer:{name:this.state.dir.nombre,phone:this.state.dir.tel},
           deliveryZoneId:selectedZone?.id||null,
           address:this.state.entrega==='domicilio'?{
@@ -902,7 +895,7 @@ class Component extends DCLogic {
     const entrega=this.state.entrega;
     const modos=[['recoger','Pasar a recoger','M9 11l3 3 8-8M5 20V9a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v11'],['domicilio','Envío a domicilio','M1 3h15v13H1zM16 8h4l3 3v5h-7M5.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM18.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z']].map(([k,l,ic])=>({key:k,label:l,icon:ic,active:k===entrega,onClick:()=>this.setState({entrega:k}),
       style:`cursor:pointer;flex:1;padding:14px 10px;border-radius:15px;border:2px solid ${k===entrega?'#10603A':'#E6DCC5'};background:${k===entrega?'#eaf4ec':'#fff'};display:flex;flex-direction:column;align-items:center;gap:7px;color:${k===entrega?'#10603A':'#8a7f66'};font-weight:700;font-size:13px`}));
-    const pagos=[['efectivo','Efectivo','M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'],['transferencia','Transferencia','M4 12h16M8 8l-4 4 4 4M16 16l4-4-4-4'],['tarjeta','Tarjeta al recibir','M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 11h20'],['clip','Pago en línea con Clip · Demo','M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 11h20M6 16h4']].map(([k,l,ic])=>({key:k,label:l,icon:ic,active:k===this.state.pago,onClick:()=>this.setState({pago:k}),
+    const pagos=[['efectivo','Efectivo','M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'],['transferencia','Transferencia','M4 12h16M8 8l-4 4 4 4M16 16l4-4-4-4'],['tarjeta','Tarjeta al recibir','M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 11h20']].map(([k,l,ic])=>({key:k,label:l,icon:ic,active:k===this.state.pago,onClick:()=>this.setState({pago:k}),
       style:`cursor:pointer;width:100%;padding:13px 15px;border-radius:13px;border:1.5px solid ${k===this.state.pago?'#10603A':'#E6DCC5'};background:${k===this.state.pago?'#eaf4ec':'#fff'};display:flex;align-items:center;gap:12px;color:#211E15;font-weight:600;font-size:14px`}));
     const zonas=[...this.coberturaTarifas.map(t=>t.label+' · '+this.MXN(t.precio)),'Más de 5 km · fuera de cobertura'];
     const zonaSel=this.state.dir.zona||'';
@@ -916,7 +909,7 @@ class Component extends DCLogic {
     return {
       chkModos:modos, chkPagos:pagos, chkEntrega:entrega,
       chkDomicilio:entrega==='domicilio', chkRecoger:entrega==='recoger',
-      chkTransfer:this.state.pago==='transferencia',chkClip:this.state.pago==='clip',chkSubmitLabel:this.state.pago==='clip'?'Simular pago con Clip':'Hacer pedido',
+      chkTransfer:this.state.pago==='transferencia',chkClip:false,chkSubmitLabel:'Hacer pedido',
       zonaChips, chkFuera:fuera, chkMinimoTxt:this.MXN(minimum),chkFaltaMinimo:entrega==='domicilio'&&faltante>0,chkFaltanteTxt:this.MXN(faltante),
       chkSubTxt:this.MXN(this.cartSubtotal()),
       chkEnvioTxt:entrega==='domicilio'?(this.envioActual()?this.MXN(this.envioActual()):'Elige zona'):'Gratis',
@@ -936,7 +929,7 @@ class Component extends DCLogic {
     return {
       confFolio:this.state.folio||'DL-0000',
       confEntregaTxt:dom?'Envío a domicilio':'Pasar a recoger',
-      confPagoTxt:{efectivo:'Efectivo',transferencia:'Transferencia (por verificar)',tarjeta:'Tarjeta al recibir',clip:'Clip en línea · pago simulado'}[this.state.pago],
+      confPagoTxt:{efectivo:'Efectivo',transferencia:'Transferencia (por verificar)',tarjeta:'Tarjeta al recibir'}[this.state.pago],
       confTiempo:this.state.liveOrder?.promised_at?new Date(this.state.liveOrder.promised_at).toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}):(dom?'30 – 40 min':'15 – 20 min'),
       confTotalTxt:this.MXN(this.state.liveOrder?.total??this.totalFinal()),
       confPuntos:this.puntosGanados(),
@@ -964,7 +957,7 @@ class Component extends DCLogic {
       trkTiempo:entregado?'¡Entregado!':(dom?'Llega en ~'+(40-step*5)+' min':'Listo en ~'+(20-step*4)+' min'),
       trkCodigo:(this.state.folio||'DL-0000').slice(-4),
       trkRepartidor:dom&&step>=5,
-      onNuevo:()=>this.nuevoPedido(), onWA:()=>this.openWhatsApp(), onLlamar:()=>this.toast('Llamando… (demo)'),
+      onNuevo:()=>this.nuevoPedido(), onWA:()=>this.openWhatsApp(), onLlamar:()=>window.location.href='tel:+524775222095',
     };
   }
 
@@ -1004,11 +997,7 @@ class Component extends DCLogic {
     const activeOrder=accountActive||localActive;
     const activo=activeOrder?{folio:'DL-'+activeOrder.folio,estado:statusLabel[activeOrder.status]||'Pedido en curso',tiempo:activeOrder.fulfillment_type==='delivery'?'30–40 min':'15–20 min',onVer:()=>{this.setState({liveOrder:activeOrder,folio:'DL-'+activeOrder.folio,entrega:activeOrder.fulfillment_type==='delivery'?'domicilio':'recoger'});this.iniciarSeguimiento();}}:null;
     const realHistory=this.state.accountOrders.filter(o=>terminal.includes(o.status)).map(o=>({folio:'DL-'+o.folio,fecha:new Date(o.created_at).toLocaleDateString('es-MX',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}),total:this.MXN(o.total),items:(o.order_items||[]).map(i=>i.quantity+'× '+i.product_name).join(', '),onRepetir:()=>this.toast('La opción de repetir estará disponible pronto')}));
-    const historial=realHistory.length?realHistory:[
-      {folio:'DL-3980',fecha:'5 ago · 21:14',total:this.MXN(102),items:'3 tacos pastor, 1 quesadilla, agua',onRepetir:()=>this.toast('Pedido agregado al carrito (demo)')},
-      {folio:'DL-3902',fecha:'2 ago · 14:40',total:this.MXN(85),items:'2 tortas, 1 refresco',onRepetir:()=>this.toast('Pedido agregado al carrito (demo)')},
-      {folio:'DL-3811',fecha:'28 jul · 20:02',total:this.MXN(51),items:'3 tacos de bistec',onRepetir:()=>this.toast('Pedido agregado al carrito (demo)')},
-    ];
+    const historial=realHistory;
     return {pedActivo:activo, pedHasActivo:!!activo, pedHistorial:historial};
   }
 
@@ -1036,7 +1025,7 @@ class Component extends DCLogic {
     ];
     const faqs=[
       {q:'¿Hacen entregas a domicilio?',a:'Sí, en las colonias de la zona norte cercanas a Punto Cañada. El costo depende de la distancia.'},
-      {q:'¿Qué métodos de pago aceptan?',a:'Efectivo, transferencia y tarjeta al recoger o al recibir. El pago en línea con Clip aparece únicamente como simulación en esta demo.'},
+      {q:'¿Qué métodos de pago aceptan?',a:'Efectivo, transferencia y tarjeta al recoger o al recibir.'},
       {q:'¿Puedo programar mi pedido?',a:'Claro, al hacer tu pedido puedes elegir "lo antes posible" o una hora programada.'},
     ];
     const tabs=[
@@ -1097,7 +1086,7 @@ class Component extends DCLogic {
       goHome:()=>this.go('home'), goMenu:()=>this.go('menu'), goCart:()=>this.go('carrito'), goCuenta:()=>this.go('cuenta'),
       onTapLogo:()=>{this.tapLogo();this.go('home');},showEasterEgg:this.state.showEasterEgg,onCloseEasterEgg:()=>this.setState({showEasterEgg:false}),appVersion:Component.APP_VERSION,
       stop:(e)=>{ e&&e.stopPropagation&&e.stopPropagation(); },
-      openWA:()=>this.toast('Abriendo WhatsApp… (demo)'),
+      openWA:()=>this.openWhatsApp(),
       estadoTxt:est.txt, estadoC:est.c, estadoBg:est.bg, estadoDot:est.dot,
       tRecoger:'15–20 min', tEntrega:'30–40 min',
       cartCount:this.cartCount()||null,

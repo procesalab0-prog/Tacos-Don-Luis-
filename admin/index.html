@@ -37,7 +37,7 @@
 <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(1100px 620px at 50% -8%,#178049 0%,#10603A 52%,#0b4a2d 100%)">
   <div style="width:100%;max-width:520px;background:#FFFDF7;border-radius:24px;box-shadow:0 34px 80px rgba(0,0,0,.4);overflow:hidden;animation:dlpop .5s ease both">
     <div style="padding:28px 28px 22px;text-align:center;border-bottom:3px dotted #e0d6bf;position:relative">
-      <span style="position:absolute;top:14px;right:16px;background:#F2C230;color:#3a2c00;font-size:11px;font-weight:800;letter-spacing:.14em;padding:5px 11px;border-radius:999px">DEMO</span>
+      <span style="position:absolute;top:14px;right:16px;background:#10603A;color:#fff;font-size:11px;font-weight:800;letter-spacing:.14em;padding:5px 11px;border-radius:999px">EN VIVO</span>
       <span onClick="{{ onTapLogo }}" style="cursor:pointer;user-select:none;width:140px;height:140px;border-radius:24px;background:#F3F0E6;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;padding:5px"><img src="../assets/logo-don-luis-oficial.svg" alt="Tacos Don Luis" style="width:100%;height:100%;object-fit:contain"></span>
       <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:26px;color:#10603A">Panel de operación</div>
       <div style="font-size:13.5px;color:#8a7f66;margin-top:3px">Tacos Don Luis · Punto Cañada</div>
@@ -58,16 +58,7 @@
         <input type="password" onInput="{{ setAuthPassword }}" placeholder="Contraseña" autocomplete="current-password" style="width:100%;padding:12px 14px;border:1.5px solid #E6DCC5;border-radius:12px;background:#fff;font:500 14px 'Rubik',sans-serif;color:#211E15;outline:none">
         <button onClick="{{ signIn }}" disabled="{{ authBusy }}" style="cursor:pointer;width:100%;background:#10603A;color:#fff;border:none;border-radius:12px;padding:13px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px">{{ authButton }}</button>
       </div>
-      <div style="font-size:11.5px;color:#8a7f66;text-align:center;margin-bottom:16px">El acceso real usa cuentas autorizadas en Punto Cañada.</div>
-      <div style="display:flex;align-items:center;gap:10px;margin:2px 0 14px"><span style="height:1px;background:#E6DCC5;flex:1"></span><span style="font-size:11px;font-weight:800;color:#9a8e70;letter-spacing:.08em">O ABRIR VISTA DEMO</span><span style="height:1px;background:#E6DCC5;flex:1"></span></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
-        <sc-for list="{{ roles }}" as="r" hint-placeholder-count="6">
-          <button onClick="{{ r.onClick }}" style="cursor:pointer;text-align:left;border:2px solid #EADFC8;background:#fff;border-radius:15px;padding:14px;display:flex;align-items:center;gap:12px;transition:all .15s" style-hover="border-color:#10603A;box-shadow:0 8px 20px rgba(16,96,58,.14);transform:translateY(-1px)">
-            <span style="width:42px;height:42px;flex:0 0 auto;border-radius:12px;background:{{ r.bg }};color:#fff;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ r.icon }}"></path></svg></span>
-            <span><span style="display:block;font-weight:700;font-size:15px;color:#211E15">{{ r.label }}</span><span style="font-size:11.5px;color:#8a7f66">{{ r.desc }}</span></span>
-          </button>
-        </sc-for>
-      </div>
+      <div style="font-size:11.5px;color:#8a7f66;text-align:center">Usa una cuenta autorizada. Los cambios se guardan directamente en Punto Cañada.</div>
       </sc-if>
     </div>
   </div>
@@ -349,7 +340,7 @@
         <div style="padding:18px 20px">
           <div style="font-size:12.5px;font-weight:800;color:#8a7f66;text-transform:uppercase;letter-spacing:.04em;margin-bottom:9px">Tiempo estimado</div>
           <div style="display:flex;gap:8px;margin-bottom:16px"><sc-for list="{{ tiempoOpts }}" as="t" hint-placeholder-count="4"><button onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}</button></sc-for></div>
-          <div style="background:#eaf4ec;border:1px solid #cfe0c6;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:16px"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color:#25D366;flex:0 0 auto"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2z"></path></svg><span style="font-size:12.5px;color:#10603A;font-weight:600">Se enviará confirmación por WhatsApp al cliente (demo).</span></div>
+          <div style="background:#eaf4ec;border:1px solid #cfe0c6;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:16px"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color:#25D366;flex:0 0 auto"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2z"></path></svg><span style="font-size:12.5px;color:#10603A;font-weight:600">La confirmación queda registrada y puede compartirse por WhatsApp.</span></div>
           <button onClick="{{ confirmarAceptar }}" style="cursor:pointer;width:100%;background:#10603A;color:#fff;border:none;border-radius:13px;padding:14px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px">Aceptar y confirmar</button>
           <button onClick="{{ cerrarAceptar }}" style="cursor:pointer;width:100%;margin-top:8px;background:none;border:none;color:#8a7f66;font-weight:700;font-size:13.5px;padding:6px">Cancelar</button>
         </div>
@@ -361,14 +352,14 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.7.0';
+  static APP_VERSION = '2.8.0';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { rol:null, route:'pedidos', vw:1280, toast:null, sonido:true,
     canal:'todos', rechazoFor:null, aceptarFor:null, aceptarTiempo:20,
     authEmail:'',authPassword:'',authBusy:false,session:null,live:false,branchId:null,logoTaps:0,showEasterEgg:false,
     inviteMode:false,invitePassword:'',inviteConfirm:'',liveSettings:null,liveProducts:null,liveStocks:null,
-    liveCashShifts:null,liveCashMovements:null,liveCustomers:null,livePurchases:null,liveSuppliers:null,liveUsers:null,liveCategories:null,liveZones:null,liveLoyaltyRule:null };
+    liveCashShifts:null,liveCashMovements:null,liveCustomers:null,livePurchases:null,liveSuppliers:null,liveUsers:null,liveCategories:null,liveZones:null,liveLoyaltyRule:null,liveIngredients:null,liveInventoryMovements:null,liveRecipes:null };
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
   componentDidMount(){
@@ -452,19 +443,26 @@ class Component extends DCLogic {
   async loadSettings(token=this.state.session?.access_token,branchId=this.state.branchId){
     if(!token||!branchId)return;
     try{
-      const [settings,products,categories,zones,rules,staff]=await Promise.all([
+      const [settings,products,categories,zones,rules,staff,ingredients,movements,recipes,shifts,cashMovements,purchases,suppliers]=await Promise.all([
         this.api('/rest/v1/business_settings?branch_id=eq.'+branchId+'&select=*',{token}),
         this.api('/rest/v1/products?branch_id=eq.'+branchId+'&select=*&order=sort_order,name',{token}),
         this.api('/rest/v1/categories?branch_id=eq.'+branchId+'&select=*&order=sort_order',{token}),
         this.api('/rest/v1/delivery_zones?branch_id=eq.'+branchId+'&select=*&order=sort_order',{token}),
         this.api('/rest/v1/loyalty_rules?branch_id=eq.'+branchId+'&is_active=eq.true&select=*&limit=1',{token}).catch(()=>[]),
-        this.api('/functions/v1/staff-users?branch_id='+branchId,{token}).catch(()=>({users:[]}))
+        this.api('/functions/v1/staff-users?branch_id='+branchId,{token}).catch(()=>({users:[]})),
+        this.api('/rest/v1/ingredients?branch_id=eq.'+branchId+'&is_active=eq.true&select=id,name,unit,current_cost,inventory_stocks(quantity,minimum_quantity)&order=name',{token}).catch(()=>[]),
+        this.api('/rest/v1/inventory_movements?branch_id=eq.'+branchId+'&select=id,ingredient_id,movement_type,quantity,unit_cost,reason,created_at,ingredients(name,unit)&order=created_at.desc&limit=100',{token}).catch(()=>[]),
+        this.api('/rest/v1/recipes?select=product_id,ingredient_id,quantity,products!inner(branch_id,name,price),ingredients(name,unit,current_cost)&products.branch_id=eq.'+branchId,{token}).catch(()=>[]),
+        this.api('/rest/v1/cash_shifts?branch_id=eq.'+branchId+'&select=*&order=opened_at.desc&limit=20',{token}).catch(()=>[]),
+        this.api('/rest/v1/cash_movements?branch_id=eq.'+branchId+'&select=*&order=created_at.desc&limit=200',{token}).catch(()=>[]),
+        this.api('/rest/v1/purchase_orders?branch_id=eq.'+branchId+'&select=*,suppliers(name),purchase_order_items(description,quantity,unit,line_total)&order=created_at.desc&limit=50',{token}).catch(()=>[]),
+        this.api('/rest/v1/suppliers?branch_id=eq.'+branchId+'&select=*&order=name',{token}).catch(()=>[])
       ]);
-      this.setState({liveSettings:settings[0]||null,liveProducts:products,liveCategories:categories,liveZones:zones,liveLoyaltyRule:rules[0]||null,liveUsers:staff.users||[]});
+      this.setState({liveSettings:settings[0]||null,liveProducts:products,liveCategories:categories,liveZones:zones,liveLoyaltyRule:rules[0]||null,liveUsers:staff.users||[],liveIngredients:ingredients,liveInventoryMovements:movements,liveRecipes:recipes,liveCashShifts:shifts,liveCashMovements:cashMovements,livePurchases:purchases,liveSuppliers:suppliers});
     }catch(error){console.error(error);this.toast('No se pudo actualizar la configuración');}
   }
   async patchSettings(changes,message='Configuración guardada'){
-    if(!this.state.live||!this.state.branchId){this.toast('Inicia sesión como administrador');return;}
+    if(!this.state.branchId){this.toast('Inicia sesión como administrador');return;}
     try{
       await this.api('/rest/v1/business_settings?branch_id=eq.'+this.state.branchId,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({...changes,updated_at:new Date().toISOString()})});
       await this.loadSettings();this.toast(message);
@@ -490,7 +488,7 @@ class Component extends DCLogic {
     }
   }
   async editContact(){
-    const phone=window.prompt('WhatsApp con código de país, sólo números',this.state.liveSettings?.whatsapp_phone||'524775222095');if(!phone)return;
+    const source=this.state.liveSettings;const phone=window.prompt('WhatsApp con código de país, sólo números',source?.whatsapp_phone||'524775222095');if(!phone)return;
     await this.patchSettings({whatsapp_phone:phone.replace(/\D/g,'')},'WhatsApp actualizado');
   }
   async manageMenu(){
@@ -535,19 +533,48 @@ class Component extends DCLogic {
       await this.loadSettings();
     }catch(error){this.toast(error.message);}
   }
+  async cashAction(){
+    const open=(this.state.liveCashShifts||[]).find(s=>s.status==='open');
+    try{
+      if(!open){
+        const amount=Number(window.prompt('Efectivo inicial de caja','0'));if(!Number.isFinite(amount)||amount<0)return this.toast('Monto no válido');
+        await this.api('/rest/v1/cash_shifts',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({branch_id:this.state.branchId,opened_by:this.state.session.user.id,opening_amount:amount,status:'open'})});
+        await this.loadSettings();return this.toast('Caja abierta correctamente');
+      }
+      const sales=this.orders.filter(o=>o.estado==='completado'&&o.pago.metodo==='efectivo').reduce((n,o)=>n+this.itemTotal(o),0);
+      const movements=(this.state.liveCashMovements||[]).filter(m=>m.cash_shift_id===open.id&&m.payment_method==='cash').reduce((n,m)=>n+(m.movement_type==='expense'||m.movement_type==='refund'?-Number(m.amount):Number(m.amount)),0);
+      const expected=Number(open.opening_amount||0)+sales+movements;const counted=Number(window.prompt('Efectivo contado al cerrar',String(expected)));if(!Number.isFinite(counted)||counted<0)return this.toast('Monto no válido');
+      const notes=window.prompt('Notas del corte (opcional)','')||null;
+      await this.api('/rest/v1/cash_shifts?id=eq.'+open.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({closed_by:this.state.session.user.id,closed_at:new Date().toISOString(),expected_cash:expected,counted_cash:counted,status:'closed',notes})});
+      await this.loadSettings();this.toast('Corte de caja guardado');
+    }catch(error){this.toast(error.message);}
+  }
+  async addCashMovement(){
+    const shift=(this.state.liveCashShifts||[]).find(s=>s.status==='open');if(!shift)return this.toast('Primero abre la caja');
+    const type=(window.prompt('Tipo: INGRESO, GASTO o AJUSTE','GASTO')||'').trim().toUpperCase();const movement_type={INGRESO:'income',GASTO:'expense',AJUSTE:'adjustment'}[type];if(!movement_type)return this.toast('Tipo no válido');
+    const amount=Number(window.prompt('Monto','0'));if(!Number.isFinite(amount)||amount<=0)return this.toast('Monto no válido');const description=window.prompt('Concepto')?.trim();if(!description)return;
+    try{await this.api('/rest/v1/cash_movements',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({branch_id:this.state.branchId,cash_shift_id:shift.id,movement_type,payment_method:'cash',amount,description,created_by:this.state.session.user.id})});await this.loadSettings();this.toast('Movimiento registrado');}catch(error){this.toast(error.message);}
+  }
+  async inventoryAdjustment(){
+    const ingredients=this.state.liveIngredients||[];if(!ingredients.length)return this.toast('Primero agrega insumos a inventario');
+    const ingredient=ingredients[Number(window.prompt(ingredients.map((x,i)=>(i+1)+'. '+x.name+' ('+x.unit+')').join('\n')+'\n\nNúmero de insumo'))-1];if(!ingredient)return this.toast('Insumo no válido');
+    const quantity=Number(window.prompt('Cantidad. Usa positivo para entrada y negativo para salida','0'));if(!Number.isFinite(quantity)||quantity===0)return this.toast('Cantidad no válida');const reason=window.prompt('Motivo del ajuste')?.trim();if(!reason)return;
+    try{await this.api('/rest/v1/inventory_movements',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({branch_id:this.state.branchId,ingredient_id:ingredient.id,movement_type:'adjustment',quantity,reason,created_by:this.state.session.user.id})});await this.loadSettings();this.toast('Inventario actualizado');}catch(error){this.toast(error.message);}
+  }
+  exportReports(orders){
+    const esc=value=>'"'+String(value??'').replace(/"/g,'""')+'"';const rows=[['Folio','Fecha','Canal','Cliente','Total'],...orders.map(o=>[o.folio,o.createdAt||'',o.canal,o.cliente,this.itemTotal(o)])];const csv='\ufeff'+rows.map(r=>r.map(esc).join(',')).join('\n');const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='ventas-don-luis-'+new Date().toISOString().slice(0,10)+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);this.toast('Reporte exportado');
+  }
   mapRemoteOrder(o){
     const status={pending_acceptance:'nuevo',confirmed:'aceptado',preparing:'preparando',ready:'listo',assigned:'listo',on_the_way:'en_camino',delivered:'completado',rejected:'rechazado',cancelled:'cancelado'}[o.status]||o.status;
     const canal=o.fulfillment_type==='delivery'?'domicilio':o.fulfillment_type==='dine_in'?'establecimiento':(o.channel==='whatsapp'?'whatsapp':'recoger');
     const created=new Date(o.created_at); const min=Math.max(0,Math.floor((Date.now()-created.getTime())/60000));
     const addr=o.delivery_address||{}; const dir=canal==='domicilio'?[addr.street,addr.exterior_number,addr.neighborhood].filter(Boolean).join(' '):(canal==='establecimiento'?'Mesa '+(o.table_number||''):'Recoger en sucursal');
-    return {id:o.id,remoteStatus:o.status,isDemo:o.is_demo,assignedDriver:o.assigned_driver_user_id,folio:'DL-'+o.folio,canal,estado:status,min,cliente:o.guest_name||(canal==='establecimiento'?'Mesa '+(o.table_number||''):'Cliente'),tel:o.guest_phone||'—',dir,pago:{metodo:o.payment_method==='clip_simulated'?'clip demo':o.payment_method==='transfer'?'transferencia':o.payment_method==='card_present'?'tarjeta':'efectivo',estado:o.payment_status==='paid'?'pagado':o.payment_status==='verification_pending'?'por_verificar':'pendiente'},items:(o.order_items||[]).map(i=>({q:i.quantity,nombre:i.product_name,nota:i.notes||'',lineTotal:Number(i.line_total)})),total:Number(o.total),tiempo:o.promised_at?Math.max(0,Math.round((new Date(o.promised_at)-created)/60000)):null};
+    return {id:o.id,remoteStatus:o.status,assignedDriver:o.assigned_driver_user_id,createdAt:o.created_at,folio:'DL-'+o.folio,canal,estado:status,min,cliente:o.guest_name||(canal==='establecimiento'?'Mesa '+(o.table_number||''):'Cliente'),tel:o.guest_phone||'—',dir,pago:{metodo:o.payment_method==='transfer'?'transferencia':o.payment_method==='card_present'?'tarjeta':'efectivo',estado:o.payment_status==='paid'?'pagado':o.payment_status==='verification_pending'?'por_verificar':'pendiente'},items:(o.order_items||[]).map(i=>({q:i.quantity,nombre:i.product_name,nota:i.notes||'',lineTotal:Number(i.line_total)})),total:Number(o.total),tiempo:o.promised_at?Math.max(0,Math.round((new Date(o.promised_at)-created)/60000)):null};
   }
   async patchOrder(o,changes,success){
-    if(!this.state.live){Object.assign(o,changes.local||{});this.forceUpdate();this.toast(success);return;}
     try{await this.api('/rest/v1/orders?id=eq.'+o.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(changes.remote||{})});await this.loadLiveOrders();this.toast(success);}catch(error){this.toast(error.message);}
   }
   async assignDelivery(o){
-    if(!this.state.live){o.estado='en_camino';o.repartidor=this.state.rol;this.forceUpdate();this.toast('Pedido asignado');return;}
     try{
       const driverId=this.state.session?.user?.id;
       await this.api('/rest/v1/driver_assignments',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({order_id:o.id,driver_user_id:driverId,assigned_by:driverId,status:'assigned'})});
@@ -555,27 +582,11 @@ class Component extends DCLogic {
       await this.loadLiveOrders(); this.toast(o.folio+' asignado · ya aparece en Repartidores');
     }catch(error){this.toast(error.message||'No fue posible asignar el pedido');}
   }
-  async demoControl(action){
-    if(!this.state.live){this.toast('Inicia sesión como Dueño');return;}
-    const question=action==='start_live'?'Esto borrará los pedidos de prueba y activará la operación real. ¿Continuar?':action==='reset_demo'?'Se borrarán solamente los pedidos de demostración. ¿Continuar?':'¿Activar nuevamente el modo de demostración?';
-    if(!window.confirm(question))return;
-    try{const result=await this.api('/functions/v1/demo-control',{method:'POST',body:JSON.stringify({branchId:this.state.branchId,action})});await Promise.all([this.loadLiveOrders(),this.loadSettings()]);this.toast(action==='start_live'?'Operación real lista desde cero':action==='reset_demo'?'Datos de prueba reiniciados':'Modo demostración activado');return result;}catch(error){this.toast(error.message);}
-  }
   async logout(){localStorage.removeItem('donLuisStaffSession');clearInterval(this._livePoll);this._orders=null;this.setState({rol:null,session:null,live:false,branchId:null});}
 
   ensure(){
     if(this._orders) return;
-    this._orders=[
-      {folio:'DL-4207',canal:'domicilio',estado:'nuevo',min:1,cliente:'Paola Ramírez',tel:'477 123 4567',dir:'Av. Cañada 120, Punto Cañada',pago:{metodo:'transferencia',estado:'por_verificar'},items:[{q:3,nombre:'Taco al pastor',nota:'Sin cebolla'},{q:1,nombre:'Quesadilla de pastor',nota:''},{q:1,nombre:'Agua ½ L',nota:''}]},
-      {folio:'DL-4206',canal:'whatsapp',estado:'nuevo',min:3,cliente:'Jorge M.',tel:'477 555 0199',dir:'Recoger en sucursal',pago:{metodo:'efectivo',estado:'pendiente'},items:[{q:5,nombre:'Taco de bistec',nota:''},{q:2,nombre:'Refresco',nota:''}]},
-      {folio:'DL-4205',canal:'recoger',estado:'aceptado',min:6,cliente:'Andrea G.',tel:'477 222 1188',dir:'Recoger 13:20',pago:{metodo:'tarjeta',estado:'pendiente'},tiempo:20,items:[{q:4,nombre:'Taco de cabeza',nota:'Salsa aparte'},{q:1,nombre:'Torta de pastor',nota:''}]},
-      {folio:'DL-4204',canal:'establecimiento',estado:'preparando',min:9,cliente:'Mesa 5',tel:'—',dir:'Consumo en mesa',pago:{metodo:'efectivo',estado:'pendiente'},tiempo:15,items:[{q:6,nombre:'Taco campechano',nota:'Doble carne'},{q:3,nombre:'Refresco',nota:''}]},
-      {folio:'DL-4203',canal:'domicilio',estado:'preparando',min:14,cliente:'Luis Ángel',tel:'477 888 4410',dir:'Jardines de Oriente 44',pago:{metodo:'efectivo',estado:'pendiente'},tiempo:35,items:[{q:6,nombre:'Taco de suadero',nota:'Sin cilantro'},{q:2,nombre:'Quesadilla de lengua',nota:''}]},
-      {folio:'DL-4202',canal:'recoger',estado:'listo',min:2,cliente:'Marcela T.',tel:'477 401 7788',dir:'Recoger ahora',pago:{metodo:'tarjeta',estado:'pagado'},tiempo:18,items:[{q:2,nombre:'Torta de bistec',nota:''},{q:1,nombre:'Agua 1 L',nota:''}]},
-      {folio:'DL-4200',canal:'domicilio',estado:'en_camino',min:8,cliente:'Diana R.',tel:'477 300 5521',dir:'Valle del Campestre 210',pago:{metodo:'efectivo',estado:'pendiente'},repartidor:'Ricardo G.',tiempo:35,items:[{q:8,nombre:'Taco al pastor',nota:''},{q:2,nombre:'Agua 1 L',nota:''}]},
-      {folio:'DL-4198',canal:'domicilio',estado:'completado',min:26,cliente:'Sr. Beto',tel:'477 610 9922',dir:'San Isidro 8',pago:{metodo:'efectivo',estado:'pagado'},repartidor:'Ricardo G.',tiempo:32,items:[{q:6,nombre:'Taco de chorizo',nota:''}]},
-      {folio:'DL-4197',canal:'recoger',estado:'completado',min:34,cliente:'Nadia P.',tel:'477 120 3344',dir:'Recogido',pago:{metodo:'tarjeta',estado:'pagado'},tiempo:16,items:[{q:3,nombre:'Quesadilla de bistec',nota:''}]},
-    ];
+    this._orders=[];
   }
   get orders(){ this.ensure(); return this._orders; }
   itemTotal(p){ if(Number.isFinite(p.total))return p.total; const price={'Taco al pastor':17,'Taco de bistec':17,'Taco de cabeza':17,'Taco de chorizo':17,'Taco de suadero':17,'Taco campechano':17,'Quesadilla de pastor':34,'Quesadilla de bistec':34,'Quesadilla de lengua':40,'Torta de pastor':40,'Torta de bistec':40,'Refresco':30,'Agua ½ L':30,'Agua 1 L':50}; return p.items.reduce((s,i)=>s+(i.lineTotal||(price[i.nombre]||20)*i.q),0); }
@@ -621,15 +632,6 @@ class Component extends DCLogic {
 
   renderVals(){
     const vw=this.state.vw, phone=vw>0&&vw<820, route=this.state.route;
-    const roles=[
-      {label:'Dueño',desc:'Todo el panel',bg:'#10603A',icon:'M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6',onClick:()=>this.setState({rol:'Dueño',route:'pedidos'})},
-      {label:'Administrador',desc:'Operación y reportes',bg:'#178049',icon:'M12 2 2 7l10 5 10-5zM2 17l10 5 10-5M2 12l10 5 10-5',onClick:()=>this.setState({rol:'Administrador',route:'pedidos'})},
-      {label:'Caja',desc:'Aceptar y cobrar',bg:'#E0A526',icon:'M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 7l2-4h16l2 4M12 11v5',onClick:()=>this.setState({rol:'Caja',route:'pedidos'})},
-      {label:'Cocina',desc:'Tablero de preparación',bg:'#D6453D',icon:'M8 3v6M12 3v6M10 9v12M17 3c-1.5 0-3 1.5-3 4v5h3zM17 12v9',onClick:()=>this.setState({rol:'Cocina',route:'cocina'})},
-      {label:'Mesero',desc:'Comandas en mesa',bg:'#28A54C',icon:'M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4zM6 1v3M10 1v3M14 1v3',onClick:()=>this.setState({rol:'Mesero',route:'pedidos'})},
-      {label:'Repartidor',desc:'Entregas (Fase 3)',bg:'#1f6f8b',icon:'M1 3h15v13H1zM16 8h4l3 3v5h-7M5.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM18.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z',onClick:()=>this.toast('El portal del repartidor llega en la Fase 3')},
-    ];
-
     const allowed=this.rolNav();
     const cur=this.nav.find(n=>n.id===route);
     const subs={pedidos:'Todos los canales en un solo lugar',cocina:'Tablero de preparación',caja:'Cobro, cortes y liquidación',inventario:'Existencias y recetas',reportes:'Ventas y desempeño',config:'Negocio, horarios y usuarios'};
@@ -643,7 +645,7 @@ class Component extends DCLogic {
 
     return {
       isLogin: this.state.rol==null, isApp: this.state.rol!=null,
-      roles, rol:this.state.rol||'Dueño', rolIni:(this.state.rol||'D').slice(0,1),
+      rol:this.state.rol||'Dueño', rolIni:(this.state.rol||'D').slice(0,1),
       showSidebar:!phone, showBottomNav:phone, sidebarWide:vw>=1180, sidebarW:vw>=1180?'234px':'74px',
       navItems, onLogout:()=>this.logout(),
       authEmail:this.state.authEmail,authPassword:this.state.authPassword,authBusy:this.state.authBusy,
@@ -652,7 +654,7 @@ class Component extends DCLogic {
       inviteMode:this.state.inviteMode,showLoginOptions:!this.state.inviteMode,invitePassword:this.state.invitePassword,inviteConfirm:this.state.inviteConfirm,
       setInvitePassword:(e)=>this.setState({invitePassword:e?.target?.value||''}),setInviteConfirm:(e)=>this.setState({inviteConfirm:e?.target?.value||''}),
       finishInvite:()=>this.finishInvite(),inviteButton:this.state.authBusy?'Activando…':'Activar mi cuenta',
-      appVersion:Component.APP_VERSION,modeLabel:this.state.live?'EN VIVO':'DEMO',modeBg:this.state.live?'#10603A':'#F2C230',modeColor:this.state.live?'#fff':'#3a2c00',
+      appVersion:Component.APP_VERSION,modeLabel:'EN VIVO',modeBg:'#10603A',modeColor:'#fff',
       onTapLogo:()=>this.tapLogo(),showEasterEgg:this.state.showEasterEgg,onCloseEasterEgg:()=>this.setState({showEasterEgg:false}),
       currentTitle:cur?cur.label:'Centro de pedidos', currentSub:subs[route]||'',
       sonido:this.state.sonido, toggleSonido:()=>this.setState({sonido:!this.state.sonido}),
@@ -690,94 +692,59 @@ class Component extends DCLogic {
   }
 
   vmCaja(phone){
-    const hoy=this.orders.filter(o=>['completado'].includes(o.estado));
-    const canalVentas=[
-      {canal:'En mesa',monto:3860,pct:38,c:'#10603A'},
-      {canal:'Para recoger',monto:2140,pct:21,c:'#E0A526'},
-      {canal:'Domicilio',monto:2980,pct:29,c:'#1f6f8b'},
-      {canal:'WhatsApp',monto:1240,pct:12,c:'#128C4B'},
-    ].map(x=>({...x,montoTxt:this.MXN(x.monto),pctTxt:x.pct+'%'}));
-    const metodos=[
-      {m:'Efectivo',v:4180,n:'23 tickets',icon:'M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'},
-      {m:'Tarjeta',v:3010,n:'16 tickets',icon:'M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 11h20'},
-      {m:'Transferencia',v:1230,n:'8 tickets · 1 por verificar',icon:'M4 12h16M8 8l-4 4 4 4M16 16l4-4-4-4'},
-    ].map(x=>({...x,vTxt:this.MXN(x.v)}));
-    const corte=[
-      {k:'Apertura de caja',v:this.MXN(2000),sub:'08:00 · fondo inicial'},
-      {k:'Total vendido hoy',v:this.MXN(10220),sub:'47 pedidos'},
-      {k:'Cancelaciones',v:this.MXN(180),sub:'2 pedidos'},
-      {k:'Descuentos',v:this.MXN(320),sub:'promos y lealtad'},
-    ];
-    const repartidores=[
-      {nombre:'Ricardo G.',ini:'RG',entregas:12,efectivo:1840,liquidado:false},
-      {nombre:'Óscar M.',ini:'OM',entregas:7,efectivo:920,liquidado:true},
-    ].map(r=>({...r,efectivoTxt:this.MXN(r.efectivo)}));
+    const start=new Date();start.setHours(0,0,0,0);const hoy=this.orders.filter(o=>o.estado==='completado'&&(!o.createdAt||new Date(o.createdAt)>=start));
+    const total=hoy.reduce((n,o)=>n+this.itemTotal(o),0);const channelMeta=[['establecimiento','En mesa','#10603A'],['recoger','Para recoger','#E0A526'],['domicilio','Domicilio','#1f6f8b'],['whatsapp','WhatsApp','#128C4B']];
+    const canalVentas=channelMeta.map(([key,canal,c])=>{const monto=hoy.filter(o=>o.canal===key).reduce((n,o)=>n+this.itemTotal(o),0);return{canal,monto,pct:total?Math.round(monto/total*100):0,c,montoTxt:this.MXN(monto),pctTxt:(total?Math.round(monto/total*100):0)+'%'};});
+    const methodMeta=[['efectivo','Efectivo','M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'],['tarjeta','Tarjeta','M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 11h20'],['transferencia','Transferencia','M4 12h16M8 8l-4 4 4 4M16 16l4-4-4-4']];
+    const metodos=methodMeta.map(([key,m,icon])=>{const rows=hoy.filter(o=>o.pago.metodo===key),v=rows.reduce((n,o)=>n+this.itemTotal(o),0),pending=rows.filter(o=>o.pago.estado==='por_verificar').length;return{m,v,n:rows.length+' tickets'+(pending?' · '+pending+' por verificar':''),icon,vTxt:this.MXN(v)};});
+    const shift=(this.state.liveCashShifts||[]).find(s=>s.status==='open')||(this.state.liveCashShifts||[])[0];const cancelled=this.orders.filter(o=>['cancelado','rechazado'].includes(o.estado));
+    const corte=[{k:'Apertura de caja',v:this.MXN(shift?.opening_amount||0),sub:shift?'Turno '+shift.status:'Sin turno abierto'},{k:'Total vendido hoy',v:this.MXN(total),sub:hoy.length+' pedidos'},{k:'Cancelaciones',v:this.MXN(cancelled.reduce((n,o)=>n+this.itemTotal(o),0)),sub:cancelled.length+' pedidos'},{k:'Movimientos manuales',v:this.MXN((this.state.liveCashMovements||[]).filter(m=>m.movement_type!=='sale').reduce((n,m)=>n+Number(m.amount),0)),sub:(this.state.liveCashMovements||[]).length+' movimientos'}];
+    const repartidores=[];
+    const cashTotal=hoy.filter(o=>o.pago.metodo==='efectivo').reduce((n,o)=>n+this.itemTotal(o),0),opening=Number(shift?.opening_amount||0),counted=Number(shift?.counted_cash||0);
     return {cajaCanales:canalVentas, cajaMetodos:metodos, cajaCorte:corte, cajaReps:repartidores,
-      cajaEsperado:this.MXN(6020), cajaRecibido:this.MXN(5990), cajaDif:'−'+this.MXN(30), cajaGrid:phone?'1fr':'1.4fr 1fr'};
+      cajaEsperado:this.MXN(opening+cashTotal), cajaRecibido:this.MXN(counted), cajaDif:this.MXN(counted-(opening+cashTotal)), cajaGrid:phone?'1fr':'1.4fr 1fr',
+      cashActionTxt:shift?.status==='open'?'Cerrar caja':'Abrir caja',onCashAction:()=>this.cashAction(),onCashMovement:()=>this.addCashMovement()};
   }
 
   vmInventario(){
     const tab=this.state.invTab||'existencias';
-    const rows=[
-      {n:'Carne al pastor',u:'kg',hay:14,dia:9,min:8},{n:'Bistec de res',u:'kg',hay:6,dia:5,min:6},
-      {n:'Cabeza',u:'kg',hay:5,dia:4,min:4},{n:'Chorizo',u:'kg',hay:7,dia:4,min:4},
-      {n:'Lengua',u:'kg',hay:3,dia:2,min:3},{n:'Tortilla de maíz',u:'kg',hay:22,dia:12,min:10},
-      {n:'Queso Oaxaca',u:'kg',hay:4,dia:3,min:3},{n:'Cebolla',u:'kg',hay:2,dia:3,min:4},
-      {n:'Cilantro',u:'manojo',hay:5,dia:8,min:6},{n:'Refrescos',u:'pzas',hay:38,dia:22,min:24},
-    ].map(i=>{const crit=i.hay<i.min;const st=crit?{t:'Crítico',c:'#b23a32',bg:'#fdeceb'}:(i.hay<=i.min?{t:'Al mínimo',c:'#8a6d12',bg:'#fdf6e3'}:{t:'Óptimo',c:'#10603A',bg:'#eaf4ec'});
+    const rows=(this.state.liveIngredients||[]).map(x=>{const stock=x.inventory_stocks?.[0]||{},today=(this.state.liveInventoryMovements||[]).filter(m=>m.ingredient_id===x.id&&new Date(m.created_at).toDateString()===new Date().toDateString()).reduce((n,m)=>n+Math.abs(Number(m.quantity)),0);return{n:x.name,u:x.unit,hay:Number(stock.quantity||0),dia:today,min:Number(stock.minimum_quantity||0)};}).map(i=>{const crit=i.hay<i.min;const st=crit?{t:'Crítico',c:'#b23a32',bg:'#fdeceb'}:(i.hay<=i.min?{t:'Al mínimo',c:'#8a6d12',bg:'#fdf6e3'}:{t:'Óptimo',c:'#10603A',bg:'#eaf4ec'});
       return {...i,stT:st.t,stC:st.c,stBg:st.bg,barC:crit?'#D6453D':(i.hay<=i.min?'#E0A526':'#28A54C'),pct:Math.min(100,Math.round(i.hay/Math.max(i.min*2,1)*100))+'%'};});
-    const recetas=[
-      {plato:'Taco al pastor',venta:'$17',costo:'$8.50',ing:'80 g pastor · 2 tortillas · cebolla · cilantro'},
-      {plato:'Quesadilla de pastor',venta:'$34',costo:'$14.00',ing:'80 g pastor · 60 g queso · 1 tortilla grande'},
-      {plato:'Torta de pastor',venta:'$40',costo:'$17.00',ing:'100 g pastor · pan · aguacate · frijol'},
-      {plato:'Agua de sabor 1 L',venta:'$50',costo:'$12.00',ing:'concentrado · azúcar · 1 L agua'},
-    ];
-    const movimientos=[
-      {tipo:'Salida automática',det:'Pedido DL-4204 confirmado',cant:'−0.48 kg pastor',c:'#b23a32',hora:'14:12'},
-      {tipo:'Entrada',det:'Compra recibida · Carnicería El Torito',cant:'+8 kg bistec',c:'#10603A',hora:'11:40'},
-      {tipo:'Merma',det:'Tortilla quemada en comal',cant:'−1.5 kg tortilla',c:'#8a6d12',hora:'12:40'},
-      {tipo:'Ajuste manual',det:'Conteo físico · motivo: reconteo',cant:'−0.3 kg queso',c:'#8a6d12',hora:'10:05'},
-      {tipo:'Reversión',det:'Pedido DL-4180 cancelado',cant:'+0.4 kg suadero',c:'#10603A',hora:'09:22'},
-    ];
-    const compras=[
-      {prov:'Carnicería El Torito',items:'Pastor, bistec, cabeza',monto:'$2,450.00',estado:'Recibido',c:'#10603A',bg:'#eaf4ec'},
-      {prov:'Tortillería La Guadalupana',items:'Tortilla 30 kg',monto:'$690.00',estado:'En camino',c:'#8a6d12',bg:'#fdf6e3'},
-      {prov:'Abarrotes Don Chuy',items:'Refrescos, desechables',monto:'$1,180.00',estado:'Pendiente',c:'#b23a32',bg:'#fdeceb'},
-    ];
+    const byProduct={};(this.state.liveRecipes||[]).forEach(r=>{const id=r.product_id;if(!byProduct[id])byProduct[id]={plato:r.products?.name||'Producto',venta:this.MXN(r.products?.price||0),cost:0,parts:[]};byProduct[id].cost+=Number(r.quantity)*Number(r.ingredients?.current_cost||0);byProduct[id].parts.push(r.quantity+' '+(r.ingredients?.unit||'')+' '+(r.ingredients?.name||'Insumo'));});
+    const recetas=Object.values(byProduct).map(r=>({plato:r.plato,venta:r.venta,costo:this.MXN(r.cost),ing:r.parts.join(' · ')}));
+    const movimientos=(this.state.liveInventoryMovements||[]).map(m=>{const positive=Number(m.quantity)>=0;return{tipo:{in:'Entrada',out:'Salida automática',waste:'Merma',adjustment:'Ajuste manual',reversal:'Reversión'}[m.movement_type]||m.movement_type,det:m.reason||m.ingredients?.name||'Movimiento',cant:(positive?'+':'')+m.quantity+' '+(m.ingredients?.unit||''),c:positive?'#10603A':(m.movement_type==='waste'?'#8a6d12':'#b23a32'),hora:new Date(m.created_at).toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'})};});
+    const compras=(this.state.livePurchases||[]).map(p=>({prov:p.suppliers?.name||'Proveedor',items:(p.purchase_order_items||[]).map(i=>i.description).join(', ')||p.notes||'Sin detalle',monto:this.MXN(p.total),estado:{draft:'Borrador',ordered:'Pedido',partially_received:'Recepción parcial',received:'Recibido',cancelled:'Cancelado'}[p.status]||p.status,c:p.status==='received'?'#10603A':p.status==='cancelled'?'#b23a32':'#8a6d12',bg:p.status==='received'?'#eaf4ec':p.status==='cancelled'?'#fdeceb':'#fdf6e3'}));
     const tabs=[['existencias','Existencias'],['recetas','Recetas'],['movimientos','Movimientos'],['compras','Compras']].map(([k,l])=>({label:l,active:k===tab,onClick:()=>this.setState({invTab:k}),
       style:`cursor:pointer;padding:9px 15px;border-radius:11px;font-weight:700;font-size:13.5px;border:none;${k===tab?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35;border:1px solid #E6DCC5'}`}));
-    return {invTabs:tabs, invRows:rows, invRecetas:recetas, invMovs:movimientos, invCompras:compras,
+    return {invTabs:tabs, invRows:rows, invRecetas:recetas, invMovs:movimientos, invCompras:compras,onInventoryAdjustment:()=>this.inventoryAdjustment(),
       invExist:tab==='existencias', invRec:tab==='recetas', invMov:tab==='movimientos', invComp:tab==='compras'};
   }
 
   vmReportes(phone){
+    const start=new Date();start.setHours(0,0,0,0);const today=this.orders.filter(o=>!o.createdAt||new Date(o.createdAt)>=start);const completed=today.filter(o=>o.estado==='completado');const sales=completed.reduce((n,o)=>n+this.itemTotal(o),0);const rejected=today.filter(o=>['rechazado','cancelado'].includes(o.estado)).length;const prep=completed.filter(o=>Number.isFinite(o.tiempo));const avgPrep=prep.length?Math.round(prep.reduce((n,o)=>n+o.tiempo,0)/prep.length):0;
     const kpis=[
-      {l:'Ventas hoy',v:'$10,220',d:'▲ 12%',dc:'#10603A',t:'#10603A',icon:'M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'},
-      {l:'Pedidos',v:'47',d:'42 aceptados · 3 rechaz.',dc:'#8a7f66',t:'#28A54C',icon:'M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'},
-      {l:'Ticket promedio',v:'$217',d:'▲ 4%',dc:'#10603A',t:'#E0A526',icon:'M3 3v18h18M7 14l4-4 3 3 5-6'},
-      {l:'Tiempo prep. prom.',v:'11 min',d:'entrega 34 min',dc:'#8a7f66',t:'#1f6f8b',icon:'M12 8v4l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z'},
+      {l:'Ventas hoy',v:this.MXN(sales),d:completed.length+' pedidos entregados',dc:'#10603A',t:'#10603A',icon:'M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'},
+      {l:'Pedidos',v:String(today.length),d:completed.length+' entregados · '+rejected+' cancelados',dc:'#8a7f66',t:'#28A54C',icon:'M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'},
+      {l:'Ticket promedio',v:this.MXN(completed.length?sales/completed.length:0),d:'Calculado con ventas reales',dc:'#10603A',t:'#E0A526',icon:'M3 3v18h18M7 14l4-4 3 3 5-6'},
+      {l:'Tiempo prep. prom.',v:avgPrep+' min',d:prep.length?'Pedidos con promesa registrada':'Sin datos todavía',dc:'#8a7f66',t:'#1f6f8b',icon:'M12 8v4l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z'},
     ];
-    const horas=['12','13','14','15','16','17','18','19','20','21'];
-    const v=[4,9,10,7,5,6,7,8,10,7]; const mx=Math.max(...v);
-    const ventasHora=horas.map((h,i)=>({h,ht:(v[i]/mx*100)+'%'}));
-    const top=[['Taco al pastor',182],['Taco de bistec',126],['Quesadilla pastor',74],['Torta de pastor',48]];
-    const mxt=top[0][1]; const topProd=top.map(t=>({n:t[0],q:t[1],pct:(t[1]/mxt*100)+'%'}));
-    const canal=[{n:'En mesa',p:'38%',c:'#10603A'},{n:'Domicilio',p:'29%',c:'#1f6f8b'},{n:'Recoger',p:'21%',c:'#E0A526'},{n:'WhatsApp',p:'12%',c:'#128C4B'}];
-    const reps=[{n:'Ricardo G.',e:12,t:'28 min'},{n:'Óscar M.',e:7,t:'31 min'}];
-    return {repKpis:kpis, repHora:ventasHora, repTop:topProd, repCanal:canal, repReps:reps, repGrid:phone?'1fr':'1.4fr 1fr'};
+    const hourTotals={};completed.forEach(o=>{const h=new Date(o.createdAt||Date.now()).getHours();hourTotals[h]=(hourTotals[h]||0)+this.itemTotal(o);});const hours=Object.keys(hourTotals).map(Number).sort((a,b)=>a-b);const maxHour=Math.max(1,...Object.values(hourTotals));const ventasHora=(hours.length?hours:[12,13,14,15,16,17,18,19,20,21]).map(h=>({h:String(h),ht:((hourTotals[h]||0)/maxHour*100)+'%'}));
+    const counts={};completed.forEach(o=>o.items.forEach(i=>counts[i.nombre]=(counts[i.nombre]||0)+Number(i.q||0)));const top=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);const maxTop=Math.max(1,...top.map(x=>x[1]));const topProd=top.map(([n,q])=>({n,q,pct:(q/maxTop*100)+'%'}));
+    const metas={establecimiento:['En mesa','#10603A'],domicilio:['Domicilio','#1f6f8b'],recoger:['Recoger','#E0A526'],whatsapp:['WhatsApp','#128C4B']};const canal=Object.entries(metas).map(([key,[n,c]])=>{const amount=completed.filter(o=>o.canal===key).reduce((sum,o)=>sum+this.itemTotal(o),0);return{n,p:sales?Math.round(amount/sales*100)+'%':'0%',c};});
+    return {repKpis:kpis,repHora:ventasHora,repTop:topProd,repCanal:canal,repReps:[],repGrid:phone?'1fr':'1.4fr 1fr',onExportReports:()=>this.exportReports(completed)};
   }
 
   vmConfig(){
-    const demoMode=this.state.liveSettings?.demo_mode!==false;
-    const s=this.state.liveSettings||{};const available=(this.state.liveProducts||[]).filter(p=>p.is_available).length,totalProducts=(this.state.liveProducts||[]).length;
+    const s=this.state.liveSettings||{};const products=this.state.liveProducts||[];const zones=this.state.liveZones||[];const users=this.state.liveUsers||[];
+    const available=products.filter(p=>p.is_available).length,totalProducts=products.length;
     const grupos=[
       {titulo:'Negocio y contacto',icon:'M3 21h18M5 21V7l7-4 7 4v14',items:[{k:'Nombre',v:'Tacos Don Luis'},{k:'Sucursal',v:'Punto Cañada (1 de 1)'},{k:'WhatsApp',v:s.whatsapp_phone||'524775222095'}],onEdit:()=>this.editContact()},
       {titulo:'Tiempos de preparación',icon:'M12 8v4l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z',items:[{k:'Para recoger',v:(s.pickup_eta_minutes||20)+' min'},{k:'Entrega',v:(s.delivery_eta_minutes||40)+' min'},{k:'Modo saturado',v:s.is_saturated?'Activo · se agregan 20 min':'Inactivo'}],onEdit:()=>this.editTimes()},
-      {titulo:'Entrega y cobertura',icon:'M1 3h15v13H1zM16 8h4l3 3v5h-7',items:[{k:'Radio',v:(s.max_delivery_radius_km||5)+' km'},{k:'Pedido mínimo',v:this.MXN(s.minimum_delivery_amount||100)},{k:'Zonas activas',v:String((this.state.liveZones||[]).filter(z=>z.is_active).length)}],onEdit:()=>this.editCoverage()},
+      {titulo:'Entrega y cobertura',icon:'M1 3h15v13H1zM16 8h4l3 3v5h-7',items:[{k:'Radio',v:(s.max_delivery_radius_km||5)+' km'},{k:'Pedido mínimo',v:this.MXN(s.minimum_delivery_amount||100)},{k:'Zonas activas',v:String(zones.filter(z=>z.is_active).length)}],onEdit:()=>this.editCoverage()},
       {titulo:'Menú y disponibilidad',icon:'M4 6h16M4 12h16M4 18h16',items:[{k:'Productos disponibles',v:available+' de '+totalProducts},{k:'Cambios',v:'Se publican al instante'},{k:'Opciones',v:'Agotar, editar o agregar'}],onEdit:()=>this.manageMenu()},
-      {titulo:'Pagos y lealtad',icon:'M2 7h20v12H2zM2 11h20',items:[{k:'Métodos',v:'Efectivo, transferencia, tarjeta y Clip (simulado)'},{k:'Puntos',v:'1 punto por cada $10'},{k:'Acreditación',v:'Automática al entregar'}],onEdit:()=>this.toast('Las reglas de puntos ya están conectadas. El canje se activará cuando Don Luis defina su autorización.')},
-      {titulo:'Usuarios y permisos',icon:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 1 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',items:[{k:'Usuarios',v:String((this.state.liveUsers||[]).length)},{k:'Activos',v:String((this.state.liveUsers||[]).filter(u=>u.is_active).length)},{k:'Acciones',v:'Invitar, cambiar rol o desactivar'}],onEdit:()=>this.manageUsers()},
-      {titulo:'Datos de demostración',icon:'M12 3v18M3 12h18',items:[{k:'Estado',v:demoMode?'Modo demo activo':'Operación real'},{k:'Pedidos de prueba',v:String(this.orders.filter(o=>o.isDemo).length)},{k:'Al pasar a real',v:'Se conservan menú, usuarios y configuración'}],onEdit:()=>{const choice=window.prompt('Escribe: REINICIAR para borrar pedidos de prueba, REAL para iniciar desde cero, o DEMO para volver a pruebas.','REINICIAR');if(!choice)return;const value=choice.trim().toUpperCase();if(value==='REINICIAR')this.demoControl('reset_demo');else if(value==='REAL')this.demoControl('start_live');else if(value==='DEMO')this.demoControl('start_demo');else this.toast('Opción no reconocida');}},
+      {titulo:'Pagos y lealtad',icon:'M2 7h20v12H2zM2 11h20',items:[{k:'Métodos',v:'Efectivo, transferencia y tarjeta al recibir'},{k:'Puntos',v:'1 punto por cada $10'},{k:'Acreditación',v:'Automática al entregar'}],onEdit:()=>this.toast('Las reglas de puntos ya están conectadas. El canje se activará cuando Don Luis defina su autorización.')},
+      {titulo:'Usuarios y permisos',icon:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 1 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',items:[{k:'Usuarios',v:String(users.length)},{k:'Activos',v:String(users.filter(u=>u.is_active).length)},{k:'Acciones',v:'Invitar, cambiar rol o desactivar'}],onEdit:()=>this.manageUsers()},
+      {titulo:'Estado de operación',icon:'M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11',items:[{k:'Entorno',v:'Producción'},{k:'Datos',v:'Persistencia en Supabase'},{k:'Sucursal',v:'Punto Cañada'}],onEdit:()=>this.toast('La operación real está activa')},
     ].map(g=>({...g,onEdit:g.onEdit||(()=>this.toast('Esta configuración requiere definición del dueño'))}));
     return {configGrupos:grupos, saturado:!!s.is_saturated, pausado:s.is_open===false,
       toggleSat:()=>this.patchSettings({is_saturated:!s.is_saturated},s.is_saturated?'Modo saturado desactivado':'Modo saturado activado'), togglePausa:()=>this.patchSettings({is_open:s.is_open===false},s.is_open===false?'Pedidos reanudados':'Pedidos pausados')};
