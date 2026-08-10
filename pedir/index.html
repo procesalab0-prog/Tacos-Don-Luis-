@@ -293,7 +293,15 @@
           <div style="font-size:13px;font-weight:800;color:#8a7f66;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">Método de pago</div>
           <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:14px">
             <sc-for list="{{ chkPagos }}" as="p" hint-placeholder-count="3"><button onClick="{{ p.onClick }}" style="{{ p.style }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10603A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ p.icon }}"></path></svg>{{ p.label }}</button></sc-for>
+            <button disabled style="cursor:not-allowed;width:100%;padding:13px 15px;border-radius:13px;border:1.5px dashed #cfc5ae;background:#f1ede3;display:flex;align-items:center;gap:12px;color:#9a8e70;font-weight:600;font-size:14px;opacity:.8"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9a8e70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 11h20"></path></svg><span style="flex:1;text-align:left">Pago en línea</span><span style="background:#e4dcc9;color:#786d55;border-radius:999px;padding:4px 9px;font-size:10px;font-weight:800;letter-spacing:.05em">PRÓXIMAMENTE</span></button>
           </div>
+          <sc-if value="{{ chkCash }}" hint-placeholder-val="{{ true }}">
+            <div style="background:#eaf4ec;border:1px solid #cfe0c6;border-radius:13px;padding:14px;margin-bottom:16px">
+              <label style="display:block;font-weight:700;font-size:13.5px;color:#10603A;margin-bottom:8px">¿Con cuánto piensas pagar?</label>
+              <div style="display:flex;align-items:center;background:#fff;border:1.5px solid #a9cbb1;border-radius:11px;overflow:hidden"><span style="padding-left:13px;color:#10603A;font-weight:800">$</span><input value="{{ cashTender }}" onInput="{{ onCashTender }}" type="number" inputmode="decimal" min="0" step="10" placeholder="Ej. 500" style="width:100%;min-width:0;border:none;outline:none;padding:11px 13px 11px 7px;font-family:'Rubik',sans-serif;font-size:15px;background:#fff;color:#211E15"></div>
+              <div style="font-size:11.5px;color:{{ cashValid ? '#10603A' : '#b23a32' }};margin-top:7px;font-weight:600">{{ cashHelp }}</div>
+            </div>
+          </sc-if>
           <sc-if value="{{ chkTransfer }}" hint-placeholder-val="{{ false }}">
             <div style="background:#fdf6e3;border:1px solid #f0e3b6;border-radius:13px;padding:14px;margin-bottom:16px">
               <div style="font-weight:700;font-size:13.5px;color:#8a6d12;margin-bottom:8px">Sube tu comprobante</div>
@@ -309,7 +317,7 @@
             <div style="display:flex;justify-content:space-between;align-items:baseline;padding:9px 0 2px;border-top:1px dashed rgba(255,255,255,.2);margin-top:6px"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px">Total</span><span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:23px;color:#F2C230">{{ chkTotalTxt }}</span></div>
             <div style="font-size:12px;color:#8FD694;text-align:right;margin-top:2px">Ganas {{ chkPuntos }} puntos ★</div>
           </div>
-          <button onClick="{{ onHacerPedido }}" style="cursor:pointer;width:100%;margin-top:14px;background:#D6453D;color:#fff;border:none;border-radius:15px;padding:16px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;box-shadow:0 8px 20px rgba(214,69,61,.35)">{{ chkSubmitLabel }}</button>
+          <button onClick="{{ onHacerPedido }}" style="{{ chkSubmitStyle }}">{{ chkSubmitLabel }}</button>
         </div>
       </sc-if>
 
@@ -487,7 +495,7 @@
               <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;color:#10603A">{{ sheet.precioTxt }}</div>
             </div>
             <div style="padding:6px 18px">
-              <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:12px 0 8px;text-transform:uppercase;letter-spacing:.04em">Modificar</div>
+              <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:12px 0 8px;text-transform:uppercase;letter-spacing:.04em">Preparación</div>
               <div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ sheet.mods }}" as="m" hint-placeholder-count="4"><button onClick="{{ m.onClick }}" style="{{ m.style }}">{{ m.label }}</button></sc-for></div>
               <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:16px 0 8px;text-transform:uppercase;letter-spacing:.04em">Extras con costo</div>
               <div style="display:flex;flex-direction:column;gap:8px"><sc-for list="{{ sheet.extras }}" as="e" hint-placeholder-count="4"><button onClick="{{ e.onClick }}" style="{{ e.style }}"><span style="font-weight:600;font-size:14px;color:#211E15">{{ e.label }}</span><span style="font-weight:700;font-size:13px;color:#10603A">{{ e.precioTxt }}</span></button></sc-for></div>
@@ -531,12 +539,12 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.9.1';
+  static APP_VERSION = '2.11.3';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
     sheetItem:null, sheetQty:1, sheetMods:[], sheetExtras:[], sheetNota:'',
-    cart:[], entrega:'recoger', pago:'efectivo', dir:{}, prog:false,
+    cart:[], entrega:'recoger', pago:'efectivo', cashTender:'', dir:{}, prog:false,
     folio:null, trackStep:0, cuentaTab:'perfil', logged:false,
     remoteMenu:null, remoteCategories:null, remoteZones:null, modifierOptions:null, branchId:null,branchLocation:null,
     settings:null, submitting:false, trackingToken:null, liveOrder:null,accountOrders:[],loyaltyAccount:null,loyaltyRule:null,
@@ -552,8 +560,9 @@ class Component extends DCLogic {
     const draft=JSON.parse(localStorage.getItem('donLuisCheckoutDraft')||'null');
     if(draft?.dir){this._pickedLatLng=draft.location||null;this.setState({dir:draft.dir});}
     const savedOrders=JSON.parse(localStorage.getItem('donLuisGuestOrderTokens')||'[]');
-    const saved=localStorage.getItem('donLuisTrackingToken')||savedOrders[0]?.token;
-    if(saved){this.setState({trackingToken:saved});setTimeout(()=>this.refreshTracking(),0);}
+    const shared=new URLSearchParams(location.search).get('pedido');
+    const saved=/^[a-f0-9]{64}$/i.test(shared||'')?shared:(localStorage.getItem('donLuisTrackingToken')||savedOrders[0]?.token);
+    if(saved){localStorage.setItem('donLuisTrackingToken',saved);this.setState({trackingToken:saved,route:shared?'seguimiento':this.state.route});setTimeout(()=>this.refreshTracking(),0);}
     const session=JSON.parse(localStorage.getItem('donLuisSession')||'null');
     if(session?.access_token)this.restoreCustomerSession(session);
     this._sessionRefresh=setInterval(()=>{if(this.state.session)this.restoreCustomerSession(this.state.session);},5*60*1000);
@@ -726,8 +735,9 @@ class Component extends DCLogic {
     return [{id:'queso',n:'Queso',p:10},{id:'aguacate',n:'Aguacate',p:10},{id:'pina',n:'Piña',p:10},{id:'doble',n:'Doble carne',p:15}];
   }
   get modsLibres(){
-    if(this.state.modifierOptions?.length)return this.state.modifierOptions.filter(o=>Number(o.price_delta)===0).map(o=>o.name);
-    return ['Sin cebolla','Sin cilantro','Sin picante','Con todo'];
+    const source=this.state.modifierOptions?.length?this.state.modifierOptions.filter(o=>Number(o.price_delta)===0).map(o=>o.name):['Sin cebolla','Sin cilantro','Sin picante','Con todo'];
+    const clean=source.filter(name=>String(name).trim().toLocaleLowerCase('es-MX')!=='bien dorado'&&String(name).trim().toLocaleLowerCase('es-MX')!=='aparte');
+    return [...clean,'Aparte'];
   }
 
   catIcon(c){ return {Tacos:'M3 11a9 9 0 0 1 18 0M2 11h20l-2 4H4zM7 18h10',Quesadillas:'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM12 2v20',Tortas:'M4 11h16a0 0 0 0 1 0 0v2a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-2zM6 11a6 6 0 0 1 12 0',['Tacos light']:'M7 20s-3-2-3-8a8 8 0 0 1 16 0c0 6-3 8-3 8M12 4v16',Bebidas:'M5 3h14l-1.5 17a1 1 0 0 1-1 .9H7.5a1 1 0 0 1-1-.9zM5 8h14'}[c]; }
@@ -767,7 +777,10 @@ class Component extends DCLogic {
   applySavedFields(){
     clearTimeout(this._fieldTimer);this._fieldTimer=setTimeout(()=>{const d=this.state.dir||{};const values={Calle:d.calle,'Número':d.num,Colonia:d.col,'Referencias (portón, color, entre calles)':d.ref,'Nombre de quien recoge':d.nombre,Nombre:d.nombre,'Teléfono':d.tel};Object.entries(values).forEach(([placeholder,value])=>{const input=document.querySelector('input[placeholder="'+placeholder+'"]');if(input&&!input.value&&value)input.value=value;});},0);
   }
-  setField(k,v){ const dir={...this.state.dir,[k]:v};this.state.dir=dir;this.persistCheckoutDraft(dir); }
+  setField(k,v){
+    if(['calle','num','col'].includes(k)){this._addressEditVersion=(this._addressEditVersion||0)+1;clearTimeout(this._geocodeTimer);}
+    const dir={...this.state.dir,[k]:v};this.state.dir=dir;this.persistCheckoutDraft(dir);
+  }
   scheduleMap(){clearTimeout(this._mapTimer);this._mapTimer=setTimeout(()=>this.initMap(),80);}
   initMap(){
     const el=document.getElementById('delivery-map');if(!el||!window.L)return;
@@ -776,22 +789,25 @@ class Component extends DCLogic {
     const initial=this._pickedLatLng||this.state.branchLocation||{lat:21.1533557,lng:-101.7273936};
     this._map=L.map(el,{zoomControl:true}).setView([initial.lat,initial.lng],14);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(this._map);
-    if(this._pickedLatLng)this.setMapMarker(initial.lat,initial.lng);
+    if(this._pickedLatLng)this.setMapMarker(initial.lat,initial.lng,{lookupAddress:false});
     this._map.on('click',(e)=>this.setMapMarker(e.latlng.lat,e.latlng.lng));
     setTimeout(()=>this._map.invalidateSize(),50);
   }
-  setMapMarker(lat,lng){
+  setMapMarker(lat,lng,{lookupAddress=true}={}){
     this._pickedLatLng={lat:Number(lat.toFixed(6)),lng:Number(lng.toFixed(6))};
     if(this._map){if(this._mapMarker)this._mapMarker.setLatLng([lat,lng]);else this._mapMarker=L.marker([lat,lng]).addTo(this._map);}
     const label=document.getElementById('delivery-coordinates');if(label)label.textContent='Punto marcado: '+this._pickedLatLng.lat+', '+this._pickedLatLng.lng;
     this.persistCheckoutDraft();
-    clearTimeout(this._geocodeTimer);this._geocodeTimer=setTimeout(()=>this.reverseGeocode(this._pickedLatLng.lat,this._pickedLatLng.lng),450);
+    if(!lookupAddress)return;
+    clearTimeout(this._geocodeTimer);const editVersion=this._addressEditVersion||0;const point={...this._pickedLatLng};
+    this._geocodeTimer=setTimeout(()=>this.reverseGeocode(point.lat,point.lng,editVersion),450);
   }
-  async reverseGeocode(lat,lng){
+  async reverseGeocode(lat,lng,editVersion=this._addressEditVersion||0){
     const label=document.getElementById('delivery-coordinates');if(label)label.textContent='Buscando dirección del punto marcado…';
     try{
       const res=await fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&addressdetails=1&accept-language=es&lat='+encodeURIComponent(lat)+'&lon='+encodeURIComponent(lng));
       if(!res.ok)throw new Error('reverse lookup failed');const data=await res.json();const a=data.address||{};
+      if(!this._pickedLatLng||this._pickedLatLng.lat!==lat||this._pickedLatLng.lng!==lng||editVersion!==(this._addressEditVersion||0))return;
       const calle=a.road||a.pedestrian||a.residential||a.footway||a.path||'';const num=a.house_number||'';const col=a.neighbourhood||a.suburb||a.quarter||a.city_district||a.village||'';
       const dir={...this.state.dir,calle:calle||this.state.dir.calle||'',num:num||this.state.dir.num||'',col:col||this.state.dir.col||''};this.state.dir=dir;this.persistCheckoutDraft(dir);
       const values={Calle:dir.calle,'Número':dir.num,Colonia:dir.col};Object.entries(values).forEach(([placeholder,value])=>{const input=document.querySelector('input[placeholder="'+placeholder+'"]');if(input&&value)input.value=value;});
@@ -813,8 +829,9 @@ class Component extends DCLogic {
     if(this.fueraCobertura()){ this.toast('Esa dirección está fuera de cobertura'); return; }
     const selectedZone=this.coberturaTarifas.find(z=>z.label===this.state.dir.zona);
     if(this.state.entrega==='domicilio'&&!selectedZone){this.toast('Elige una zona de entrega');return;}
-    const minimum=Number(this.state.remoteZones?.find(z=>z.id===selectedZone?.id)?.minimum_order||this.state.settings?.minimum_delivery_amount||80);
+    const minimum=Number(this.state.remoteZones?.find(z=>z.id===selectedZone?.id)?.minimum_order||this.state.settings?.minimum_delivery_amount||100);
     if(this.state.entrega==='domicilio'&&this.cartSubtotal()<minimum){this.toast('El pedido mínimo para envío es '+this.MXN(minimum)+' · agrega '+this.MXN(minimum-this.cartSubtotal())+' más');return;}
+    const cashTender=Number(this.state.cashTender);if(this.state.pago==='efectivo'&&(!Number.isFinite(cashTender)||cashTender<this.totalFinal())){this.toast('Indica con cuánto pagarás; debe cubrir el total');return;}
     if(this.state.entrega==='domicilio' && !this.state.dir.calle){ this.toast('Agrega tu dirección de entrega'); return; }
     if(!this.state.dir.nombre?.trim()||!this.state.dir.tel?.trim()){this.toast('Agrega tu nombre y teléfono');return;}
     if(!this.state.remoteMenu){this.toast('Espera a que termine de cargar el menú');return;}
@@ -840,7 +857,7 @@ class Component extends DCLogic {
           requestId,branchSlug:'punto-canada',
           fulfillmentType:this.state.entrega==='domicilio'?'delivery':'pickup',
           paymentMethod:{efectivo:'cash',transferencia:'transfer',tarjeta:'card_present'}[this.state.pago],
-          customerNotes:'',
+          customerNotes:this.state.pago==='efectivo'?'Paga con '+this.MXN(cashTender)+' · llevar cambio de '+this.MXN(cashTender-this.totalFinal()):'',
           customer:{name:this.state.dir.nombre,phone:this.state.dir.tel},
           deliveryZoneId:selectedZone?.id||null,
           address:this.state.entrega==='domicilio'?{
@@ -886,8 +903,10 @@ class Component extends DCLogic {
     const lines=this.state.cart.map(l=>{const it=this.itemById(l.id);const note=this.lineLabel(l);return l.q+'× '+it.nombre+(note?' ('+note+')':'');});
     const address=this.state.entrega==='domicilio'?[this.state.dir.calle,this.state.dir.num,this.state.dir.col].filter(Boolean).join(', '):'Pasar a recoger en Punto Cañada';
     const map=this._pickedLatLng?'https://www.google.com/maps?q='+this._pickedLatLng.lat+','+this._pickedLatLng.lng:'';
-    return ['Hola, envío la confirmación de mi pedido en Tacos Don Luis 🌮','Folio: '+(this.state.folio||'Pendiente'),'Cliente: '+(this.state.dir.nombre||''),'Teléfono: '+(this.state.dir.tel||''),'','Pedido:',...lines,'','Entrega: '+address,(this.state.dir.ref?'Referencias: '+this.state.dir.ref:''),(map?'Ubicación: '+map:''),'Pago: '+({efectivo:'Efectivo',transferencia:'Transferencia',tarjeta:'Tarjeta al recibir',clip:'Clip en línea (simulación aprobada)'}[this.state.pago]||this.state.pago),'Total: '+this.MXN(this.state.liveOrder?.total??this.totalFinal())].filter(Boolean).join('\n');
+    const tracking=this.trackingLink();const cash=Number(this.state.cashTender);const change=this.state.pago==='efectivo'&&Number.isFinite(cash)?'Paga con '+this.MXN(cash)+' · cambio '+this.MXN(Math.max(0,cash-this.totalFinal())):'';
+    return ['Hola, envío la confirmación de mi pedido en Tacos Don Luis 🌮','Folio: '+(this.state.folio||'Pendiente'),'Cliente: '+(this.state.dir.nombre||''),'Teléfono: '+(this.state.dir.tel||''),'','Pedido:',...lines,'','Entrega: '+address,(this.state.dir.ref?'Referencias: '+this.state.dir.ref:''),(map?'Ubicación: '+map:''),'Pago: '+({efectivo:'Efectivo',transferencia:'Transferencia',tarjeta:'Tarjeta al recibir'}[this.state.pago]||this.state.pago),change,'Total: '+this.MXN(this.state.liveOrder?.total??this.totalFinal()),(tracking?'Seguimiento: '+tracking:'')].filter(Boolean).join('\n');
   }
+  trackingLink(token=this.state.trackingToken){return token?location.origin+'/pedir/?pedido='+encodeURIComponent(token):'';}
   openWhatsApp(){const phone=String(this.state.settings?.whatsapp_phone||'').replace(/\D/g,'');const base=phone?'https://wa.me/'+phone:'https://api.whatsapp.com/send';window.open(base+(base.includes('?')?'&':'?')+'text='+encodeURIComponent(this.whatsappText()),'_blank','noopener');}
   nuevoPedido(){ clearInterval(this._trk); this.setState({cart:[],folio:null,trackStep:0,route:'home'}); }
 
@@ -904,12 +923,15 @@ class Component extends DCLogic {
     const fuera=this.fueraCobertura();
     const desc=this.descuento();
     const selectedZone=this.coberturaTarifas.find(z=>z.label===zonaSel);
-    const minimum=Number(this.state.remoteZones?.find(z=>z.id===selectedZone?.id)?.minimum_order||this.state.settings?.minimum_delivery_amount||80);
+    const minimum=Number(this.state.remoteZones?.find(z=>z.id===selectedZone?.id)?.minimum_order||this.state.settings?.minimum_delivery_amount||100);
     const faltante=Math.max(0,minimum-this.cartSubtotal());
+    const blockedMinimum=entrega==='domicilio'&&faltante>0;const cash=Number(this.state.cashTender);const cashValid=this.state.pago!=='efectivo'||(Number.isFinite(cash)&&cash>=this.totalFinal());
     return {
       chkModos:modos, chkPagos:pagos, chkEntrega:entrega,
       chkDomicilio:entrega==='domicilio', chkRecoger:entrega==='recoger',
-      chkTransfer:this.state.pago==='transferencia',chkClip:false,chkSubmitLabel:'Hacer pedido',
+      chkTransfer:this.state.pago==='transferencia',chkCash:this.state.pago==='efectivo',chkClip:false,chkSubmitLabel:blockedMinimum?'Faltan '+this.MXN(faltante)+' para el mínimo':'Hacer pedido',
+      chkSubmitStyle:`cursor:${blockedMinimum?'not-allowed':'pointer'};width:100%;margin-top:14px;background:${blockedMinimum?'#a99d80':'#D6453D'};color:#fff;border:none;border-radius:15px;padding:16px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;box-shadow:${blockedMinimum?'none':'0 8px 20px rgba(214,69,61,.35)'}`,
+      cashTender:this.state.cashTender,cashValid,cashHelp:!this.state.cashTender?'Necesitamos este dato para llevar tu cambio.':cashValid?'Llevaremos '+this.MXN(Math.max(0,cash-this.totalFinal()))+' de cambio.':'El monto debe cubrir el total de '+this.MXN(this.totalFinal())+'.',onCashTender:e=>this.setState({cashTender:e?.target?.value||''}),
       zonaChips, chkFuera:fuera, chkMinimoTxt:this.MXN(minimum),chkFaltaMinimo:entrega==='domicilio'&&faltante>0,chkFaltanteTxt:this.MXN(faltante),
       chkSubTxt:this.MXN(this.cartSubtotal()),
       chkEnvioTxt:entrega==='domicilio'?(this.envioActual()?this.MXN(this.envioActual()):'Elige zona'):'Gratis',
