@@ -299,6 +299,20 @@
         </div>
       </sc-if>
 
+      <sc-if value="{{ configEditorOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="position:fixed;inset:0;z-index:80;background:rgba(20,15,5,.55);display:flex;align-items:flex-end;justify-content:center;padding-top:30px">
+          <div style="width:100%;max-width:620px;max-height:90dvh;overflow-y:auto;background:#FFFDF7;border-radius:22px 22px 0 0;padding:20px 18px calc(24px + env(safe-area-inset-bottom));box-shadow:0 -18px 50px rgba(0,0,0,.25)">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div style="flex:1"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:21px;color:#10603A">{{ configEditorTitle }}</div><div style="font-size:12px;color:#8a7f66;margin-top:2px">Los cambios se guardarán en la operación real.</div></div><button onClick="{{ closeConfigEditor }}" style="cursor:pointer;border:0;background:#efe6d2;width:36px;height:36px;border-radius:11px;font-size:21px;color:#5a4e35">×</button></div>
+            <sc-if value="{{ cfgContact }}" hint-placeholder-val="{{ false }}"><label style="display:grid;gap:6px;font-size:12px;font-weight:700;color:#6a5f45">WhatsApp con código de país<input value="{{ cfgPhone }}" onInput="{{ setCfgPhone }}" inputmode="tel" style="width:100%;padding:12px;border:1.5px solid #e0d6bf;border-radius:11px;font:500 14px Rubik"></label></sc-if>
+            <sc-if value="{{ cfgTimes }}" hint-placeholder-val="{{ false }}"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><label style="display:grid;gap:6px;font-size:12px;font-weight:700;color:#6a5f45">Minutos para recoger<input value="{{ cfgPickup }}" onInput="{{ setCfgPickup }}" type="number" min="0" max="240" style="width:100%;padding:12px;border:1.5px solid #e0d6bf;border-radius:11px"></label><label style="display:grid;gap:6px;font-size:12px;font-weight:700;color:#6a5f45">Minutos de entrega<input value="{{ cfgDelivery }}" onInput="{{ setCfgDelivery }}" type="number" min="0" max="360" style="width:100%;padding:12px;border:1.5px solid #e0d6bf;border-radius:11px"></label></div></sc-if>
+            <sc-if value="{{ cfgCoverage }}" hint-placeholder-val="{{ false }}"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><label style="display:grid;gap:6px;font-size:12px;font-weight:700;color:#6a5f45">Pedido mínimo<input value="{{ cfgMinimum }}" onInput="{{ setCfgMinimum }}" type="number" min="0" style="width:100%;padding:12px;border:1.5px solid #e0d6bf;border-radius:11px"></label><label style="display:grid;gap:6px;font-size:12px;font-weight:700;color:#6a5f45">Radio máximo (km)<input value="{{ cfgRadius }}" onInput="{{ setCfgRadius }}" type="number" min="0" step=".1" style="width:100%;padding:12px;border:1.5px solid #e0d6bf;border-radius:11px"></label></div></sc-if>
+            <sc-if value="{{ cfgMenu }}" hint-placeholder-val="{{ false }}"><div style="display:grid;gap:10px"><label style="display:grid;gap:6px;font-size:12px;font-weight:700;color:#6a5f45">Producto<select value="{{ cfgProductId }}" onChange="{{ setCfgProduct }}" style="width:100%;padding:12px;border:1.5px solid #e0d6bf;border-radius:11px;background:#fff"><option value="new">+ Agregar producto</option><sc-for list="{{ cfgProductOptions }}" as="p" hint-placeholder-count="4"><option value="{{ p.id }}">{{ p.label }}</option></sc-for></select></label><label style="display:grid;gap:6px;font-size:12px;font-weight:700;color:#6a5f45">Nombre<input value="{{ cfgProductName }}" onInput="{{ setCfgProductName }}" style="width:100%;padding:12px;border:1.5px solid #e0d6bf;border-radius:11px"></label><label style="display:grid;gap:6px;font-size:12px;font-weight:700;color:#6a5f45">Precio<input value="{{ cfgProductPrice }}" onInput="{{ setCfgProductPrice }}" type="number" min="0" step=".5" style="width:100%;padding:12px;border:1.5px solid #e0d6bf;border-radius:11px"></label><label style="display:grid;gap:6px;font-size:12px;font-weight:700;color:#6a5f45">Descripción<textarea onInput="{{ setCfgProductDescription }}" style="width:100%;min-height:72px;padding:12px;border:1.5px solid #e0d6bf;border-radius:11px;font:500 14px Rubik">{{ cfgProductDescription }}</textarea></label><label style="display:flex;align-items:center;gap:9px;font-size:13px;font-weight:700;color:#3a3120"><input type="checkbox" checked="{{ cfgProductAvailable }}" onChange="{{ toggleCfgProductAvailable }}"> Disponible para venta</label></div></sc-if>
+            <sc-if value="{{ cfgUsers }}" hint-placeholder-val="{{ false }}"><div style="display:grid;gap:10px"><div style="display:flex;gap:8px"><button onClick="{{ cfgUserInviteMode }}" style="{{ cfgUserInviteStyle }}">Invitar usuario</button><button onClick="{{ cfgUserEditMode }}" style="{{ cfgUserEditStyle }}">Editar acceso</button></div><sc-if value="{{ cfgUserIsEdit }}" hint-placeholder-val="{{ false }}"><label style="display:grid;gap:6px;font-size:12px;font-weight:700;color:#6a5f45">Usuario<select value="{{ cfgUserId }}" onChange="{{ setCfgUser }}" style="width:100%;padding:12px;border:1.5px solid #e0d6bf;border-radius:11px;background:#fff"><sc-for list="{{ cfgUserOptions }}" as="u" hint-placeholder-count="2"><option value="{{ u.id }}">{{ u.label }}</option></sc-for></select></label></sc-if><sc-if value="{{ cfgUserIsInvite }}" hint-placeholder-val="{{ true }}"><label style="display:grid;gap:6px;font-size:12px;font-weight:700;color:#6a5f45">Nombre<input value="{{ cfgUserName }}" onInput="{{ setCfgUserName }}" style="width:100%;padding:12px;border:1.5px solid #e0d6bf;border-radius:11px"></label><label style="display:grid;gap:6px;font-size:12px;font-weight:700;color:#6a5f45">Correo<input value="{{ cfgUserEmail }}" onInput="{{ setCfgUserEmail }}" type="email" style="width:100%;padding:12px;border:1.5px solid #e0d6bf;border-radius:11px"></label></sc-if><label style="display:grid;gap:6px;font-size:12px;font-weight:700;color:#6a5f45">Rol<select value="{{ cfgUserRole }}" onChange="{{ setCfgUserRole }}" style="width:100%;padding:12px;border:1.5px solid #e0d6bf;border-radius:11px;background:#fff"><option value="owner">Dueño</option><option value="admin">Administrador</option><option value="cashier">Caja</option><option value="kitchen">Cocina</option><option value="waiter">Mesero</option><option value="driver">Repartidor</option></select></label><sc-if value="{{ cfgUserIsEdit }}" hint-placeholder-val="{{ false }}"><label style="display:flex;align-items:center;gap:9px;font-size:13px;font-weight:700;color:#3a3120"><input type="checkbox" checked="{{ cfgUserActive }}" onChange="{{ toggleCfgUserActive }}"> Acceso activo</label></sc-if></div></sc-if>
+            <button onClick="{{ saveConfigEditor }}" disabled="{{ cfgSaving }}" style="cursor:pointer;width:100%;margin-top:18px;background:#10603A;color:#fff;border:0;border-radius:13px;padding:14px;font-family:'Fredoka',sans-serif;font-weight:700;font-size:15px">{{ cfgSaveText }}</button>
+          </div>
+        </div>
+      </sc-if>
+
       <sc-if value="{{ isOtro }}" hint-placeholder-val="{{ false }}">
         <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:64px 20px;text-align:center;animation:dlfade .3s"><div style="width:70px;height:70px;border-radius:20px;background:#eaf4ec;display:flex;align-items:center;justify-content:center;margin-bottom:14px"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10603A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"></path></svg></div><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px;color:#10603A">{{ currentTitle }}</div></div>
       </sc-if>
@@ -352,11 +366,11 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.8.0';
+  static APP_VERSION = '2.9.0';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { rol:null, route:'pedidos', vw:1280, toast:null, sonido:true,
-    canal:'todos', rechazoFor:null, aceptarFor:null, aceptarTiempo:20,
+    canal:'todos', rechazoFor:null, aceptarFor:null, aceptarTiempo:20,configEditor:null,cfgSaving:false,cfgForm:{},
     authEmail:'',authPassword:'',authBusy:false,session:null,live:false,branchId:null,logoTaps:0,showEasterEgg:false,
     inviteMode:false,invitePassword:'',inviteConfirm:'',liveSettings:null,liveProducts:null,liveStocks:null,
     liveCashShifts:null,liveCashMovements:null,liveCustomers:null,livePurchases:null,liveSuppliers:null,liveUsers:null,liveCategories:null,liveZones:null,liveLoyaltyRule:null,liveIngredients:null,liveInventoryMovements:null,liveRecipes:null };
@@ -467,6 +481,40 @@ class Component extends DCLogic {
       await this.api('/rest/v1/business_settings?branch_id=eq.'+this.state.branchId,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({...changes,updated_at:new Date().toISOString()})});
       await this.loadSettings();this.toast(message);
     }catch(error){this.toast(error.message);}
+  }
+  openConfigEditor(type){
+    const s=this.state.liveSettings||{},products=this.state.liveProducts||[],users=this.state.liveUsers||[];let form={};
+    if(type==='contact')form={phone:s.whatsapp_phone||'524775222095'};
+    if(type==='times')form={pickup:String(s.pickup_eta_minutes??20),delivery:String(s.delivery_eta_minutes??40)};
+    if(type==='coverage')form={minimum:String(s.minimum_delivery_amount??100),radius:String(s.max_delivery_radius_km??5)};
+    if(type==='menu'){const p=products[0];form={productId:p?.id||'new',name:p?.name||'',price:String(p?.price??''),description:p?.description||'',available:p?.is_available!==false};}
+    if(type==='users'){const u=users[0];form={userMode:'invite',userId:u?.id||'',name:'',email:'',role:'driver',active:true};}
+    this.setState({configEditor:type,cfgForm:form});
+  }
+  setCfg(key,value){this.setState({cfgForm:{...(this.state.cfgForm||{}),[key]:value}});}
+  selectCfgProduct(id){const p=(this.state.liveProducts||[]).find(x=>x.id===id);this.setState({cfgForm:{...(this.state.cfgForm||{}),productId:id,name:p?.name||'',price:String(p?.price??''),description:p?.description||'',available:p?.is_available!==false}});}
+  selectCfgUser(id){const u=(this.state.liveUsers||[]).find(x=>x.id===id);this.setState({cfgForm:{...(this.state.cfgForm||{}),userId:id,role:u?.role||'driver',active:u?.is_active!==false}});}
+  async saveConfigEditor(){
+    const type=this.state.configEditor,f=this.state.cfgForm||{};this.setState({cfgSaving:true});
+    try{
+      if(type==='contact'){const phone=String(f.phone||'').replace(/\D/g,'');if(phone.length<10)throw Error('Escribe un teléfono válido');await this.patchSettings({whatsapp_phone:phone},'WhatsApp actualizado');}
+      else if(type==='times'){const pickup=Number(f.pickup),delivery=Number(f.delivery);if(!Number.isFinite(pickup)||!Number.isFinite(delivery))throw Error('Revisa los tiempos');await this.patchSettings({pickup_eta_minutes:pickup,delivery_eta_minutes:delivery},'Tiempos actualizados');}
+      else if(type==='coverage'){const minimum=Number(f.minimum),radius=Number(f.radius);if(!Number.isFinite(minimum)||!Number.isFinite(radius))throw Error('Revisa la cobertura');await this.patchSettings({minimum_delivery_amount:minimum,max_delivery_radius_km:radius},'Cobertura actualizada');}
+      else if(type==='menu'){
+        const name=String(f.name||'').trim(),price=Number(f.price);if(!name||!Number.isFinite(price))throw Error('Escribe nombre y precio');
+        if(f.productId==='new'){
+          const category=(this.state.liveCategories||[])[0];if(!category)throw Error('Primero crea una categoría');const slug=name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'')+'-'+Date.now().toString().slice(-5);
+          await this.api('/rest/v1/products',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({branch_id:this.state.branchId,category_id:category.id,name,slug,description:f.description||'',price,is_active:true,is_available:f.available!==false,sort_order:(this.state.liveProducts||[]).length+1})});
+        }else await this.api('/rest/v1/products?id=eq.'+f.productId,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({name,price,description:f.description||'',is_available:f.available!==false,updated_at:new Date().toISOString()})});
+        await this.loadSettings();this.toast('Menú actualizado en tiempo real');
+      }else if(type==='users'){
+        if(f.userMode==='invite'){const email=String(f.email||'').trim().toLowerCase();if(!email.includes('@'))throw Error('Escribe un correo válido');await this.api('/functions/v1/staff-users',{method:'POST',body:JSON.stringify({action:'invite',branch_id:this.state.branchId,email,full_name:String(f.name||'').trim(),role:f.role})});this.toast('Invitación enviada');}
+        else {if(!f.userId)throw Error('Selecciona un usuario');await this.api('/functions/v1/staff-users',{method:'PATCH',body:JSON.stringify({branch_id:this.state.branchId,membership_id:f.userId,role:f.role,is_active:f.active!==false})});this.toast('Permisos actualizados');}
+        await this.loadSettings();
+      }
+      this.setState({configEditor:null});
+    }catch(error){this.toast(error.message||'No se pudo guardar');}
+    finally{this.setState({cfgSaving:false});}
   }
   async editTimes(){
     const s=this.state.liveSettings||{};
@@ -655,6 +703,7 @@ class Component extends DCLogic {
       setInvitePassword:(e)=>this.setState({invitePassword:e?.target?.value||''}),setInviteConfirm:(e)=>this.setState({inviteConfirm:e?.target?.value||''}),
       finishInvite:()=>this.finishInvite(),inviteButton:this.state.authBusy?'Activando…':'Activar mi cuenta',
       appVersion:Component.APP_VERSION,modeLabel:'EN VIVO',modeBg:'#10603A',modeColor:'#fff',
+      ...this.vmConfigEditor(),
       onTapLogo:()=>this.tapLogo(),showEasterEgg:this.state.showEasterEgg,onCloseEasterEgg:()=>this.setState({showEasterEgg:false}),
       currentTitle:cur?cur.label:'Centro de pedidos', currentSub:subs[route]||'',
       sonido:this.state.sonido, toggleSonido:()=>this.setState({sonido:!this.state.sonido}),
@@ -734,16 +783,26 @@ class Component extends DCLogic {
     return {repKpis:kpis,repHora:ventasHora,repTop:topProd,repCanal:canal,repReps:[],repGrid:phone?'1fr':'1.4fr 1fr',onExportReports:()=>this.exportReports(completed)};
   }
 
+  vmConfigEditor(){
+    const type=this.state.configEditor,f=this.state.cfgForm||{},users=this.state.liveUsers||[];const editing=f.userMode==='edit';const userStyle=active=>`cursor:pointer;flex:1;border:1.5px solid ${active?'#10603A':'#E6DCC5'};background:${active?'#10603A':'#fff'};color:${active?'#fff':'#5a4e35'};border-radius:11px;padding:10px;font-weight:700`;
+    return {configEditorOpen:!!type,configEditorTitle:{contact:'Negocio y contacto',times:'Tiempos de preparación',coverage:'Entrega y cobertura',menu:'Menú y disponibilidad',users:'Usuarios y permisos'}[type]||'Configuración',closeConfigEditor:()=>this.setState({configEditor:null}),cfgSaving:this.state.cfgSaving,cfgSaveText:this.state.cfgSaving?'Guardando…':(type==='users'&&f.userMode==='invite'?'Enviar invitación':'Guardar cambios'),
+      cfgContact:type==='contact',cfgTimes:type==='times',cfgCoverage:type==='coverage',cfgMenu:type==='menu',cfgUsers:type==='users',
+      cfgPhone:f.phone||'',cfgPickup:f.pickup||'',cfgDelivery:f.delivery||'',cfgMinimum:f.minimum||'',cfgRadius:f.radius||'',
+      setCfgPhone:e=>this.setCfg('phone',e?.target?.value||''),setCfgPickup:e=>this.setCfg('pickup',e?.target?.value||''),setCfgDelivery:e=>this.setCfg('delivery',e?.target?.value||''),setCfgMinimum:e=>this.setCfg('minimum',e?.target?.value||''),setCfgRadius:e=>this.setCfg('radius',e?.target?.value||''),
+      cfgProductId:f.productId||'new',cfgProductName:f.name||'',cfgProductPrice:f.price||'',cfgProductDescription:f.description||'',cfgProductAvailable:f.available!==false,cfgProductOptions:(this.state.liveProducts||[]).map(p=>({id:p.id,label:p.name+(p.is_available?'':' · AGOTADO')})),setCfgProduct:e=>this.selectCfgProduct(e?.target?.value||'new'),setCfgProductName:e=>this.setCfg('name',e?.target?.value||''),setCfgProductPrice:e=>this.setCfg('price',e?.target?.value||''),setCfgProductDescription:e=>this.setCfg('description',e?.target?.value||''),toggleCfgProductAvailable:e=>this.setCfg('available',!!e?.target?.checked),
+      cfgUserIsInvite:!editing,cfgUserIsEdit:editing,cfgUserInviteMode:()=>this.setState({cfgForm:{...f,userMode:'invite',name:'',email:'',role:'driver',active:true}}),cfgUserEditMode:()=>{const u=users[0];this.setState({cfgForm:{...f,userMode:'edit',userId:u?.id||'',role:u?.role||'driver',active:u?.is_active!==false}});},cfgUserInviteStyle:userStyle(!editing),cfgUserEditStyle:userStyle(editing),cfgUserId:f.userId||'',cfgUserName:f.name||'',cfgUserEmail:f.email||'',cfgUserRole:f.role||'driver',cfgUserActive:f.active!==false,cfgUserOptions:users.map(u=>({id:u.id,label:(u.profiles?.full_name||u.email||'Usuario')+' · '+u.role})),setCfgUser:e=>this.selectCfgUser(e?.target?.value||''),setCfgUserName:e=>this.setCfg('name',e?.target?.value||''),setCfgUserEmail:e=>this.setCfg('email',e?.target?.value||''),setCfgUserRole:e=>this.setCfg('role',e?.target?.value||'driver'),toggleCfgUserActive:e=>this.setCfg('active',!!e?.target?.checked),saveConfigEditor:()=>this.saveConfigEditor()};
+  }
+
   vmConfig(){
     const s=this.state.liveSettings||{};const products=this.state.liveProducts||[];const zones=this.state.liveZones||[];const users=this.state.liveUsers||[];
     const available=products.filter(p=>p.is_available).length,totalProducts=products.length;
     const grupos=[
-      {titulo:'Negocio y contacto',icon:'M3 21h18M5 21V7l7-4 7 4v14',items:[{k:'Nombre',v:'Tacos Don Luis'},{k:'Sucursal',v:'Punto Cañada (1 de 1)'},{k:'WhatsApp',v:s.whatsapp_phone||'524775222095'}],onEdit:()=>this.editContact()},
-      {titulo:'Tiempos de preparación',icon:'M12 8v4l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z',items:[{k:'Para recoger',v:(s.pickup_eta_minutes||20)+' min'},{k:'Entrega',v:(s.delivery_eta_minutes||40)+' min'},{k:'Modo saturado',v:s.is_saturated?'Activo · se agregan 20 min':'Inactivo'}],onEdit:()=>this.editTimes()},
-      {titulo:'Entrega y cobertura',icon:'M1 3h15v13H1zM16 8h4l3 3v5h-7',items:[{k:'Radio',v:(s.max_delivery_radius_km||5)+' km'},{k:'Pedido mínimo',v:this.MXN(s.minimum_delivery_amount||100)},{k:'Zonas activas',v:String(zones.filter(z=>z.is_active).length)}],onEdit:()=>this.editCoverage()},
-      {titulo:'Menú y disponibilidad',icon:'M4 6h16M4 12h16M4 18h16',items:[{k:'Productos disponibles',v:available+' de '+totalProducts},{k:'Cambios',v:'Se publican al instante'},{k:'Opciones',v:'Agotar, editar o agregar'}],onEdit:()=>this.manageMenu()},
+      {titulo:'Negocio y contacto',icon:'M3 21h18M5 21V7l7-4 7 4v14',items:[{k:'Nombre',v:'Tacos Don Luis'},{k:'Sucursal',v:'Punto Cañada (1 de 1)'},{k:'WhatsApp',v:s.whatsapp_phone||'524775222095'}],onEdit:()=>this.openConfigEditor('contact')},
+      {titulo:'Tiempos de preparación',icon:'M12 8v4l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z',items:[{k:'Para recoger',v:(s.pickup_eta_minutes||20)+' min'},{k:'Entrega',v:(s.delivery_eta_minutes||40)+' min'},{k:'Modo saturado',v:s.is_saturated?'Activo · se agregan 20 min':'Inactivo'}],onEdit:()=>this.openConfigEditor('times')},
+      {titulo:'Entrega y cobertura',icon:'M1 3h15v13H1zM16 8h4l3 3v5h-7',items:[{k:'Radio',v:(s.max_delivery_radius_km||5)+' km'},{k:'Pedido mínimo',v:this.MXN(s.minimum_delivery_amount||100)},{k:'Zonas activas',v:String(zones.filter(z=>z.is_active).length)}],onEdit:()=>this.openConfigEditor('coverage')},
+      {titulo:'Menú y disponibilidad',icon:'M4 6h16M4 12h16M4 18h16',items:[{k:'Productos disponibles',v:available+' de '+totalProducts},{k:'Cambios',v:'Se publican al instante'},{k:'Opciones',v:'Agotar, editar o agregar'}],onEdit:()=>this.openConfigEditor('menu')},
       {titulo:'Pagos y lealtad',icon:'M2 7h20v12H2zM2 11h20',items:[{k:'Métodos',v:'Efectivo, transferencia y tarjeta al recibir'},{k:'Puntos',v:'1 punto por cada $10'},{k:'Acreditación',v:'Automática al entregar'}],onEdit:()=>this.toast('Las reglas de puntos ya están conectadas. El canje se activará cuando Don Luis defina su autorización.')},
-      {titulo:'Usuarios y permisos',icon:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 1 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',items:[{k:'Usuarios',v:String(users.length)},{k:'Activos',v:String(users.filter(u=>u.is_active).length)},{k:'Acciones',v:'Invitar, cambiar rol o desactivar'}],onEdit:()=>this.manageUsers()},
+      {titulo:'Usuarios y permisos',icon:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 1 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',items:[{k:'Usuarios',v:String(users.length)},{k:'Activos',v:String(users.filter(u=>u.is_active).length)},{k:'Acciones',v:'Invitar, cambiar rol o desactivar'}],onEdit:()=>this.openConfigEditor('users')},
       {titulo:'Estado de operación',icon:'M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11',items:[{k:'Entorno',v:'Producción'},{k:'Datos',v:'Persistencia en Supabase'},{k:'Sucursal',v:'Punto Cañada'}],onEdit:()=>this.toast('La operación real está activa')},
     ].map(g=>({...g,onEdit:g.onEdit||(()=>this.toast('Esta configuración requiere definición del dueño'))}));
     return {configGrupos:grupos, saturado:!!s.is_saturated, pausado:s.is_open===false,
