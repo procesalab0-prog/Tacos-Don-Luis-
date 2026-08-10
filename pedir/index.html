@@ -91,7 +91,7 @@
             <div style="display:flex;gap:10px;justify-content:space-between">
               <sc-for list="{{ valores }}" as="v" hint-placeholder-count="4">
                 <div style="flex:1;text-align:center">
-                  <div style="width:58px;height:58px;margin:0 auto 7px;border-radius:16px;background:#eaf4ec;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="{{ v.image }}" alt="{{ v.label }}" style="width:100%;height:100%;object-fit:contain"></div>
+                  <div style="width:64px;height:64px;margin:0 auto 7px;display:flex;align-items:center;justify-content:center"><img src="{{ v.image }}" alt="{{ v.label }}" style="width:100%;height:100%;object-fit:contain"></div>
                   <div style="font-size:11.5px;font-weight:800;color:#10603A;letter-spacing:.02em">{{ v.label }}</div>
                 </div>
               </sc-for>
@@ -512,7 +512,7 @@
     <nav style="position:sticky;bottom:0;z-index:30;background:#fff;border-top:1px solid #E6DCC5;display:flex;padding:7px 6px calc(7px + env(safe-area-inset-bottom))">
       <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
         <button onClick="{{ t.onClick }}" style="{{ t.style }}">
-          <span style="position:relative;width:27px;height:27px;display:flex;align-items:center;justify-content:center"><sc-if value="{{ t.hasSticker }}" hint-placeholder-val="{{ false }}"><span style="{{ t.stickerStyle }}"></span></sc-if><sc-if value="{{ t.noSticker }}" hint-placeholder-val="{{ true }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ t.icon }}"></path></svg></sc-if><sc-if value="{{ t.badge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-4px;right:-7px;background:#D6453D;color:#fff;font-size:9px;font-weight:800;min-width:15px;height:15px;padding:0 3px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ t.badge }}</span></sc-if></span>
+          <span style="position:relative;width:36px;height:36px;display:flex;align-items:center;justify-content:center"><sc-if value="{{ t.hasSticker }}" hint-placeholder-val="{{ false }}"><span style="{{ t.stickerStyle }}"></span></sc-if><sc-if value="{{ t.noSticker }}" hint-placeholder-val="{{ true }}"><svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ t.icon }}"></path></svg></sc-if><sc-if value="{{ t.badge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-4px;right:-7px;background:#D6453D;color:#fff;font-size:9px;font-weight:800;min-width:15px;height:15px;padding:0 3px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ t.badge }}</span></sc-if></span>
           <span style="font-size:10.5px;font-weight:700">{{ t.label }}</span>
         </button>
       </sc-for>
@@ -537,7 +537,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.5.4';
+  static APP_VERSION = '2.5.5';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
@@ -1010,7 +1010,7 @@ class Component extends DCLogic {
       {id:'cuenta',label:'Cuenta',sticker:'../assets/sticker-chef.svg'},
     ].map(t=>{
       const active=(route===t.id)||(t.id==='pedidos'&&['seguimiento'].includes(route))||(t.id==='menu'&&['carrito','checkout','confirmacion'].includes(route));
-      return {...t,hasSticker:!!t.sticker,noSticker:!t.sticker,stickerStyle:t.sticker?`display:block;width:27px;height:27px;background:#10603A;mask:url(${t.sticker}) center/contain no-repeat;-webkit-mask:url(${t.sticker}) center/contain no-repeat`:'',onClick:()=>this.go(t.id==='pedidos'?(this.state.folio?'seguimiento':'pedidos'):t.id),
+      return {...t,hasSticker:!!t.sticker,noSticker:!t.sticker,stickerStyle:t.sticker?`display:block;width:34px;height:34px;background:#10603A;mask:url(${t.sticker}) center/contain no-repeat;-webkit-mask:url(${t.sticker}) center/contain no-repeat`:'',onClick:()=>this.go(t.id==='pedidos'?(this.state.folio?'seguimiento':'pedidos'):t.id),
         style:`flex:1;cursor:pointer;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;font-family:'Rubik',sans-serif;color:${active?'#10603A':'#a99d80'};font-weight:${active?'700':'600'}`};
     });
 
