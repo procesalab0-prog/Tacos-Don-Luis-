@@ -537,7 +537,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.5.3';
+  static APP_VERSION = '2.5.4';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
@@ -569,18 +569,19 @@ class Component extends DCLogic {
   tapLogo(){ clearTimeout(this._logoTapTimer); const taps=(this.state.logoTaps||0)+1; if(taps>=6){this.setState({logoTaps:0,showEasterEgg:true});return;} this.setState({logoTaps:taps}); this._logoTapTimer=setTimeout(()=>this.setState({logoTaps:0}),1200); }
 
   async api(path,options={}){
-    const token=options.token||this.state.session?.access_token;
+    const {skipAuth=false,token:requestedToken,...fetchOptions}=options;
+    const token=skipAuth?null:(requestedToken||this.state.session?.access_token);
     const headers={apikey:Component.SUPABASE_KEY,'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{}),...(options.headers||{})};
-    const res=await fetch(Component.SUPABASE_URL+path,{...options,headers});
+    const res=await fetch(Component.SUPABASE_URL+path,{...fetchOptions,headers});
     const data=await res.json().catch(()=>null);
     if(!res.ok)throw new Error(data?.error||'No fue posible conectar con Don Luis');
     return data;
   }
   async publicRead(path){
-    try{return await this.api(path);}
+    try{return await this.api(path,{skipAuth:true});}
     catch(firstError){
       await new Promise(resolve=>setTimeout(resolve,700));
-      return this.api(path);
+      return this.api(path,{skipAuth:true});
     }
   }
   async loadPublicData(){
