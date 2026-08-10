@@ -449,7 +449,7 @@
                       <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:13px 15px;display:flex;align-items:center;gap:12px">
                         <span style="background:#F2C230;color:#3a2c00;font-weight:800;font-size:12px;padding:5px 10px;border-radius:999px;white-space:nowrap;min-width:62px;text-align:center">{{ r.req }}</span>
                         <span style="flex:1;font-weight:600;font-size:13.5px;color:#3a3120">{{ r.premio }}</span>
-                        <sc-if value="{{ r.listo }}" hint-placeholder-val="{{ false }}"><button style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:10px;padding:8px 13px;font-weight:700;font-size:12px">Canjear</button></sc-if>
+                        <sc-if value="{{ r.listo }}" hint-placeholder-val="{{ false }}"><button onClick="{{ r.onRedeem }}" style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:10px;padding:8px 13px;font-weight:700;font-size:12px">Usar en caja</button></sc-if>
                       </div>
                     </sc-for>
                   </div>
@@ -498,7 +498,7 @@
               <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:16px 0 8px;text-transform:uppercase;letter-spacing:.04em">Extras con costo</div>
               <div style="display:flex;flex-direction:column;gap:8px"><sc-for list="{{ sheet.extras }}" as="e" hint-placeholder-count="4"><button onClick="{{ e.onClick }}" style="{{ e.style }}"><span style="font-weight:600;font-size:14px;color:#211E15">{{ e.label }}</span><span style="font-weight:700;font-size:13px;color:#10603A">{{ e.precioTxt }}</span></button></sc-for></div>
               <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:16px 0 8px;text-transform:uppercase;letter-spacing:.04em">Nota especial</div>
-              <textarea onInput="{{ sheet.onNota }}" placeholder="Ej. bien doradito, salsa aparte…" style="width:100%;min-height:64px;resize:none;border:1.5px solid #e0d6bf;border-radius:12px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></textarea>
+              <textarea onInput="{{ sheet.onNota }}" placeholder="Ej. salsa aparte, sin cebolla…" style="width:100%;min-height:64px;resize:none;border:1.5px solid #e0d6bf;border-radius:12px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></textarea>
             </div>
             <div style="position:sticky;bottom:0;background:#F3F0E6;padding:14px 18px calc(16px + env(safe-area-inset-bottom));border-top:1px solid #E6DCC5;display:flex;gap:12px;align-items:center">
               <div style="display:flex;align-items:center;gap:11px;background:#fff;border:1.5px solid #E6DCC5;border-radius:13px;padding:7px 8px"><button onClick="{{ sheet.onDec }}" style="cursor:pointer;width:32px;height:32px;border-radius:9px;border:none;background:#f0e8d4;color:#10603A;font-size:19px;line-height:1">−</button><span style="font-weight:800;min-width:18px;text-align:center;font-size:16px">{{ sheet.qty }}</span><button onClick="{{ sheet.onInc }}" style="cursor:pointer;width:32px;height:32px;border-radius:9px;border:none;background:#10603A;color:#fff;font-size:19px;line-height:1">+</button></div>
@@ -537,7 +537,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.6.0';
+  static APP_VERSION = '2.7.0';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
@@ -545,7 +545,7 @@ class Component extends DCLogic {
     cart:[], entrega:'recoger', pago:'efectivo', dir:{}, prog:false,
     folio:null, trackStep:0, cuentaTab:'perfil', logged:false,
     remoteMenu:null, remoteCategories:null, remoteZones:null, modifierOptions:null, branchId:null,branchLocation:null,
-    settings:null, submitting:false, trackingToken:null, liveOrder:null,accountOrders:[],
+    settings:null, submitting:false, trackingToken:null, liveOrder:null,accountOrders:[],loyaltyAccount:null,loyaltyRule:null,
     authEmail:'',authPassword:'',session:null,currentUser:null,logoTaps:0,showEasterEgg:false };
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
@@ -554,6 +554,7 @@ class Component extends DCLogic {
     this.setState({vw:window.innerWidth});
     window.addEventListener('resize',this._onR);
     this.loadPublicData();
+    this._menuPoll=setInterval(()=>this.loadPublicData(),30000);
     const draft=JSON.parse(localStorage.getItem('donLuisCheckoutDraft')||'null');
     if(draft?.dir){this._pickedLatLng=draft.location||null;this.setState({dir:draft.dir});}
     const savedOrders=JSON.parse(localStorage.getItem('donLuisGuestOrderTokens')||'[]');
@@ -564,7 +565,7 @@ class Component extends DCLogic {
     this._sessionRefresh=setInterval(()=>{if(this.state.session)this.restoreCustomerSession(this.state.session);},5*60*1000);
   }
   componentDidUpdate(){ if(this.state.route==='checkout'){this.applySavedFields();if(this.state.entrega==='domicilio')this.scheduleMap();} if(this.state.route==='cuenta'){this.applySavedFields();if(this.state.cuentaTab==='direcciones')this.scheduleMap();} }
-  componentWillUnmount(){ window.removeEventListener('resize',this._onR); clearInterval(this._trk); clearInterval(this._poll); clearInterval(this._sessionRefresh); clearTimeout(this._mapTimer);clearTimeout(this._fieldTimer);clearTimeout(this._geocodeTimer); if(this._map)try{this._map.remove();}catch(_){} }
+  componentWillUnmount(){ window.removeEventListener('resize',this._onR); clearInterval(this._trk); clearInterval(this._poll); clearInterval(this._menuPoll); clearInterval(this._sessionRefresh); clearTimeout(this._mapTimer);clearTimeout(this._fieldTimer);clearTimeout(this._geocodeTimer); if(this._map)try{this._map.remove();}catch(_){} }
   toast(m){ clearTimeout(this._t); this.setState({toast:m}); this._t=setTimeout(()=>this.setState({toast:null}),2400); }
   go(r){ this.setState({route:r}); if(typeof window!=='undefined') window.scrollTo?.({top:0}); }
   tapLogo(){ clearTimeout(this._logoTapTimer); const taps=(this.state.logoTaps||0)+1; if(taps>=6){this.setState({logoTaps:0,showEasterEgg:true});return;} this.setState({logoTaps:taps}); this._logoTapTimer=setTimeout(()=>this.setState({logoTaps:0}),1200); }
@@ -647,7 +648,15 @@ class Component extends DCLogic {
       const customer=customers[0],profile=profiles[0]||{};const addresses=customer?.customer_addresses||[];const address=addresses.find(a=>a.is_default)||addresses[0];
       const current=this.state.dir||{};const dir={...current,nombre:customer?.full_name||profile.full_name||current.nombre||'',tel:customer?.phone||profile.phone||current.tel||''};
       if(address){Object.assign(dir,{calle:address.street||'',num:address.exterior_number||'',col:address.neighborhood||'',ref:address.references_text||'',savedAddressId:address.id});if(address.latitude!=null&&address.longitude!=null)this._pickedLatLng={lat:Number(address.latitude),lng:Number(address.longitude)};}
-      this.setState({dir,accountOrders:orders||[]});this.persistCheckoutDraft(dir);
+      let loyaltyAccount=null,loyaltyRule=null;
+      if(customer?.id){
+        const [accounts,rules]=await Promise.all([
+          this.api('/rest/v1/loyalty_accounts?customer_id=eq.'+customer.id+'&select=id,points_balance,lifetime_points&limit=1',{token:session.access_token}).catch(()=>[]),
+          this.state.branchId?this.publicRead('/rest/v1/loyalty_rules?branch_id=eq.'+this.state.branchId+'&is_active=eq.true&select=points_per_currency,minimum_spend,config&limit=1').catch(()=>[]):Promise.resolve([])
+        ]);
+        loyaltyAccount=accounts[0]||null;loyaltyRule=rules[0]||null;
+      }
+      this.setState({dir,accountOrders:orders||[],loyaltyAccount,loyaltyRule});this.persistCheckoutDraft(dir);
     }catch(error){console.error(error);}
   }
   async saveCustomerData(){
@@ -676,6 +685,7 @@ class Component extends DCLogic {
     const session=this.state.session,d=this.state.dir||{};
     if(!session?.user?.id){this.toast('Inicia sesión para guardar tu dirección');return;}
     if(!d.calle?.trim()||!d.col?.trim()){this.toast('Agrega calle y colonia');return;}
+    if(!/^\d{10}$/.test(String(d.tel||'').replace(/\D/g,''))){this.toast('Guarda primero un teléfono de 10 dígitos en Perfil');return;}
     try{
       const customers=await this.api('/rest/v1/customers?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=representation'},body:JSON.stringify({user_id:session.user.id,full_name:d.nombre||session.user.email?.split('@')[0]||'Cliente Don Luis',phone:d.tel||null,email:session.user.email||null,whatsapp_opt_in:true})});
       const customer=customers[0];if(!customer)throw new Error('No fue posible guardar el cliente');
@@ -691,7 +701,7 @@ class Component extends DCLogic {
     {id:'t_cabeza',nombre:'Taco de cabeza',cat:'Tacos',precio:17,desc:'Cabeza suave en su jugo',foto:null},
     {id:'t_chorizo',nombre:'Taco de chorizo',cat:'Tacos',precio:17,desc:'Chorizo artesanal dorado',foto:null},
     {id:'t_lengua',nombre:'Taco de lengua',cat:'Tacos',precio:25,desc:'Lengua de res suave',foto:null},
-    {id:'t_sesos',nombre:'Taco de sesos',cat:'Tacos',precio:25,desc:'Sesos bien dorados',foto:null},
+    {id:'t_sesos',nombre:'Taco de sesos',cat:'Tacos',precio:25,desc:'Sesos preparados al momento',foto:null},
     {id:'t_arrachera',nombre:'Taco de arrachera',cat:'Tacos',precio:25,desc:'Arrachera sazonada',foto:null,disponible:false},
     {id:'q_pastor',nombre:'Quesadilla de pastor',cat:'Quesadillas',precio:34,desc:'Queso Oaxaca y pastor',foto:null,tag:'Recomendado'},
     {id:'q_bistec',nombre:'Quesadilla de bistec',cat:'Quesadillas',precio:34,desc:'Queso Oaxaca y bistec',foto:null},
@@ -723,7 +733,7 @@ class Component extends DCLogic {
   }
   get modsLibres(){
     if(this.state.modifierOptions?.length)return this.state.modifierOptions.filter(o=>Number(o.price_delta)===0).map(o=>o.name);
-    return ['Sin cebolla','Sin cilantro','Sin picante','Bien dorado','Con todo'];
+    return ['Sin cebolla','Sin cilantro','Sin picante','Con todo'];
   }
 
   catIcon(c){ return {Tacos:'M3 11a9 9 0 0 1 18 0M2 11h20l-2 4H4zM7 18h10',Quesadillas:'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM12 2v20',Tortas:'M4 11h16a0 0 0 0 1 0 0v2a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-2zM6 11a6 6 0 0 1 12 0',['Tacos light']:'M7 20s-3-2-3-8a8 8 0 0 1 16 0c0 6-3 8-3 8M12 4v16',Bebidas:'M5 3h14l-1.5 17a1 1 0 0 1-1 .9H7.5a1 1 0 0 1-1-.9zM5 8h14'}[c]; }
@@ -804,6 +814,8 @@ class Component extends DCLogic {
   puntosGanados(){ return Math.round(this.totalFinal()/10); }
 
   async hacerPedido(){
+    if(this.state.settings?.is_open===false){this.toast('Los pedidos en línea están pausados por el momento');return;}
+    if(this.state.settings?.is_saturated&&!window.confirm('Tenemos alta demanda. El tiempo estimado aumentará aproximadamente 20 minutos. ¿Deseas continuar?'))return;
     if(this.fueraCobertura()){ this.toast('Esa dirección está fuera de cobertura'); return; }
     const selectedZone=this.coberturaTarifas.find(z=>z.label===this.state.dir.zona);
     if(this.state.entrega==='domicilio'&&!selectedZone){this.toast('Elige una zona de entrega');return;}
@@ -816,7 +828,9 @@ class Component extends DCLogic {
     if(this.state.pago==='clip'&&!window.confirm('SIMULACIÓN CLIP\n\nNo se realizará ningún cobro ni se pedirán datos de tarjeta. ¿Quieres simular un pago aprobado y crear el pedido?'))return;
     this.setState({submitting:true});
     try{
-      const requestId=crypto.randomUUID();
+      const pending=JSON.parse(localStorage.getItem('donLuisPendingOrder')||'null');
+      const requestId=pending?.requestId||crypto.randomUUID();
+      localStorage.setItem('donLuisPendingOrder',JSON.stringify({requestId,createdAt:new Date().toISOString()}));
       const freeOptions=this.state.modifierOptions||[];
       const items=this.state.cart.map(l=>({
         productId:l.id,
@@ -845,6 +859,7 @@ class Component extends DCLogic {
         })
       });
       const folio='DL-'+result.order.folio;
+      localStorage.removeItem('donLuisPendingOrder');
       try{await this.saveCustomerData();}catch(error){console.error(error);}
       localStorage.setItem('donLuisTrackingToken',result.trackingToken);
       const remembered=JSON.parse(localStorage.getItem('donLuisGuestOrderTokens')||'[]').filter(x=>x?.token!==result.trackingToken);
@@ -852,7 +867,7 @@ class Component extends DCLogic {
       localStorage.setItem('donLuisGuestOrderTokens',JSON.stringify(remembered.slice(0,10)));
       this.setState({folio,trackingToken:result.trackingToken,liveOrder:result.order,route:'confirmacion',trackStep:0,prog:false,submitting:false});
       if(this.state.session)await this.loadCustomerData(this.state.session);
-      this.toast('¡Pedido recibido! 🌮');
+      this.toast(result.duplicate?'Este pedido ya estaba recibido · no se envió dos veces':'¡Pedido recibido! 🌮');
     }catch(error){this.setState({submitting:false});this.toast(error.message||'No se pudo crear el pedido');}
   }
   async refreshTracking(){
@@ -881,7 +896,7 @@ class Component extends DCLogic {
     return ['Hola, envío la confirmación de mi pedido en Tacos Don Luis 🌮','Folio: '+(this.state.folio||'Pendiente'),'Cliente: '+(this.state.dir.nombre||''),'Teléfono: '+(this.state.dir.tel||''),'','Pedido:',...lines,'','Entrega: '+address,(this.state.dir.ref?'Referencias: '+this.state.dir.ref:''),(map?'Ubicación: '+map:''),'Pago: '+({efectivo:'Efectivo',transferencia:'Transferencia',tarjeta:'Tarjeta al recibir',clip:'Clip en línea (simulación aprobada)'}[this.state.pago]||this.state.pago),'Total: '+this.MXN(this.state.liveOrder?.total??this.totalFinal())].filter(Boolean).join('\n');
   }
   openWhatsApp(){const phone=String(this.state.settings?.whatsapp_phone||'').replace(/\D/g,'');const base=phone?'https://wa.me/'+phone:'https://api.whatsapp.com/send';window.open(base+(base.includes('?')?'&':'?')+'text='+encodeURIComponent(this.whatsappText()),'_blank','noopener');}
-  nuevoPedido(){ clearInterval(this._trk); this.setState({cart:[],folio:null,trackStep:0,dir:{},route:'home'}); }
+  nuevoPedido(){ clearInterval(this._trk); this.setState({cart:[],folio:null,trackStep:0,route:'home'}); }
 
   vmCheckout(){
     const entrega=this.state.entrega;
@@ -956,16 +971,20 @@ class Component extends DCLogic {
   vmCuenta(){
     const tabs=[['perfil','Perfil'],['direcciones','Direcciones'],['puntos','Puntos']].map(([k,l])=>({label:l,active:k===this.state.cuentaTab,onClick:()=>this.setState({cuentaTab:k}),
       style:`cursor:pointer;flex:1;padding:9px;border-radius:11px;font-weight:700;font-size:13px;border:none;${k===this.state.cuentaTab?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35;border:1px solid #E6DCC5'}`}));
-    const recompensas=[
-      {req:'200 pts',premio:'3 tacos de pastor gratis',listo:true},
-      {req:'350 pts',premio:'Orden de quesadilla + agua',listo:false},
-      {req:'500 pts',premio:'20% en toda tu cuenta',listo:false},
+    const configured=this.state.loyaltyRule?.config?.rewards;
+    const rewards=Array.isArray(configured)&&configured.length?configured:[
+      {points:200,label:'3 tacos de pastor gratis'},
+      {points:350,label:'Orden de quesadilla + agua'},
+      {points:500,label:'20% en toda tu cuenta'},
     ];
+    const balance=Number(this.state.loyaltyAccount?.points_balance||0);
+    const lifetime=Number(this.state.loyaltyAccount?.lifetime_points||0);
+    const recompensas=rewards.map(r=>({req:r.points+' pts',premio:r.label,listo:balance>=Number(r.points),onRedeem:()=>this.toast('Muéstralo en caja para autorizar el canje')}));
     const email=this.state.currentUser?.email||'';
     const name=this.state.currentUser?.user_metadata?.full_name||email.split('@')[0]||'Cliente Don Luis';
     return {cuentaTabs:tabs, cuLogged:this.state.logged, cuNotLogged:!this.state.logged,
       cuPerfil:this.state.cuentaTab==='perfil', cuDir:this.state.cuentaTab==='direcciones', cuPuntos:this.state.cuentaTab==='puntos',
-      cuPuntosVal:180, cuNivel:'Plata', cuVisitas:12,
+      cuPuntosVal:balance, cuNivel:lifetime>=500?'Oro':lifetime>=200?'Plata':'Bronce', cuVisitas:this.state.accountOrders.filter(o=>o.status==='delivered').length,
       cuName:this.state.dir?.nombre||name,cuNameValue:this.state.dir?.nombre||'',cuEmail:email,cuPhoneValue:this.state.dir?.tel||'',cuInitial:(this.state.dir?.nombre||name).slice(0,1).toUpperCase(),
       cuLocationText:this._pickedLatLng?'Ubicación guardada: '+this._pickedLatLng.lat+', '+this._pickedLatLng.lng:'Marca la ubicación para guardarla',
       recompensas,
@@ -996,8 +1015,11 @@ class Component extends DCLogic {
   renderVals(){
     const vw=this.state.vw, phone=vw>0&&vw<760;
     const route=this.state.route;
-    const estados={abierto:{txt:'Abierto',c:'#dff5e4',bg:'rgba(255,255,255,.16)',dot:'#8FD694'}};
-    const est=estados.abierto;
+    const est=this.state.settings?.is_open===false
+      ?{txt:'Pedidos pausados',c:'#fff0ee',bg:'rgba(214,69,61,.32)',dot:'#f2a29c'}
+      :this.state.settings?.is_saturated
+        ?{txt:'Alta demanda',c:'#fff7d7',bg:'rgba(242,194,48,.24)',dot:'#F2C230'}
+        :{txt:'Abierto',c:'#dff5e4',bg:'rgba(255,255,255,.16)',dot:'#8FD694'};
     const valores=[
       {label:'FRESCO',image:'../assets/value-fresco.png'},
       {label:'SABROSO',image:'../assets/value-sabroso.png'},

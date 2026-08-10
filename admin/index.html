@@ -361,14 +361,14 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.6.0';
+  static APP_VERSION = '2.7.0';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { rol:null, route:'pedidos', vw:1280, toast:null, sonido:true,
     canal:'todos', rechazoFor:null, aceptarFor:null, aceptarTiempo:20,
     authEmail:'',authPassword:'',authBusy:false,session:null,live:false,branchId:null,logoTaps:0,showEasterEgg:false,
     inviteMode:false,invitePassword:'',inviteConfirm:'',liveSettings:null,liveProducts:null,liveStocks:null,
-    liveCashShifts:null,liveCashMovements:null,liveCustomers:null,livePurchases:null,liveSuppliers:null,liveUsers:null };
+    liveCashShifts:null,liveCashMovements:null,liveCustomers:null,livePurchases:null,liveSuppliers:null,liveUsers:null,liveCategories:null,liveZones:null,liveLoyaltyRule:null };
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
   componentDidMount(){
@@ -451,7 +451,89 @@ class Component extends DCLogic {
   }
   async loadSettings(token=this.state.session?.access_token,branchId=this.state.branchId){
     if(!token||!branchId)return;
-    try{const rows=await this.api('/rest/v1/business_settings?branch_id=eq.'+branchId+'&select=*',{token});this.setState({liveSettings:rows[0]||null});}catch(error){console.error(error);}
+    try{
+      const [settings,products,categories,zones,rules,staff]=await Promise.all([
+        this.api('/rest/v1/business_settings?branch_id=eq.'+branchId+'&select=*',{token}),
+        this.api('/rest/v1/products?branch_id=eq.'+branchId+'&select=*&order=sort_order,name',{token}),
+        this.api('/rest/v1/categories?branch_id=eq.'+branchId+'&select=*&order=sort_order',{token}),
+        this.api('/rest/v1/delivery_zones?branch_id=eq.'+branchId+'&select=*&order=sort_order',{token}),
+        this.api('/rest/v1/loyalty_rules?branch_id=eq.'+branchId+'&is_active=eq.true&select=*&limit=1',{token}).catch(()=>[]),
+        this.api('/functions/v1/staff-users?branch_id='+branchId,{token}).catch(()=>({users:[]}))
+      ]);
+      this.setState({liveSettings:settings[0]||null,liveProducts:products,liveCategories:categories,liveZones:zones,liveLoyaltyRule:rules[0]||null,liveUsers:staff.users||[]});
+    }catch(error){console.error(error);this.toast('No se pudo actualizar la configuración');}
+  }
+  async patchSettings(changes,message='Configuración guardada'){
+    if(!this.state.live||!this.state.branchId){this.toast('Inicia sesión como administrador');return;}
+    try{
+      await this.api('/rest/v1/business_settings?branch_id=eq.'+this.state.branchId,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({...changes,updated_at:new Date().toISOString()})});
+      await this.loadSettings();this.toast(message);
+    }catch(error){this.toast(error.message);}
+  }
+  async editTimes(){
+    const s=this.state.liveSettings||{};
+    const pickup=Number(window.prompt('Minutos estimados para recoger',String(s.pickup_eta_minutes||20)));if(!Number.isFinite(pickup))return;
+    const delivery=Number(window.prompt('Minutos estimados para entrega',String(s.delivery_eta_minutes||40)));if(!Number.isFinite(delivery))return;
+    await this.patchSettings({pickup_eta_minutes:pickup,delivery_eta_minutes:delivery},'Tiempos actualizados');
+  }
+  async editCoverage(){
+    const s=this.state.liveSettings||{};
+    const minimum=Number(window.prompt('Pedido mínimo para envío',String(s.minimum_delivery_amount||100)));if(!Number.isFinite(minimum))return;
+    const radius=Number(window.prompt('Radio máximo en kilómetros',String(s.max_delivery_radius_km||5)));if(!Number.isFinite(radius))return;
+    await this.patchSettings({minimum_delivery_amount:minimum,max_delivery_radius_km:radius},'Cobertura actualizada');
+    const zones=this.state.liveZones||[];
+    if(zones.length&&window.confirm('¿También quieres editar el costo y mínimo de una zona?')){
+      const zone=zones[Number(window.prompt(zones.map((z,i)=>(i+1)+'. '+z.name+' · $'+z.fee).join('\n')+'\n\nNúmero de zona'))-1];if(!zone)return;
+      const fee=Number(window.prompt('Costo de envío para '+zone.name,String(zone.fee)));if(!Number.isFinite(fee))return;
+      const zoneMinimum=Number(window.prompt('Pedido mínimo para '+zone.name,String(zone.minimum_order)));if(!Number.isFinite(zoneMinimum))return;
+      try{await this.api('/rest/v1/delivery_zones?id=eq.'+zone.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({fee,minimum_order:zoneMinimum})});await this.loadSettings();this.toast('Zona actualizada');}catch(error){this.toast(error.message);}
+    }
+  }
+  async editContact(){
+    const phone=window.prompt('WhatsApp con código de país, sólo números',this.state.liveSettings?.whatsapp_phone||'524775222095');if(!phone)return;
+    await this.patchSettings({whatsapp_phone:phone.replace(/\D/g,'')},'WhatsApp actualizado');
+  }
+  async manageMenu(){
+    const products=this.state.liveProducts||[];
+    const action=window.prompt('MENÚ\nEscribe AGOTADO para activar/desactivar un producto, EDITAR para cambiar nombre/precio o AGREGAR para crear uno.','AGOTADO');if(!action)return;
+    const mode=action.trim().toUpperCase();if(mode==='AGREGAR')return this.addProduct();
+    const list=products.map((p,i)=>(i+1)+'. '+p.name+' · $'+p.price+(p.is_available?'':' · AGOTADO')).join('\n');
+    const product=products[Number(window.prompt(list+'\n\nNúmero del producto'))-1];if(!product)return this.toast('Producto no válido');
+    try{
+      if(mode==='AGOTADO')await this.api('/rest/v1/products?id=eq.'+product.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({is_available:!product.is_available,updated_at:new Date().toISOString()})});
+      else if(mode==='EDITAR'){
+        const name=window.prompt('Nombre',product.name);if(!name)return;const price=Number(window.prompt('Precio',String(product.price)));if(!Number.isFinite(price))return;
+        const description=window.prompt('Descripción',product.description||'')??product.description;
+        await this.api('/rest/v1/products?id=eq.'+product.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({name,price,description,updated_at:new Date().toISOString()})});
+      }else return this.toast('Escribe AGOTADO, EDITAR o AGREGAR');
+      await this.loadSettings();this.toast('Menú actualizado en tiempo real');
+    }catch(error){this.toast(error.message);}
+  }
+  async addProduct(){
+    const categories=this.state.liveCategories||[];const list=categories.map((c,i)=>(i+1)+'. '+c.name).join('\n');
+    const category=categories[Number(window.prompt(list+'\n\nNúmero de categoría'))-1];if(!category)return this.toast('Categoría no válida');
+    const name=window.prompt('Nombre del producto');if(!name)return;const price=Number(window.prompt('Precio'));if(!Number.isFinite(price))return;
+    const description=window.prompt('Descripción','')||'';const slug=name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'')+'-'+Date.now().toString().slice(-5);
+    try{
+      await this.api('/rest/v1/products',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({branch_id:this.state.branchId,category_id:category.id,name,slug,description,price,is_active:true,is_available:true,sort_order:(this.state.liveProducts||[]).length+1})});
+      await this.loadSettings();this.toast('Producto agregado al menú');
+    }catch(error){this.toast(error.message);}
+  }
+  async manageUsers(){
+    const action=window.prompt('USUARIOS\nEscribe INVITAR para dar acceso o EDITAR para cambiar rol/estado.','INVITAR');if(!action)return;
+    const mode=action.trim().toUpperCase();
+    try{
+      if(mode==='INVITAR'){
+        const email=window.prompt('Correo electrónico');if(!email)return;const full_name=window.prompt('Nombre completo','')||'';
+        const role=(window.prompt('Rol: owner, admin, cashier, kitchen, waiter o driver','driver')||'').trim().toLowerCase();
+        await this.api('/functions/v1/staff-users',{method:'POST',body:JSON.stringify({action:'invite',branch_id:this.state.branchId,email,full_name,role})});this.toast('Invitación enviada');
+      }else if(mode==='EDITAR'){
+        const users=this.state.liveUsers||[];const user=users[Number(window.prompt(users.map((u,i)=>(i+1)+'. '+(u.profiles?.full_name||u.email||u.user_id)+' · '+u.role+(u.is_active?'':' · INACTIVO')).join('\n')+'\n\nNúmero de usuario'))-1];if(!user)return this.toast('Usuario no válido');
+        const role=(window.prompt('Nuevo rol',user.role)||user.role).trim().toLowerCase();const active=window.confirm('Aceptar = acceso activo\nCancelar = acceso desactivado');
+        await this.api('/functions/v1/staff-users',{method:'PATCH',body:JSON.stringify({branch_id:this.state.branchId,membership_id:user.id,role,is_active:active})});this.toast('Acceso actualizado');
+      }else return this.toast('Escribe INVITAR o EDITAR');
+      await this.loadSettings();
+    }catch(error){this.toast(error.message);}
   }
   mapRemoteOrder(o){
     const status={pending_acceptance:'nuevo',confirmed:'aceptado',preparing:'preparando',ready:'listo',assigned:'listo',on_the_way:'en_camino',delivered:'completado',rejected:'rechazado',cancelled:'cancelado'}[o.status]||o.status;
@@ -486,7 +568,7 @@ class Component extends DCLogic {
     this._orders=[
       {folio:'DL-4207',canal:'domicilio',estado:'nuevo',min:1,cliente:'Paola Ramírez',tel:'477 123 4567',dir:'Av. Cañada 120, Punto Cañada',pago:{metodo:'transferencia',estado:'por_verificar'},items:[{q:3,nombre:'Taco al pastor',nota:'Sin cebolla'},{q:1,nombre:'Quesadilla de pastor',nota:''},{q:1,nombre:'Agua ½ L',nota:''}]},
       {folio:'DL-4206',canal:'whatsapp',estado:'nuevo',min:3,cliente:'Jorge M.',tel:'477 555 0199',dir:'Recoger en sucursal',pago:{metodo:'efectivo',estado:'pendiente'},items:[{q:5,nombre:'Taco de bistec',nota:''},{q:2,nombre:'Refresco',nota:''}]},
-      {folio:'DL-4205',canal:'recoger',estado:'aceptado',min:6,cliente:'Andrea G.',tel:'477 222 1188',dir:'Recoger 13:20',pago:{metodo:'tarjeta',estado:'pendiente'},tiempo:20,items:[{q:4,nombre:'Taco de cabeza',nota:'Bien dorado'},{q:1,nombre:'Torta de pastor',nota:''}]},
+      {folio:'DL-4205',canal:'recoger',estado:'aceptado',min:6,cliente:'Andrea G.',tel:'477 222 1188',dir:'Recoger 13:20',pago:{metodo:'tarjeta',estado:'pendiente'},tiempo:20,items:[{q:4,nombre:'Taco de cabeza',nota:'Salsa aparte'},{q:1,nombre:'Torta de pastor',nota:''}]},
       {folio:'DL-4204',canal:'establecimiento',estado:'preparando',min:9,cliente:'Mesa 5',tel:'—',dir:'Consumo en mesa',pago:{metodo:'efectivo',estado:'pendiente'},tiempo:15,items:[{q:6,nombre:'Taco campechano',nota:'Doble carne'},{q:3,nombre:'Refresco',nota:''}]},
       {folio:'DL-4203',canal:'domicilio',estado:'preparando',min:14,cliente:'Luis Ángel',tel:'477 888 4410',dir:'Jardines de Oriente 44',pago:{metodo:'efectivo',estado:'pendiente'},tiempo:35,items:[{q:6,nombre:'Taco de suadero',nota:'Sin cilantro'},{q:2,nombre:'Quesadilla de lengua',nota:''}]},
       {folio:'DL-4202',canal:'recoger',estado:'listo',min:2,cliente:'Marcela T.',tel:'477 401 7788',dir:'Recoger ahora',pago:{metodo:'tarjeta',estado:'pagado'},tiempo:18,items:[{q:2,nombre:'Torta de bistec',nota:''},{q:1,nombre:'Agua 1 L',nota:''}]},
@@ -687,16 +769,18 @@ class Component extends DCLogic {
 
   vmConfig(){
     const demoMode=this.state.liveSettings?.demo_mode!==false;
+    const s=this.state.liveSettings||{};const available=(this.state.liveProducts||[]).filter(p=>p.is_available).length,totalProducts=(this.state.liveProducts||[]).length;
     const grupos=[
-      {titulo:'Negocio y sucursales',icon:'M3 21h18M5 21V7l7-4 7 4v14',items:[{k:'Nombre',v:'Tacos Don Luis'},{k:'Sucursal',v:'Punto Cañada (1 de 1)'},{k:'Teléfono / WhatsApp',v:'477 522 2095'},{k:'Redes sociales',v:'@tacosdonluis'}]},
-      {titulo:'Horarios y capacidad',icon:'M12 8v4l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z',items:[{k:'Horario',v:'12:00 – 23:00'},{k:'Días cerrados',v:'Lunes'},{k:'Tiempo recoger',v:'15–20 min'},{k:'Tiempo entrega',v:'30–40 min'},{k:'Capacidad máx.',v:'25 pedidos/hora'}]},
-      {titulo:'Entrega y cobertura',icon:'M1 3h15v13H1zM16 8h4l3 3v5h-7',items:[{k:'Radio de cobertura',v:'5 km'},{k:'Zonas / costos',v:'$25 / $35 / $45'},{k:'Pedido mínimo',v:'$80.00'},{k:'Colonias',v:'6 activas'}]},
-      {titulo:'Pagos y lealtad',icon:'M2 7h20v12H2zM2 11h20',items:[{k:'Métodos',v:'Efectivo, transferencia, tarjeta y Clip (demo)'},{k:'Puntos por $10',v:'1 punto'},{k:'Recompensas',v:'3 activas'}]},
-      {titulo:'Usuarios y permisos',icon:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',items:[{k:'Usuarios',v:'6 (Dueño, Admin, 2 Caja, Cocina, 2 Repartidores)'},{k:'Roles',v:'6 configurados'}]},
+      {titulo:'Negocio y contacto',icon:'M3 21h18M5 21V7l7-4 7 4v14',items:[{k:'Nombre',v:'Tacos Don Luis'},{k:'Sucursal',v:'Punto Cañada (1 de 1)'},{k:'WhatsApp',v:s.whatsapp_phone||'524775222095'}],onEdit:()=>this.editContact()},
+      {titulo:'Tiempos de preparación',icon:'M12 8v4l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z',items:[{k:'Para recoger',v:(s.pickup_eta_minutes||20)+' min'},{k:'Entrega',v:(s.delivery_eta_minutes||40)+' min'},{k:'Modo saturado',v:s.is_saturated?'Activo · se agregan 20 min':'Inactivo'}],onEdit:()=>this.editTimes()},
+      {titulo:'Entrega y cobertura',icon:'M1 3h15v13H1zM16 8h4l3 3v5h-7',items:[{k:'Radio',v:(s.max_delivery_radius_km||5)+' km'},{k:'Pedido mínimo',v:this.MXN(s.minimum_delivery_amount||100)},{k:'Zonas activas',v:String((this.state.liveZones||[]).filter(z=>z.is_active).length)}],onEdit:()=>this.editCoverage()},
+      {titulo:'Menú y disponibilidad',icon:'M4 6h16M4 12h16M4 18h16',items:[{k:'Productos disponibles',v:available+' de '+totalProducts},{k:'Cambios',v:'Se publican al instante'},{k:'Opciones',v:'Agotar, editar o agregar'}],onEdit:()=>this.manageMenu()},
+      {titulo:'Pagos y lealtad',icon:'M2 7h20v12H2zM2 11h20',items:[{k:'Métodos',v:'Efectivo, transferencia, tarjeta y Clip (simulado)'},{k:'Puntos',v:'1 punto por cada $10'},{k:'Acreditación',v:'Automática al entregar'}],onEdit:()=>this.toast('Las reglas de puntos ya están conectadas. El canje se activará cuando Don Luis defina su autorización.')},
+      {titulo:'Usuarios y permisos',icon:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 1 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',items:[{k:'Usuarios',v:String((this.state.liveUsers||[]).length)},{k:'Activos',v:String((this.state.liveUsers||[]).filter(u=>u.is_active).length)},{k:'Acciones',v:'Invitar, cambiar rol o desactivar'}],onEdit:()=>this.manageUsers()},
       {titulo:'Datos de demostración',icon:'M12 3v18M3 12h18',items:[{k:'Estado',v:demoMode?'Modo demo activo':'Operación real'},{k:'Pedidos de prueba',v:String(this.orders.filter(o=>o.isDemo).length)},{k:'Al pasar a real',v:'Se conservan menú, usuarios y configuración'}],onEdit:()=>{const choice=window.prompt('Escribe: REINICIAR para borrar pedidos de prueba, REAL para iniciar desde cero, o DEMO para volver a pruebas.','REINICIAR');if(!choice)return;const value=choice.trim().toUpperCase();if(value==='REINICIAR')this.demoControl('reset_demo');else if(value==='REAL')this.demoControl('start_live');else if(value==='DEMO')this.demoControl('start_demo');else this.toast('Opción no reconocida');}},
-    ].map(g=>({...g,onEdit:g.onEdit||(()=>this.toast('Editor de '+g.titulo+' en preparación'))}));
-    return {configGrupos:grupos, saturado:this.state.saturado||false, pausado:this.state.pausado||false,
-      toggleSat:()=>this.setState({saturado:!this.state.saturado}), togglePausa:()=>this.setState({pausado:!this.state.pausado})};
+    ].map(g=>({...g,onEdit:g.onEdit||(()=>this.toast('Esta configuración requiere definición del dueño'))}));
+    return {configGrupos:grupos, saturado:!!s.is_saturated, pausado:s.is_open===false,
+      toggleSat:()=>this.patchSettings({is_saturated:!s.is_saturated},s.is_saturated?'Modo saturado desactivado':'Modo saturado activado'), togglePausa:()=>this.patchSettings({is_open:s.is_open===false},s.is_open===false?'Pedidos reanudados':'Pedidos pausados')};
   }
 
   vmPedidos(){

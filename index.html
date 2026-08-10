@@ -712,7 +712,7 @@ class Component extends DCLogic {
     chat:[], chatBusy:false, invTab:'existencias',
     logoTaps:0, showEasterEgg:false };
   // IMPORTANTE: incrementar esta versión en cada publicación a main.
-  static APP_VERSION = '2.6.0';
+  static APP_VERSION = '2.7.0';
   get propinaActual(){ return this.state.propinaPct!=null?this.state.propinaPct:parseInt(this.props.propinaSugerida||'10',10); }
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2})+' MXN'; }
@@ -1158,7 +1158,7 @@ class Component extends DCLogic {
       return {...m, precioTxt:this.short(m.precio), q, inCart:q>0,
         onAdd:()=>this.addCart(m.id), onDec:()=>this.decCart(m.id)};
     });
-    const notasOpts=['Sin cebolla','Sin cilantro','Doble carne','Sin picante','Bien dorado'];
+    const notasOpts=['Sin cebolla','Sin cilantro','Doble carne','Sin picante'];
     const cart=this.state.cart.map((l,idx)=>{
       const it=this.itemById(l.id);
       return {idx, nombre:it.nombre, q:l.q, nota:l.nota,
