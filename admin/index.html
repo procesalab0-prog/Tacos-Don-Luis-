@@ -361,7 +361,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.5.5';
+  static APP_VERSION = '2.6.0';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { rol:null, route:'pedidos', vw:1280, toast:null, sonido:true,
@@ -377,19 +377,34 @@ class Component extends DCLogic {
     const inviteToken=hash.get('access_token');
     if(inviteToken&&['invite','recovery'].includes(hash.get('type'))){this.setState({inviteMode:true,session:{access_token:inviteToken,refresh_token:hash.get('refresh_token')}});return;}
     const saved=JSON.parse(localStorage.getItem('donLuisStaffSession')||'null'); if(saved?.access_token)this.restoreSession(saved);
+    this._sessionRefresh=setInterval(()=>{if(this.state.session)this.refreshCurrentSession();},5*60*1000);
   }
-  componentWillUnmount(){ window.removeEventListener('resize',this._onR); clearInterval(this._livePoll); }
+  componentWillUnmount(){ window.removeEventListener('resize',this._onR); clearInterval(this._livePoll); clearInterval(this._sessionRefresh); }
   toast(m){ clearTimeout(this._t); this.setState({toast:m}); this._t=setTimeout(()=>this.setState({toast:null}),2600); }
   go(r){ this.setState({route:r}); if(typeof window!=='undefined') window.scrollTo?.({top:0}); }
   tapLogo(){ clearTimeout(this._logoTapTimer); const taps=(this.state.logoTaps||0)+1; if(taps>=6){this.setState({logoTaps:0,showEasterEgg:true});return;} this.setState({logoTaps:taps}); this._logoTapTimer=setTimeout(()=>this.setState({logoTaps:0}),1200); }
 
   async api(path,options={}){
-    const token=options.token||this.state.session?.access_token;
+    const {skipAuth=false,token:requestedToken,...fetchOptions}=options;
+    const token=skipAuth?null:(requestedToken||this.state.session?.access_token);
     const headers={apikey:Component.SUPABASE_KEY,'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{}),...(options.headers||{})};
-    const res=await fetch(Component.SUPABASE_URL+path,{...options,headers});
+    const res=await fetch(Component.SUPABASE_URL+path,{...fetchOptions,headers});
     const data=await res.json().catch(()=>null);
     if(!res.ok)throw new Error(data?.msg||data?.message||data?.error_description||data?.error||'No fue posible conectar con Don Luis');
     return data;
+  }
+  tokenExpiresSoon(session){
+    try{const payload=JSON.parse(atob(session.access_token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));return !payload.exp||payload.exp*1000<=Date.now()+60000;}catch(_){return true;}
+  }
+  async ensureFreshSession(session){
+    if(!session?.access_token)throw new Error('Inicia sesión nuevamente');
+    if(!this.tokenExpiresSoon(session))return session;
+    if(!session.refresh_token)throw new Error('Tu sesión venció. Inicia sesión nuevamente.');
+    return this.api('/auth/v1/token?grant_type=refresh_token',{method:'POST',skipAuth:true,body:JSON.stringify({refresh_token:session.refresh_token})});
+  }
+  async refreshCurrentSession(){
+    try{const session=await this.ensureFreshSession(this.state.session);if(session!==this.state.session){localStorage.setItem('donLuisStaffSession',JSON.stringify(session));this.setState({session});}}
+    catch(error){await this.logout();this.toast(error.message||'Tu sesión venció. Inicia sesión nuevamente.');}
   }
   async signIn(){
     if(!this.state.authEmail.trim()||!this.state.authPassword){this.toast('Escribe correo y contraseña');return;}
@@ -415,6 +430,7 @@ class Component extends DCLogic {
   }
   async restoreSession(session,notify=false){
     try{
+      session=await this.ensureFreshSession(session);
       const memberships=await this.api('/rest/v1/branch_memberships?user_id=eq.'+session.user.id+'&is_active=eq.true&select=branch_id,role&limit=1',{token:session.access_token});
       const membership=memberships[0]; if(!membership)throw new Error('Esta cuenta no tiene acceso de personal');
       const roleName={owner:'Dueño',admin:'Administrador',cashier:'Caja',kitchen:'Cocina',waiter:'Mesero',driver:'Repartidor'}[membership.role]||'Administrador';
