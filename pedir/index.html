@@ -464,13 +464,27 @@
               <div style="width:112px;height:112px;margin:0 auto 14px;border-radius:24px;background:#F3F0E6;padding:5px;display:flex;align-items:center;justify-content:center"><img src="../assets/logo-don-luis-oficial.svg" alt="Tacos Don Luis" style="display:block;width:100%;height:100%;object-fit:contain"></div>
               <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:24px;color:#10603A;text-align:center">Tu cuenta</div>
               <div style="font-size:13.5px;color:#8a7f66;text-align:center;margin:5px 0 20px">Junta puntos, guarda direcciones y repite pedidos.</div>
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <input onInput="{{ onAuthEmail }}" placeholder="Correo electrónico" type="email" autocomplete="email" style="width:100%;border:1.5px solid #e0d6bf;border-radius:12px;padding:13px 14px;font-family:'Rubik',sans-serif;font-size:14.5px;background:#fff;color:#211E15">
-                <input onInput="{{ onAuthPassword }}" placeholder="Contraseña" type="password" autocomplete="current-password" style="width:100%;border:1.5px solid #e0d6bf;border-radius:12px;padding:13px 14px;font-family:'Rubik',sans-serif;font-size:14.5px;background:#fff;color:#211E15">
-                <button onClick="{{ onLogin }}" style="cursor:pointer;background:#D6453D;color:#fff;border:none;border-radius:13px;padding:15px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px">Iniciar sesión</button>
-                <button onClick="{{ onSignup }}" style="cursor:pointer;background:#fff;color:#10603A;border:1.5px solid #10603A;border-radius:13px;padding:14px;font-weight:700;font-size:14.5px">Crear cuenta nueva</button>
-                <button style="cursor:pointer;background:none;border:none;color:#8a7f66;font-weight:600;font-size:13px;padding:6px">¿Olvidaste tu contraseña?</button>
-              </div>
+              <sc-if value="{{ cuLogin }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <input onInput="{{ onAuthEmail }}" placeholder="Correo electrónico" type="email" autocomplete="email" style="width:100%;border:1.5px solid #e0d6bf;border-radius:12px;padding:13px 14px;font-family:'Rubik',sans-serif;font-size:14.5px;background:#fff;color:#211E15">
+                  <input onInput="{{ onAuthPassword }}" placeholder="Contraseña" type="password" autocomplete="current-password" style="width:100%;border:1.5px solid #e0d6bf;border-radius:12px;padding:13px 14px;font-family:'Rubik',sans-serif;font-size:14.5px;background:#fff;color:#211E15">
+                  <button onClick="{{ onLogin }}" style="cursor:pointer;background:#D6453D;color:#fff;border:none;border-radius:13px;padding:15px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px">Iniciar sesión</button>
+                  <button onClick="{{ onOpenSignup }}" style="cursor:pointer;background:#fff;color:#10603A;border:1.5px solid #10603A;border-radius:13px;padding:14px;font-weight:700;font-size:14.5px">Crear cuenta nueva</button>
+                  <button style="cursor:pointer;background:none;border:none;color:#8a7f66;font-weight:600;font-size:13px;padding:6px">¿Olvidaste tu contraseña?</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ cuSignup }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <div style="font-family:'Fredoka',sans-serif;font-size:19px;font-weight:700;color:#211E15;text-align:center">Crea tu cuenta</div>
+                  <input onInput="{{ onSignupName }}" placeholder="Nombre completo" type="text" autocomplete="name" style="width:100%;border:1.5px solid #e0d6bf;border-radius:12px;padding:13px 14px;font-family:'Rubik',sans-serif;font-size:14.5px;background:#fff;color:#211E15">
+                  <input onInput="{{ onSignupPhone }}" placeholder="Número de WhatsApp" type="tel" inputmode="tel" autocomplete="tel" style="width:100%;border:1.5px solid #e0d6bf;border-radius:12px;padding:13px 14px;font-family:'Rubik',sans-serif;font-size:14.5px;background:#fff;color:#211E15">
+                  <input onInput="{{ onAuthEmail }}" placeholder="Correo electrónico" type="email" autocomplete="email" style="width:100%;border:1.5px solid #e0d6bf;border-radius:12px;padding:13px 14px;font-family:'Rubik',sans-serif;font-size:14.5px;background:#fff;color:#211E15">
+                  <input onInput="{{ onAuthPassword }}" placeholder="Crear contraseña (mínimo 6 caracteres)" type="password" minlength="6" autocomplete="new-password" style="width:100%;border:1.5px solid #e0d6bf;border-radius:12px;padding:13px 14px;font-family:'Rubik',sans-serif;font-size:14.5px;background:#fff;color:#211E15">
+                  <input onInput="{{ onSignupConfirm }}" placeholder="Confirmar contraseña" type="password" minlength="6" autocomplete="new-password" style="width:100%;border:1.5px solid #e0d6bf;border-radius:12px;padding:13px 14px;font-family:'Rubik',sans-serif;font-size:14.5px;background:#fff;color:#211E15">
+                  <button onClick="{{ onSignup }}" style="cursor:pointer;background:#D6453D;color:#fff;border:none;border-radius:13px;padding:15px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px">Crear mi cuenta</button>
+                  <button onClick="{{ onCloseSignup }}" style="cursor:pointer;background:none;border:none;color:#10603A;font-weight:700;font-size:13px;padding:7px">Ya tengo cuenta · Iniciar sesión</button>
+                </div>
+              </sc-if>
               <div style="margin-top:16px;background:#fdf6e3;border:1px solid #f0e3b6;border-radius:12px;padding:12px 14px;font-size:12.5px;color:#8a6d12;text-align:center">También puedes pedir <strong>como invitado</strong> desde el menú, sin registrarte.</div>
             </div>
           </sc-if>
@@ -539,7 +553,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.11.3';
+  static APP_VERSION = '2.11.4';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
@@ -548,7 +562,7 @@ class Component extends DCLogic {
     folio:null, trackStep:0, cuentaTab:'perfil', logged:false,
     remoteMenu:null, remoteCategories:null, remoteZones:null, modifierOptions:null, branchId:null,branchLocation:null,
     settings:null, submitting:false, trackingToken:null, liveOrder:null,accountOrders:[],loyaltyAccount:null,loyaltyRule:null,
-    authEmail:'',authPassword:'',session:null,currentUser:null,logoTaps:0,showEasterEgg:false };
+    authEmail:'',authPassword:'',signupMode:false,signupName:'',signupPhone:'',signupConfirm:'',session:null,currentUser:null,logoTaps:0,showEasterEgg:false };
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
   componentDidMount(){
@@ -579,7 +593,7 @@ class Component extends DCLogic {
     const headers={apikey:Component.SUPABASE_KEY,'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{}),...(options.headers||{})};
     const res=await fetch(Component.SUPABASE_URL+path,{...fetchOptions,headers});
     const data=await res.json().catch(()=>null);
-    if(!res.ok)throw new Error(data?.error||'No fue posible conectar con Don Luis');
+    if(!res.ok)throw new Error(data?.msg||data?.error_description||data?.error||'No fue posible conectar con Don Luis');
     return data;
   }
   async publicRead(path){
@@ -630,12 +644,21 @@ class Component extends DCLogic {
   }
   async signUp(){
     try{
-      const result=await this.api('/auth/v1/signup',{method:'POST',body:JSON.stringify({email:this.state.authEmail.trim(),password:this.state.authPassword})});
+      const email=this.state.authEmail.trim();
+      const name=this.state.signupName.trim();
+      const phone=this.state.signupPhone.replace(/\D/g,'');
+      if(!name)throw new Error('Escribe tu nombre completo');
+      if(phone.length!==10)throw new Error('Escribe un número de WhatsApp de 10 dígitos');
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw new Error('Escribe un correo electrónico válido');
+      if(this.state.authPassword.length<6)throw new Error('La contraseña debe tener al menos 6 caracteres');
+      if(this.state.authPassword!==this.state.signupConfirm)throw new Error('Las contraseñas no coinciden');
+      const result=await this.api('/auth/v1/signup',{method:'POST',body:JSON.stringify({email,password:this.state.authPassword,data:{full_name:name,phone}})});
       if(result.access_token){
         localStorage.setItem('donLuisSession',JSON.stringify(result));
-        this.setState({session:result,currentUser:result.user,logged:true,authPassword:''});
+        this.setState({session:result,currentUser:result.user,logged:true,authPassword:'',signupConfirm:'',signupMode:false,dir:{...this.state.dir,nombre:name,tel:phone}});
         await this.loadCustomerData(result);
       }
+      if(!result.access_token)this.setState({signupMode:false,authPassword:'',signupConfirm:''});
       this.toast(result.access_token?'Cuenta creada':'Revisa tu correo para confirmar la cuenta');
     }catch(error){this.toast(error.message||'No fue posible crear la cuenta');}
   }
@@ -997,7 +1020,7 @@ class Component extends DCLogic {
     const recompensas=rewards.map(r=>({req:r.points+' pts',premio:r.label,listo:balance>=Number(r.points),onRedeem:()=>this.toast('Muéstralo en caja para autorizar el canje')}));
     const email=this.state.currentUser?.email||'';
     const name=this.state.currentUser?.user_metadata?.full_name||email.split('@')[0]||'Cliente Don Luis';
-    return {cuentaTabs:tabs, cuLogged:this.state.logged, cuNotLogged:!this.state.logged,
+    return {cuentaTabs:tabs, cuLogged:this.state.logged, cuNotLogged:!this.state.logged,cuLogin:!this.state.signupMode,cuSignup:this.state.signupMode,
       cuPerfil:this.state.cuentaTab==='perfil', cuDir:this.state.cuentaTab==='direcciones', cuPuntos:this.state.cuentaTab==='puntos',
       cuPuntosVal:balance, cuNivel:lifetime>=500?'Oro':lifetime>=200?'Plata':'Bronce', cuVisitas:this.state.accountOrders.filter(o=>o.status==='delivered').length,
       cuName:this.state.dir?.nombre||name,cuNameValue:this.state.dir?.nombre||'',cuEmail:email,cuPhoneValue:this.state.dir?.tel||'',cuInitial:(this.state.dir?.nombre||name).slice(0,1).toUpperCase(),
@@ -1006,8 +1029,9 @@ class Component extends DCLogic {
       authEmail:this.state.authEmail,authPassword:this.state.authPassword,
       onAuthEmail:e=>this.setState({authEmail:e.target.value}),
       onAuthPassword:e=>this.setState({authPassword:e.target.value}),
+      onSignupName:e=>this.setState({signupName:e.target.value}),onSignupPhone:e=>this.setState({signupPhone:e.target.value}),onSignupConfirm:e=>this.setState({signupConfirm:e.target.value}),
       onAccountName:e=>this.setField('nombre',e.target.value),onAccountPhone:e=>this.setField('tel',e.target.value),onSaveProfile:()=>this.saveAccountProfile(),onSaveAddress:()=>this.saveAccountAddress(),
-      onLogin:()=>this.signIn(),onSignup:()=>this.signUp(),
+      onLogin:()=>this.signIn(),onOpenSignup:()=>this.setState({signupMode:true,authPassword:''}),onCloseSignup:()=>this.setState({signupMode:false,authPassword:'',signupConfirm:''}),onSignup:()=>this.signUp(),
       onLogout:()=>this.signOut(),
     };
   }
