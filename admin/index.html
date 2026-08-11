@@ -333,6 +333,29 @@
     </nav>
   </sc-if>
 
+      <sc-if value="{{ asignarOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:85;background:rgba(20,15,5,.55);display:flex;align-items:flex-end;justify-content:center;padding-top:30px">
+      <div style="width:100%;max-width:520px;max-height:88vh;background:#F3F0E6;border-radius:22px 22px 0 0;display:flex;flex-direction:column;overflow:hidden">
+        <div style="padding:17px 20px;background:#10603A;color:#fff;flex:0 0 auto">
+          <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:18px">¿Quién lo lleva?</div>
+          <div style="font-size:12.5px;color:#cfe3d3;margin-top:2px">{{ asignarFolio }} · {{ asignarDir }}</div>
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:9px">
+          <sc-for list="{{ asignarLista }}" as="r" hint-placeholder-count="3">
+            <button onClick="{{ r.onPick }}" style="cursor:pointer;width:100%;text-align:left;background:#FFFDF7;border:1.5px solid #E6DCC5;border-radius:14px;padding:14px 15px;display:flex;align-items:center;gap:12px">
+              <span style="width:42px;height:42px;border-radius:50%;background:#10603A;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex:0 0 auto">{{ r.ini }}</span>
+              <span style="flex:1;min-width:0"><span style="display:block;font-weight:700;font-size:15px;color:#211E15">{{ r.nombre }}</span><span style="display:block;font-size:12.5px;color:#8a7f66">{{ r.tel }}</span></span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10603A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+            </button>
+          </sc-for>
+        </div>
+        <div style="flex:0 0 auto;padding:13px 16px calc(13px + env(safe-area-inset-bottom));border-top:1px solid #E6DCC5;background:#fbf7ec">
+          <button onClick="{{ onCancelAsignar }}" style="cursor:pointer;width:100%;background:#fff;border:1.5px solid #E6DCC5;border-radius:12px;padding:12px;font-weight:700;font-size:14px;color:#5a4e35">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
   <sc-if value="{{ showEasterEgg }}" hint-placeholder-val="{{ false }}">
     <div style="position:fixed;inset:0;z-index:100;background:rgba(16,20,14,.6);display:flex;align-items:center;justify-content:center;padding:24px;animation:dlfade .2s"><div style="width:100%;max-width:340px;background:#FFFDF7;border-radius:22px;box-shadow:0 30px 70px rgba(0,0,0,.4);overflow:hidden;text-align:center;animation:dlpop .3s"><div style="background:linear-gradient(#178049,#10603A);padding:26px 20px 20px;color:#fff"><div style="font-size:34px">🌮✨</div><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:18px;margin-top:8px">¡Encontraste el Easter egg!</div></div><div style="padding:22px 24px 24px"><div style="font-size:14px;color:#4a3d28;line-height:1.6">Esta plataforma fue hecha por<br><a href="https://procesalab0-prog.github.io/ProcesaLabWeb/" target="_blank" rel="noopener" style="color:#10603A;font-weight:800;font-size:16px;text-decoration:underline">ProcesaLab</a></div><div style="margin-top:14px;display:inline-block;background:#F3F0E6;color:#8a7f66;font-size:12px;font-weight:700;letter-spacing:.06em;padding:6px 14px;border-radius:999px">VERSIÓN {{ appVersion }}</div><button onClick="{{ onCloseEasterEgg }}" style="cursor:pointer;margin-top:18px;width:100%;background:#10603A;color:#fff;border:none;border-radius:12px;padding:11px;font-weight:700;font-size:14px">Cerrar</button></div></div></div>
   </sc-if>
@@ -372,11 +395,12 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.14.0';
+  static APP_VERSION = '2.14.1';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { rol:null, route:'pedidos', vw:1280, toast:null, sonido:true,
     canal:'todos', rechazoFor:null, aceptarFor:null, aceptarTiempo:20,configEditor:null,cfgSaving:false,cfgForm:{},
+    asignarFor:null, asignando:false,
     authEmail:'',authPassword:'',authBusy:false,session:null,live:false,branchId:null,logoTaps:0,showEasterEgg:false,
     inviteMode:false,invitePassword:'',inviteConfirm:'',liveSettings:null,liveProducts:null,liveStocks:null,
     liveCashShifts:null,liveCashMovements:null,liveCustomers:null,livePurchases:null,liveSuppliers:null,liveUsers:null,liveCategories:null,liveZones:null,liveLoyaltyRule:null,liveMarketing:null,liveCombos:null,liveRewards:null,liveIngredients:null,liveInventoryMovements:null,liveRecipes:null };
@@ -681,13 +705,28 @@ class Component extends DCLogic {
   async patchOrder(o,changes,success){
     try{await this.api('/rest/v1/orders?id=eq.'+o.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(changes.remote||{})});await this.loadLiveOrders();this.toast(success);}catch(error){this.toast(error.message);}
   }
-  async assignDelivery(o){
+  // Repartidores dados de alta y activos en la sucursal.
+  get repartidores(){
+    return (this.state.liveUsers||[]).filter(u=>u.role==='driver'&&u.is_active!==false)
+      .map(u=>({userId:u.user_id,nombre:u.profiles?.full_name||u.email||'Repartidor',tel:u.profiles?.phone||''}));
+  }
+  // Antes esto asignaba el pedido a quien estuviera usando el panel, no a un
+  // repartidor. Ahora se abre la lista para elegir a quién se le manda.
+  assignDelivery(o){
+    if(!this.repartidores.length){this.toast('No hay repartidores activos. Da de alta uno en Equipo.');return;}
+    this.setState({asignarFor:o});
+  }
+  async confirmarAsignacion(driverUserId){
+    const o=this.state.asignarFor; if(!o||this.state.asignando)return;
+    this.setState({asignando:true});
     try{
-      const driverId=this.state.session?.user?.id;
-      await this.api('/rest/v1/driver_assignments',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({order_id:o.id,driver_user_id:driverId,assigned_by:driverId,status:'assigned'})});
-      await this.api('/rest/v1/orders?id=eq.'+o.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({status:'assigned',assigned_driver_user_id:driverId})});
-      await this.loadLiveOrders(); this.toast(o.folio+' asignado · ya aparece en Repartidores');
-    }catch(error){this.toast(error.message||'No fue posible asignar el pedido');}
+      const yo=this.state.session?.user?.id;
+      await this.api('/rest/v1/driver_assignments',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({order_id:o.id,driver_user_id:driverUserId,assigned_by:yo,status:'assigned'})});
+      await this.api('/rest/v1/orders?id=eq.'+o.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({status:'assigned',assigned_driver_user_id:driverUserId})});
+      const quien=this.repartidores.find(r=>r.userId===driverUserId)?.nombre||'el repartidor';
+      this.setState({asignarFor:null,asignando:false});
+      await this.loadLiveOrders(); this.toast(o.folio+' asignado a '+quien);
+    }catch(error){this.setState({asignando:false});this.toast(error.message||'No fue posible asignar el pedido');}
   }
   async logout(){localStorage.removeItem('donLuisStaffSession');clearInterval(this._livePoll);this._orders=null;this.setState({rol:null,session:null,live:false,branchId:null});}
 
@@ -793,6 +832,14 @@ class Component extends DCLogic {
       sonido:this.state.sonido, toggleSonido:()=>this.toggleSound(),
       sonidoIcon:this.state.sonido?'M11 5 6 9H2v6h4l5 4zM19 12a7 7 0 0 0-2-5M15.5 12a3 3 0 0 0-1-2':'M11 5 6 9H2v6h4l5 4zM23 9l-6 6M17 9l6 6',
       toast:this.state.toast,
+      asignarOpen:!!this.state.asignarFor,
+      asignarFolio:this.state.asignarFor?.folio||'',
+      asignarDir:this.state.asignarFor?.dir||'',
+      asignarLista:this.repartidores.map(r=>({...r,
+        ini:(r.nombre||'R').split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase(),
+        tel:r.tel||'Sin teléfono',
+        onPick:()=>this.confirmarAsignacion(r.userId)})),
+      onCancelAsignar:()=>this.setState({asignarFor:null}),
       isPedidos: route==='pedidos',
       isCocina: route==='cocina',
       isCaja: route==='caja',
