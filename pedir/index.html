@@ -3,10 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Don Luis</title>
+<title>Pide en Tacos Don Luis · Punto Cañada, León</title>
+<meta name="description" content="Pide tacos, quesadillas y tortas de Tacos Don Luis. Pasa a recoger en Punto Cañada o pide a domicilio en la zona norte de León. Listo en 15–20 min.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tacos Don Luis">
+<meta property="og:title" content="Pide en Tacos Don Luis · Punto Cañada">
+<meta property="og:description" content="Tacos, quesadillas y tortas hechas al momento. Recoge en Punto Cañada o pide a domicilio en la zona norte de León.">
+<meta property="og:image" content="/assets/hero-pedir.jpg">
+<meta property="og:locale" content="es_MX">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#10603A"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Don Luis">
 <link rel="manifest" href="/pedir/manifest.webmanifest"><link rel="icon" href="/assets/logo-don-luis-oficial.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/logo-don-luis-oficial.svg">
 <script>if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(console.error));</script>
+<script>window.__resources={"https://unpkg.com/react@18.3.1/umd/react.production.min.js":"/assets/vendor/react-18.3.1.min.js","https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"/assets/vendor/react-dom-18.3.1.min.js"};</script>
 <script src="../support.js"></script>
 <link rel="stylesheet" href="/assets/leaflet/leaflet.css">
 <script src="/assets/leaflet/leaflet.js"></script>
@@ -109,7 +118,7 @@
                   </div>
                   <div style="padding:11px 13px">
                     <div style="font-weight:700;font-size:14.5px;color:#211E15">{{ d.nombre }}</div>
-                    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:7px"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#10603A">{{ d.precioTxt }}</span><button onClick="{{ d.onAdd }}" style="cursor:pointer;width:32px;height:32px;border-radius:10px;border:none;background:#10603A;color:#fff;font-size:19px;line-height:1">+</button></div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:7px"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#10603A">{{ d.precioTxt }}</span><button onClick="{{ d.onAdd }}" aria-label="Agregar {{ d.nombre }}" style="cursor:pointer;width:44px;height:44px;border-radius:13px;border:none;background:#10603A;color:#fff;font-size:22px;line-height:1">+</button></div>
                   </div>
                 </div>
               </sc-for>
@@ -177,7 +186,7 @@
           <footer style="background:#0d3f26;color:#cfe3d3;padding:24px 20px 30px;margin-top:14px">
             <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:20px;color:#fff">Tacos Don Luis</div>
             <div style="font-size:11px;color:#F2C230;font-weight:700;letter-spacing:.14em;margin-top:2px">FRESCO · SABROSO · HECHO CON ORGULLO</div>
-            <div style="display:flex;gap:14px;margin:16px 0;font-size:13px;font-weight:600"><a href="#" style="color:#eaf3ec">Aviso de privacidad</a><a href="#" style="color:#eaf3ec">Términos</a></div>
+            <div style="display:flex;gap:14px;margin:16px 0;font-size:13px;font-weight:600"><button onClick="{{ onOpenPrivacidad }}" style="cursor:pointer;background:none;border:none;padding:0;font-family:'Rubik',sans-serif;font-size:13px;font-weight:600;color:#eaf3ec;text-decoration:underline">Aviso de privacidad</button></div>
             <div style="font-size:12px;color:#8bb193;line-height:1.5">Punto Cañada, León, Gto. · <a href="tel:+524775222095" style="color:#cfe3d3">Tel. 477 522 2095</a><br>© 2026 Tacos Don Luis<br><a href="https://procesalab0-prog.github.io/ProcesaLabWeb/#proyectos" target="_blank" rel="noopener" style="display:inline-block;margin-top:3px;color:#9fc3a7;font-size:10px;text-decoration:none;letter-spacing:.02em">By ProcesaLab</a></div>
           </footer>
         </div>
@@ -269,8 +278,7 @@
           </sc-if>
           <sc-if value="{{ chkRecoger }}" hint-placeholder-val="{{ true }}">
             <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:15px;margin-bottom:16px">
-              <div style="font-weight:700;font-size:14.5px;color:#211E15;margin-bottom:9px">Datos para recoger</div>
-              <input data-field="nombre-recoge" onInput="{{ onNombre }}" placeholder="Nombre de quien recoge" style="width:100%;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;margin-bottom:9px;background:#fff;color:#211E15">
+              <div style="font-weight:700;font-size:14.5px;color:#211E15;margin-bottom:9px">Para recoger</div>
               <div style="display:flex;align-items:center;gap:9px;background:#eaf4ec;border:1px solid #cfe0c6;border-radius:11px;padding:11px 13px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#10603A" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg><span style="font-size:13px;color:#10603A;font-weight:600">Lo antes posible · listo en 15–20 min</span></div>
             </div>
           </sc-if>
@@ -596,7 +604,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.12.6';
+  static APP_VERSION = '2.13.0';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
@@ -840,7 +848,7 @@ class Component extends DCLogic {
   fueraCobertura(){ return this.state.entrega==='domicilio' && this.state.dir.zona==='Más de 5 km · fuera de cobertura'; }
   persistCheckoutDraft(dir=this.state.dir){try{localStorage.setItem('donLuisCheckoutDraft',JSON.stringify({dir,location:this._pickedLatLng||null}));}catch(_){}}
   applySavedFields(){
-    clearTimeout(this._fieldTimer);this._fieldTimer=setTimeout(()=>{const d=this.state.dir||{};const values={calle:d.calle,num:d.num,col:d.col,ref:d.ref,'nombre-recoge':d.nombre,nombre:d.nombre,tel:d.tel};Object.entries(values).forEach(([field,value])=>{const input=document.querySelector('input[data-field="'+field+'"]');if(input&&!input.value&&value)input.value=value;});},0);
+    clearTimeout(this._fieldTimer);this._fieldTimer=setTimeout(()=>{const d=this.state.dir||{};const values={calle:d.calle,num:d.num,col:d.col,ref:d.ref,nombre:d.nombre,tel:d.tel};Object.entries(values).forEach(([field,value])=>{const input=document.querySelector('input[data-field="'+field+'"]');if(input&&!input.value&&value)input.value=value;});},0);
   }
   setField(k,v){
     if(['calle','num','col'].includes(k)){this._addressEditVersion=(this._addressEditVersion||0)+1;clearTimeout(this._geocodeTimer);}
