@@ -368,7 +368,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.11.4';
+  static APP_VERSION = '2.11.5';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { rol:null, route:'pedidos', vw:1280, toast:null, sonido:true,
@@ -400,7 +400,7 @@ class Component extends DCLogic {
     const now=ctx.currentTime;[[0,880],[.18,1175],[.36,880]].forEach(([delay,freq])=>{const osc=ctx.createOscillator(),gain=ctx.createGain();osc.type='sine';osc.frequency.value=freq;gain.gain.setValueAtTime(.0001,now+delay);gain.gain.exponentialRampToValueAtTime(.22,now+delay+.015);gain.gain.exponentialRampToValueAtTime(.0001,now+delay+.14);osc.connect(gain);gain.connect(ctx.destination);osc.start(now+delay);osc.stop(now+delay+.16);});
   }
   toggleSound(){const enabled=!this.state.sonido;localStorage.setItem('donLuisAdminSound',String(enabled));this.setState({sonido:enabled});if(enabled){this.playNewOrderSound(true);this.toast('Sonido de pedidos activado');}else this.toast('Sonido de pedidos desactivado');}
-  go(r){ this.setState({route:r}); if(typeof window!=='undefined') window.scrollTo?.({top:0}); }
+  go(r){const allowed=this.rolNav();if(this.state.rol&&!allowed.includes(r)){this.toast('Tu rol no tiene acceso a esta sección');return;}this.setState({route:r});if(typeof window!=='undefined')window.scrollTo?.({top:0});}
   tapLogo(){ clearTimeout(this._logoTapTimer); const taps=(this.state.logoTaps||0)+1; if(taps>=6){this.setState({logoTaps:0,showEasterEgg:true});return;} this.setState({logoTaps:taps}); this._logoTapTimer=setTimeout(()=>this.setState({logoTaps:0}),1200); }
 
   async api(path,options={}){
@@ -724,7 +724,7 @@ class Component extends DCLogic {
     'Dueño':['pedidos','cocina','caja','inventario','reportes','config'],
     'Administrador':['pedidos','cocina','caja','inventario','reportes','config'],
     'Caja':['pedidos','caja','inventario'],
-    'Cocina':['pedidos','cocina','inventario'],
+    'Cocina':['cocina'],
     'Mesero':['pedidos','cocina'],
   }; return perms[this.state.rol]||['pedidos']; }
 
