@@ -57,7 +57,7 @@
       </button>
       <div style="flex:1"></div>
       <span style="display:flex;align-items:center;gap:6px;background:{{ estadoBg }};color:{{ estadoC }};font-size:11.5px;font-weight:800;padding:5px 11px;border-radius:999px"><span style="width:7px;height:7px;border-radius:50%;background:{{ estadoDot }};animation:dlpulse 1.6s infinite"></span>{{ estadoTxt }}</span>
-      <button onClick="{{ goCart }}" style="cursor:pointer;position:relative;background:rgba(255,255,255,.14);border:none;color:#fff;width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center">
+      <button onClick="{{ goCart }}" aria-label="Abrir carrito" style="cursor:pointer;position:relative;background:rgba(255,255,255,.14);border:none;color:#fff;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center">
         <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
         <sc-if value="{{ cartCount }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:-5px;right:-5px;background:#F2C230;color:#3a2c00;font-size:11px;font-weight:800;min-width:19px;height:19px;padding:0 5px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ cartCount }}</span></sc-if>
       </button>
@@ -108,7 +108,7 @@
           </div>
 
           <div style="padding:16px 20px 6px">
-            <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px"><span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px;color:#10603A">Los favoritos</span><button onClick="{{ goMenu }}" style="cursor:pointer;background:none;border:none;color:#D6453D;font-weight:700;font-size:13.5px">Ver todo →</button></div>
+            <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px"><span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px;color:#10603A">Los favoritos</span><button onClick="{{ goMenu }}" style="cursor:pointer;background:none;border:none;color:#D6453D;font-weight:700;font-size:13.5px;min-height:44px;padding:8px">Ver todo →</button></div>
             <div style="display:flex;gap:13px;overflow-x:auto;padding-bottom:8px;margin:0 -20px;padding-left:20px;padding-right:20px">
               <sc-for list="{{ destacados }}" as="d" hint-placeholder-count="4">
                 <div style="flex:0 0 auto;width:172px;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,.06)">
@@ -134,7 +134,7 @@
           </sc-if>
 
           <sc-if value="{{ hasCombos }}" hint-placeholder-val="{{ false }}">
-            <div style="padding:12px 20px 6px"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px;color:#10603A;margin-bottom:11px">Combos especiales</div><div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px"><sc-for list="{{ homeCombos }}" as="c" hint-placeholder-count="2"><div style="flex:0 0 230px;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:14px"><div style="font-size:10px;font-weight:800;color:#D6453D">{{ c.badge }}</div><div style="font-weight:800;font-size:16px;margin-top:3px">{{ c.name }}</div><div style="font-size:12px;color:#6a5f45;margin:4px 0 10px">{{ c.description }}</div><div style="display:flex;justify-content:space-between;align-items:center"><strong style="color:#10603A">{{ c.price }}</strong><button onClick="{{ c.onAdd }}" style="cursor:pointer;width:34px;height:34px;border:0;border-radius:10px;background:#10603A;color:#fff;font-size:20px">+</button></div></div></sc-for></div></div>
+            <div style="padding:12px 20px 6px"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px;color:#10603A;margin-bottom:11px">Combos especiales</div><div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px"><sc-for list="{{ homeCombos }}" as="c" hint-placeholder-count="2"><div style="flex:0 0 230px;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:14px"><div style="font-size:10px;font-weight:800;color:#D6453D">{{ c.badge }}</div><div style="font-weight:800;font-size:16px;margin-top:3px">{{ c.name }}</div><div style="font-size:12px;color:#6a5f45;margin:4px 0 10px">{{ c.description }}</div><div style="display:flex;justify-content:space-between;align-items:center"><strong style="color:#10603A">{{ c.price }}</strong><button onClick="{{ c.onAdd }}" aria-label="Agregar combo" style="cursor:pointer;width:44px;height:44px;border:0;border-radius:10px;background:#10603A;color:#fff;font-size:20px">+</button></div></div></sc-for></div></div>
           </sc-if>
 
           <div style="padding:12px 20px 6px">
@@ -441,7 +441,7 @@
                   <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px"><label style="display:block;font-size:11.5px;color:#9a8e70;font-weight:700;margin-bottom:7px">CÓDIGO DE REFERIDO</label><div style="display:flex;gap:7px"><input value="{{ referralInput }}" onInput="{{ onReferralInput }}" placeholder="DL-XXXXXXX" style="min-width:0;flex:1;border:1.5px solid #e0d6bf;border-radius:10px;padding:10px;font:inherit"><button onClick="{{ onClaimReferral }}" style="cursor:pointer;border:0;border-radius:10px;background:#10603A;color:#fff;font-weight:800;padding:0 12px">Aplicar</button></div></div>
                   <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:600;font-size:14.5px;color:#211E15">Notificaciones</div><div style="font-size:12px;color:#9a8e70">Ofertas y estado de pedidos</div></div><span style="width:44px;height:26px;background:#28A54C;border-radius:999px;position:relative"><span style="position:absolute;top:3px;right:3px;width:20px;height:20px;background:#fff;border-radius:50%"></span></span></div>
                   <button onClick="{{ onLogout }}" style="cursor:pointer;background:none;border:none;color:#b23a32;font-weight:700;font-size:13.5px;padding:10px;text-align:center">Cerrar sesión</button>
-                  <button style="cursor:pointer;background:none;border:none;color:#b0a488;font-weight:600;font-size:12px;padding:2px;text-align:center">Eliminar mi cuenta</button>
+                  <button onClick="{{ onRequestDeletion }}" style="cursor:pointer;background:none;border:none;color:#b0a488;font-weight:600;font-size:12px;padding:10px;text-align:center">Solicitar eliminación de mi cuenta</button>
                 </div>
               </sc-if>
               <sc-if value="{{ cuDir }}" hint-placeholder-val="{{ false }}">
@@ -488,7 +488,7 @@
                   <input onInput="{{ onAuthPassword }}" placeholder="Contraseña" type="password" autocomplete="current-password" style="width:100%;border:1.5px solid #e0d6bf;border-radius:12px;padding:13px 14px;font-family:'Rubik',sans-serif;font-size:14.5px;background:#fff;color:#211E15">
                   <button onClick="{{ onLogin }}" style="cursor:pointer;background:#D6453D;color:#fff;border:none;border-radius:13px;padding:15px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px">Iniciar sesión</button>
                   <button onClick="{{ onOpenSignup }}" style="cursor:pointer;background:#fff;color:#10603A;border:1.5px solid #10603A;border-radius:13px;padding:14px;font-weight:700;font-size:14.5px">Crear cuenta nueva</button>
-                  <button style="cursor:pointer;background:none;border:none;color:#8a7f66;font-weight:600;font-size:13px;padding:6px">¿Olvidaste tu contraseña?</button>
+                  <button onClick="{{ onForgotPassword }}" style="cursor:pointer;background:none;border:none;color:#8a7f66;font-weight:600;font-size:13px;padding:10px;min-height:44px">¿Olvidaste tu contraseña?</button>
                 </div>
               </sc-if>
               <sc-if value="{{ cuSignup }}" hint-placeholder-val="{{ false }}">
@@ -520,7 +520,7 @@
             <div style="height:150px;background:#f0e8d4;position:relative;display:flex;align-items:center;justify-content:center">
               <sc-if value="{{ sheet.foto }}" hint-placeholder-val="{{ false }}"><img src="{{ sheet.foto }}" alt="{{ sheet.nombre }}" style="width:100%;height:100%;object-fit:cover"></sc-if>
               <sc-if value="{{ sheet.noFoto }}" hint-placeholder-val="{{ true }}"><span style="color:#c2b48f;display:flex;flex-direction:column;align-items:center;gap:6px"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11a9 9 0 0 1 18 0M2 11h20l-2 4H4zM7 18h10"></path></svg><span style="font-size:11px;font-weight:700">Foto próximamente</span></span></sc-if>
-              <button onClick="{{ sheet.onClose }}" style="cursor:pointer;position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.92);color:#211E15;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
+              <button onClick="{{ sheet.onClose }}" aria-label="Cerrar producto" style="cursor:pointer;position:absolute;top:12px;right:12px;width:44px;height:44px;border-radius:50%;border:none;background:rgba(255,255,255,.92);color:#211E15;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
             </div>
             <div style="padding:18px 18px 4px">
               <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:23px;color:#211E15">{{ sheet.nombre }}</div>
@@ -540,7 +540,7 @@
               <textarea onInput="{{ sheet.onNota }}" placeholder="{{ sheet.notePlaceholder }}" style="width:100%;min-height:64px;resize:none;border:1.5px solid #e0d6bf;border-radius:12px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></textarea>
             </div>
             <div style="position:sticky;bottom:0;background:#F3F0E6;padding:14px 18px calc(16px + env(safe-area-inset-bottom));border-top:1px solid #E6DCC5;display:flex;gap:12px;align-items:center">
-              <div style="display:flex;align-items:center;gap:11px;background:#fff;border:1.5px solid #E6DCC5;border-radius:13px;padding:7px 8px"><button onClick="{{ sheet.onDec }}" style="cursor:pointer;width:32px;height:32px;border-radius:9px;border:none;background:#f0e8d4;color:#10603A;font-size:19px;line-height:1">−</button><span style="font-weight:800;min-width:18px;text-align:center;font-size:16px">{{ sheet.qty }}</span><button onClick="{{ sheet.onInc }}" style="cursor:pointer;width:32px;height:32px;border-radius:9px;border:none;background:#10603A;color:#fff;font-size:19px;line-height:1">+</button></div>
+              <div style="display:flex;align-items:center;gap:11px;background:#fff;border:1.5px solid #E6DCC5;border-radius:13px;padding:7px 8px"><button onClick="{{ sheet.onDec }}" aria-label="Quitar una unidad" style="cursor:pointer;width:44px;height:44px;border-radius:9px;border:none;background:#f0e8d4;color:#10603A;font-size:19px;line-height:1">−</button><span style="font-weight:800;min-width:18px;text-align:center;font-size:16px">{{ sheet.qty }}</span><button onClick="{{ sheet.onInc }}" aria-label="Agregar una unidad" style="cursor:pointer;width:44px;height:44px;border-radius:9px;border:none;background:#10603A;color:#fff;font-size:19px;line-height:1">+</button></div>
               <button onClick="{{ sheet.onAdd }}" style="cursor:pointer;flex:1;background:#D6453D;color:#fff;border:none;border-radius:13px;padding:14px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:15.5px">{{ sheet.addTxt }}</button>
             </div>
           </div>
@@ -623,7 +623,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.14.2';
+  static APP_VERSION = '2.14.3';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
@@ -741,6 +741,19 @@ class Component extends DCLogic {
     }catch(error){this.toast(error.message||'No fue posible crear la cuenta');}
   }
   signOut(){localStorage.removeItem('donLuisSession');this.setState({session:null,currentUser:null,logged:false});this.toast('Sesión cerrada');}
+  async requestPasswordReset(){
+    const email=String(this.state.authEmail||'').trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){this.toast('Escribe primero el correo de tu cuenta');return;}
+    try{await this.api('/auth/v1/recover',{method:'POST',skipAuth:true,body:JSON.stringify({email,redirect_to:location.origin+'/pedir/'})});this.toast('Te enviamos un enlace para recuperar tu contraseña');}
+    catch(error){this.toast(error.message||'No fue posible enviar el enlace');}
+  }
+  requestAccountDeletion(){
+    const email=this.state.currentUser?.email||'';
+    const subject=encodeURIComponent('Solicitud de eliminación de cuenta Don Luis');
+    const body=encodeURIComponent('Solicito eliminar mi cuenta y datos asociados.\n\nCorreo de la cuenta: '+email);
+    location.href='mailto:procesalab0@gmail.com?subject='+subject+'&body='+body;
+    this.toast('Se abrió tu correo para confirmar la solicitud');
+  }
   async loadCustomerData(session=this.state.session){
     if(!session?.user?.id)return;
     try{
@@ -1176,8 +1189,8 @@ class Component extends DCLogic {
       onAuthPassword:e=>this.setState({authPassword:e.target.value}),
       onSignupName:e=>this.setState({signupName:e.target.value}),onSignupPhone:e=>this.setState({signupPhone:e.target.value}),onSignupConfirm:e=>this.setState({signupConfirm:e.target.value}),
       onAccountName:e=>this.setField('nombre',e.target.value),onAccountPhone:e=>this.setField('tel',e.target.value),onSaveProfile:()=>this.saveAccountProfile(),onSaveAddress:()=>this.saveAccountAddress(),
-      onLogin:()=>this.signIn(),onOpenSignup:()=>this.setState({signupMode:true,authPassword:''}),onCloseSignup:()=>this.setState({signupMode:false,authPassword:'',signupConfirm:''}),onSignup:()=>this.signUp(),
-      onLogout:()=>this.signOut(),
+      onLogin:()=>this.signIn(),onOpenSignup:()=>this.setState({signupMode:true,authPassword:''}),onCloseSignup:()=>this.setState({signupMode:false,authPassword:'',signupConfirm:''}),onSignup:()=>this.signUp(),onForgotPassword:()=>this.requestPasswordReset(),
+      onLogout:()=>this.signOut(),onRequestDeletion:()=>this.requestAccountDeletion(),
     };
   }
   async redeemReward(reward){if(!this.state.session){this.toast('Inicia sesión para canjear');return;}try{const result=await this.api('/rest/v1/rpc/redeem_loyalty_reward',{method:'POST',body:JSON.stringify({p_reward_id:reward.id})});this.toast('Canje confirmado · código '+result.code);await this.loadCustomerData();}catch(error){this.toast(error.message||'No se pudo realizar el canje');}}
@@ -1222,7 +1235,7 @@ class Component extends DCLogic {
     const opiniones=[
       {nombre:'Andrea G.',ini:'A',stars:'★★★★★',txt:'Los tacos al pastor son los mejores de la zona norte. Llegó rapidísimo.',c:'#D6453D'},
       {nombre:'Luis M.',ini:'L',stars:'★★★★★',txt:'Pedí por WhatsApp y estuvo listo en 15 min. Muy buen sabor.',c:'#10603A'},
-      {nombre:'Paola R.',ini:'P',stars:'★★★★☆',txt:'La gringa está deliciosa y las salsas bien picositas.',c:'#E0A526'},
+      {nombre:'Paola R.',ini:'P',stars:'★★★★☆',txt:'La quesadilla está deliciosa y las salsas bien picositas.',c:'#E0A526'},
     ];
     const faqs=[
       {q:'¿Hacen entregas a domicilio?',a:'Sí, en las colonias de la zona norte cercanas a Punto Cañada. El costo depende de la distancia.'},
