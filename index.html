@@ -62,7 +62,7 @@
         <sc-for list="{{ perfiles }}" as="p" hint-placeholder-count="4">
           <button onClick="{{ p.onClick }}" style="cursor:pointer;text-align:left;border:2px solid #EADFC8;background:#fff;border-radius:16px;padding:15px 14px;display:flex;flex-direction:column;gap:9px;transition:all .15s" style-hover="border-color:#10603A;box-shadow:0 10px 24px rgba(16,96,58,.16);transform:translateY(-2px)">
             <span style="width:42px;height:42px;border-radius:12px;background:{{ p.bg }};color:#fff;display:flex;align-items:center;justify-content:center">
-              <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ p.icon }}"></path></svg>
+              <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path sc-camel-d="{{ p.icon }}"></path></svg>
             </span>
             <span style="font-weight:700;font-size:16.5px;color:#211E15">{{ p.rol }}</span>
             <span style="font-size:12.5px;color:#8a7f66;line-height:1.35">{{ p.desc }}</span>
@@ -88,7 +88,7 @@
       <nav style="flex:1;overflow-y:auto;padding:12px 10px;display:flex;flex-direction:column;gap:3px">
         <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="10">
           <button onClick="{{ n.onClick }}" title="{{ n.label }}" style="{{ n.sideStyle }}">
-            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto"><path d="{{ n.icon }}"></path></svg>
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto"><path sc-camel-d="{{ n.icon }}"></path></svg>
             <sc-if value="{{ sidebarWide }}" hint-placeholder-val="{{ true }}"><span style="font-weight:600;font-size:14.5px">{{ n.label }}</span></sc-if>
             <sc-if value="{{ n.showBadge }}" hint-placeholder-val="{{ false }}"><span style="margin-left:auto;background:#D6453D;color:#fff;font-size:11px;font-weight:800;min-width:20px;height:20px;padding:0 6px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ n.badge }}</span></sc-if>
           </button>
@@ -131,7 +131,7 @@
                 <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:16px 17px;box-shadow:0 2px 0 #ece2cc;position:relative;overflow:hidden">
                   <div style="position:absolute;top:0;right:0;width:56px;height:56px;background:{{ k.tint }};opacity:.14;border-radius:0 0 0 56px"></div>
                   <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">
-                    <span style="width:34px;height:34px;border-radius:10px;background:{{ k.tint }};color:#fff;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ k.icon }}"></path></svg></span>
+                    <span style="width:34px;height:34px;border-radius:10px;background:{{ k.tint }};color:#fff;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path sc-camel-d="{{ k.icon }}"></path></svg></span>
                     <span style="font-size:12.5px;color:#8a7f66;font-weight:600">{{ k.label }}</span>
                   </div>
                   <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:26px;color:#211E15;line-height:1">{{ k.value }}</div>
@@ -399,7 +399,7 @@
                   </div>
                   <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:20px;padding:16px 18px;box-shadow:0 4px 14px rgba(0,0,0,.06)">
                     <div style="font-size:12.5px;font-weight:700;color:#8a7f66;margin-bottom:10px">MÉTODO DE PAGO</div>
-                    <div style="display:flex;gap:9px"><sc-for list="{{ cuenta.pagos }}" as="pg" hint-placeholder-count="3"><button onClick="{{ pg.onClick }}" style="{{ pg.style }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ pg.icon }}"></path></svg>{{ pg.label }}</button></sc-for></div>
+                    <div style="display:flex;gap:9px"><sc-for list="{{ cuenta.pagos }}" as="pg" hint-placeholder-count="3"><button onClick="{{ pg.onClick }}" style="{{ pg.style }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path sc-camel-d="{{ pg.icon }}"></path></svg>{{ pg.label }}</button></sc-for></div>
                   </div>
                   <button onClick="{{ cuenta.onCobrar }}" style="cursor:pointer;width:100%;background:#10603A;color:#fff;border:none;border-radius:16px;padding:17px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;box-shadow:0 8px 20px rgba(16,96,58,.3);display:flex;align-items:center;justify-content:center;gap:10px">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
@@ -571,7 +571,7 @@
               <sc-for list="{{ menuItems }}" as="i" hint-placeholder-count="4">
                 <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,.06)">
                   <div style="height:140px;background:#f0e8d4;position:relative;display:flex;align-items:center;justify-content:center">
-                    <sc-if value="{{ i.foto }}" hint-placeholder-val="{{ true }}"><img src="{{ i.foto }}" alt="{{ i.nombre }}" style="width:100%;height:100%;object-fit:cover"></sc-if>
+                    <sc-if value="{{ i.foto }}" hint-placeholder-val="{{ true }}"><img sc-camel-src="{{ i.foto }}" alt="{{ i.nombre }}" style="width:100%;height:100%;object-fit:cover"></sc-if>
                     <sc-if value="{{ i.noFoto }}" hint-placeholder-val="{{ false }}"><span style="display:flex;flex-direction:column;align-items:center;gap:8px;color:#c2b48f"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11a9 9 0 0 1 18 0M2 11h20l-2 3H4zM7 17h10"></path></svg><span style="font-size:11.5px;font-weight:700;letter-spacing:.03em">Foto próximamente</span></span></sc-if>
                     <span style="position:absolute;top:10px;right:10px;background:#10603A;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;padding:4px 11px;border-radius:999px">{{ i.precioTxt }}</span>
                   </div>
@@ -665,7 +665,7 @@
       <div style="flex:1;min-width:0;display:flex;overflow-x:auto;gap:2px">
         <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="10">
           <button onClick="{{ n.onClick }}" style="{{ n.botStyle }}">
-            <span style="position:relative"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ n.icon }}"></path></svg><sc-if value="{{ n.showBadge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-6px;right:-9px;background:#D6453D;color:#fff;font-size:9px;font-weight:800;min-width:15px;height:15px;padding:0 3px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ n.badge }}</span></sc-if></span>
+            <span style="position:relative"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path sc-camel-d="{{ n.icon }}"></path></svg><sc-if value="{{ n.showBadge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-6px;right:-9px;background:#D6453D;color:#fff;font-size:9px;font-weight:800;min-width:15px;height:15px;padding:0 3px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ n.badge }}</span></sc-if></span>
             <span style="font-size:10px;font-weight:600;white-space:nowrap">{{ n.short }}</span>
           </button>
         </sc-for>
@@ -714,7 +714,7 @@ class Component extends DCLogic {
     chat:[], chatBusy:false, invTab:'existencias',
     logoTaps:0, showEasterEgg:false };
   // IMPORTANTE: incrementar esta versión en cada publicación a main.
-  static APP_VERSION = '2.14.3';
+  static APP_VERSION = '2.14.4';
   get propinaActual(){ return this.state.propinaPct!=null?this.state.propinaPct:parseInt(this.props.propinaSugerida||'10',10); }
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2})+' MXN'; }

@@ -100,7 +100,7 @@
             <div style="display:flex;gap:10px;justify-content:space-between">
               <sc-for list="{{ valores }}" as="v" hint-placeholder-count="4">
                 <div style="flex:1;text-align:center">
-                  <div style="width:64px;height:64px;margin:0 auto 7px;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="{{ v.image }}" alt="{{ v.label }}" style="{{ v.imageStyle }}"></div>
+                  <div style="width:64px;height:64px;margin:0 auto 7px;display:flex;align-items:center;justify-content:center;overflow:hidden"><img sc-camel-src="{{ v.image }}" alt="{{ v.label }}" style="{{ v.imageStyle }}"></div>
                   <div style="font-size:11.5px;font-weight:800;color:#10603A;letter-spacing:.02em">{{ v.label }}</div>
                 </div>
               </sc-for>
@@ -113,7 +113,7 @@
               <sc-for list="{{ destacados }}" as="d" hint-placeholder-count="4">
                 <div style="flex:0 0 auto;width:172px;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,.06)">
                   <div style="height:112px;background:#f0e8d4;position:relative">
-                    <sc-if value="{{ d.foto }}" hint-placeholder-val="{{ false }}"><img src="{{ d.foto }}" alt="{{ d.nombre }}" style="width:100%;height:100%;object-fit:cover"></sc-if>
+                    <sc-if value="{{ d.foto }}" hint-placeholder-val="{{ false }}"><img sc-camel-src="{{ d.foto }}" alt="{{ d.nombre }}" style="width:100%;height:100%;object-fit:cover"></sc-if>
                     <span style="position:absolute;top:8px;left:8px;background:#F2C230;color:#3a2c00;font-size:10px;font-weight:800;padding:3px 8px;border-radius:999px">{{ d.tag }}</span>
                   </div>
                   <div style="padding:11px 13px">
@@ -142,7 +142,7 @@
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
               <sc-for list="{{ categoriasHome }}" as="c" hint-placeholder-count="5">
                 <button onClick="{{ c.onClick }}" style="cursor:pointer;text-align:left;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:15px;display:flex;align-items:center;gap:12px" style-hover="border-color:#10603A">
-                  <span style="width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;overflow:hidden"><img src="{{ c.image }}" alt="{{ c.label }}" style="width:100%;height:100%;object-fit:cover"></span>
+                  <span style="width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;overflow:hidden"><img sc-camel-src="{{ c.image }}" alt="{{ c.label }}" style="width:100%;height:100%;object-fit:cover"></span>
                   <span><span style="display:block;font-weight:700;font-size:14.5px;color:#211E15">{{ c.label }}</span><span style="font-size:12px;color:#9a8e70">{{ c.count }} productos</span></span>
                 </button>
               </sc-for>
@@ -214,7 +214,7 @@
             <sc-for list="{{ menuItems }}" as="m" hint-placeholder-count="6">
               <button onClick="{{ m.onOpen }}" style="cursor:pointer;text-align:left;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:12px;display:flex;gap:13px;align-items:center;box-shadow:0 2px 0 #ece2cc" style-hover="border-color:#10603A">
                 <div style="width:88px;height:88px;flex:0 0 auto;border-radius:13px;overflow:hidden;background:#f0e8d4;display:flex;align-items:center;justify-content:center">
-                  <sc-if value="{{ m.foto }}" hint-placeholder-val="{{ false }}"><img src="{{ m.foto }}" alt="{{ m.nombre }}" style="width:100%;height:100%;object-fit:cover"></sc-if>
+                  <sc-if value="{{ m.foto }}" hint-placeholder-val="{{ false }}"><img sc-camel-src="{{ m.foto }}" alt="{{ m.nombre }}" style="width:100%;height:100%;object-fit:cover"></sc-if>
                   <sc-if value="{{ m.noFoto }}" hint-placeholder-val="{{ true }}"><span style="color:#c2b48f;display:flex;flex-direction:column;align-items:center;gap:4px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11a9 9 0 0 1 18 0M2 11h20l-2 4H4zM7 18h10"></path></svg><span style="font-size:8.5px;font-weight:700">Foto pronto</span></span></sc-if>
                 </div>
                 <div style="flex:1;min-width:0">
@@ -271,7 +271,7 @@
 
           <div style="font-size:13px;font-weight:800;color:#8a7f66;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">¿Cómo lo quieres?</div>
           <div style="display:flex;gap:11px;margin-bottom:18px">
-            <sc-for list="{{ chkModos }}" as="m" hint-placeholder-count="2"><button onClick="{{ m.onClick }}" style="{{ m.style }}"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ m.icon }}"></path></svg>{{ m.label }}</button></sc-for>
+            <sc-for list="{{ chkModos }}" as="m" hint-placeholder-count="2"><button onClick="{{ m.onClick }}" style="{{ m.style }}"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path sc-camel-d="{{ m.icon }}"></path></svg>{{ m.label }}</button></sc-for>
           </div>
 
           <sc-if value="{{ chkDomicilio }}" hint-placeholder-val="{{ false }}">
@@ -306,7 +306,7 @@
 
           <div style="font-size:13px;font-weight:800;color:#8a7f66;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">Método de pago</div>
           <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:14px">
-            <sc-for list="{{ chkPagos }}" as="p" hint-placeholder-count="3"><button onClick="{{ p.onClick }}" style="{{ p.style }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10603A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ p.icon }}"></path></svg>{{ p.label }}</button></sc-for>
+            <sc-for list="{{ chkPagos }}" as="p" hint-placeholder-count="3"><button onClick="{{ p.onClick }}" style="{{ p.style }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10603A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path sc-camel-d="{{ p.icon }}"></path></svg>{{ p.label }}</button></sc-for>
             <button disabled style="cursor:not-allowed;width:100%;padding:13px 15px;border-radius:13px;border:1.5px dashed #cfc5ae;background:#f1ede3;display:flex;align-items:center;gap:12px;color:#9a8e70;font-weight:600;font-size:14px;opacity:.8"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9a8e70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 11h20"></path></svg><span style="flex:1;text-align:left">Pago en línea</span><span style="background:#e4dcc9;color:#786d55;border-radius:999px;padding:4px 9px;font-size:10px;font-weight:800;letter-spacing:.05em">PRÓXIMAMENTE</span></button>
           </div>
           <sc-if value="{{ chkCash }}" hint-placeholder-val="{{ true }}">
@@ -366,7 +366,7 @@
           <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:8px 18px;margin-bottom:16px">
             <sc-for list="{{ trkItems }}" as="s" hint-placeholder-count="6">
               <div style="display:flex;gap:14px;padding:6px 0">
-                <div style="display:flex;flex-direction:column;align-items:center"><span style="width:28px;height:28px;border-radius:50%;background:{{ s.dot }};color:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="{{ s.icon }}"></path></svg></span><span style="flex:1;width:2px;background:{{ s.line }};min-height:14px"></span></div>
+                <div style="display:flex;flex-direction:column;align-items:center"><span style="width:28px;height:28px;border-radius:50%;background:{{ s.dot }};color:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path sc-camel-d="{{ s.icon }}"></path></svg></span><span style="flex:1;width:2px;background:{{ s.line }};min-height:14px"></span></div>
                 <span style="padding-top:4px;font-weight:{{ s.current ? '700' : '600' }};font-size:14.5px;color:{{ s.txtC }}">{{ s.label }}</span>
               </div>
             </sc-for>
@@ -518,7 +518,7 @@
         <div onClick="{{ sheet.onClose }}" style="position:fixed;inset:0;z-index:60;background:rgba(20,15,5,.5);animation:dlfade .2s;display:flex;align-items:flex-end;justify-content:center">
           <div onClick="{{ stop }}" style="width:100%;max-width:480px;max-height:92vh;overflow-y:auto;background:#F3F0E6;border-radius:24px 24px 0 0;animation:dlsheet .28s ease both">
             <div style="height:150px;background:#f0e8d4;position:relative;display:flex;align-items:center;justify-content:center">
-              <sc-if value="{{ sheet.foto }}" hint-placeholder-val="{{ false }}"><img src="{{ sheet.foto }}" alt="{{ sheet.nombre }}" style="width:100%;height:100%;object-fit:cover"></sc-if>
+              <sc-if value="{{ sheet.foto }}" hint-placeholder-val="{{ false }}"><img sc-camel-src="{{ sheet.foto }}" alt="{{ sheet.nombre }}" style="width:100%;height:100%;object-fit:cover"></sc-if>
               <sc-if value="{{ sheet.noFoto }}" hint-placeholder-val="{{ true }}"><span style="color:#c2b48f;display:flex;flex-direction:column;align-items:center;gap:6px"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11a9 9 0 0 1 18 0M2 11h20l-2 4H4zM7 18h10"></path></svg><span style="font-size:11px;font-weight:700">Foto próximamente</span></span></sc-if>
               <button onClick="{{ sheet.onClose }}" aria-label="Cerrar producto" style="cursor:pointer;position:absolute;top:12px;right:12px;width:44px;height:44px;border-radius:50%;border:none;background:rgba(255,255,255,.92);color:#211E15;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
             </div>
@@ -551,7 +551,7 @@
     <nav style="position:sticky;bottom:0;z-index:30;background:#fff;border-top:1px solid #E6DCC5;display:flex;padding:7px 6px calc(7px + env(safe-area-inset-bottom))">
       <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
         <button onClick="{{ t.onClick }}" style="{{ t.style }}">
-          <span style="position:relative;width:36px;height:36px;display:flex;align-items:center;justify-content:center"><sc-if value="{{ t.hasSticker }}" hint-placeholder-val="{{ false }}"><span style="{{ t.stickerStyle }}"></span></sc-if><sc-if value="{{ t.noSticker }}" hint-placeholder-val="{{ true }}"><svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ t.icon }}"></path></svg></sc-if><sc-if value="{{ t.badge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-4px;right:-7px;background:#D6453D;color:#fff;font-size:9px;font-weight:800;min-width:15px;height:15px;padding:0 3px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ t.badge }}</span></sc-if></span>
+          <span style="position:relative;width:36px;height:36px;display:flex;align-items:center;justify-content:center"><sc-if value="{{ t.hasSticker }}" hint-placeholder-val="{{ false }}"><span style="{{ t.stickerStyle }}"></span></sc-if><sc-if value="{{ t.noSticker }}" hint-placeholder-val="{{ true }}"><svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path sc-camel-d="{{ t.icon }}"></path></svg></sc-if><sc-if value="{{ t.badge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-4px;right:-7px;background:#D6453D;color:#fff;font-size:9px;font-weight:800;min-width:15px;height:15px;padding:0 3px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ t.badge }}</span></sc-if></span>
           <span style="font-size:10.5px;font-weight:700">{{ t.label }}</span>
         </button>
       </sc-for>
@@ -623,7 +623,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.14.3';
+  static APP_VERSION = '2.14.4';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
