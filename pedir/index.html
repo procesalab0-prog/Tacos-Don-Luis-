@@ -59,13 +59,14 @@
       <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
         <div style="animation:dlfade .3s ease both">
           <div style="position:relative;min-height:clamp(560px,150vw,720px);aspect-ratio:2/3;display:flex;align-items:flex-end;background:#0b3f2a;overflow:hidden">
-            <img src="../assets/hero-pedir.png" alt="Tacos Don Luis preparados al momento" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;display:block">
-            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,35,23,.08) 0%,rgba(5,35,23,.12) 34%,rgba(5,35,23,.78) 62%,rgba(5,35,23,.97) 100%)"></div>
+            <img src="../assets/hero-pedir.jpg" alt="Tacos Don Luis preparados al momento" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;display:block">
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,24,15,.02) 0%,rgba(3,24,15,.08) 36%,rgba(3,24,15,.34) 62%,rgba(3,24,15,.78) 100%)"></div>
             <div style="position:absolute;top:0;left:0;right:0;height:12px" class="dl-check"></div>
             <div style="position:relative;padding:26px 22px 28px;color:#fff;width:100%">
               <span style="display:inline-flex;align-items:center;gap:7px;background:#F2C230;color:#3a2c00;font-weight:800;font-size:11px;letter-spacing:.12em;padding:5px 12px;border-radius:999px">FRESCO · SABROSO · HECHO CON ORGULLO</span>
+              <div style="margin-top:11px;display:inline-flex;align-items:center;gap:7px;background:rgba(5,35,23,.72);border:1px solid rgba(255,255,255,.22);color:#fff;font-size:12px;font-weight:700;padding:7px 11px;border-radius:11px"><span style="width:7px;height:7px;border-radius:50%;background:{{ estadoDot }}"></span>{{ horarioMensaje }}</div>
               <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:40px;line-height:.95;margin:14px 0 8px;text-shadow:0 2px 12px rgba(0,0,0,.35)">Los mejores tacos<br>de la zona norte</div>
-              <div style="font-size:15px;color:#e9dfc8;max-width:440px;line-height:1.4">Preparados al momento, con recetas de casa. Pide para recoger o a domicilio en Punto Cañada, León.</div>
+              <div style="font-size:15px;color:#fff;max-width:440px;line-height:1.4;text-shadow:0 2px 9px rgba(0,0,0,.9)">Preparados al momento, con recetas de casa. Pide para recoger o a domicilio en Punto Cañada, León.</div>
               <div style="display:flex;gap:14px;margin:18px 0 20px;flex-wrap:wrap">
                 <div style="display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:9px 14px">
                   <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#F2C230" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg>
@@ -90,7 +91,7 @@
             <div style="display:flex;gap:10px;justify-content:space-between">
               <sc-for list="{{ valores }}" as="v" hint-placeholder-count="4">
                 <div style="flex:1;text-align:center">
-                  <div style="width:64px;height:64px;margin:0 auto 7px;display:flex;align-items:center;justify-content:center"><img src="{{ v.image }}" alt="{{ v.label }}" style="width:100%;height:100%;object-fit:contain"></div>
+                  <div style="width:64px;height:64px;margin:0 auto 7px;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="{{ v.image }}" alt="{{ v.label }}" style="{{ v.imageStyle }}"></div>
                   <div style="font-size:11.5px;font-weight:800;color:#10603A;letter-spacing:.02em">{{ v.label }}</div>
                 </div>
               </sc-for>
@@ -112,16 +113,6 @@
                   </div>
                 </div>
               </sc-for>
-            </div>
-          </div>
-
-          <div style="padding:14px 20px">
-            <div style="border-radius:20px;overflow:hidden;position:relative;background:#D6453D;padding:20px 22px;color:#fff">
-              <div style="position:absolute;right:-10px;bottom:-10px;opacity:.16"><svg width="130" height="130" viewBox="0 0 24 24" fill="currentColor"><path d="M2 12a10 10 0 0 1 20 0z"></path></svg></div>
-              <span style="background:#F2C230;color:#3a2c00;font-weight:800;font-size:10.5px;letter-spacing:.1em;padding:4px 10px;border-radius:999px">PROMO DEL DÍA</span>
-              <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:26px;margin-top:9px;line-height:1">3 tacos de pastor $45</div>
-              <div style="color:#ffe0dc;font-size:13.5px;margin-top:3px">Válido de 13:00 a 17:00 · para recoger o domicilio</div>
-              <button onClick="{{ goMenu }}" style="cursor:pointer;margin-top:14px;background:#fff;color:#D6453D;border:none;border-radius:12px;padding:11px 18px;font-weight:800;font-size:14px">Aprovechar promo</button>
             </div>
           </div>
 
@@ -314,7 +305,7 @@
             <div style="display:flex;justify-content:space-between;font-size:13.5px;padding:4px 0"><span style="color:#bcd6c1">Envío</span><span>{{ chkEnvioTxt }}</span></div>
             <sc-if value="{{ chkHasDesc }}" hint-placeholder-val="{{ false }}"><div style="display:flex;justify-content:space-between;font-size:13.5px;padding:4px 0;color:#8FD694"><span>Descuento</span><span>{{ chkDescTxt }}</span></div></sc-if>
             <div style="display:flex;justify-content:space-between;align-items:baseline;padding:9px 0 2px;border-top:1px dashed rgba(255,255,255,.2);margin-top:6px"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px">Total</span><span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:23px;color:#F2C230">{{ chkTotalTxt }}</span></div>
-            <div style="font-size:12px;color:#8FD694;text-align:right;margin-top:2px">Ganas {{ chkPuntos }} puntos ★</div>
+            <sc-if value="{{ chkLoyaltyEnabled }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;color:#8FD694;text-align:right;margin-top:2px">Ganas {{ chkPuntos }} puntos ★</div></sc-if>
           </div>
           <button onClick="{{ onHacerPedido }}" style="{{ chkSubmitStyle }}">{{ chkSubmitLabel }}</button>
         </div>
@@ -556,7 +547,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.11.9';
+  static APP_VERSION = '2.12.0';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
@@ -624,16 +615,17 @@ class Component extends DCLogic {
       const branches=await this.publicRead('/rest/v1/branches?slug=eq.punto-canada&is_active=eq.true&select=id,name,address_line,latitude,longitude');
       const branch=branches[0]; if(!branch)throw new Error('Sucursal no disponible');
       const bid=branch.id;
-      const [cats,products,zones,settings,modifierOptions]=await Promise.all([
+      const [cats,products,zones,settings,modifierOptions,loyaltyRules]=await Promise.all([
         this.publicRead('/rest/v1/categories?branch_id=eq.'+bid+'&is_active=eq.true&select=id,name,slug,sort_order&order=sort_order'),
         this.publicRead('/rest/v1/products?branch_id=eq.'+bid+'&is_active=eq.true&select=id,category_id,name,description,price,image_url,is_available,is_featured,sort_order&order=sort_order'),
         this.publicRead('/rest/v1/delivery_zones?branch_id=eq.'+bid+'&is_active=eq.true&select=id,name,min_distance_km,max_distance_km,fee,minimum_order,sort_order&order=sort_order').catch(()=>[]),
         this.publicRead('/rest/v1/business_settings?branch_id=eq.'+bid+'&select=*').catch(()=>[]),
-        this.publicRead('/rest/v1/modifier_options?is_available=eq.true&select=id,name,price_delta,modifier_group_id,modifier_groups!inner(branch_id)&modifier_groups.branch_id=eq.'+bid).catch(()=>[])
+        this.publicRead('/rest/v1/modifier_options?is_available=eq.true&select=id,name,price_delta,modifier_group_id,modifier_groups!inner(branch_id)&modifier_groups.branch_id=eq.'+bid).catch(()=>[]),
+        this.publicRead('/rest/v1/loyalty_rules?branch_id=eq.'+bid+'&is_active=eq.true&select=points_per_currency,minimum_spend,points_expire_days,config&limit=1').catch(()=>[])
       ]);
       const catById=Object.fromEntries(cats.map(c=>[c.id,c.name]));
       const remoteMenu=products.map(p=>({id:p.id,nombre:p.name,cat:catById[p.category_id]||'Tacos',precio:Number(p.price),desc:p.description||'',foto:p.image_url||null,tag:p.is_featured?'Favorito':null,featured:p.is_featured,disponible:p.is_available}));
-      this.setState({branchId:bid,branchLocation:branch.latitude!=null&&branch.longitude!=null?{lat:Number(branch.latitude),lng:Number(branch.longitude),address:branch.address_line}:null,remoteCategories:cats.map(c=>c.name),remoteMenu,remoteZones:zones,modifierOptions,settings:settings[0]||null});
+      this.setState({branchId:bid,branchLocation:branch.latitude!=null&&branch.longitude!=null?{lat:Number(branch.latitude),lng:Number(branch.longitude),address:branch.address_line}:null,remoteCategories:cats.map(c=>c.name),remoteMenu,remoteZones:zones,modifierOptions,settings:settings[0]||null,loyaltyRule:loyaltyRules[0]||null});
     }catch(error){ console.error('No se pudo cargar el menú en vivo',error); this.toast('No pudimos actualizar el menú. Mostramos una copia disponible.'); }
   }
   async signIn(){
@@ -843,10 +835,28 @@ class Component extends DCLogic {
   }
   descuento(){ return this.state.cart.length && this.cartSubtotal()>=200 ? 20 : 0; }
   totalFinal(){ return Math.max(0,this.cartSubtotal()+this.envioActual()-this.descuento()); }
-  puntosGanados(){ return Math.round(this.totalFinal()/10); }
+  puntosGanados(){const total=this.totalFinal(),rule=this.state.loyaltyRule;if(this.state.settings?.loyalty_enabled===false||!rule||total<Number(rule.minimum_spend||0))return 0;return Math.floor(total*Number(rule.points_per_currency||.05));}
+  paymentMethodsConfig(){const methods=this.state.settings?.payment_methods||{};return{cash:methods.cash!==false,transfer:methods.transfer!==false,card_present:methods.card_present!==false};}
+  availablePaymentKeys(){const methods=this.paymentMethodsConfig();return[methods.cash?'efectivo':null,methods.transfer?'transferencia':null,methods.card_present?'tarjeta':null].filter(Boolean);}
+
+  timeMinutes(value){const match=String(value||'').match(/^(\d{2}):(\d{2})$/);return match?Number(match[1])*60+Number(match[2]):null;}
+  timeLabel(value){const minutes=this.timeMinutes(value);if(minutes==null)return value||'';const hour=Math.floor(minutes/60),minute=minutes%60;return (hour%12||12)+':'+String(minute).padStart(2,'0')+' '+(hour<12?'a. m.':'p. m.');}
+  weeklyScheduleStatus(){
+    const schedule=this.state.settings?.weekly_schedule;if(!schedule||typeof schedule!=='object')return{configured:false,isOpen:true,label:'Consulta el horario con la sucursal'};
+    const days=['sun','mon','tue','wed','thu','fri','sat'],names=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+    const parts=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'America/Mexico_City',weekday:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date()).map(p=>[p.type,p.value]));
+    const dayIndex={Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6}[parts.weekday],now=Number(parts.hour)*60+Number(parts.minute),today=schedule[days[dayIndex]]||{},previous=schedule[days[(dayIndex+6)%7]]||{};
+    const prevOpen=this.timeMinutes(previous.open),prevClose=this.timeMinutes(previous.close),open=this.timeMinutes(today.open),close=this.timeMinutes(today.close);
+    if(previous.enabled&&prevOpen!=null&&prevClose!=null&&prevOpen>prevClose&&now<prevClose)return{configured:true,isOpen:true,label:'Abierto · cierra a las '+this.timeLabel(previous.close)};
+    if(today.enabled&&open!=null&&close!=null&&(open===close||(open<close&&now>=open&&now<close)||(open>close&&now>=open)))return{configured:true,isOpen:true,label:'Abierto · cierra a las '+this.timeLabel(today.close)};
+    for(let offset=0;offset<8;offset++){const index=(dayIndex+offset)%7,h=schedule[days[index]]||{},start=this.timeMinutes(h.open);if(!h.enabled||start==null||(offset===0&&start<=now))continue;const when=offset===0?'hoy':offset===1?'mañana':'el '+names[index];return{configured:true,isOpen:false,label:'Cerrado · abre '+when+' a las '+this.timeLabel(h.open)};}
+    return{configured:true,isOpen:false,label:'Cerrado · sin próxima apertura configurada'};
+  }
 
   async hacerPedido(){
     if(this.state.settings?.is_open===false){this.toast('Los pedidos en línea están pausados por el momento');return;}
+    const scheduleStatus=this.weeklyScheduleStatus();if(!scheduleStatus.isOpen){this.toast(scheduleStatus.label);return;}
+    if(!this.availablePaymentKeys().includes(this.state.pago)){this.toast('Elige un método de pago disponible');return;}
     if(this.state.settings?.is_saturated&&!window.confirm('Tenemos alta demanda. El tiempo estimado aumentará aproximadamente 20 minutos. ¿Deseas continuar?'))return;
     if(this.fueraCobertura()){ this.toast('Esa dirección está fuera de cobertura'); return; }
     const selectedZone=this.coberturaTarifas.find(z=>z.label===this.state.dir.zona);
@@ -933,8 +943,9 @@ class Component extends DCLogic {
     const entrega=this.state.entrega;
     const modos=[['recoger','Pasar a recoger','M9 11l3 3 8-8M5 20V9a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v11'],['domicilio','Envío a domicilio','M1 3h15v13H1zM16 8h4l3 3v5h-7M5.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM18.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z']].map(([k,l,ic])=>({key:k,label:l,icon:ic,active:k===entrega,onClick:()=>this.setState({entrega:k}),
       style:`cursor:pointer;flex:1;padding:14px 10px;border-radius:15px;border:2px solid ${k===entrega?'#10603A':'#E6DCC5'};background:${k===entrega?'#eaf4ec':'#fff'};display:flex;flex-direction:column;align-items:center;gap:7px;color:${k===entrega?'#10603A':'#8a7f66'};font-weight:700;font-size:13px`}));
-    const pagos=[['efectivo','Efectivo','M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'],['transferencia','Transferencia','M4 12h16M8 8l-4 4 4 4M16 16l4-4-4-4'],['tarjeta','Tarjeta al recibir','M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 11h20']].map(([k,l,ic])=>({key:k,label:l,icon:ic,active:k===this.state.pago,onClick:()=>this.setState({pago:k}),
-      style:`cursor:pointer;width:100%;padding:13px 15px;border-radius:13px;border:1.5px solid ${k===this.state.pago?'#10603A':'#E6DCC5'};background:${k===this.state.pago?'#eaf4ec':'#fff'};display:flex;align-items:center;gap:12px;color:#211E15;font-weight:600;font-size:14px`}));
+    const availablePayments=this.availablePaymentKeys(),selectedPayment=availablePayments.includes(this.state.pago)?this.state.pago:null;
+    const pagos=[['efectivo','Efectivo','M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'],['transferencia','Transferencia','M4 12h16M8 8l-4 4 4 4M16 16l4-4-4-4'],['tarjeta','Tarjeta al recibir','M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 11h20']].filter(([k])=>availablePayments.includes(k)).map(([k,l,ic])=>({key:k,label:l,icon:ic,active:k===selectedPayment,onClick:()=>this.setState({pago:k}),
+      style:`cursor:pointer;width:100%;padding:13px 15px;border-radius:13px;border:1.5px solid ${k===selectedPayment?'#10603A':'#E6DCC5'};background:${k===selectedPayment?'#eaf4ec':'#fff'};display:flex;align-items:center;gap:12px;color:#211E15;font-weight:600;font-size:14px`}));
     const zonas=[...this.coberturaTarifas.map(t=>t.label+' · '+this.MXN(t.precio)),'Más de 5 km · fuera de cobertura'];
     const zonaSel=this.state.dir.zona||'';
     const zonaChips=this.coberturaTarifas.map(t=>({label:t.label,precio:this.MXN(t.precio),active:zonaSel===t.label,onClick:()=>this.setField('zona',t.label),
@@ -944,11 +955,11 @@ class Component extends DCLogic {
     const selectedZone=this.coberturaTarifas.find(z=>z.label===zonaSel);
     const minimum=Number(this.state.remoteZones?.find(z=>z.id===selectedZone?.id)?.minimum_order||this.state.settings?.minimum_delivery_amount||100);
     const faltante=Math.max(0,minimum-this.cartSubtotal());
-    const blockedMinimum=entrega==='domicilio'&&faltante>0;const cash=Number(this.state.cashTender);const cashValid=this.state.pago!=='efectivo'||(Number.isFinite(cash)&&cash>=this.totalFinal());
+    const blockedMinimum=entrega==='domicilio'&&faltante>0;const cash=Number(this.state.cashTender);const cashValid=selectedPayment!=='efectivo'||(Number.isFinite(cash)&&cash>=this.totalFinal());
     return {
       chkModos:modos, chkPagos:pagos, chkEntrega:entrega,
       chkDomicilio:entrega==='domicilio', chkRecoger:entrega==='recoger',
-      chkTransfer:this.state.pago==='transferencia',chkCash:this.state.pago==='efectivo',chkClip:false,chkSubmitLabel:blockedMinimum?'Faltan '+this.MXN(faltante)+' para el mínimo':'Hacer pedido',
+      chkTransfer:selectedPayment==='transferencia',chkCash:selectedPayment==='efectivo',chkClip:false,chkSubmitLabel:blockedMinimum?'Faltan '+this.MXN(faltante)+' para el mínimo':'Hacer pedido',
       chkSubmitStyle:`cursor:${blockedMinimum?'not-allowed':'pointer'};width:100%;margin-top:14px;background:${blockedMinimum?'#a99d80':'#D6453D'};color:#fff;border:none;border-radius:15px;padding:16px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;box-shadow:${blockedMinimum?'none':'0 8px 20px rgba(214,69,61,.35)'}`,
       cashTender:this.state.cashTender,cashValid,cashHelp:!this.state.cashTender?'Necesitamos este dato para llevar tu cambio.':cashValid?'Llevaremos '+this.MXN(Math.max(0,cash-this.totalFinal()))+' de cambio.':'El monto debe cubrir el total de '+this.MXN(this.totalFinal())+'.',onCashTender:e=>this.setState({cashTender:e?.target?.value||''}),
       zonaChips, chkFuera:fuera, chkMinimoTxt:this.MXN(minimum),chkFaltaMinimo:entrega==='domicilio'&&faltante>0,chkFaltanteTxt:this.MXN(faltante),
@@ -956,7 +967,7 @@ class Component extends DCLogic {
       chkEnvioTxt:entrega==='domicilio'?(this.envioActual()?this.MXN(this.envioActual()):'Elige zona'):'Gratis',
       chkDescTxt:'−'+this.MXN(desc), chkHasDesc:desc>0,
       chkTotalTxt:this.MXN(this.totalFinal()),
-      chkPuntos:this.puntosGanados(),
+      chkPuntos:this.puntosGanados(),chkLoyaltyEnabled:this.state.settings?.loyalty_enabled!==false&&!!this.state.loyaltyRule,
       onCalle:(e)=>this.setField('calle',e?.target?.value||''),onNumero:(e)=>this.setField('num',e?.target?.value||''),
       onColonia:(e)=>this.setField('col',e?.target?.value||''),onReferencias:(e)=>this.setField('ref',e?.target?.value||''),
       onNombre:(e)=>this.setField('nombre',e?.target?.value||''),onTelefono:(e)=>this.setField('tel',e?.target?.value||''),
@@ -1046,15 +1057,18 @@ class Component extends DCLogic {
   renderVals(){
     const vw=this.state.vw, phone=vw>0&&vw<760;
     const route=this.state.route;
+    const scheduleStatus=this.weeklyScheduleStatus();
     const est=this.state.settings?.is_open===false
       ?{txt:'Pedidos pausados',c:'#fff0ee',bg:'rgba(214,69,61,.32)',dot:'#f2a29c'}
+      :!scheduleStatus.isOpen
+        ?{txt:'Cerrado',c:'#fff0ee',bg:'rgba(214,69,61,.32)',dot:'#f2a29c'}
       :this.state.settings?.is_saturated
         ?{txt:'Alta demanda',c:'#fff7d7',bg:'rgba(242,194,48,.24)',dot:'#F2C230'}
         :{txt:'Abierto',c:'#dff5e4',bg:'rgba(255,255,255,.16)',dot:'#8FD694'};
     const valores=[
-      {label:'FRESCO',image:'../assets/value-fresco.png'},
-      {label:'SABROSO',image:'../assets/value-sabroso.png'},
-      {label:'CON ORGULLO',image:'../assets/value-orgullo.png'},
+      {label:'FRESCO',image:'../assets/value-fresco.png',imageStyle:'width:100%;height:100%;object-fit:contain'},
+      {label:'SABROSO',image:'../assets/value-sabroso.png',imageStyle:'width:100%;height:100%;object-fit:contain;transform:scale(1.38)'},
+      {label:'CON ORGULLO',image:'../assets/value-orgullo.png',imageStyle:'width:100%;height:100%;object-fit:contain'},
     ];
     const favoritosRemotos=this.menu.filter(m=>m.featured);
     const destacados=(favoritosRemotos.length?favoritosRemotos:(this.state.remoteMenu?this.menu.slice(0,4):this.menu.filter(m=>['t_pastor','t_bistec','q_pastor','to_pastor'].includes(m.id)))).slice(0,4).map(m=>({...m,precioTxt:this.MXN(m.precio),tag:m.tag||'Favorito',onAdd:()=>this.addQuick(m.id)}));
@@ -1130,8 +1144,8 @@ class Component extends DCLogic {
       onTapLogo:()=>{this.tapLogo();this.go('home');},showEasterEgg:this.state.showEasterEgg,onCloseEasterEgg:()=>this.setState({showEasterEgg:false}),appVersion:Component.APP_VERSION,
       stop:(e)=>{ e&&e.stopPropagation&&e.stopPropagation(); },
       openWA:()=>this.openWhatsApp(),
-      estadoTxt:est.txt, estadoC:est.c, estadoBg:est.bg, estadoDot:est.dot,
-      tRecoger:'15–20 min', tEntrega:'30–40 min',
+      estadoTxt:est.txt, estadoC:est.c, estadoBg:est.bg, estadoDot:est.dot,horarioMensaje:this.state.settings?.is_open===false?'Pedidos en línea pausados':scheduleStatus.label,
+      tRecoger:(this.state.settings?.pickup_eta_minutes||20)+' min', tEntrega:(this.state.settings?.delivery_eta_minutes||40)+' min',
       cartCount:this.cartCount()||null,
       valores, destacados, categoriasHome, opiniones, faqs, tabs,
       coberturaHome:['Punto Cañada','Jardines de Oriente','Valle del Campestre','San Isidro'],
