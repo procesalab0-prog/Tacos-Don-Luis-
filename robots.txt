@@ -1,0 +1,6 @@
+# Tacos Don Luis
+# Los portales de personal no deben aparecer en buscadores.
+User-agent: *
+Disallow: /admin/
+Disallow: /repartidor/
+Allow: /pedir/
