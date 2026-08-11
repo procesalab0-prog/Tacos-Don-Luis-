@@ -509,10 +509,16 @@
               <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;color:#10603A">{{ sheet.precioTxt }}</div>
             </div>
             <div style="padding:6px 18px">
+              <sc-if value="{{ sheet.hasProtein }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:12px 0 8px;text-transform:uppercase;letter-spacing:.04em">¿De qué lo quieres? <span style="color:#D6453D">*</span></div>
+                <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px"><sc-for list="{{ sheet.proteins }}" as="p" hint-placeholder-count="4"><button onClick="{{ p.onClick }}" style="{{ p.style }}">{{ p.label }}</button></sc-for></div>
+              </sc-if>
               <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:12px 0 8px;text-transform:uppercase;letter-spacing:.04em">Preparación</div>
               <div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ sheet.mods }}" as="m" hint-placeholder-count="4"><button onClick="{{ m.onClick }}" style="{{ m.style }}">{{ m.label }}</button></sc-for></div>
-              <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:16px 0 8px;text-transform:uppercase;letter-spacing:.04em">Extras con costo</div>
-              <div style="display:flex;flex-direction:column;gap:8px"><sc-for list="{{ sheet.extras }}" as="e" hint-placeholder-count="4"><button onClick="{{ e.onClick }}" style="{{ e.style }}"><span style="font-weight:600;font-size:14px;color:#211E15">{{ e.label }}</span><span style="font-weight:700;font-size:13px;color:#10603A">{{ e.precioTxt }}</span></button></sc-for></div>
+              <sc-if value="{{ sheet.hasExtras }}" hint-placeholder-val="{{ true }}">
+                <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:16px 0 8px;text-transform:uppercase;letter-spacing:.04em">Extras con costo</div>
+                <div style="display:flex;flex-direction:column;gap:8px"><sc-for list="{{ sheet.extras }}" as="e" hint-placeholder-count="4"><button onClick="{{ e.onClick }}" style="{{ e.style }}"><span style="font-weight:600;font-size:14px;color:#211E15">{{ e.label }}</span><span style="font-weight:700;font-size:13px;color:#10603A">{{ e.precioTxt }}</span></button></sc-for></div>
+              </sc-if>
               <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:16px 0 8px;text-transform:uppercase;letter-spacing:.04em">Nota especial</div>
               <textarea onInput="{{ sheet.onNota }}" placeholder="Ej. salsa aparte, sin cebolla…" style="width:100%;min-height:64px;resize:none;border:1.5px solid #e0d6bf;border-radius:12px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></textarea>
             </div>
@@ -553,11 +559,11 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.11.5';
+  static APP_VERSION = '2.11.7';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
-    sheetItem:null, sheetQty:1, sheetMods:[], sheetExtras:[], sheetNota:'',
+    sheetItem:null, sheetQty:1, sheetProtein:'', sheetMods:[], sheetExtras:[], sheetNota:'',
     cart:[], entrega:'recoger', pago:'efectivo', cashTender:'', dir:{}, prog:false,
     folio:null, trackStep:0, cuentaTab:'perfil', logged:false,
     remoteMenu:null, remoteCategories:null, remoteZones:null, modifierOptions:null, branchId:null,branchLocation:null,
@@ -767,15 +773,16 @@ class Component extends DCLogic {
   catTint(c){ return {Tacos:'#D6453D',Quesadillas:'#E0A526',Tortas:'#10603A',['Tacos light']:'#28A54C',Bebidas:'#1f6f8b'}[c]; }
 
   cartCount(){ return this.state.cart.reduce((s,l)=>s+l.q,0); }
-  addQuick(id){ const it=this.itemById(id); if(it.disponible===false){ this.toast(it.nombre+' está agotado hoy'); return; } const c=[...this.state.cart]; c.push({uid:Date.now()+Math.random(),id,q:1,mods:[],extras:[],nota:''}); this.setState({cart:c}); this.toast(it.nombre+' agregado'); }
+  addQuick(id){ const it=this.itemById(id); if(it.disponible===false){ this.toast(it.nombre+' está agotado hoy'); return; }if(this.proteinOptionsFor(it).length){this.openSheet(id);return;}const c=[...this.state.cart];c.push({uid:Date.now()+Math.random(),id,q:1,protein:'',mods:[],extras:[],nota:''});this.setState({cart:c});this.toast(it.nombre+' agregado'); }
 
   // ---- product sheet ----
-  openSheet(id){ this.setState({sheetItem:id,sheetQty:1,sheetMods:[],sheetExtras:[],sheetNota:''}); }
+  proteinOptionsFor(it){if(!it||!['Quesadillas','Tortas','Tacos light'].includes(it.cat))return[];const name=String(it.nombre||'').toLocaleLowerCase('es-MX');if(name.includes('especial'))return['Lengua','Sesos'];if(name.includes('con queso'))return['Cabeza','Pastor','Bistec','Chorizo','Lengua','Sesos'];return['Cabeza','Pastor','Bistec','Chorizo'];}
+  openSheet(id){ this.setState({sheetItem:id,sheetQty:1,sheetProtein:'',sheetMods:[],sheetExtras:[],sheetNota:''}); }
   closeSheet(){ this.setState({sheetItem:null}); }
   toggleMod(m){ const a=[...this.state.sheetMods]; const i=a.indexOf(m); if(i>-1)a.splice(i,1); else a.push(m); this.setState({sheetMods:a}); }
   toggleExtra(id){ const a=[...this.state.sheetExtras]; const i=a.indexOf(id); if(i>-1)a.splice(i,1); else a.push(id); this.setState({sheetExtras:a}); }
   sheetUnit(){ const it=this.itemById(this.state.sheetItem); const ex=this.state.sheetExtras.reduce((s,id)=>s+(this.extras.find(e=>e.id===id)?.p||0),0); return it.precio+ex; }
-  addSheet(){ const c=[...this.state.cart]; c.push({uid:Date.now()+Math.random(),id:this.state.sheetItem,q:this.state.sheetQty,mods:[...this.state.sheetMods],extras:[...this.state.sheetExtras],nota:this.state.sheetNota}); this.setState({cart:c,sheetItem:null}); this.toast('Agregado al carrito'); }
+  addSheet(){const it=this.itemById(this.state.sheetItem);if(this.proteinOptionsFor(it).length&&!this.state.sheetProtein){this.toast('Elige de qué carne lo quieres');return;}const c=[...this.state.cart];c.push({uid:Date.now()+Math.random(),id:this.state.sheetItem,q:this.state.sheetQty,protein:this.state.sheetProtein,mods:[...this.state.sheetMods],extras:[...this.state.sheetExtras],nota:this.state.sheetNota});this.setState({cart:c,sheetItem:null});this.toast('Agregado al carrito');}
 
   lineUnit(l){ const it=this.itemById(l.id); const ex=(l.extras||[]).reduce((s,id)=>s+(this.extras.find(e=>e.id===id)?.p||0),0); return it.precio+ex; }
   lineTotal(l){ return this.lineUnit(l)*l.q; }
@@ -783,7 +790,7 @@ class Component extends DCLogic {
   cartInc(uid){ const c=this.state.cart.map(l=>l.uid===uid?{...l,q:l.q+1}:l); this.setState({cart:c}); }
   cartDec(uid){ let c=this.state.cart.map(l=>l.uid===uid?{...l,q:l.q-1}:l).filter(l=>l.q>0); this.setState({cart:c}); }
   cartRemove(uid){ this.setState({cart:this.state.cart.filter(l=>l.uid!==uid)}); }
-  lineLabel(l){ const parts=[...(l.mods||[])]; (l.extras||[]).forEach(id=>parts.push('+ '+(this.extras.find(e=>e.id===id)?.n||id))); if(l.nota)parts.push('“'+l.nota+'”'); return parts.join(' · '); }
+  lineLabel(l){const parts=[...(l.protein?['Carne: '+l.protein]:[]),...(l.mods||[])];(l.extras||[]).forEach(id=>parts.push('+ '+(this.extras.find(e=>e.id===id)?.n||id)));if(l.nota)parts.push('“'+l.nota+'”');return parts.join(' · ');}
 
   // ---- checkout / cobertura ----
   get coberturaTarifas(){
@@ -868,7 +875,7 @@ class Component extends DCLogic {
       const items=this.state.cart.map(l=>({
         productId:l.id,
         quantity:l.q,
-        notes:[...(l.mods||[]),l.nota||''].filter(Boolean).join(' · '),
+        notes:[l.protein?'Carne: '+l.protein:'',...(l.mods||[]),l.nota||''].filter(Boolean).join(' · '),
         modifierOptionIds:[
           ...(l.extras||[]),
           ...(l.mods||[]).map(name=>freeOptions.find(o=>o.name===name)?.id).filter(Boolean)
@@ -1095,14 +1102,17 @@ class Component extends DCLogic {
     let sheet=null;
     if(sheetOpen){
       const it=this.itemById(this.state.sheetItem);
-      sheet={...it,noFoto:!it.foto,qty:this.state.sheetQty,precioTxt:this.MXN(it.precio),
+      const proteinOptions=this.proteinOptionsFor(it);
+      const sheetExtras=it.cat==='Tacos'?[]:this.extras;
+      sheet={...it,noFoto:!it.foto,qty:this.state.sheetQty,precioTxt:this.MXN(it.precio),hasProtein:proteinOptions.length>0,hasExtras:sheetExtras.length>0,
         onClose:()=>this.closeSheet(),
         onInc:()=>this.setState({sheetQty:this.state.sheetQty+1}),
         onDec:()=>this.setState({sheetQty:Math.max(1,this.state.sheetQty-1)}),
         onNota:e=>this.setState({sheetNota:e.target.value}), nota:this.state.sheetNota,
+        proteins:proteinOptions.map(p=>({label:p,onClick:()=>this.setState({sheetProtein:p}),style:`cursor:pointer;font-size:13.5px;font-weight:700;padding:11px 10px;border-radius:11px;border:1.5px solid ${this.state.sheetProtein===p?'#10603A':'#e0d6bf'};${this.state.sheetProtein===p?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35'}`})),
         mods:this.modsLibres.map(m=>({label:m,active:this.state.sheetMods.includes(m),onClick:()=>this.toggleMod(m),
           style:`cursor:pointer;font-size:13px;font-weight:600;padding:9px 13px;border-radius:11px;border:1.5px solid ${this.state.sheetMods.includes(m)?'#10603A':'#e0d6bf'};${this.state.sheetMods.includes(m)?'background:#eaf4ec;color:#10603A':'background:#fff;color:#6a5f45'}`})),
-        extras:this.extras.map(e=>({label:e.n,precioTxt:'+'+this.MXN(e.p),active:this.state.sheetExtras.includes(e.id),onClick:()=>this.toggleExtra(e.id),
+        extras:sheetExtras.map(e=>({label:e.n,precioTxt:'+'+this.MXN(e.p),active:this.state.sheetExtras.includes(e.id),onClick:()=>this.toggleExtra(e.id),
           style:`cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-radius:12px;border:1.5px solid ${this.state.sheetExtras.includes(e.id)?'#10603A':'#e0d6bf'};${this.state.sheetExtras.includes(e.id)?'background:#eaf4ec':'background:#fff'}`})),
         addTxt:'Agregar '+this.MXN(this.sheetUnit()*this.state.sheetQty), onAdd:()=>this.addSheet()};
     }
