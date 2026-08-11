@@ -308,6 +308,7 @@
             <sc-if value="{{ chkLoyaltyEnabled }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;color:#8FD694;text-align:right;margin-top:2px">Ganas {{ chkPuntos }} puntos ★</div></sc-if>
           </div>
           <button onClick="{{ onHacerPedido }}" style="{{ chkSubmitStyle }}">{{ chkSubmitLabel }}</button>
+          <div style="text-align:center;font-size:11.5px;color:#9a8e70;line-height:1.5;margin-top:11px">Al hacer tu pedido aceptas que usemos tus datos para prepararlo y entregarlo, conforme a nuestro <button onClick="{{ onOpenPrivacidad }}" style="cursor:pointer;background:none;border:none;padding:0;font-family:'Rubik',sans-serif;font-size:11.5px;font-weight:700;color:#10603A;text-decoration:underline">Aviso de Privacidad</button>.</div>
         </div>
       </sc-if>
 
@@ -472,6 +473,7 @@
                   <input onInput="{{ onAuthPassword }}" placeholder="Crear contraseña (mínimo 6 caracteres)" type="password" minlength="6" autocomplete="new-password" style="width:100%;border:1.5px solid #e0d6bf;border-radius:12px;padding:13px 14px;font-family:'Rubik',sans-serif;font-size:14.5px;background:#fff;color:#211E15">
                   <input onInput="{{ onSignupConfirm }}" placeholder="Confirmar contraseña" type="password" minlength="6" autocomplete="new-password" style="width:100%;border:1.5px solid #e0d6bf;border-radius:12px;padding:13px 14px;font-family:'Rubik',sans-serif;font-size:14.5px;background:#fff;color:#211E15">
                   <button onClick="{{ onSignup }}" style="cursor:pointer;background:#D6453D;color:#fff;border:none;border-radius:13px;padding:15px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px">Crear mi cuenta</button>
+                  <div style="text-align:center;font-size:11.5px;color:#9a8e70;line-height:1.5">Al crear tu cuenta aceptas nuestro <button onClick="{{ onOpenPrivacidad }}" style="cursor:pointer;background:none;border:none;padding:0;font-family:'Rubik',sans-serif;font-size:11.5px;font-weight:700;color:#10603A;text-decoration:underline">Aviso de Privacidad</button>.</div>
                   <button onClick="{{ onCloseSignup }}" style="cursor:pointer;background:none;border:none;color:#10603A;font-weight:700;font-size:13px;padding:7px">Ya tengo cuenta · Iniciar sesión</button>
                 </div>
               </sc-if>
@@ -537,6 +539,53 @@
       </div>
     </sc-if>
 
+    <sc-if value="{{ showPrivacidad }}" hint-placeholder-val="{{ false }}">
+      <div style="position:fixed;inset:0;z-index:100;background:rgba(16,20,14,.6);display:flex;align-items:center;justify-content:center;padding:18px;animation:dlfade .2s">
+        <div style="width:100%;max-width:420px;max-height:88vh;background:#FFFDF7;border-radius:20px;box-shadow:0 30px 70px rgba(0,0,0,.4);display:flex;flex-direction:column;overflow:hidden;animation:dlpop .3s">
+          <div style="background:#10603A;color:#fff;padding:17px 20px;flex:0 0 auto"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:18px">Aviso de Privacidad</div><div style="font-size:12px;color:#cfe3d3;margin-top:2px">Tacos Don Luis · Punto Cañada</div></div>
+          <div style="flex:1;overflow-y:auto;padding:18px 20px;font-size:13px;line-height:1.6;color:#3a3120">
+            <p style="margin:0 0 13px">En <b>Tacos Don Luis</b>, con domicilio en Blvd. Campestre 2802, Cañada del Refugio, C.P. 37258, León de los Aldama, Guanajuato, somos responsables del uso y protección de tus datos personales. Este aviso explica para qué los usamos y cómo puedes controlarlos.</p>
+
+            <p style="font-weight:800;color:#10603A;margin:16px 0 6px">¿Qué datos recabamos?</p>
+            <p style="margin:0 0 6px">Únicamente los necesarios para atender tu pedido:</p>
+            <ul style="margin:0 0 13px;padding-left:19px">
+              <li>Nombre y número de teléfono.</li>
+              <li>Domicilio de entrega y referencias, cuando pides a domicilio.</li>
+              <li>Ubicación aproximada, solo si marcas tu punto en el mapa o autorizas el uso de tu ubicación.</li>
+              <li>Correo electrónico, solo si decides crear una cuenta.</li>
+              <li>Historial de pedidos y puntos acumulados, si tienes cuenta.</li>
+            </ul>
+            <p style="margin:0 0 13px"><b>No solicitamos ni almacenamos datos de tarjetas bancarias.</b> El pago se realiza en efectivo, por transferencia o con tarjeta al momento de recibir tu pedido.</p>
+
+            <p style="font-weight:800;color:#10603A;margin:16px 0 6px">¿Para qué los usamos?</p>
+            <p style="margin:0 0 6px">Finalidades necesarias para darte el servicio:</p>
+            <ul style="margin:0 0 10px;padding-left:19px">
+              <li>Preparar, cobrar y entregar tu pedido.</li>
+              <li>Comunicarnos contigo sobre tu pedido, incluso por WhatsApp o llamada.</li>
+              <li>Atender aclaraciones y darte comprobante.</li>
+              <li>Administrar tu cuenta y tus puntos, si te registraste.</li>
+            </ul>
+            <p style="margin:0 0 13px">Finalidad adicional, que <b>no</b> es necesaria: enviarte promociones. Si no quieres recibirlas, dínoslo al correo de abajo y no afectará tu servicio.</p>
+
+            <p style="font-weight:800;color:#10603A;margin:16px 0 6px">¿Compartimos tus datos?</p>
+            <p style="margin:0 0 13px">Solo con quien necesita conocerlos para entregarte: el repartidor asignado a tu pedido ve tu nombre, teléfono y dirección. También usamos proveedores tecnológicos que almacenan la información por cuenta nuestra. <b>No vendemos tus datos ni los compartimos con terceros para fines publicitarios.</b></p>
+
+            <p style="font-weight:800;color:#10603A;margin:16px 0 6px">Tus derechos</p>
+            <p style="margin:0 0 13px">Puedes solicitar en cualquier momento <b>acceder</b> a tus datos, <b>rectificarlos</b> si están equivocados, <b>cancelarlos</b> u <b>oponerte</b> a que los usemos (derechos ARCO), así como revocar tu consentimiento. Escríbenos a <a href="mailto:{{ privacidadContacto }}" style="color:#10603A;font-weight:700">{{ privacidadContacto }}</a> indicando tu nombre, tu teléfono y qué necesitas. Te responderemos en un plazo máximo de 20 días hábiles.</p>
+
+            <p style="font-weight:800;color:#10603A;margin:16px 0 6px">Conservación y seguridad</p>
+            <p style="margin:0 0 13px">Conservamos tus datos mientras seas cliente y por el tiempo que exija la ley para efectos fiscales y de aclaraciones. La información se guarda en servidores con acceso restringido: cada miembro del personal solo puede ver lo que necesita para su función.</p>
+
+            <p style="font-weight:800;color:#10603A;margin:16px 0 6px">Cambios a este aviso</p>
+            <p style="margin:0 0 13px">Si modificamos este aviso, publicaremos la versión actualizada en esta misma pantalla.</p>
+
+            <p style="margin:0;color:#8a7f66;font-size:11.5px">Última actualización: agosto de 2026 · Versión {{ appVersion }}</p>
+          </div>
+          <div style="flex:0 0 auto;padding:14px 20px;border-top:1px solid #E6DCC5;background:#fbf7ec"><button onClick="{{ onClosePrivacidad }}" style="cursor:pointer;width:100%;background:#10603A;color:#fff;border:none;border-radius:12px;padding:12px;font-weight:700;font-size:14px">Entendido</button></div>
+        </div>
+      </div>
+    </sc-if>
+
     <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
       <div style="position:fixed;left:50%;transform:translateX(-50%);bottom:78px;z-index:90;background:#10603A;color:#fff;padding:12px 20px;border-radius:13px;box-shadow:0 12px 30px rgba(0,0,0,.3);font-weight:600;font-size:14px;display:flex;align-items:center;gap:10px;animation:dlpop .3s;max-width:90vw">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#8FD694" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>{{ toast }}
@@ -547,16 +596,18 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.12.2';
+  static APP_VERSION = '2.12.3';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
+  // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
+  static PRIVACY_CONTACT = 'procesalab0@gmail.com';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
     sheetItem:null, sheetQty:1, sheetProtein:'', sheetMods:[], sheetNota:'',
     cart:[], entrega:'recoger', pago:'efectivo', cashTender:'', dir:{}, prog:false,
     folio:null, trackStep:0, cuentaTab:'perfil', logged:false,
     remoteMenu:null, remoteCategories:null, remoteZones:null, modifierOptions:null, branchId:null,branchLocation:null,
     settings:null, submitting:false, trackingToken:null, liveOrder:null,accountOrders:[],loyaltyAccount:null,loyaltyRule:null,
-    authEmail:'',authPassword:'',signupMode:false,signupName:'',signupPhone:'',signupConfirm:'',session:null,currentUser:null,logoTaps:0,showEasterEgg:false };
+    authEmail:'',authPassword:'',signupMode:false,signupName:'',signupPhone:'',signupConfirm:'',session:null,currentUser:null,logoTaps:0,showEasterEgg:false,showPrivacidad:false };
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
   componentDidMount(){
@@ -1154,6 +1205,10 @@ class Component extends DCLogic {
       goCheckout:()=>{ if(!this.state.cart.length){this.toast('Tu carrito está vacío');return;} this.go('checkout'); },
       goHome:()=>this.go('home'), goMenu:()=>this.go('menu'), goCart:()=>this.go('carrito'), goCuenta:()=>this.go('cuenta'),
       onTapLogo:()=>{this.tapLogo();this.go('home');},showEasterEgg:this.state.showEasterEgg,onCloseEasterEgg:()=>this.setState({showEasterEgg:false}),appVersion:Component.APP_VERSION,
+      showPrivacidad:this.state.showPrivacidad,
+      onOpenPrivacidad:()=>this.setState({showPrivacidad:true}),
+      onClosePrivacidad:()=>this.setState({showPrivacidad:false}),
+      privacidadContacto:Component.PRIVACY_CONTACT,
       stop:(e)=>{ e&&e.stopPropagation&&e.stopPropagation(); },
       openWA:()=>this.openWhatsApp(),
       estadoTxt:est.txt, estadoC:est.c, estadoBg:est.bg, estadoDot:est.dot,horarioMensaje:this.state.settings?.is_open===false?'Pedidos en línea pausados':scheduleStatus.label,
