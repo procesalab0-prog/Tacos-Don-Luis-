@@ -58,10 +58,9 @@
       <!--LANDING-->
       <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
         <div style="animation:dlfade .3s ease both">
-          <div style="position:relative;min-height:420px;display:flex;align-items:flex-end;background:radial-gradient(120% 90% at 80% 0%,#178049 0%,#10603A 46%,#0b4a2d 100%);overflow:hidden">
-            <div style="position:absolute;inset:0;background-image:linear-gradient(45deg,rgba(255,255,255,.05) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.05) 75%),linear-gradient(45deg,rgba(255,255,255,.05) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.05) 75%);background-size:52px 52px;background-position:0 0,26px 26px;opacity:.7"></div>
-            <div style="position:absolute;right:-30px;top:20px;opacity:.14;color:#F2C230"><svg width="230" height="230" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 13c0-3 2.5-5 5.5-5 .5-2 2.3-3.5 4.5-3.5S17.5 6 18 8c1.7.3 3 1.7 3 3.5 0 1.4-.9 2.6-2.2 3H6a3 3 0 0 1-2-5.5"></path><path d="M6 14.5V19a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-4.5"></path></svg></div>
-            <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(11,74,45,.85) 2%,transparent 42%)"></div>
+          <div style="position:relative;min-height:clamp(560px,150vw,720px);aspect-ratio:2/3;display:flex;align-items:flex-end;background:#0b3f2a;overflow:hidden">
+            <img src="../assets/hero-pedir.png" alt="Tacos Don Luis preparados al momento" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;display:block">
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,35,23,.08) 0%,rgba(5,35,23,.12) 34%,rgba(5,35,23,.78) 62%,rgba(5,35,23,.97) 100%)"></div>
             <div style="position:absolute;top:0;left:0;right:0;height:12px" class="dl-check"></div>
             <div style="position:relative;padding:26px 22px 28px;color:#fff;width:100%">
               <span style="display:inline-flex;align-items:center;gap:7px;background:#F2C230;color:#3a2c00;font-weight:800;font-size:11px;letter-spacing:.12em;padding:5px 12px;border-radius:999px">FRESCO · SABROSO · HECHO CON ORGULLO</span>
@@ -513,10 +512,12 @@
                 <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:12px 0 8px;text-transform:uppercase;letter-spacing:.04em">¿De qué lo quieres? <span style="color:#D6453D">*</span></div>
                 <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px"><sc-for list="{{ sheet.proteins }}" as="p" hint-placeholder-count="4"><button onClick="{{ p.onClick }}" style="{{ p.style }}">{{ p.label }}</button></sc-for></div>
               </sc-if>
-              <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:12px 0 8px;text-transform:uppercase;letter-spacing:.04em">Preparación</div>
-              <div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ sheet.mods }}" as="m" hint-placeholder-count="4"><button onClick="{{ m.onClick }}" style="{{ m.style }}">{{ m.label }}</button></sc-for></div>
+              <sc-if value="{{ sheet.hasPreparation }}" hint-placeholder-val="true">
+                <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:12px 0 8px;text-transform:uppercase;letter-spacing:.04em">Preparación</div>
+                <div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ sheet.mods }}" as="m" hint-placeholder-count="4"><button onClick="{{ m.onClick }}" style="{{ m.style }}">{{ m.label }}</button></sc-for></div>
+              </sc-if>
               <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:16px 0 8px;text-transform:uppercase;letter-spacing:.04em">Nota especial</div>
-              <textarea onInput="{{ sheet.onNota }}" placeholder="Ej. salsa aparte, sin cebolla…" style="width:100%;min-height:64px;resize:none;border:1.5px solid #e0d6bf;border-radius:12px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></textarea>
+              <textarea onInput="{{ sheet.onNota }}" placeholder="{{ sheet.notePlaceholder }}" style="width:100%;min-height:64px;resize:none;border:1.5px solid #e0d6bf;border-radius:12px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></textarea>
             </div>
             <div style="position:sticky;bottom:0;background:#F3F0E6;padding:14px 18px calc(16px + env(safe-area-inset-bottom));border-top:1px solid #E6DCC5;display:flex;gap:12px;align-items:center">
               <div style="display:flex;align-items:center;gap:11px;background:#fff;border:1.5px solid #E6DCC5;border-radius:13px;padding:7px 8px"><button onClick="{{ sheet.onDec }}" style="cursor:pointer;width:32px;height:32px;border-radius:9px;border:none;background:#f0e8d4;color:#10603A;font-size:19px;line-height:1">−</button><span style="font-weight:800;min-width:18px;text-align:center;font-size:16px">{{ sheet.qty }}</span><button onClick="{{ sheet.onInc }}" style="cursor:pointer;width:32px;height:32px;border-radius:9px;border:none;background:#10603A;color:#fff;font-size:19px;line-height:1">+</button></div>
@@ -555,7 +556,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.11.8';
+  static APP_VERSION = '2.11.9';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
@@ -1091,13 +1092,14 @@ class Component extends DCLogic {
     if(sheetOpen){
       const it=this.itemById(this.state.sheetItem);
       const proteinOptions=this.proteinOptionsFor(it);
-      sheet={...it,noFoto:!it.foto,qty:this.state.sheetQty,precioTxt:this.MXN(it.precio),hasProtein:proteinOptions.length>0,
+      const hasPreparation=it.cat!=='Bebidas';
+      sheet={...it,noFoto:!it.foto,qty:this.state.sheetQty,precioTxt:this.MXN(it.precio),hasProtein:proteinOptions.length>0,hasPreparation,notePlaceholder:hasPreparation?'Ej. salsa aparte, sin cebolla…':'Escribe una indicación…',
         onClose:()=>this.closeSheet(),
         onInc:()=>this.setState({sheetQty:this.state.sheetQty+1}),
         onDec:()=>this.setState({sheetQty:Math.max(1,this.state.sheetQty-1)}),
         onNota:e=>this.setState({sheetNota:e.target.value}), nota:this.state.sheetNota,
         proteins:proteinOptions.map(p=>({label:p,onClick:()=>this.setState({sheetProtein:p}),style:`cursor:pointer;font-size:13.5px;font-weight:700;padding:11px 10px;border-radius:11px;border:1.5px solid ${this.state.sheetProtein===p?'#10603A':'#e0d6bf'};${this.state.sheetProtein===p?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35'}`})),
-        mods:this.modsLibres.map(m=>({label:m,active:this.state.sheetMods.includes(m),onClick:()=>this.toggleMod(m),
+        mods:(hasPreparation?this.modsLibres:[]).map(m=>({label:m,active:this.state.sheetMods.includes(m),onClick:()=>this.toggleMod(m),
           style:`cursor:pointer;font-size:13px;font-weight:600;padding:9px 13px;border-radius:11px;border:1.5px solid ${this.state.sheetMods.includes(m)?'#10603A':'#e0d6bf'};${this.state.sheetMods.includes(m)?'background:#eaf4ec;color:#10603A':'background:#fff;color:#6a5f45'}`})),
         addTxt:'Agregar '+this.MXN(this.sheetUnit()*this.state.sheetQty), onAdd:()=>this.addSheet()};
     }
