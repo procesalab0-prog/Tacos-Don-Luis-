@@ -125,6 +125,18 @@
             </div>
           </div>
 
+          <sc-if value="{{ hasPromos }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:12px 20px 6px"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px;color:#10603A;margin-bottom:11px">Promociones para ti</div><div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px"><sc-for list="{{ homePromos }}" as="p" hint-placeholder-count="2"><div style="flex:0 0 270px;background:#10603A;color:#fff;border-radius:17px;padding:16px;position:relative;overflow:hidden"><div style="font-size:10px;font-weight:800;letter-spacing:.1em;color:#F2C230">{{ p.badge }}</div><div style="font-family:'Fredoka',sans-serif;font-size:19px;font-weight:700;margin-top:5px">{{ p.title }}</div><div style="font-size:12.5px;color:#d8eadc;line-height:1.4;margin:4px 0 12px">{{ p.description }}</div><button onClick="{{ p.onAdd }}" style="cursor:pointer;border:0;border-radius:10px;padding:9px 12px;background:#F2C230;color:#3a2c00;font-weight:800">Agregar con un clic</button></div></sc-for></div></div>
+          </sc-if>
+
+          <sc-if value="{{ hasNews }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:12px 20px 6px"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px;color:#10603A;margin-bottom:11px">Novedades</div><div style="display:flex;flex-direction:column;gap:10px"><sc-for list="{{ homeNews }}" as="n" hint-placeholder-count="2"><div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:15px;padding:14px"><div style="font-weight:800;color:#211E15">{{ n.title }}</div><div style="font-size:12.5px;color:#6a5f45;margin-top:4px;line-height:1.4">{{ n.description }}</div><sc-if value="{{ n.canAdd }}" hint-placeholder-val="{{ false }}"><button onClick="{{ n.onAdd }}" style="cursor:pointer;margin-top:10px;border:0;border-radius:10px;padding:8px 11px;background:#eaf4ec;color:#10603A;font-weight:800">+ Agregar al carrito</button></sc-if></div></sc-for></div></div>
+          </sc-if>
+
+          <sc-if value="{{ hasCombos }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:12px 20px 6px"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px;color:#10603A;margin-bottom:11px">Combos especiales</div><div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px"><sc-for list="{{ homeCombos }}" as="c" hint-placeholder-count="2"><div style="flex:0 0 230px;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:14px"><div style="font-size:10px;font-weight:800;color:#D6453D">{{ c.badge }}</div><div style="font-weight:800;font-size:16px;margin-top:3px">{{ c.name }}</div><div style="font-size:12px;color:#6a5f45;margin:4px 0 10px">{{ c.description }}</div><div style="display:flex;justify-content:space-between;align-items:center"><strong style="color:#10603A">{{ c.price }}</strong><button onClick="{{ c.onAdd }}" style="cursor:pointer;width:34px;height:34px;border:0;border-radius:10px;background:#10603A;color:#fff;font-size:20px">+</button></div></div></sc-for></div></div>
+          </sc-if>
+
           <div style="padding:12px 20px 6px">
             <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px;color:#10603A;margin-bottom:12px">Explora el menú</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
@@ -281,7 +293,9 @@
           <sc-if value="{{ chkRecoger }}" hint-placeholder-val="{{ true }}">
             <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:15px;margin-bottom:16px">
               <div style="font-weight:700;font-size:14.5px;color:#211E15;margin-bottom:9px">Para recoger</div>
-              <div style="display:flex;align-items:center;gap:9px;background:#eaf4ec;border:1px solid #cfe0c6;border-radius:11px;padding:11px 13px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#10603A" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg><span style="font-size:13px;color:#10603A;font-weight:600">Lo antes posible · listo en 15–20 min</span></div>
+              <div style="display:flex;gap:8px;margin-bottom:9px"><sc-for list="{{ chkScheduleModes }}" as="s" hint-placeholder-count="2"><button onClick="{{ s.onClick }}" style="{{ s.style }}">{{ s.label }}</button></sc-for></div>
+              <sc-if value="{{ chkScheduled }}" hint-placeholder-val="{{ false }}"><label style="display:block;font-size:12px;font-weight:700;color:#6a5f45">Hora para recoger<input type="datetime-local" value="{{ scheduledFor }}" min="{{ scheduleMin }}" max="{{ scheduleMax }}" onInput="{{ onScheduledFor }}" style="display:block;width:100%;margin-top:6px;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px;font:inherit;background:#fff"></label></sc-if>
+              <sc-if value="{{ chkImmediate }}" hint-placeholder-val="{{ true }}"><div style="display:flex;align-items:center;gap:9px;background:#eaf4ec;border:1px solid #cfe0c6;border-radius:11px;padding:11px 13px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#10603A" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg><span style="font-size:13px;color:#10603A;font-weight:600">Lo antes posible · listo en 15–20 min</span></div></sc-if>
             </div>
           </sc-if>
 
@@ -424,6 +438,7 @@
                   <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px"><label style="display:block;font-size:11.5px;color:#9a8e70;font-weight:700;margin-bottom:7px">TELÉFONO</label><input data-field="tel" onInput="{{ onAccountPhone }}" placeholder="Teléfono" type="tel" inputmode="tel" autocomplete="tel" maxlength="15" style="display:block;width:100%;min-width:0;border:1.5px solid #e0d6bf;border-radius:11px;padding:11px 12px;font-family:'Rubik',sans-serif;font-size:15px;background:#fff;color:#211E15"><div style="font-size:11.5px;color:#9a8e70;margin-top:6px">Se usará automáticamente en tus pedidos.</div></div>
                   <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px"><div style="font-size:11.5px;color:#9a8e70;font-weight:700">CORREO</div><div style="font-weight:600;font-size:15px;color:#211E15;margin-top:3px">{{ cuEmail }}</div></div>
                   <button onClick="{{ onSaveProfile }}" style="cursor:pointer;width:100%;border:none;border-radius:12px;padding:13px;background:#10603A;color:#fff;font-weight:700;font-size:14px">Guardar mis datos</button>
+                  <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px"><label style="display:block;font-size:11.5px;color:#9a8e70;font-weight:700;margin-bottom:7px">CÓDIGO DE REFERIDO</label><div style="display:flex;gap:7px"><input value="{{ referralInput }}" onInput="{{ onReferralInput }}" placeholder="DL-XXXXXXX" style="min-width:0;flex:1;border:1.5px solid #e0d6bf;border-radius:10px;padding:10px;font:inherit"><button onClick="{{ onClaimReferral }}" style="cursor:pointer;border:0;border-radius:10px;background:#10603A;color:#fff;font-weight:800;padding:0 12px">Aplicar</button></div></div>
                   <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:600;font-size:14.5px;color:#211E15">Notificaciones</div><div style="font-size:12px;color:#9a8e70">Ofertas y estado de pedidos</div></div><span style="width:44px;height:26px;background:#28A54C;border-radius:999px;position:relative"><span style="position:absolute;top:3px;right:3px;width:20px;height:20px;background:#fff;border-radius:50%"></span></span></div>
                   <button onClick="{{ onLogout }}" style="cursor:pointer;background:none;border:none;color:#b23a32;font-weight:700;font-size:13.5px;padding:10px;text-align:center">Cerrar sesión</button>
                   <button style="cursor:pointer;background:none;border:none;color:#b0a488;font-weight:600;font-size:12px;padding:2px;text-align:center">Eliminar mi cuenta</button>
@@ -456,6 +471,8 @@
                       </div>
                     </sc-for>
                   </div>
+                  <sc-if value="{{ hasReferral }}" hint-placeholder-val="{{ false }}"><div style="margin-top:14px;background:#fff5d1;border:1px solid #ecd47e;border-radius:14px;padding:13px"><div style="font-size:11px;font-weight:800;color:#8a6d12">TU CÓDIGO DE REFERIDO</div><div style="font-family:'Fredoka',sans-serif;font-size:22px;font-weight:700;color:#10603A;margin:3px 0">{{ referralCode }}</div><button onClick="{{ onShareReferral }}" style="cursor:pointer;border:0;border-radius:9px;padding:8px 11px;background:#10603A;color:#fff;font-weight:800">Compartir invitación</button></div></sc-if>
+                  <sc-if value="{{ hasLoyaltyHistory }}" hint-placeholder-val="{{ false }}"><div style="font-size:13px;font-weight:800;color:#8a7f66;margin:16px 0 8px;text-transform:uppercase">Historial de puntos y canjes</div><div style="display:flex;flex-direction:column;gap:7px"><sc-for list="{{ loyaltyHistory }}" as="m" hint-placeholder-count="3"><div style="display:flex;justify-content:space-between;gap:10px;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:11px;padding:10px 12px"><span style="font-size:12px;color:#5a4e35">{{ m.description }}</span><strong style="font-size:12px;color:{{ m.positive ? '#10603A' : '#D6453D' }}">{{ m.points }}</strong></div></sc-for></div></sc-if>
                 </div>
               </sc-if>
             </div>
@@ -606,21 +623,22 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.13.1';
+  static APP_VERSION = '2.14.0';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
   static PRIVACY_CONTACT = 'procesalab0@gmail.com';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
     sheetItem:null, sheetQty:1, sheetProtein:'', sheetMods:[], sheetNota:'',
-    cart:[], entrega:'recoger', pago:'efectivo', cashTender:'', dir:{}, prog:false,
+    cart:[], activeCombos:[], entrega:'recoger', pago:'efectivo', cashTender:'', dir:{}, prog:false,scheduleMode:'immediate',scheduledFor:'',
     folio:null, trackStep:0, cuentaTab:'perfil', logged:false,
     remoteMenu:null, remoteCategories:null, remoteZones:null, modifierOptions:null, branchId:null,branchLocation:null,
-    settings:null, submitting:false, trackingToken:null, liveOrder:null,accountOrders:[],loyaltyAccount:null,loyaltyRule:null,
-    authEmail:'',authPassword:'',signupMode:false,signupName:'',signupPhone:'',signupConfirm:'',session:null,currentUser:null,logoTaps:0,showEasterEgg:false,showPrivacidad:false };
+    settings:null, submitting:false, trackingToken:null, liveOrder:null,accountOrders:[],loyaltyAccount:null,loyaltyRule:null,marketingContent:[],combos:[],salesStats:[],loyaltyRewards:[],loyaltyMovements:[],loyaltyRedemptions:[],referralCode:'',
+    authEmail:'',authPassword:'',signupMode:false,signupName:'',signupPhone:'',signupConfirm:'',referralInput:'',session:null,currentUser:null,logoTaps:0,showEasterEgg:false,showPrivacidad:false };
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
   componentDidMount(){
+    const referral=new URLSearchParams(location.search).get('ref');if(referral)this.setState({referralInput:referral});
     this._onR=()=>this.setState({vw:window.innerWidth});
     this.setState({vw:window.innerWidth});
     window.addEventListener('resize',this._onR);
@@ -676,17 +694,21 @@ class Component extends DCLogic {
       const branches=await this.publicRead('/rest/v1/branches?slug=eq.punto-canada&is_active=eq.true&select=id,name,address_line,latitude,longitude');
       const branch=branches[0]; if(!branch)throw new Error('Sucursal no disponible');
       const bid=branch.id;
-      const [cats,products,zones,settings,modifierOptions,loyaltyRules]=await Promise.all([
+      const [cats,products,zones,settings,modifierOptions,loyaltyRules,marketingContent,combos,salesStats,loyaltyRewards]=await Promise.all([
         this.publicRead('/rest/v1/categories?branch_id=eq.'+bid+'&is_active=eq.true&select=id,name,slug,sort_order&order=sort_order'),
         this.publicRead('/rest/v1/products?branch_id=eq.'+bid+'&is_active=eq.true&select=id,category_id,name,description,price,image_url,is_available,is_featured,sort_order&order=sort_order'),
         this.publicRead('/rest/v1/delivery_zones?branch_id=eq.'+bid+'&is_active=eq.true&select=id,name,min_distance_km,max_distance_km,fee,minimum_order,sort_order&order=sort_order').catch(()=>[]),
         this.publicRead('/rest/v1/business_settings?branch_id=eq.'+bid+'&select=*').catch(()=>[]),
         this.publicRead('/rest/v1/modifier_options?is_available=eq.true&select=id,name,price_delta,modifier_group_id,modifier_groups!inner(branch_id)&modifier_groups.branch_id=eq.'+bid).catch(()=>[]),
-        this.publicRead('/rest/v1/loyalty_rules?branch_id=eq.'+bid+'&is_active=eq.true&select=points_per_currency,minimum_spend,points_expire_days,config&limit=1').catch(()=>[])
+        this.publicRead('/rest/v1/loyalty_rules?branch_id=eq.'+bid+'&is_active=eq.true&select=points_per_currency,minimum_spend,points_expire_days,config&limit=1').catch(()=>[]),
+        this.publicRead('/rest/v1/marketing_content?branch_id=eq.'+bid+'&select=*&order=sort_order').catch(()=>[]),
+        this.publicRead('/rest/v1/combos?branch_id=eq.'+bid+'&select=*&order=sort_order').catch(()=>[]),
+        this.publicRead('/rest/v1/product_sales_stats?branch_id=eq.'+bid+'&select=product_id,units_sold,order_count&order=units_sold.desc').catch(()=>[]),
+        this.publicRead('/rest/v1/loyalty_rewards?branch_id=eq.'+bid+'&select=*&order=sort_order').catch(()=>[])
       ]);
       const catById=Object.fromEntries(cats.map(c=>[c.id,c.name]));
       const remoteMenu=products.map(p=>({id:p.id,nombre:p.name,cat:catById[p.category_id]||'Tacos',precio:Number(p.price),desc:p.description||'',foto:p.image_url||null,tag:p.is_featured?'Favorito':null,featured:p.is_featured,disponible:p.is_available}));
-      this.setState({branchId:bid,branchLocation:branch.latitude!=null&&branch.longitude!=null?{lat:Number(branch.latitude),lng:Number(branch.longitude),address:branch.address_line}:null,remoteCategories:cats.map(c=>c.name),remoteMenu,remoteZones:zones,modifierOptions,settings:settings[0]||null,loyaltyRule:loyaltyRules[0]||null});
+      this.setState({branchId:bid,branchLocation:branch.latitude!=null&&branch.longitude!=null?{lat:Number(branch.latitude),lng:Number(branch.longitude),address:branch.address_line}:null,remoteCategories:cats.map(c=>c.name),remoteMenu,remoteZones:zones,modifierOptions,settings:settings[0]||null,loyaltyRule:loyaltyRules[0]||null,marketingContent,combos,salesStats,loyaltyRewards});
     }catch(error){ console.error('No se pudo cargar el menú en vivo',error); this.toast('No pudimos actualizar el menú. Mostramos una copia disponible.'); }
   }
   async signIn(){
@@ -725,18 +747,22 @@ class Component extends DCLogic {
       const [customers,profiles,orders]=await Promise.all([
         this.api('/rest/v1/customers?user_id=eq.'+session.user.id+'&select=id,full_name,phone,customer_addresses(*)&limit=1',{token:session.access_token}),
         this.api('/rest/v1/profiles?id=eq.'+session.user.id+'&select=full_name,phone&limit=1',{token:session.access_token}),
-        this.api('/rest/v1/orders?customer_user_id=eq.'+session.user.id+'&select=id,folio,status,total,fulfillment_type,promised_at,created_at,order_items(product_name,quantity)&order=created_at.desc&limit=20',{token:session.access_token})
+        this.api('/rest/v1/orders?customer_user_id=eq.'+session.user.id+'&select=id,folio,status,total,fulfillment_type,promised_at,created_at,order_items(product_id,product_name,quantity,notes)&order=created_at.desc&limit=20',{token:session.access_token})
       ]);
       const customer=customers[0],profile=profiles[0]||{};const addresses=customer?.customer_addresses||[];const address=addresses.find(a=>a.is_default)||addresses[0];
       const current=this.state.dir||{};const dir={...current,nombre:customer?.full_name||profile.full_name||current.nombre||'',tel:customer?.phone||profile.phone||current.tel||''};
       if(address){Object.assign(dir,{calle:address.street||'',num:address.exterior_number||'',col:address.neighborhood||'',ref:address.references_text||'',savedAddressId:address.id});if(address.latitude!=null&&address.longitude!=null)this._pickedLatLng={lat:Number(address.latitude),lng:Number(address.longitude)};}
       let loyaltyAccount=null,loyaltyRule=null;
       if(customer?.id){
-        const [accounts,rules]=await Promise.all([
+        const [accounts,rules,movements,redemptions,referral]=await Promise.all([
           this.api('/rest/v1/loyalty_accounts?customer_id=eq.'+customer.id+'&select=id,points_balance,lifetime_points&limit=1',{token:session.access_token}).catch(()=>[]),
-          this.state.branchId?this.publicRead('/rest/v1/loyalty_rules?branch_id=eq.'+this.state.branchId+'&is_active=eq.true&select=points_per_currency,minimum_spend,config&limit=1').catch(()=>[]):Promise.resolve([])
+          this.state.branchId?this.publicRead('/rest/v1/loyalty_rules?branch_id=eq.'+this.state.branchId+'&is_active=eq.true&select=points_per_currency,minimum_spend,config&limit=1').catch(()=>[]):Promise.resolve([]),
+          this.api('/rest/v1/loyalty_movements?select=id,movement_type,points,description,created_at&order=created_at.desc&limit=30',{token:session.access_token}).catch(()=>[]),
+          this.api('/rest/v1/loyalty_redemptions?select=id,reward_id,points_spent,status,redemption_code,created_at&order=created_at.desc&limit=30',{token:session.access_token}).catch(()=>[]),
+          this.state.branchId?this.api('/rest/v1/rpc/ensure_referral_code',{method:'POST',token:session.access_token,body:JSON.stringify({p_branch_id:this.state.branchId})}).catch(()=>''):Promise.resolve('')
         ]);
         loyaltyAccount=accounts[0]||null;loyaltyRule=rules[0]||null;
+        this.setState({loyaltyMovements:movements,loyaltyRedemptions:redemptions,referralCode:typeof referral==='string'?referral:''});
       }
       this.setState({dir,accountOrders:orders||[],loyaltyAccount,loyaltyRule});this.persistCheckoutDraft(dir);
     }catch(error){console.error(error);}
@@ -820,6 +846,11 @@ class Component extends DCLogic {
 
   cartCount(){ return this.state.cart.reduce((s,l)=>s+l.q,0); }
   addQuick(id){ const it=this.itemById(id); if(it.disponible===false){ this.toast(it.nombre+' está agotado hoy'); return; }if(this.proteinOptionsFor(it).length){this.openSheet(id);return;}const c=[...this.state.cart];c.push({uid:Date.now()+Math.random(),id,q:1,protein:'',mods:[],nota:''});this.setState({cart:c});this.toast(it.nombre+' agregado'); }
+  addCombo(combo){
+    const components=Array.isArray(combo.components)?combo.components:[];if(!components.length){this.toast('Este combo aún no tiene productos');return;}
+    const comboUid=crypto.randomUUID(),cart=[...this.state.cart];for(const part of components){const id=part.product_id||part.productId,product=this.itemById(id);if(!product?.id||product.disponible===false){this.toast('Un producto del combo no está disponible');return;}cart.push({uid:Date.now()+Math.random(),id,q:Math.max(1,Number(part.quantity)||1),protein:'',mods:[],nota:'Combo: '+combo.name,comboId:combo.id,comboUid});}
+    this.setState({cart,activeCombos:[...this.state.activeCombos,{id:combo.id,uid:comboUid}]});this.toast(combo.name+' agregado');
+  }
 
   // ---- product sheet ----
   proteinOptionsFor(it){if(!it||!['Quesadillas','Tortas','Tacos light'].includes(it.cat))return[];const name=String(it.nombre||'').toLocaleLowerCase('es-MX');if(name.includes('especial'))return['Lengua','Sesos'];if(name.includes('con queso'))return['Cabeza','Pastor','Bistec','Chorizo','Lengua','Sesos'];return['Cabeza','Pastor','Bistec','Chorizo'];}
@@ -833,8 +864,9 @@ class Component extends DCLogic {
   lineTotal(l){ return this.lineUnit(l)*l.q; }
   cartSubtotal(){ return this.state.cart.reduce((s,l)=>s+this.lineTotal(l),0); }
   cartInc(uid){ const c=this.state.cart.map(l=>l.uid===uid?{...l,q:l.q+1}:l); this.setState({cart:c}); }
-  cartDec(uid){ let c=this.state.cart.map(l=>l.uid===uid?{...l,q:l.q-1}:l).filter(l=>l.q>0); this.setState({cart:c}); }
-  cartRemove(uid){ this.setState({cart:this.state.cart.filter(l=>l.uid!==uid)}); }
+  cartDec(uid){const line=this.state.cart.find(l=>l.uid===uid);if(line?.comboUid){this.removeComboInstance(line.comboUid);return;}let c=this.state.cart.map(l=>l.uid===uid?{...l,q:l.q-1}:l).filter(l=>l.q>0);this.setState({cart:c}); }
+  cartRemove(uid){const line=this.state.cart.find(l=>l.uid===uid);if(line?.comboUid){this.removeComboInstance(line.comboUid);return;}this.setState({cart:this.state.cart.filter(l=>l.uid!==uid)});}
+  removeComboInstance(comboUid){this.setState({cart:this.state.cart.filter(l=>l.comboUid!==comboUid),activeCombos:this.state.activeCombos.filter(c=>c.uid!==comboUid)});this.toast('Combo retirado');}
   lineLabel(l){const parts=[...(l.protein?['Carne: '+l.protein]:[]),...(l.mods||[])];if(l.nota)parts.push('“'+l.nota+'”');return parts.join(' · ');}
 
   // ---- checkout / cobertura ----
@@ -929,7 +961,7 @@ class Component extends DCLogic {
     if(!navigator.geolocation){this.toast('Tu navegador no permite obtener ubicación');return;}
     navigator.geolocation.getCurrentPosition(p=>{const {latitude,longitude}=p.coords;this.setMapMarker(latitude,longitude);this._map?.setView([latitude,longitude],17);this.toast('Ubicación encontrada · buscando dirección');},()=>this.toast('Activa el permiso de ubicación o toca el mapa'),{enableHighAccuracy:true,timeout:10000});
   }
-  descuento(){ return this.state.cart.length && this.cartSubtotal()>=200 ? 20 : 0; }
+  descuento(){return (this.state.activeCombos||[]).reduce((sum,entry)=>{const combo=(this.state.combos||[]).find(c=>c.id===entry.id);if(!combo)return sum;const regular=(combo.components||[]).reduce((s,p)=>s+this.itemById(p.product_id||p.productId).precio*(Number(p.quantity)||1),0);return sum+Math.max(0,regular-Number(combo.price));},0);}
   totalFinal(){ return Math.max(0,this.cartSubtotal()+this.envioActual()-this.descuento()); }
   puntosGanados(){const total=this.totalFinal(),rule=this.state.loyaltyRule;if(this.state.settings?.loyalty_enabled===false||!rule||total<Number(rule.minimum_spend||0))return 0;return Math.floor(total*Number(rule.points_per_currency||.05));}
   paymentMethodsConfig(){const methods=this.state.settings?.payment_methods||{};return{cash:methods.cash!==false,transfer:methods.transfer!==false,card_present:methods.card_present!==false};}
@@ -960,10 +992,11 @@ class Component extends DCLogic {
     const selectedZone=this.zonaCalculada();
     if(this.state.entrega==='domicilio'&&!selectedZone){this.toast('No pudimos calcular tu zona de entrega');return;}
     const minimum=Number(this.state.remoteZones?.find(z=>z.id===selectedZone?.id)?.minimum_order||this.state.settings?.minimum_delivery_amount||100);
-    if(this.state.entrega==='domicilio'&&this.cartSubtotal()<minimum){this.toast('El pedido mínimo para envío es '+this.MXN(minimum)+' · agrega '+this.MXN(minimum-this.cartSubtotal())+' más');return;}
+    const discountedSubtotal=Math.max(0,this.cartSubtotal()-this.descuento());if(this.state.entrega==='domicilio'&&discountedSubtotal<minimum){this.toast('El pedido mínimo para envío es '+this.MXN(minimum)+' · agrega '+this.MXN(minimum-discountedSubtotal)+' más');return;}
     const cashTender=Number(this.state.cashTender);if(this.state.pago==='efectivo'&&(!Number.isFinite(cashTender)||cashTender<this.totalFinal())){this.toast('Indica con cuánto pagarás; debe cubrir el total');return;}
     if(this.state.entrega==='domicilio' && !this.state.dir.calle){ this.toast('Agrega tu dirección de entrega'); return; }
     if(!this.state.dir.nombre?.trim()||!this.state.dir.tel?.trim()){this.toast('Agrega tu nombre y teléfono');return;}
+    if(this.state.entrega==='recoger'&&this.state.scheduleMode==='scheduled'&&(!this.state.scheduledFor||Date.parse(this.state.scheduledFor)<Date.now()+10*60000)){this.toast('Elige una hora válida, al menos 10 minutos después');return;}
     if(!this.state.remoteMenu){this.toast('Espera a que termine de cargar el menú');return;}
     if(this.state.submitting)return;
     this.setState({submitting:true});
@@ -992,6 +1025,8 @@ class Component extends DCLogic {
             neighborhood:this.state.dir.col,references:this.state.dir.ref,
             latitude:this._pickedLatLng?.lat||null,longitude:this._pickedLatLng?.lng||null
           }:null,
+          scheduledFor:this.state.entrega==='recoger'&&this.state.scheduleMode==='scheduled'?new Date(this.state.scheduledFor).toISOString():null,
+          comboIds:(this.state.activeCombos||[]).map(c=>c.id),
           items
         })
       });
@@ -1002,7 +1037,7 @@ class Component extends DCLogic {
       const remembered=JSON.parse(localStorage.getItem('donLuisGuestOrderTokens')||'[]').filter(x=>x?.token!==result.trackingToken);
       remembered.unshift({token:result.trackingToken,folio,createdAt:new Date().toISOString()});
       localStorage.setItem('donLuisGuestOrderTokens',JSON.stringify(remembered.slice(0,10)));
-      this.setState({folio,trackingToken:result.trackingToken,liveOrder:result.order,route:'confirmacion',trackStep:0,prog:false,submitting:false});
+      this.setState({folio,trackingToken:result.trackingToken,liveOrder:result.order,route:'confirmacion',trackStep:0,prog:false,submitting:false,activeCombos:[]});
       if(this.state.session)await this.loadCustomerData(this.state.session);
       this.toast(result.duplicate?'Este pedido ya estaba recibido · no se envió dos veces':'¡Pedido recibido! 🌮');
     }catch(error){this.setState({submitting:false});this.toast(error.message||'No se pudo crear el pedido');}
@@ -1055,10 +1090,13 @@ class Component extends DCLogic {
     const desc=this.descuento();
     const selectedZone=this.coberturaTarifas.find(z=>z.label===zonaSel);
     const minimum=Number(this.state.remoteZones?.find(z=>z.id===selectedZone?.id)?.minimum_order||this.state.settings?.minimum_delivery_amount||100);
-    const faltante=Math.max(0,minimum-this.cartSubtotal());
+    const faltante=Math.max(0,minimum-Math.max(0,this.cartSubtotal()-this.descuento()));
     const blockedMinimum=entrega==='domicilio'&&(faltante>0||km==null);const cash=Number(this.state.cashTender);const cashValid=selectedPayment!=='efectivo'||(Number.isFinite(cash)&&cash>=this.totalFinal());
+    const now=new Date(),min=new Date(now.getTime()+10*60000),max=new Date(now.getTime()+7*86400000),toLocal=d=>new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);
+    const scheduleModes=[['immediate','Lo antes posible'],['scheduled','Programar hora']].map(([key,label])=>({label,onClick:()=>this.setState({scheduleMode:key}),style:`cursor:pointer;flex:1;border:1.5px solid ${this.state.scheduleMode===key?'#10603A':'#E6DCC5'};background:${this.state.scheduleMode===key?'#eaf4ec':'#fff'};color:${this.state.scheduleMode===key?'#10603A':'#6a5f45'};border-radius:10px;padding:10px;font-weight:800`}));
     return {
       chkModos:modos, chkPagos:pagos, chkEntrega:entrega,
+      chkScheduleModes:scheduleModes,chkScheduled:this.state.scheduleMode==='scheduled',chkImmediate:this.state.scheduleMode!=='scheduled',scheduledFor:this.state.scheduledFor,scheduleMin:toLocal(min),scheduleMax:toLocal(max),onScheduledFor:e=>this.setState({scheduledFor:e.target.value}),
       chkDomicilio:entrega==='domicilio', chkRecoger:entrega==='recoger',
       chkTransfer:selectedPayment==='transferencia',chkCash:selectedPayment==='efectivo',chkClip:false,chkSubmitLabel:(entrega==='domicilio'&&km==null)?'Marca tu punto en el mapa':(blockedMinimum?'Faltan '+this.MXN(faltante)+' para el mínimo':'Hacer pedido'),
       chkSubmitStyle:`cursor:${blockedMinimum?'not-allowed':'pointer'};width:100%;margin-top:14px;background:${blockedMinimum?'#a99d80':'#D6453D'};color:#fff;border:none;border-radius:15px;padding:16px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;box-shadow:${blockedMinimum?'none':'0 8px 20px rgba(214,69,61,.35)'}`,
@@ -1120,23 +1158,19 @@ class Component extends DCLogic {
   vmCuenta(){
     const tabs=[['perfil','Perfil'],['direcciones','Direcciones'],['puntos','Puntos']].map(([k,l])=>({label:l,active:k===this.state.cuentaTab,onClick:()=>this.setState({cuentaTab:k}),
       style:`cursor:pointer;flex:1;padding:9px;border-radius:11px;font-weight:700;font-size:13px;border:none;${k===this.state.cuentaTab?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35;border:1px solid #E6DCC5'}`}));
-    const configured=this.state.loyaltyRule?.config?.rewards;
-    const rewards=Array.isArray(configured)&&configured.length?configured:[
-      {points:200,label:'3 tacos de pastor gratis'},
-      {points:350,label:'Orden de quesadilla + agua'},
-      {points:500,label:'20% en toda tu cuenta'},
-    ];
+    const rewards=this.state.loyaltyRewards||[];
     const balance=Number(this.state.loyaltyAccount?.points_balance||0);
     const lifetime=Number(this.state.loyaltyAccount?.lifetime_points||0);
-    const recompensas=rewards.map(r=>({req:r.points+' pts',premio:r.label,listo:balance>=Number(r.points),onRedeem:()=>this.toast('Muéstralo en caja para autorizar el canje')}));
+    const purchases=this.state.accountOrders.filter(o=>o.status==='delivered').length;
+    const recompensas=rewards.map(r=>({req:r.reward_type==='points'?r.points_cost+' pts':r.reward_type==='purchase_count'?purchases+'/'+r.required_purchases+' compras':r.required_product_quantity+' productos',premio:r.name,listo:r.reward_type==='points'?balance>=Number(r.points_cost):true,onRedeem:()=>this.redeemReward(r)}));
     const email=this.state.currentUser?.email||'';
     const name=this.state.currentUser?.user_metadata?.full_name||email.split('@')[0]||'Cliente Don Luis';
     return {cuentaTabs:tabs, cuLogged:this.state.logged, cuNotLogged:!this.state.logged,cuLogin:!this.state.signupMode,cuSignup:this.state.signupMode,
       cuPerfil:this.state.cuentaTab==='perfil', cuDir:this.state.cuentaTab==='direcciones', cuPuntos:this.state.cuentaTab==='puntos',
-      cuPuntosVal:balance, cuNivel:lifetime>=500?'Oro':lifetime>=200?'Plata':'Bronce', cuVisitas:this.state.accountOrders.filter(o=>o.status==='delivered').length,
+      cuPuntosVal:balance, cuNivel:lifetime>=500?'Oro':lifetime>=200?'Plata':'Bronce', cuVisitas:purchases,
       cuName:this.state.dir?.nombre||name,cuNameValue:this.state.dir?.nombre||'',cuEmail:email,cuPhoneValue:this.state.dir?.tel||'',cuInitial:(this.state.dir?.nombre||name).slice(0,1).toUpperCase(),
       cuLocationText:this._pickedLatLng?'Ubicación guardada: '+this._pickedLatLng.lat+', '+this._pickedLatLng.lng:'Marca la ubicación para guardarla',
-      recompensas,
+      recompensas,referralInput:this.state.referralInput,onReferralInput:e=>this.setState({referralInput:e.target.value}),onClaimReferral:()=>this.claimReferral(),hasReferral:!!this.state.referralCode,referralCode:this.state.referralCode,onShareReferral:()=>{const text='Usa mi código '+this.state.referralCode+' en Tacos Don Luis';if(navigator.share)navigator.share({title:'Tacos Don Luis',text,url:location.origin+'/pedir/?ref='+this.state.referralCode});else navigator.clipboard?.writeText(text+' '+location.origin+'/pedir/?ref='+this.state.referralCode).then(()=>this.toast('Invitación copiada'));},loyaltyHistory:(this.state.loyaltyMovements||[]).map(m=>({description:m.description,positive:Number(m.points)>=0,points:(Number(m.points)>=0?'+':'')+m.points+' pts'})),hasLoyaltyHistory:(this.state.loyaltyMovements||[]).length>0,
       authEmail:this.state.authEmail,authPassword:this.state.authPassword,
       onAuthEmail:e=>this.setState({authEmail:e.target.value}),
       onAuthPassword:e=>this.setState({authPassword:e.target.value}),
@@ -1146,6 +1180,9 @@ class Component extends DCLogic {
       onLogout:()=>this.signOut(),
     };
   }
+  async redeemReward(reward){if(!this.state.session){this.toast('Inicia sesión para canjear');return;}try{const result=await this.api('/rest/v1/rpc/redeem_loyalty_reward',{method:'POST',body:JSON.stringify({p_reward_id:reward.id})});this.toast('Canje confirmado · código '+result.code);await this.loadCustomerData();}catch(error){this.toast(error.message||'No se pudo realizar el canje');}}
+  async claimReferral(){const code=String(this.state.referralInput||'').trim();if(!code){this.toast('Escribe un código');return;}try{await this.api('/rest/v1/rpc/claim_referral_code',{method:'POST',body:JSON.stringify({p_branch_id:this.state.branchId,p_code:code})});this.toast('Código aplicado; ambos recibirán puntos tras tu primera compra');this.setState({referralInput:''});}catch(error){this.toast(error.message||'No se pudo aplicar el código');}}
+  repeatOrder(order){const cart=[];for(const line of order.order_items||[]){const product=this.itemById(line.product_id);if(!line.product_id||!product?.id||product.disponible===false)continue;cart.push({uid:Date.now()+Math.random(),id:line.product_id,q:Number(line.quantity)||1,protein:'',mods:[],nota:line.notes||''});}if(!cart.length){this.toast('Los productos de ese pedido ya no están disponibles');return;}this.setState({cart,activeCombos:[],route:'carrito'});this.toast('Pedido agregado al carrito; revisa disponibilidad y total');}
   vmPedidos(){
     const terminal=['delivered','cancelled','rejected','failed_delivery'];
     const statusLabel={pending_acceptance:'Por aceptar',confirmed:'Confirmado',preparing:'En preparación',ready:'Listo',assigned:'Repartidor asignado',on_the_way:'En camino',delivered:'Entregado',cancelled:'Cancelado',rejected:'Rechazado',failed_delivery:'No entregado'};
@@ -1153,7 +1190,7 @@ class Component extends DCLogic {
     const localActive=this.state.liveOrder&&!terminal.includes(this.state.liveOrder.status)?this.state.liveOrder:null;
     const activeOrder=accountActive||localActive;
     const activo=activeOrder?{folio:'DL-'+activeOrder.folio,estado:statusLabel[activeOrder.status]||'Pedido en curso',tiempo:activeOrder.fulfillment_type==='delivery'?'30–40 min':'15–20 min',onVer:()=>{this.setState({liveOrder:activeOrder,folio:'DL-'+activeOrder.folio,entrega:activeOrder.fulfillment_type==='delivery'?'domicilio':'recoger'});this.iniciarSeguimiento();}}:null;
-    const realHistory=this.state.accountOrders.filter(o=>terminal.includes(o.status)).map(o=>({folio:'DL-'+o.folio,fecha:new Date(o.created_at).toLocaleDateString('es-MX',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}),total:this.MXN(o.total),items:(o.order_items||[]).map(i=>i.quantity+'× '+i.product_name).join(', '),onRepetir:()=>this.toast('La opción de repetir estará disponible pronto')}));
+    const realHistory=this.state.accountOrders.filter(o=>terminal.includes(o.status)).map(o=>({folio:'DL-'+o.folio,fecha:new Date(o.created_at).toLocaleDateString('es-MX',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}),total:this.MXN(o.total),items:(o.order_items||[]).map(i=>i.quantity+'× '+i.product_name).join(', '),onRepetir:()=>this.repeatOrder(o)}));
     const historial=realHistory;
     return {pedActivo:activo, pedHasActivo:!!activo, pedHistorial:historial};
   }
@@ -1174,8 +1211,12 @@ class Component extends DCLogic {
       {label:'SABROSO',image:'../assets/value-sabroso.png',imageStyle:'width:100%;height:100%;object-fit:contain;transform:scale(1.38)'},
       {label:'CON ORGULLO',image:'../assets/value-orgullo.png',imageStyle:'width:100%;height:100%;object-fit:contain'},
     ];
+    const ranked=(this.state.salesStats||[]).map(s=>this.itemById(s.product_id)).filter(p=>p?.id&&p.disponible!==false);
     const favoritosRemotos=this.menu.filter(m=>m.featured);
-    const destacados=(favoritosRemotos.length?favoritosRemotos:(this.state.remoteMenu?this.menu.slice(0,4):this.menu.filter(m=>['t_pastor','t_bistec','q_pastor','to_pastor'].includes(m.id)))).slice(0,4).map(m=>({...m,precioTxt:this.MXN(m.precio),tag:m.tag||'Favorito',onAdd:()=>this.addQuick(m.id)}));
+    const destacados=(ranked.length?ranked:favoritosRemotos.length?favoritosRemotos:(this.state.remoteMenu?this.menu.slice(0,4):this.menu.filter(m=>['t_pastor','t_bistec','q_pastor','to_pastor'].includes(m.id)))).slice(0,4).map((m,i)=>({...m,precioTxt:this.MXN(m.precio),tag:ranked.length?'#'+(i+1)+' Más vendido':m.tag||'Favorito',onAdd:()=>this.addQuick(m.id)}));
+    const homePromos=(this.state.marketingContent||[]).filter(x=>x.content_type==='daily_promo'&&x.product_id).map(x=>({title:x.title,description:x.description,badge:x.badge||'PROMOCIÓN EXCLUSIVA',onAdd:()=>this.addQuick(x.product_id)}));
+    const homeNews=(this.state.marketingContent||[]).filter(x=>x.content_type==='news').map(x=>({title:x.title,description:x.description,canAdd:!!x.product_id,onAdd:()=>this.addQuick(x.product_id)}));
+    const homeCombos=(this.state.combos||[]).map(c=>({name:c.name,description:c.description,price:this.MXN(c.price),badge:c.app_exclusive?'EXCLUSIVO APP':'COMBO',onAdd:()=>this.addCombo(c)}));
     const categoryImages={Tacos:'../assets/menu-tacos.png',Quesadillas:'../assets/menu-quesadillas.png',Tortas:'../assets/menu-tortas.png',['Tacos light']:'../assets/menu-light.png',Bebidas:'../assets/menu-bebidas.png'};
     const categoriasHome=this.cats.map(c=>({label:c,count:this.menu.filter(m=>m.cat===c).length,image:categoryImages[c],onClick:()=>{this.setState({cat:c});this.go('menu');}}));
     const opiniones=[
@@ -1230,7 +1271,7 @@ class Component extends DCLogic {
 
     return {
       shellMax: phone?'100%':'480px',
-      isHome: route==='home',
+      isHome: route==='home',hasPromos:homePromos.length>0,homePromos,hasNews:homeNews.length>0,homeNews,hasCombos:homeCombos.length>0,homeCombos,
       isMenu: route==='menu',
       isCarrito: route==='carrito',
       isCheckout: route==='checkout',
