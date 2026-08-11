@@ -265,7 +265,9 @@
           <sc-if value="{{ chkDomicilio }}" hint-placeholder-val="{{ false }}">
             <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:15px;margin-bottom:16px">
               <div style="font-weight:700;font-size:14.5px;color:#211E15;margin-bottom:11px">Dirección de entrega</div>
-              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px"><sc-for list="{{ zonaChips }}" as="z" hint-placeholder-count="3"><button onClick="{{ z.onClick }}" style="{{ z.style }}"><span style="font-weight:700;font-size:12px;color:#211E15">{{ z.label }}</span><span style="font-size:11.5px;color:#10603A;font-weight:700">{{ z.precio }}</span></button></sc-for></div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px"><sc-for list="{{ zonaChips }}" as="z" hint-placeholder-count="3"><span style="{{ z.style }}"><span style="font-weight:700;font-size:12px;color:#211E15">{{ z.label }}</span><span style="font-size:11.5px;color:#10603A;font-weight:700">{{ z.precio }}</span></span></sc-for></div>
+              <sc-if value="{{ chkSinPunto }}" hint-placeholder-val="{{ true }}"><div style="background:#fdf6e3;border:1px solid #f2e2b0;color:#8a6d12;font-weight:600;font-size:12.5px;padding:10px 12px;border-radius:11px;margin-bottom:12px">Marca tu punto en el mapa de abajo y calculamos el costo de envío que te toca.</div></sc-if>
+              <sc-if value="{{ chkZonaTxt }}" hint-placeholder-val="{{ false }}"><div style="background:#eaf4ec;border:1px solid #cfe0c6;color:#10603A;font-weight:700;font-size:12.5px;padding:10px 12px;border-radius:11px;margin-bottom:12px">Tu envío: {{ chkZonaTxt }}<br><span style="font-weight:500;color:#5a7d63">{{ chkDistanciaTxt }}</span></div></sc-if>
               <div style="background:#eaf4ec;border:1px solid #cfe0c6;color:#10603A;font-weight:600;font-size:12.5px;padding:9px 12px;border-radius:11px;margin-bottom:12px">Pedido mínimo para envío: {{ chkMinimoTxt }}<sc-if value="{{ chkFaltaMinimo }}" hint-placeholder-val="{{ false }}"> · agrega {{ chkFaltanteTxt }} más</sc-if></div>
               <sc-if value="{{ chkFuera }}" hint-placeholder-val="{{ false }}"><div style="background:#fdeceb;border:1px solid #f6cfcc;color:#b23a32;font-weight:600;font-size:12.5px;padding:9px 12px;border-radius:11px;margin-bottom:12px">Esa distancia está fuera de cobertura. Prueba recoger en sucursal.</div></sc-if>
               <div style="display:flex;flex-direction:column;gap:9px">
@@ -604,7 +606,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.13.0';
+  static APP_VERSION = '2.13.1';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
@@ -844,8 +846,28 @@ class Component extends DCLogic {
     }));
     return [{max:2,label:'Hasta 2 km',precio:25},{max:4,label:'2 – 4 km',precio:35},{max:5,label:'4 – 5 km',precio:45}];
   }
-  envioActual(){ if(this.state.entrega!=='domicilio') return 0; const z=this.state.dir.zona; const t=this.coberturaTarifas.find(x=>x.label===z); return t?t.precio:0; }
-  fueraCobertura(){ return this.state.entrega==='domicilio' && this.state.dir.zona==='Más de 5 km · fuera de cobertura'; }
+  envioActual(){ if(this.state.entrega!=='domicilio') return 0; const t=this.zonaCalculada(); return t?t.precio:0; }
+  fueraCobertura(){ return this.state.entrega==='domicilio' && this.distanciaKm()!=null && this.zonaCalculada()==null; }
+
+  // ---------- cobro por distancia real ----------
+  // Antes el cliente elegía su propia zona, así que alguien a 4.5 km podía
+  // pagar la tarifa de 2 km. Ahora la distancia decide la tarifa.
+  distanciaKm(){
+    // Mismo respaldo que usa el mapa, para no bloquear pedidos si la sucursal
+    // se quedara sin coordenadas en la base de datos.
+    const a=this.state.branchLocation||{lat:21.1533557,lng:-101.7273936}, b=this._pickedLatLng;
+    if(!b||b.lat==null) return null;
+    const R=6371, rad=g=>g*Math.PI/180;
+    const dLat=rad(b.lat-a.lat), dLng=rad(b.lng-a.lng);
+    const h=Math.sin(dLat/2)**2+Math.cos(rad(a.lat))*Math.cos(rad(b.lat))*Math.sin(dLng/2)**2;
+    return 2*R*Math.asin(Math.min(1,Math.sqrt(h)));
+  }
+  // Devuelve la zona que corresponde a la distancia, o null si queda fuera de cobertura.
+  zonaCalculada(){
+    const km=this.distanciaKm(); if(km==null) return null;
+    const zonas=[...this.coberturaTarifas].sort((x,y)=>x.max-y.max);
+    return zonas.find(z=>km<=z.max)||null;
+  }
   persistCheckoutDraft(dir=this.state.dir){try{localStorage.setItem('donLuisCheckoutDraft',JSON.stringify({dir,location:this._pickedLatLng||null}));}catch(_){}}
   applySavedFields(){
     clearTimeout(this._fieldTimer);this._fieldTimer=setTimeout(()=>{const d=this.state.dir||{};const values={calle:d.calle,num:d.num,col:d.col,ref:d.ref,nombre:d.nombre,tel:d.tel};Object.entries(values).forEach(([field,value])=>{const input=document.querySelector('input[data-field="'+field+'"]');if(input&&!input.value&&value)input.value=value;});},0);
@@ -883,6 +905,9 @@ class Component extends DCLogic {
     if(this._map){if(this._mapMarker)this._mapMarker.setLatLng([lat,lng]);else this._mapMarker=L.marker([lat,lng]).addTo(this._map);}
     const label=document.getElementById('delivery-coordinates');if(label)label.textContent='Punto marcado: '+this._pickedLatLng.lat+', '+this._pickedLatLng.lng;
     this.persistCheckoutDraft();
+    // El costo de envío depende de este punto, así que hay que repintar de
+    // inmediato, sin esperar a que responda la búsqueda de dirección.
+    this.setState({puntoVersion:(this.state.puntoVersion||0)+1});
     if(!lookupAddress)return;
     clearTimeout(this._geocodeTimer);const editVersion=this._addressEditVersion||0;const point={...this._pickedLatLng};
     this._geocodeTimer=setTimeout(()=>this.reverseGeocode(point.lat,point.lng,editVersion),450);
@@ -929,9 +954,11 @@ class Component extends DCLogic {
     const scheduleStatus=this.weeklyScheduleStatus();if(!scheduleStatus.isOpen){this.toast(scheduleStatus.label);return;}
     if(!this.availablePaymentKeys().includes(this.state.pago)){this.toast('Elige un método de pago disponible');return;}
     if(this.state.settings?.is_saturated&&!window.confirm('Tenemos alta demanda. El tiempo estimado aumentará aproximadamente 20 minutos. ¿Deseas continuar?'))return;
+    // Para domicilio el punto en el mapa es obligatorio: de ahí sale la tarifa.
+    if(this.state.entrega==='domicilio'&&this.distanciaKm()==null){this.toast('Marca tu punto en el mapa para calcular el envío');return;}
     if(this.fueraCobertura()){ this.toast('Esa dirección está fuera de cobertura'); return; }
-    const selectedZone=this.coberturaTarifas.find(z=>z.label===this.state.dir.zona);
-    if(this.state.entrega==='domicilio'&&!selectedZone){this.toast('Elige una zona de entrega');return;}
+    const selectedZone=this.zonaCalculada();
+    if(this.state.entrega==='domicilio'&&!selectedZone){this.toast('No pudimos calcular tu zona de entrega');return;}
     const minimum=Number(this.state.remoteZones?.find(z=>z.id===selectedZone?.id)?.minimum_order||this.state.settings?.minimum_delivery_amount||100);
     if(this.state.entrega==='domicilio'&&this.cartSubtotal()<minimum){this.toast('El pedido mínimo para envío es '+this.MXN(minimum)+' · agrega '+this.MXN(minimum-this.cartSubtotal())+' más');return;}
     const cashTender=Number(this.state.cashTender);if(this.state.pago==='efectivo'&&(!Number.isFinite(cashTender)||cashTender<this.totalFinal())){this.toast('Indica con cuánto pagarás; debe cubrir el total');return;}
@@ -1018,24 +1045,30 @@ class Component extends DCLogic {
     const pagos=[['efectivo','Efectivo','M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'],['transferencia','Transferencia','M4 12h16M8 8l-4 4 4 4M16 16l4-4-4-4'],['tarjeta','Tarjeta al recibir','M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 11h20']].filter(([k])=>availablePayments.includes(k)).map(([k,l,ic])=>({key:k,label:l,icon:ic,active:k===selectedPayment,onClick:()=>this.setState({pago:k}),
       style:`cursor:pointer;width:100%;padding:13px 15px;border-radius:13px;border:1.5px solid ${k===selectedPayment?'#10603A':'#E6DCC5'};background:${k===selectedPayment?'#eaf4ec':'#fff'};display:flex;align-items:center;gap:12px;color:#211E15;font-weight:600;font-size:14px`}));
     const zonas=[...this.coberturaTarifas.map(t=>t.label+' · '+this.MXN(t.precio)),'Más de 5 km · fuera de cobertura'];
-    const zonaSel=this.state.dir.zona||'';
-    const zonaChips=this.coberturaTarifas.map(t=>({label:t.label,precio:this.MXN(t.precio),active:zonaSel===t.label,onClick:()=>this.setField('zona',t.label),
-      style:`cursor:pointer;flex:1;min-width:96px;padding:11px;border-radius:12px;border:1.5px solid ${zonaSel===t.label?'#10603A':'#E6DCC5'};background:${zonaSel===t.label?'#eaf4ec':'#fff'};display:flex;flex-direction:column;gap:2px;align-items:center`}));
+    const km=this.distanciaKm();
+    const zonaAuto=this.zonaCalculada();
+    const zonaSel=zonaAuto?zonaAuto.label:'';
+    // Los chips ya no se eligen: muestran la tarifa y se resalta la que aplica.
+    const zonaChips=this.coberturaTarifas.map(t=>({label:t.label,precio:this.MXN(t.precio),active:zonaSel===t.label,onClick:()=>{},
+      style:`flex:1;min-width:96px;padding:11px;border-radius:12px;border:1.5px solid ${zonaSel===t.label?'#10603A':'#E6DCC5'};background:${zonaSel===t.label?'#eaf4ec':'#fff'};opacity:${!zonaSel||zonaSel===t.label?'1':'.5'};display:flex;flex-direction:column;gap:2px;align-items:center`}));
     const fuera=this.fueraCobertura();
     const desc=this.descuento();
     const selectedZone=this.coberturaTarifas.find(z=>z.label===zonaSel);
     const minimum=Number(this.state.remoteZones?.find(z=>z.id===selectedZone?.id)?.minimum_order||this.state.settings?.minimum_delivery_amount||100);
     const faltante=Math.max(0,minimum-this.cartSubtotal());
-    const blockedMinimum=entrega==='domicilio'&&faltante>0;const cash=Number(this.state.cashTender);const cashValid=selectedPayment!=='efectivo'||(Number.isFinite(cash)&&cash>=this.totalFinal());
+    const blockedMinimum=entrega==='domicilio'&&(faltante>0||km==null);const cash=Number(this.state.cashTender);const cashValid=selectedPayment!=='efectivo'||(Number.isFinite(cash)&&cash>=this.totalFinal());
     return {
       chkModos:modos, chkPagos:pagos, chkEntrega:entrega,
       chkDomicilio:entrega==='domicilio', chkRecoger:entrega==='recoger',
-      chkTransfer:selectedPayment==='transferencia',chkCash:selectedPayment==='efectivo',chkClip:false,chkSubmitLabel:blockedMinimum?'Faltan '+this.MXN(faltante)+' para el mínimo':'Hacer pedido',
+      chkTransfer:selectedPayment==='transferencia',chkCash:selectedPayment==='efectivo',chkClip:false,chkSubmitLabel:(entrega==='domicilio'&&km==null)?'Marca tu punto en el mapa':(blockedMinimum?'Faltan '+this.MXN(faltante)+' para el mínimo':'Hacer pedido'),
       chkSubmitStyle:`cursor:${blockedMinimum?'not-allowed':'pointer'};width:100%;margin-top:14px;background:${blockedMinimum?'#a99d80':'#D6453D'};color:#fff;border:none;border-radius:15px;padding:16px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;box-shadow:${blockedMinimum?'none':'0 8px 20px rgba(214,69,61,.35)'}`,
       cashTender:this.state.cashTender,cashValid,cashHelp:!this.state.cashTender?'Necesitamos este dato para llevar tu cambio.':cashValid?'Llevaremos '+this.MXN(Math.max(0,cash-this.totalFinal()))+' de cambio.':'El monto debe cubrir el total de '+this.MXN(this.totalFinal())+'.',onCashTender:e=>this.setState({cashTender:e?.target?.value||''}),
       zonaChips, chkFuera:fuera, chkMinimoTxt:this.MXN(minimum),chkFaltaMinimo:entrega==='domicilio'&&faltante>0,chkFaltanteTxt:this.MXN(faltante),
+      chkSinPunto:entrega==='domicilio'&&km==null,
+      chkDistanciaTxt:km==null?'':(km<1?Math.round(km*1000)+' m':km.toFixed(1).replace('.',',')+' km')+' desde la sucursal',
+      chkZonaTxt:zonaAuto?zonaAuto.label+' · '+this.MXN(zonaAuto.precio):'',
       chkSubTxt:this.MXN(this.cartSubtotal()),
-      chkEnvioTxt:entrega==='domicilio'?(this.envioActual()?this.MXN(this.envioActual()):'Elige zona'):'Gratis',
+      chkEnvioTxt:entrega==='domicilio'?(this.envioActual()?this.MXN(this.envioActual()):'Marca tu punto'):'Gratis',
       chkDescTxt:'−'+this.MXN(desc), chkHasDesc:desc>0,
       chkTotalTxt:this.MXN(this.totalFinal()),
       chkPuntos:this.puntosGanados(),chkLoyaltyEnabled:this.state.settings?.loyalty_enabled!==false&&!!this.state.loyaltyRule,
