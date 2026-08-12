@@ -1,32 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pide en Tacos Don Luis · Punto Cañada, León</title>
-<meta name="description" content="Pide tacos, quesadillas y tortas de Tacos Don Luis. Pasa a recoger en Punto Cañada o pide a domicilio en la zona norte de León. Listo en 15–20 min.">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Tacos Don Luis">
-<meta property="og:title" content="Pide en Tacos Don Luis · Punto Cañada">
-<meta property="og:description" content="Tacos, quesadillas y tortas hechas al momento. Recoge en Punto Cañada o pide a domicilio en la zona norte de León.">
-<meta property="og:image" content="/assets/hero-pedir.jpg">
-<meta property="og:locale" content="es_MX">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#10603A"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Don Luis">
-<link rel="manifest" href="/pedir/manifest.webmanifest"><link rel="icon" href="/assets/logo-don-luis-oficial.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/logo-don-luis-oficial.svg">
-<script>if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(console.error));</script>
-<script>window.__resources={"https://unpkg.com/react@18.3.1/umd/react.production.min.js":"/assets/vendor/react-18.3.1.min.js","https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"/assets/vendor/react-dom-18.3.1.min.js"};</script>
-<script src="../support.js"></script>
-<link rel="stylesheet" href="/assets/leaflet/leaflet.css">
-<script src="/assets/leaflet/leaflet.js"></script>
-</head>
-<body>
-<x-dc>
-<helmet>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pide en Tacos Don Luis · Punto Cañada, León</title><meta name="description" content="Pide tacos, quesadillas y tortas de Tacos Don Luis. Pasa a recoger en Punto Cañada o pide a domicilio en la zona norte de León. Listo en 15–20 min."><meta property="og:type" content="website"><meta property="og:site_name" content="Tacos Don Luis"><meta property="og:title" content="Pide en Tacos Don Luis · Punto Cañada"><meta property="og:description" content="Tacos, quesadillas y tortas hechas al momento. Recoge en Punto Cañada o pide a domicilio en la zona norte de León."><meta property="og:image" content="/assets/hero-pedir.jpg"><meta property="og:locale" content="es_MX"><meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#10603A"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Don Luis"><link rel="manifest" href="/pedir/manifest.webmanifest"><link rel="icon" href="/assets/logo-don-luis-oficial.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/logo-don-luis-oficial.svg"><script>if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(console.error));</script><script>window.__resources={"https://unpkg.com/react@18.3.1/umd/react.production.min.js":"/assets/vendor/react-18.3.1.min.js","https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"/assets/vendor/react-dom-18.3.1.min.js"};</script><script src="../support.js"></script><link rel="stylesheet" href="/assets/leaflet/leaflet.css"><script src="/assets/leaflet/leaflet.js"></script></head><body><x-dc><helmet><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style>
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{font-family:'Rubik',system-ui,sans-serif;color:#211E15;background:#e7ddc8;-webkit-font-smoothing:antialiased}
@@ -44,8 +16,7 @@
   .dl-field-row.dl-address-row{grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr)}
   .dl-field-row input{display:block;width:100%;min-width:0;max-width:100%}
   @media(max-width:360px){.dl-field-row,.dl-field-row.dl-address-row{grid-template-columns:1fr}}
-</style>
-</helmet>
+</style></helmet>
 
 <div style="min-height:100vh;display:flex;justify-content:center;background:#e7ddc8;background-image:radial-gradient(circle at 20% 10%,#efe7d5,#e2d6bd)">
   <div style="width:100%;max-width:{{ shellMax }};background:#F3F0E6;min-height:100vh;position:relative;box-shadow:0 0 60px rgba(0,0,0,.12);display:flex;flex-direction:column">
@@ -532,9 +503,12 @@
                 <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:12px 0 8px;text-transform:uppercase;letter-spacing:.04em">¿De qué lo quieres? <span style="color:#D6453D">*</span></div>
                 <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px"><sc-for list="{{ sheet.proteins }}" as="p" hint-placeholder-count="4"><button onClick="{{ p.onClick }}" style="{{ p.style }}">{{ p.label }}</button></sc-for></div>
               </sc-if>
+              <sc-if value="{{ sheet.hasFlavor }}" hint-placeholder-val="{{ false }}"><div style="font-size:13px;font-weight:800;color:#8a7f66;margin:12px 0 8px;text-transform:uppercase;letter-spacing:.04em">Elige el sabor <span style="color:#D6453D">*</span></div><div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px"><sc-for list="{{ sheet.flavors }}" as="p"><button onClick="{{ p.onClick }}" style="{{ p.style }}">{{ p.label }}</button></sc-for></div></sc-if>
               <sc-if value="{{ sheet.hasPreparation }}" hint-placeholder-val="true">
-                <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:12px 0 8px;text-transform:uppercase;letter-spacing:.04em">Preparación</div>
+                <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:12px 0 8px;text-transform:uppercase;letter-spacing:.04em">¿Cómo lo preparamos?</div>
                 <div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ sheet.mods }}" as="m" hint-placeholder-count="4"><button onClick="{{ m.onClick }}" style="{{ m.style }}">{{ m.label }}</button></sc-for></div>
+                <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:16px 0 8px;text-transform:uppercase;letter-spacing:.04em">Salsas</div><div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ sheet.sauces }}" as="m"><button onClick="{{ m.onClick }}" style="{{ m.style }}">{{ m.label }}</button></sc-for></div>
+                <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:16px 0 8px;text-transform:uppercase;letter-spacing:.04em">¿Qué quieres aparte?</div><div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ sheet.asides }}" as="m"><button onClick="{{ m.onClick }}" style="{{ m.style }}">{{ m.label }}</button></sc-for></div>
               </sc-if>
               <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:16px 0 8px;text-transform:uppercase;letter-spacing:.04em">Nota especial</div>
               <textarea onInput="{{ sheet.onNota }}" placeholder="{{ sheet.notePlaceholder }}" style="width:100%;min-height:64px;resize:none;border:1.5px solid #e0d6bf;border-radius:12px;padding:11px 13px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;color:#211E15"></textarea>
@@ -618,18 +592,15 @@
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#8FD694" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>{{ toast }}
       </div>
     </sc-if>
-  </div>
-</div>
-</x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
+  </div></div></x-dc><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.14.6';
+  static APP_VERSION = '2.14.7';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
   static PRIVACY_CONTACT = 'procesalab0@gmail.com';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
-    sheetItem:null, sheetEditUid:null, sheetQty:1, sheetProtein:'', sheetMods:[], sheetNota:'',
+    sheetItem:null, sheetEditUid:null, sheetQty:1, sheetProtein:'', sheetFlavor:'', sheetMods:[], sheetNota:'',
     cart:[], activeCombos:[], entrega:'recoger', pago:'efectivo', cashTender:'', dir:{}, prog:false,scheduleMode:'immediate',scheduledFor:'',
     folio:null, trackStep:0, cuentaTab:'perfil', logged:false,
     remoteMenu:null, remoteCategories:null, remoteZones:null, modifierOptions:null, branchId:null,branchLocation:null,
@@ -868,11 +839,16 @@ class Component extends DCLogic {
   // ---- product sheet ----
   proteinOptionsFor(it){const configured=it?.customization?.protein_options;if(Array.isArray(configured))return configured;if(!it||!['Quesadillas','Tortas','Tacos light'].includes(it.cat))return[];const name=String(it.nombre||'').toLocaleLowerCase('es-MX');if(name.includes('especial'))return['Lengua','Sesos'];if(name.includes('con queso'))return['Cabeza','Pastor','Bistec','Chorizo','Lengua','Sesos'];return['Cabeza','Pastor','Bistec','Chorizo'];}
   preparationOptionsFor(it){const configured=it?.customization?.preparation_options;if(Array.isArray(configured))return configured;return it?.cat==='Bebidas'?[]:this.modsLibres;}
-  openSheet(id,editUid=null){const line=editUid==null?null:this.state.cart.find(l=>l.uid===editUid);this.setState({sheetItem:id,sheetEditUid:line?.uid||null,sheetQty:line?.q||1,sheetProtein:line?.protein||'',sheetMods:[...(line?.mods||[])],sheetNota:line?.nota||''});}
+  sauceOptionsFor(it){const value=it?.customization?.sauce_options;return Array.isArray(value)?value:it?.cat==='Bebidas'?[]:['Salsa roja','Salsa verde'];}
+  asideOptionsFor(it){const value=it?.customization?.aside_options;return Array.isArray(value)?value:it?.cat==='Bebidas'?[]:['Cebolla aparte','Cilantro aparte','Salsa roja aparte','Salsa verde aparte','Todo aparte'];}
+  flavorOptionsFor(it){const value=it?.customization?.flavor_options;return Array.isArray(value)?value:[];}
+  openSheet(id,editUid=null){const line=editUid==null?null:this.state.cart.find(l=>l.uid===editUid);this.setState({sheetItem:id,sheetEditUid:line?.uid||null,sheetQty:line?.q||1,sheetProtein:line?.protein||'',sheetFlavor:line?.flavor||'',sheetMods:[...(line?.mods||[])],sheetNota:line?.nota||''});}
   closeSheet(){ this.setState({sheetItem:null,sheetEditUid:null}); }
   toggleMod(m){ const a=[...this.state.sheetMods]; const i=a.indexOf(m); if(i>-1)a.splice(i,1); else a.push(m); this.setState({sheetMods:a}); }
+  selectPreparation(m){const all=this.preparationOptionsFor(this.itemById(this.state.sheetItem)),rest=this.state.sheetMods.filter(x=>!all.includes(x));this.setState({sheetMods:[...rest,m]});}
+  toggleAside(m){const all=this.asideOptionsFor(this.itemById(this.state.sheetItem)),rest=this.state.sheetMods.filter(x=>!all.includes(x));if(m==='Todo aparte'){this.setState({sheetMods:this.state.sheetMods.includes(m)?rest:[...rest,m]});return;}const selected=this.state.sheetMods.filter(x=>all.includes(x)&&x!=='Todo aparte'),next=selected.includes(m)?selected.filter(x=>x!==m):[...selected,m];this.setState({sheetMods:[...rest,...next]});}
   sheetUnit(){ return this.itemById(this.state.sheetItem).precio; }
-  addSheet(){const it=this.itemById(this.state.sheetItem);if(this.proteinOptionsFor(it).length&&!this.state.sheetProtein){this.toast('Elige de qué carne lo quieres');return;}const row={uid:this.state.sheetEditUid||Date.now()+Math.random(),id:this.state.sheetItem,q:this.state.sheetQty,protein:this.state.sheetProtein,mods:[...this.state.sheetMods],nota:this.state.sheetNota},editing=!!this.state.sheetEditUid,c=editing?this.state.cart.map(l=>l.uid===this.state.sheetEditUid?row:l):[...this.state.cart,row];this.setState({cart:c,sheetItem:null,sheetEditUid:null});this.toast(editing?'Producto actualizado':'Agregado al carrito');}
+  addSheet(){const it=this.itemById(this.state.sheetItem);if(this.proteinOptionsFor(it).length&&!this.state.sheetProtein){this.toast('Elige de qué carne lo quieres');return;}if(this.flavorOptionsFor(it).length&&!this.state.sheetFlavor){this.toast('Elige el sabor del agua');return;}const row={uid:this.state.sheetEditUid||Date.now()+Math.random(),id:this.state.sheetItem,q:this.state.sheetQty,protein:this.state.sheetProtein,flavor:this.state.sheetFlavor,mods:[...this.state.sheetMods],nota:this.state.sheetNota},editing=!!this.state.sheetEditUid,c=editing?this.state.cart.map(l=>l.uid===this.state.sheetEditUid?row:l):[...this.state.cart,row];this.setState({cart:c,sheetItem:null,sheetEditUid:null});this.toast(editing?'Producto actualizado':'Agregado al carrito');}
 
   lineUnit(l){ return this.itemById(l.id).precio; }
   lineTotal(l){ return this.lineUnit(l)*l.q; }
@@ -881,7 +857,7 @@ class Component extends DCLogic {
   cartDec(uid){const line=this.state.cart.find(l=>l.uid===uid);if(line?.comboUid){this.removeComboInstance(line.comboUid);return;}let c=this.state.cart.map(l=>l.uid===uid?{...l,q:l.q-1}:l).filter(l=>l.q>0);this.setState({cart:c}); }
   cartRemove(uid){const line=this.state.cart.find(l=>l.uid===uid);if(line?.comboUid){this.removeComboInstance(line.comboUid);return;}this.setState({cart:this.state.cart.filter(l=>l.uid!==uid)});}
   removeComboInstance(comboUid){this.setState({cart:this.state.cart.filter(l=>l.comboUid!==comboUid),activeCombos:this.state.activeCombos.filter(c=>c.uid!==comboUid)});this.toast('Combo retirado');}
-  lineLabel(l){const parts=[...(l.protein?['Carne: '+l.protein]:[]),...(l.mods||[])];if(l.nota)parts.push('“'+l.nota+'”');return parts.join(' · ');}
+  lineLabel(l){const parts=[...(l.protein?['Carne: '+l.protein]:[]),...(l.flavor?['Sabor: '+l.flavor]:[]),...(l.mods||[])];if(l.nota)parts.push('“'+l.nota+'”');return parts.join(' · ');}
 
   // ---- checkout / cobertura ----
   get coberturaTarifas(){
@@ -1065,10 +1041,12 @@ class Component extends DCLogic {
       const steps=dom?['pending_acceptance','pending_acceptance','confirmed','preparing','ready','assigned','on_the_way','delivered']:['pending_acceptance','pending_acceptance','confirmed','preparing','ready','ready'];
       let index=steps.lastIndexOf(order.status);
       if(index<0)index=0;
+      const terminal=['delivered','cancelled','rejected','failed_delivery'].includes(order.status);
+      if(terminal){clearInterval(this._poll);this.clearFinishedTracking(this.state.trackingToken);this.setState({liveOrder:null,trackingToken:null,folio:null,trackStep:0,route:'pedidos'});if(this.state.session)await this.loadCustomerData(this.state.session);return;}
       this.setState({liveOrder:order,trackStep:index,folio:'DL-'+order.folio,entrega:dom?'domicilio':'recoger'});
-      if(['delivered','cancelled','rejected','failed_delivery'].includes(order.status))clearInterval(this._poll);
     }catch(error){console.error(error);}
   }
+  clearFinishedTracking(token){const remembered=JSON.parse(localStorage.getItem('donLuisGuestOrderTokens')||'[]').filter(x=>x?.token!==token);localStorage.setItem('donLuisGuestOrderTokens',JSON.stringify(remembered));if(localStorage.getItem('donLuisTrackingToken')===token)localStorage.removeItem('donLuisTrackingToken');}
   iniciarSeguimiento(){
     this.setState({route:'seguimiento'});
     this.refreshTracking();
@@ -1268,15 +1246,15 @@ class Component extends DCLogic {
     if(sheetOpen){
       const it=this.itemById(this.state.sheetItem);
       const proteinOptions=this.proteinOptionsFor(it);
-      const preparationOptions=this.preparationOptionsFor(it),hasPreparation=preparationOptions.length>0;
-      sheet={...it,noFoto:!it.foto,qty:this.state.sheetQty,precioTxt:this.MXN(it.precio),hasProtein:proteinOptions.length>0,hasPreparation,notePlaceholder:hasPreparation?'Ej. salsa aparte, sin cebolla…':'Escribe una indicación…',
+      const preparationOptions=this.preparationOptionsFor(it),sauceOptions=this.sauceOptionsFor(it),asideOptions=this.asideOptionsFor(it),flavorOptions=this.flavorOptionsFor(it),hasPreparation=preparationOptions.length+sauceOptions.length+asideOptions.length>0;
+      const chip=(m,onClick=()=>this.toggleMod(m))=>({label:m,active:this.state.sheetMods.includes(m),onClick,style:`cursor:pointer;font-size:13px;font-weight:600;padding:9px 13px;border-radius:11px;border:1.5px solid ${this.state.sheetMods.includes(m)?'#10603A':'#e0d6bf'};${this.state.sheetMods.includes(m)?'background:#eaf4ec;color:#10603A':'background:#fff;color:#6a5f45'}`});
+      sheet={...it,noFoto:!it.foto,qty:this.state.sheetQty,precioTxt:this.MXN(it.precio),hasProtein:proteinOptions.length>0,hasFlavor:flavorOptions.length>0,hasPreparation,notePlaceholder:hasPreparation?'Ej. alguna indicación adicional…':'Escribe una indicación…',
         onClose:()=>this.closeSheet(),
         onInc:()=>this.setState({sheetQty:this.state.sheetQty+1}),
         onDec:()=>this.setState({sheetQty:Math.max(1,this.state.sheetQty-1)}),
         onNota:e=>this.setState({sheetNota:e.target.value}), nota:this.state.sheetNota,
         proteins:proteinOptions.map(p=>({label:p,onClick:()=>this.setState({sheetProtein:p}),style:`cursor:pointer;font-size:13.5px;font-weight:700;padding:11px 10px;border-radius:11px;border:1.5px solid ${this.state.sheetProtein===p?'#10603A':'#e0d6bf'};${this.state.sheetProtein===p?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35'}`})),
-        mods:preparationOptions.map(m=>({label:m,active:this.state.sheetMods.includes(m),onClick:()=>this.toggleMod(m),
-          style:`cursor:pointer;font-size:13px;font-weight:600;padding:9px 13px;border-radius:11px;border:1.5px solid ${this.state.sheetMods.includes(m)?'#10603A':'#e0d6bf'};${this.state.sheetMods.includes(m)?'background:#eaf4ec;color:#10603A':'background:#fff;color:#6a5f45'}`})),
+        flavors:flavorOptions.map(p=>({label:p,onClick:()=>this.setState({sheetFlavor:p}),style:`cursor:pointer;font-size:13px;font-weight:700;padding:11px 7px;border-radius:11px;border:1.5px solid ${this.state.sheetFlavor===p?'#10603A':'#e0d6bf'};${this.state.sheetFlavor===p?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35'}`})),mods:preparationOptions.map(m=>chip(m,()=>this.selectPreparation(m))),sauces:sauceOptions.map(m=>chip(m)),asides:asideOptions.map(m=>chip(m,()=>this.toggleAside(m))),
         addTxt:(this.state.sheetEditUid?'Guardar cambios · ':'Agregar ')+this.MXN(this.sheetUnit()*this.state.sheetQty), onAdd:()=>this.addSheet()};
     }
 
@@ -1321,6 +1299,4 @@ class Component extends DCLogic {
     };
   }
 }
-</script>
-</body>
-</html>
+</script></body></html>
