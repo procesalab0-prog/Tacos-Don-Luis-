@@ -1,6 +1,6 @@
-self.__DON_LUIS_PWA_VERSION__='2.16.1';
-// release-sync: 2.16.1
-const CACHE='don-luis-2.16.1';
+self.__DON_LUIS_PWA_VERSION__='2.17.0';
+// release-sync: 2.17.0
+const CACHE='don-luis-2.17.0';
 
 // Solo se guardan archivos propios y estáticos. Nunca se cachean las respuestas
 // de Supabase: el menú, los precios y el estado de los pedidos deben venir en vivo.
@@ -11,7 +11,9 @@ const PRECARGA=[
   '/support.js',
   '/assets/logo-don-luis-oficial.svg',
   '/assets/sticker-inicio.svg','/assets/sticker-puesto.svg',
-  '/assets/sticker-boleto.svg','/assets/sticker-chef.svg'
+  '/assets/sticker-boleto.svg','/assets/sticker-chef.svg',
+  // Se usa en la pantalla de seguimiento, que se abre en la calle y con mala señal.
+  '/assets/sticker-don-luis-corriendo.png'
 ];
 
 self.addEventListener('install',e=>{
