@@ -621,7 +621,7 @@
     </sc-if>
   </div></div></x-dc><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.15.0';
+  static APP_VERSION = '2.15.1';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
@@ -1081,11 +1081,18 @@ class Component extends DCLogic {
       let index=steps.lastIndexOf(order.status);
       if(index<0)index=0;
       const terminal=['delivered','cancelled','rejected','failed_delivery'].includes(order.status);
+      if(!terminal){ this._enCurso=this._enCurso||new Set(); this._enCurso.add(order.id); }
       if(terminal){
         clearInterval(this._poll);
-        // Al entregarse pedimos calificación. Guardamos el token antes de
-        // limpiarlo porque es lo que identifica el pedido al enviarla.
-        const pedirResena=order.status==='delivered'&&this.state.trackingToken&&!this.yaCalificado(order.id);
+        // Solo pedimos calificación si la app vio el pedido pasar a entregado,
+        // o si la entrega fue hace muy poco. Antes bastaba con que el pedido
+        // estuviera entregado, así que un pedido viejo abría la reseña al
+        // entrar a la app.
+        const vioLaEntrega=!!(this._enCurso&&this._enCurso.has(order.id));
+        const entregadoHace=this.minutosDesdeEntrega(order);
+        const recien=entregadoHace!=null&&entregadoHace<=30;
+        const pedirResena=order.status==='delivered'&&this.state.trackingToken&&
+          (vioLaEntrega||recien)&&!this.yaCalificado(order.id);
         const tokenResena=this.state.trackingToken;
         this.clearFinishedTracking(this.state.trackingToken);
         this.setState({liveOrder:null,trackingToken:null,folio:null,trackStep:0,route:'pedidos',
@@ -1101,6 +1108,15 @@ class Component extends DCLogic {
   // ---------- calificación del pedido ----------
   // Se recuerda localmente qué pedidos ya se calificaron para no volver a
   // preguntar. Calificar es opcional, pero una nota baja sí pide explicación.
+  // Minutos desde que el pedido se marcó entregado, o null si no se sabe.
+  minutosDesdeEntrega(order){
+    const dela=(order.driver_assignments||[]).map(a=>a.delivered_at).filter(Boolean)[0];
+    const hist=(order.order_status_history||[]).filter(x=>x.to_status==='delivered').map(x=>x.created_at).sort().pop();
+    const cuando=dela||hist;
+    if(!cuando)return null;
+    const ms=Date.now()-new Date(cuando).getTime();
+    return Number.isFinite(ms)?ms/60000:null;
+  }
   yaCalificado(orderId){ try{ return JSON.parse(localStorage.getItem('donLuisResenas')||'[]').includes(orderId); }catch(_){ return false; } }
   marcarCalificado(orderId){ try{ const l=JSON.parse(localStorage.getItem('donLuisResenas')||'[]'); if(!l.includes(orderId)){l.push(orderId);localStorage.setItem('donLuisResenas',JSON.stringify(l.slice(-50)));} }catch(_){} }
   cerrarResena(){ const r=this.state.resena; if(r)this.marcarCalificado(r.orderId); this.setState({resena:null}); }
