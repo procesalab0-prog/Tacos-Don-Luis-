@@ -517,8 +517,11 @@
               </sc-if>
               <sc-if value="{{ sheet.hasFlavor }}" hint-placeholder-val="{{ false }}"><div style="font-size:13px;font-weight:800;color:#8a7f66;margin:12px 0 8px;text-transform:uppercase;letter-spacing:.04em">Elige el sabor <span style="color:#D6453D">*</span></div><div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px"><sc-for list="{{ sheet.flavors }}" as="p"><button onClick="{{ p.onClick }}" style="{{ p.style }}">{{ p.label }}</button></sc-for></div></sc-if>
               <sc-if value="{{ sheet.hasPreparation }}" hint-placeholder-val="true">
-                <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:12px 0 8px;text-transform:uppercase;letter-spacing:.04em">¿Cómo lo preparamos?</div>
-                <div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ sheet.mods }}" as="m" hint-placeholder-count="4"><button onClick="{{ m.onClick }}" style="{{ m.style }}">{{ m.label }}</button></sc-for></div>
+                <sc-if value="{{ sheet.hasMods }}" hint-placeholder-val="true">
+                  <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:12px 0 8px;text-transform:uppercase;letter-spacing:.04em">¿Cómo lo preparamos? <span style="color:#D6453D">*</span></div>
+                  <div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ sheet.mods }}" as="m" hint-placeholder-count="4"><button onClick="{{ m.onClick }}" style="{{ m.style }}">{{ m.label }}</button></sc-for></div>
+                  <div style="font-size:11.5px;color:#8a7f66;margin-top:7px;line-height:1.45">Puedes juntar varias opciones «Sin…». Toca de nuevo para quitarla.</div>
+                </sc-if>
                 <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:16px 0 8px;text-transform:uppercase;letter-spacing:.04em">Salsas</div><div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ sheet.sauces }}" as="m"><button onClick="{{ m.onClick }}" style="{{ m.style }}">{{ m.label }}</button></sc-for></div>
                 <div style="font-size:13px;font-weight:800;color:#8a7f66;margin:16px 0 8px;text-transform:uppercase;letter-spacing:.04em">¿Qué quieres aparte?</div><div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ sheet.asides }}" as="m"><button onClick="{{ m.onClick }}" style="{{ m.style }}">{{ m.label }}</button></sc-for></div>
               </sc-if>
@@ -631,7 +634,7 @@
     </sc-if>
   </div></div></x-dc><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.16.0';
+  static APP_VERSION = '2.16.1';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
@@ -906,13 +909,21 @@ class Component extends DCLogic {
   toggleMod(m){ const a=[...this.state.sheetMods]; const i=a.indexOf(m); if(i>-1)a.splice(i,1); else a.push(m); this.setState({sheetMods:a}); }
   esSinPicante(m){return /sin\s*(picante|salsa|chile)/i.test(String(m||''));}
   esSalsa(m){return /salsa/i.test(String(m||''))&&!/aparte/i.test(String(m||''))&&!this.esSinPicante(m);}
+  // "Con todo" y "Solo carne" describen el taco entero, así que no se combinan
+  // con nada. Las opciones "Sin ..." sí se acumulan entre ellas: se puede pedir
+  // sin cebolla y sin cilantro a la vez.
+  esPrepExclusiva(m){return this.esSoloCarne(m)||/^\s*con\s+todo\b/i.test(String(m||''));}
   // Pedir "sin picante" y una salsa al mismo tiempo llegaba como comanda
   // contradictoria a la cocina. Elegir uno ahora descarta el otro.
   selectPreparation(m){const all=this.preparationOptionsFor(this.itemById(this.state.sheetItem));
+    // Tocar de nuevo una opción ya elegida la quita. Sin esto el cliente se
+    // quedaba con la primera que tocó y no había forma de corregir.
+    if(this.state.sheetMods.includes(m)){this.setState({sheetMods:this.state.sheetMods.filter(x=>x!==m)});return;}
+    const otras=this.esPrepExclusiva(m)?[]:this.state.sheetMods.filter(x=>all.includes(x)&&!this.esPrepExclusiva(x));
     let rest=this.state.sheetMods.filter(x=>!all.includes(x));
     if(this.esSinPicante(m))rest=rest.filter(x=>!this.esSalsa(x));
     if(this.esSoloCarne(m))rest=rest.filter(x=>!this.esSalsa(x)&&!/aparte/i.test(String(x)));
-    this.setState({sheetMods:[...rest,m]});}
+    this.setState({sheetMods:[...rest,...otras,m]});}
   toggleSauce(m){const a=[...this.state.sheetMods];const i=a.indexOf(m);
     if(i>-1){a.splice(i,1);}else{a.push(m);}
     const limpio=a.indexOf(m)>-1?a.filter(x=>!this.esSinPicante(x)&&!this.esSoloCarne(x)):a;
@@ -1376,7 +1387,7 @@ class Component extends DCLogic {
       const proteinOptions=this.proteinOptionsFor(it);
       const preparationOptions=this.preparationOptionsFor(it),sauceOptions=this.sauceOptionsFor(it),asideOptions=this.asideOptionsFor(it),flavorOptions=this.flavorOptionsFor(it),hasPreparation=preparationOptions.length+sauceOptions.length+asideOptions.length>0;
       const chip=(m,onClick=()=>this.toggleMod(m))=>({label:m,active:this.state.sheetMods.includes(m),onClick,style:`cursor:pointer;font-size:13px;font-weight:600;padding:9px 13px;border-radius:12px;border:1.5px solid ${this.state.sheetMods.includes(m)?'#10603A':'#e0d6bf'};${this.state.sheetMods.includes(m)?'background:#eaf4ec;color:#10603A':'background:#fff;color:#6a5f45'}`});
-      sheet={...it,noFoto:!it.foto,qty:this.state.sheetQty,precioTxt:this.MXN(it.precio),hasProtein:proteinOptions.length>0,hasFlavor:flavorOptions.length>0,hasPreparation,notePlaceholder:hasPreparation?'Ej. alguna indicación adicional…':'Escribe una indicación…',
+      sheet={...it,noFoto:!it.foto,qty:this.state.sheetQty,precioTxt:this.MXN(it.precio),hasProtein:proteinOptions.length>0,hasFlavor:flavorOptions.length>0,hasPreparation,hasMods:preparationOptions.length>0,notePlaceholder:hasPreparation?'Ej. alguna indicación adicional…':'Escribe una indicación…',
         onClose:()=>this.closeSheet(),
         onInc:()=>this.setState({sheetQty:this.state.sheetQty+1}),
         onDec:()=>this.setState({sheetQty:Math.max(1,this.state.sheetQty-1)}),
