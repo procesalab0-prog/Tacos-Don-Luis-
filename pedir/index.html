@@ -621,7 +621,7 @@
     </sc-if>
   </div></div></x-dc><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.15.1';
+  static APP_VERSION = '2.15.2';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
@@ -708,6 +708,7 @@ class Component extends DCLogic {
       const remoteMenu=products.map(p=>({id:p.id,nombre:p.name,cat:catById[p.category_id]||'Tacos',precio:Number(p.price),desc:p.description||'',foto:p.image_url||null,tag:p.is_featured?'Favorito':null,featured:p.is_featured,disponible:p.is_available,customization:p.customization||{}}));
       const resenas=await this.publicRead('/rest/v1/order_reviews?branch_id=eq.'+bid+'&is_published=eq.true&select=rating,comment,display_name,created_at&order=created_at.desc&limit=6').catch(()=>[]);
       this.setState({opinionesReales:(resenas||[]).filter(r=>r.comment),branchId:bid,branchLocation:branch.latitude!=null&&branch.longitude!=null?{lat:Number(branch.latitude),lng:Number(branch.longitude),address:branch.address_line}:null,remoteCategories:cats.map(c=>c.name),remoteMenu,remoteZones:zones,modifierOptions,settings:settings[0]||null,loyaltyRule:loyaltyRules[0]||null,marketingContent,combos,salesStats,loyaltyRewards});
+      this.asegurarCodigoReferido();
     }catch(error){ console.error('No se pudo cargar el menú en vivo',error); this.toast('No pudimos actualizar el menú. Mostramos una copia disponible.'); }
   }
   async signIn(){
@@ -753,6 +754,18 @@ class Component extends DCLogic {
     location.href='mailto:procesalab0@gmail.com?subject='+subject+'&body='+body;
     this.toast('Se abrió tu correo para confirmar la solicitud');
   }
+  // El código de referido se genera con una RPC que necesita saber la sucursal.
+  // Los datos públicos (que traen la sucursal) y los del cliente se cargan en
+  // paralelo, así que antes se saltaba la llamada cuando el cliente ganaba la
+  // carrera, y el código no aparecía nunca.
+  async asegurarCodigoReferido(session=this.state.session){
+    if(!session||!this.state.branchId||this.state.referralCode)return;
+    try{
+      const codigo=await this.api('/rest/v1/rpc/ensure_referral_code',{method:'POST',token:session.access_token,
+        body:JSON.stringify({p_branch_id:this.state.branchId})});
+      if(typeof codigo==='string'&&codigo)this.setState({referralCode:codigo});
+    }catch(error){console.error('No se pudo obtener el código de referido',error);}
+  }
   async loadCustomerData(session=this.state.session){
     if(!session?.user?.id)return;
     try{
@@ -774,7 +787,8 @@ class Component extends DCLogic {
           this.state.branchId?this.api('/rest/v1/rpc/ensure_referral_code',{method:'POST',token:session.access_token,body:JSON.stringify({p_branch_id:this.state.branchId})}).catch(()=>''):Promise.resolve('')
         ]);
         loyaltyAccount=accounts[0]||null;loyaltyRule=rules[0]||null;
-        this.setState({loyaltyMovements:movements,loyaltyRedemptions:redemptions,referralCode:typeof referral==='string'?referral:''});
+        this.setState({loyaltyMovements:movements,loyaltyRedemptions:redemptions,referralCode:typeof referral==='string'&&referral?referral:this.state.referralCode||''});
+        this.asegurarCodigoReferido(session);
       }
       this.setState({dir,accountOrders:orders||[],loyaltyAccount,loyaltyRule});this.persistCheckoutDraft(dir);
     }catch(error){console.error(error);}
@@ -848,10 +862,17 @@ class Component extends DCLogic {
   get cats(){ return this.state.remoteCategories?.length?this.state.remoteCategories:['Tacos','Quesadillas','Tortas','Tacos light','Bebidas']; }
   itemById(id){ return this.menu.find(m=>m.id===id)||{nombre:id,precio:0}; }
   get modsLibres(){
-    const source=this.state.modifierOptions?.length?this.state.modifierOptions.filter(o=>Number(o.price_delta)===0).map(o=>o.name):['Sin cebolla','Sin cilantro','Sin picante','Con todo'];
-    const clean=source.filter(name=>String(name).trim().toLocaleLowerCase('es-MX')!=='bien dorado'&&String(name).trim().toLocaleLowerCase('es-MX')!=='aparte');
-    return [...clean,'Aparte'];
+    // "Aparte" ya no se agrega aquí: tiene su propia sección más abajo, y
+    // tenerlo en los dos lugares dejaba al cliente sin saber cuál usar.
+    // Si el negocio configura sus propias opciones, se respetan tal cual.
+    if(this.state.modifierOptions?.length){
+      return this.state.modifierOptions.filter(o=>Number(o.price_delta)===0).map(o=>o.name);
+    }
+    return ['Sin cebolla','Sin cilantro','Sin picante','Solo carne','Con todo'];
   }
+  // "Solo carne" y "sin picante" significan que no va nada encima, así que
+  // descartan las salsas y lo que se pidió aparte.
+  esSoloCarne(m){ return /^\s*solo\b/i.test(String(m||'')); }
 
   catIcon(c){ return {Tacos:'M3 11a9 9 0 0 1 18 0M2 11h20l-2 4H4zM7 18h10',Quesadillas:'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM12 2v20',Tortas:'M4 11h16a0 0 0 0 1 0 0v2a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-2zM6 11a6 6 0 0 1 12 0',['Tacos light']:'M7 20s-3-2-3-8a8 8 0 0 1 16 0c0 6-3 8-3 8M12 4v16',Bebidas:'M5 3h14l-1.5 17a1 1 0 0 1-1 .9H7.5a1 1 0 0 1-1-.9zM5 8h14'}[c]; }
   catTint(c){ return {Tacos:'#D6453D',Quesadillas:'#E0A526',Tortas:'#10603A',['Tacos light']:'#28A54C',Bebidas:'#1f6f8b'}[c]; }
@@ -880,10 +901,11 @@ class Component extends DCLogic {
   selectPreparation(m){const all=this.preparationOptionsFor(this.itemById(this.state.sheetItem));
     let rest=this.state.sheetMods.filter(x=>!all.includes(x));
     if(this.esSinPicante(m))rest=rest.filter(x=>!this.esSalsa(x));
+    if(this.esSoloCarne(m))rest=rest.filter(x=>!this.esSalsa(x)&&!/aparte/i.test(String(x)));
     this.setState({sheetMods:[...rest,m]});}
   toggleSauce(m){const a=[...this.state.sheetMods];const i=a.indexOf(m);
     if(i>-1){a.splice(i,1);}else{a.push(m);}
-    const limpio=a.indexOf(m)>-1?a.filter(x=>!this.esSinPicante(x)):a;
+    const limpio=a.indexOf(m)>-1?a.filter(x=>!this.esSinPicante(x)&&!this.esSoloCarne(x)):a;
     this.setState({sheetMods:limpio});}
   toggleAside(m){const all=this.asideOptionsFor(this.itemById(this.state.sheetItem)),rest=this.state.sheetMods.filter(x=>!all.includes(x));if(m==='Todo aparte'){this.setState({sheetMods:this.state.sheetMods.includes(m)?rest:[...rest,m]});return;}const selected=this.state.sheetMods.filter(x=>all.includes(x)&&x!=='Todo aparte'),next=selected.includes(m)?selected.filter(x=>x!==m):[...selected,m];this.setState({sheetMods:[...rest,...next]});}
   sheetUnit(){ return this.itemById(this.state.sheetItem).precio; }
