@@ -11,6 +11,22 @@
   @keyframes dlfade{from{opacity:0}to{opacity:1}}
   @keyframes dlspin{to{transform:rotate(360deg)}}
   @keyframes dlpulse{0%,100%{opacity:1}50%{opacity:.45}}
+  /* Don Luis corriendo. El sticker es línea negra sobre transparente, así que
+     no se vería sobre el verde: se pinta con mask, igual que los iconos del nav.
+     El paso es rebote + inclinación + estirarse al despegar y aplastarse al caer. */
+  @keyframes dlrun{
+    0%,100%{transform:translateY(0) rotate(0deg) scale(1,1)}
+    25%{transform:translateY(-8px) rotate(3.5deg) scale(.965,1.05)}
+    50%{transform:translateY(0) rotate(0deg) scale(1.03,.97)}
+    75%{transform:translateY(-8px) rotate(-3.5deg) scale(.965,1.05)}
+  }
+  .dl-runner{display:block;width:58px;height:63px;flex:0 0 auto;margin-bottom:-16px;opacity:.92;
+    background:#F2C230;
+    mask:url(../assets/sticker-don-luis-corriendo.png) center/contain no-repeat;
+    -webkit-mask:url(../assets/sticker-don-luis-corriendo.png) center/contain no-repeat;
+    animation:dlrun .62s ease-in-out infinite;will-change:transform}
+  /* Si el teléfono tiene las animaciones desactivadas, se queda quieto. */
+  @media(prefers-reduced-motion:reduce){.dl-runner{animation:none}}
   .dl-check{background-image:repeating-conic-gradient(#10603A 0 25%,transparent 0 50%);background-size:14px 14px}
   .dl-field-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px;width:100%}
   .dl-field-row.dl-address-row{grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr)}
@@ -343,7 +359,10 @@
             <div style="position:absolute;top:0;left:0;right:0;height:10px" class="dl-check"></div>
             <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-top:6px"><div><div style="font-size:12px;color:#9ec5a6;font-weight:600">Pedido {{ trkFolio }}</div><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:24px;margin-top:2px">{{ trkActual }}</div></div><span style="background:rgba(255,255,255,.16);border-radius:12px;padding:8px 12px;text-align:center"><span style="display:block;font-size:10px;color:#cbe0cf">Código</span><span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:17px;color:#F2C230">{{ trkCodigo }}</span></span></div>
             <div style="margin-top:14px;height:8px;background:rgba(255,255,255,.16);border-radius:999px;overflow:hidden"><div style="height:100%;width:{{ trkPct }};background:#F2C230;border-radius:999px;transition:width .6s"></div></div>
-            <div style="font-size:13px;color:#e9dfc8;margin-top:9px;font-weight:600">{{ trkTiempo }}</div>
+            <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:9px;min-height:22px">
+              <span style="font-size:13px;color:#e9dfc8;font-weight:600">{{ trkTiempo }}</span>
+              <sc-if value="{{ trkCorriendo }}" hint-placeholder-val="true"><span class="dl-runner"></span></sc-if>
+            </div>
           </div>
 
           <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:8px 18px;margin-bottom:16px">
@@ -628,7 +647,7 @@
     </sc-if>
   </div></div></x-dc><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.16.1';
+  static APP_VERSION = '2.17.0';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
@@ -1273,6 +1292,9 @@ class Component extends DCLogic {
       trkTiempo:entregado?'¡Entregado!':(dom?'Llega en ~'+(40-step*5)+' min':'Listo en ~'+(20-step*4)+' min'),
       trkCodigo:(this.state.folio||'DL-0000').slice(-4),
       trkRepartidor:dom&&step>=5,
+      // Don Luis empieza a correr en cuanto aceptan el pedido (paso 2,
+      // "Confirmado") y se detiene al entregarlo.
+      trkCorriendo:step>=2&&!entregado,
       onNuevo:()=>this.nuevoPedido(), onWA:()=>this.openWhatsApp(), onLlamar:()=>window.location.href='tel:+524775222095',
     };
   }
