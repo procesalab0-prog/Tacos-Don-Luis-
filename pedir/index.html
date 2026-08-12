@@ -329,6 +329,16 @@
 
       <sc-if value="{{ isSeguimiento }}" hint-placeholder-val="{{ false }}">
         <div style="animation:dlfade .3s ease both;padding:16px 16px 26px">
+          <sc-if value="{{ hayRepartidor }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#FFFDF7;border:1.5px solid #cfe0c6;border-radius:16px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:13px">
+              <span style="width:46px;height:46px;border-radius:50%;background:#10603A;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex:0 0 auto">{{ repIniciales }}</span>
+              <span style="flex:1;min-width:0">
+                <span style="display:block;font-size:11.5px;font-weight:800;color:#8a7f66;letter-spacing:.06em">TU REPARTIDOR</span>
+                <span style="display:block;font-weight:700;font-size:15px;color:#211E15">{{ repNombre }}</span>
+                <span style="display:block;font-size:12.5px;color:#5a7d63;font-weight:600">{{ repVehiculo }}</span>
+              </span>
+            </div>
+          </sc-if>
           <div style="background:#10603A;border-radius:20px;padding:20px;color:#fff;margin-bottom:16px;position:relative;overflow:hidden">
             <div style="position:absolute;top:0;left:0;right:0;height:10px" class="dl-check"></div>
             <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-top:6px"><div><div style="font-size:12px;color:#9ec5a6;font-weight:600">Pedido {{ trkFolio }}</div><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:24px;margin-top:2px">{{ trkActual }}</div></div><span style="background:rgba(255,255,255,.16);border-radius:12px;padding:8px 12px;text-align:center"><span style="display:block;font-size:10px;color:#cbe0cf">Código</span><span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:17px;color:#F2C230">{{ trkCodigo }}</span></span></div>
@@ -517,7 +527,7 @@
             </div>
             <div style="position:sticky;bottom:0;background:#F3F0E6;padding:14px 18px calc(16px + env(safe-area-inset-bottom));border-top:1px solid #E6DCC5;display:flex;gap:12px;align-items:center">
               <div style="display:flex;align-items:center;gap:11px;background:#fff;border:1.5px solid #E6DCC5;border-radius:14px;padding:7px 8px"><button onClick="{{ sheet.onDec }}" aria-label="Quitar una unidad" style="cursor:pointer;width:44px;height:44px;border-radius:9px;border:none;background:#f0e8d4;color:#10603A;font-size:19px;line-height:1">−</button><span style="font-weight:800;min-width:18px;text-align:center;font-size:16px">{{ sheet.qty }}</span><button onClick="{{ sheet.onInc }}" aria-label="Agregar una unidad" style="cursor:pointer;width:44px;height:44px;border-radius:9px;border:none;background:#10603A;color:#fff;font-size:19px;line-height:1">+</button></div>
-              <button onClick="{{ sheet.onAdd }}" style="cursor:pointer;flex:1;background:#D6453D;color:#fff;border:none;border-radius:14px;padding:14px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:15.5px">{{ sheet.addTxt }}</button>
+              <button onClick="{{ sheet.onAdd }}" style="{{ sheet.addStyle }}">{{ sheet.addTxt }}</button>
             </div>
           </div>
         </div>
@@ -621,7 +631,7 @@
     </sc-if>
   </div></div></x-dc><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.15.2';
+  static APP_VERSION = '2.16.0';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
@@ -909,7 +919,7 @@ class Component extends DCLogic {
     this.setState({sheetMods:limpio});}
   toggleAside(m){const all=this.asideOptionsFor(this.itemById(this.state.sheetItem)),rest=this.state.sheetMods.filter(x=>!all.includes(x));if(m==='Todo aparte'){this.setState({sheetMods:this.state.sheetMods.includes(m)?rest:[...rest,m]});return;}const selected=this.state.sheetMods.filter(x=>all.includes(x)&&x!=='Todo aparte'),next=selected.includes(m)?selected.filter(x=>x!==m):[...selected,m];this.setState({sheetMods:[...rest,...next]});}
   sheetUnit(){ return this.itemById(this.state.sheetItem).precio; }
-  addSheet(){const it=this.itemById(this.state.sheetItem);if(this.proteinOptionsFor(it).length&&!this.state.sheetProtein){this.toast('Elige de qué carne lo quieres');return;}if(this.flavorOptionsFor(it).length&&!this.state.sheetFlavor){this.toast('Elige el sabor del agua');return;}const row={uid:this.state.sheetEditUid||Date.now()+Math.random(),id:this.state.sheetItem,q:this.state.sheetQty,protein:this.state.sheetProtein,flavor:this.state.sheetFlavor,mods:[...this.state.sheetMods],nota:this.state.sheetNota},editing=!!this.state.sheetEditUid,c=editing?this.state.cart.map(l=>l.uid===this.state.sheetEditUid?row:l):[...this.state.cart,row];this.setState({cart:c,sheetItem:null,sheetEditUid:null});this.toast(editing?'Producto actualizado':'Agregado al carrito');}
+  addSheet(){const it=this.itemById(this.state.sheetItem);if(this.proteinOptionsFor(it).length&&!this.state.sheetProtein){this.toast('Elige de qué carne lo quieres');return;}const prep=this.preparationOptionsFor(it);if(prep.length&&!prep.some(o=>this.state.sheetMods.includes(o))){this.toast('Elige cómo lo preparamos');return;}if(this.flavorOptionsFor(it).length&&!this.state.sheetFlavor){this.toast('Elige el sabor del agua');return;}const row={uid:this.state.sheetEditUid||Date.now()+Math.random(),id:this.state.sheetItem,q:this.state.sheetQty,protein:this.state.sheetProtein,flavor:this.state.sheetFlavor,mods:[...this.state.sheetMods],nota:this.state.sheetNota},editing=!!this.state.sheetEditUid,c=editing?this.state.cart.map(l=>l.uid===this.state.sheetEditUid?row:l):[...this.state.cart,row];this.setState({cart:c,sheetItem:null,sheetEditUid:null});this.toast(editing?'Producto actualizado':'Agregado al carrito');}
 
   lineUnit(l){ return this.itemById(l.id).precio; }
   lineTotal(l){ return this.lineUnit(l)*l.q; }
@@ -1373,7 +1383,16 @@ class Component extends DCLogic {
         onNota:e=>this.setState({sheetNota:e.target.value}), nota:this.state.sheetNota,
         proteins:proteinOptions.map(p=>({label:p,onClick:()=>this.setState({sheetProtein:p}),style:`cursor:pointer;font-size:13.5px;font-weight:700;padding:11px 10px;border-radius:12px;border:1.5px solid ${this.state.sheetProtein===p?'#10603A':'#e0d6bf'};${this.state.sheetProtein===p?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35'}`})),
         flavors:flavorOptions.map(p=>({label:p,onClick:()=>this.setState({sheetFlavor:p}),style:`cursor:pointer;font-size:13px;font-weight:700;padding:11px 7px;border-radius:12px;border:1.5px solid ${this.state.sheetFlavor===p?'#10603A':'#e0d6bf'};${this.state.sheetFlavor===p?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35'}`})),mods:preparationOptions.map(m=>chip(m,()=>this.selectPreparation(m))),sauces:sauceOptions.map(m=>chip(m,()=>this.toggleSauce(m))),asides:asideOptions.map(m=>chip(m,()=>this.toggleAside(m))),
-        addTxt:(this.state.sheetEditUid?'Guardar cambios · ':'Agregar ')+this.MXN(this.sheetUnit()*this.state.sheetQty), onAdd:()=>this.addSheet()};
+        // Elegir preparación es obligatorio: si no, a cocina y a administración
+        // les llega el producto sin saber si va con todo, sin algo o solo carne.
+        faltaPreparacion:preparationOptions.length>0&&!preparationOptions.some(o=>this.state.sheetMods.includes(o)),
+        addTxt:(preparationOptions.length>0&&!preparationOptions.some(o=>this.state.sheetMods.includes(o)))
+          ?'Elige cómo lo preparamos'
+          :((this.state.sheetEditUid?'Guardar cambios · ':'Agregar ')+this.MXN(this.sheetUnit()*this.state.sheetQty)),
+        addStyle:(preparationOptions.length>0&&!preparationOptions.some(o=>this.state.sheetMods.includes(o)))
+          ?'cursor:not-allowed;flex:1;background:#a99d80;color:#fff;border:none;border-radius:14px;padding:14px;font-family:\'Fredoka\',sans-serif;font-weight:600;font-size:15.5px'
+          :'cursor:pointer;flex:1;background:#D6453D;color:#fff;border:none;border-radius:14px;padding:14px;font-family:\'Fredoka\',sans-serif;font-weight:600;font-size:15.5px',
+        onAdd:()=>this.addSheet()};
     }
 
     // ---- carrito ----
@@ -1403,6 +1422,11 @@ class Component extends DCLogic {
       goHome:()=>this.go('home'), goMenu:()=>this.go('menu'), goCart:()=>this.go('carrito'), goCuenta:()=>this.go('cuenta'),
       onTapLogo:()=>{this.tapLogo();this.go('home');},showEasterEgg:this.state.showEasterEgg,onCloseEasterEgg:()=>this.setState({showEasterEgg:false}),appVersion:Component.APP_VERSION,
       showPrivacidad:this.state.showPrivacidad,
+      hayRepartidor:!!(this.state.liveOrder?.repartidor?.nombre||this.state.liveOrder?.repartidor?.placas),
+      repNombre:this.state.liveOrder?.repartidor?.nombre||'Repartidor asignado',
+      repIniciales:((this.state.liveOrder?.repartidor?.nombre||'R').trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('')||'R').toUpperCase(),
+      repVehiculo:(()=>{const r=this.state.liveOrder?.repartidor||{};
+        return [r.vehiculo,r.color,r.placas&&('Placas '+r.placas)].filter(Boolean).join(' · ')||'En camino';})(),
       resenaAbierta:!!this.state.resena,
       resenaFolio:this.state.resena?('DL-'+this.state.resena.folio):'',
       resenaEstrellas:[1,2,3,4,5].map(n=>({n,on:(this.state.resena?.estrellas||0)>=n,
