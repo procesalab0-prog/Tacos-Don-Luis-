@@ -247,8 +247,8 @@
                   <div style="flex:1"><div style="font-weight:700;font-size:14.5px;color:#211E15">{{ l.nombre }}</div><sc-if value="{{ l.hasLabel }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:#8a7f66;margin-top:3px;line-height:1.35">{{ l.label }}</div></sc-if></div>
                   <span style="font-weight:700;font-size:14.5px;color:#10603A;white-space:nowrap">{{ l.totalTxt }}</span>
                 </div>
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:11px">
-                  <button onClick="{{ l.onRemove }}" style="cursor:pointer;background:none;border:none;color:#b23a32;font-weight:600;font-size:12.5px;display:flex;align-items:center;gap:5px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg>Quitar</button>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:11px;gap:8px">
+                  <div style="display:flex;align-items:center;gap:8px"><button onClick="{{ l.onRemove }}" style="cursor:pointer;min-height:44px;background:none;border:none;color:#b23a32;font-weight:600;font-size:12.5px;display:flex;align-items:center;gap:5px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg>Quitar</button><sc-if value="{{ l.canEdit }}" hint-placeholder-val="{{ false }}"><button onClick="{{ l.onEdit }}" style="cursor:pointer;min-height:44px;background:none;border:none;color:#10603A;font-weight:700;font-size:12.5px">Editar</button></sc-if></div>
                   <div style="display:flex;align-items:center;gap:9px"><button onClick="{{ l.onDec }}" aria-label="Quitar una unidad" style="cursor:pointer;width:44px;height:44px;border-radius:11px;border:1.5px solid #E6DCC5;background:#fff;color:#10603A;font-size:20px;line-height:1">−</button><span style="font-weight:800;min-width:16px;text-align:center">{{ l.q }}</span><button onClick="{{ l.onInc }}" aria-label="Agregar una unidad" style="cursor:pointer;width:44px;height:44px;border-radius:11px;border:none;background:#10603A;color:#fff;font-size:20px;line-height:1">+</button></div>
                 </div>
               </div>
@@ -623,13 +623,13 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.14.5';
+  static APP_VERSION = '2.14.6';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
   static PRIVACY_CONTACT = 'procesalab0@gmail.com';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos',
-    sheetItem:null, sheetQty:1, sheetProtein:'', sheetMods:[], sheetNota:'',
+    sheetItem:null, sheetEditUid:null, sheetQty:1, sheetProtein:'', sheetMods:[], sheetNota:'',
     cart:[], activeCombos:[], entrega:'recoger', pago:'efectivo', cashTender:'', dir:{}, prog:false,scheduleMode:'immediate',scheduledFor:'',
     folio:null, trackStep:0, cuentaTab:'perfil', logged:false,
     remoteMenu:null, remoteCategories:null, remoteZones:null, modifierOptions:null, branchId:null,branchLocation:null,
@@ -696,7 +696,7 @@ class Component extends DCLogic {
       const bid=branch.id;
       const [cats,products,zones,settings,modifierOptions,loyaltyRules,marketingContent,combos,salesStats,loyaltyRewards]=await Promise.all([
         this.publicRead('/rest/v1/categories?branch_id=eq.'+bid+'&is_active=eq.true&select=id,name,slug,sort_order&order=sort_order'),
-        this.publicRead('/rest/v1/products?branch_id=eq.'+bid+'&is_active=eq.true&select=id,category_id,name,description,price,image_url,is_available,is_featured,sort_order&order=sort_order'),
+        this.publicRead('/rest/v1/products?branch_id=eq.'+bid+'&is_active=eq.true&select=id,category_id,name,description,price,image_url,is_available,is_featured,sort_order,customization&order=sort_order'),
         this.publicRead('/rest/v1/delivery_zones?branch_id=eq.'+bid+'&is_active=eq.true&select=id,name,min_distance_km,max_distance_km,fee,minimum_order,sort_order&order=sort_order').catch(()=>[]),
         this.publicRead('/rest/v1/business_settings?branch_id=eq.'+bid+'&select=*').catch(()=>[]),
         this.publicRead('/rest/v1/modifier_options?is_available=eq.true&select=id,name,price_delta,modifier_group_id,modifier_groups!inner(branch_id)&modifier_groups.branch_id=eq.'+bid).catch(()=>[]),
@@ -707,7 +707,7 @@ class Component extends DCLogic {
         this.publicRead('/rest/v1/loyalty_rewards?branch_id=eq.'+bid+'&select=*&order=sort_order').catch(()=>[])
       ]);
       const catById=Object.fromEntries(cats.map(c=>[c.id,c.name]));
-      const remoteMenu=products.map(p=>({id:p.id,nombre:p.name,cat:catById[p.category_id]||'Tacos',precio:Number(p.price),desc:p.description||'',foto:p.image_url||null,tag:p.is_featured?'Favorito':null,featured:p.is_featured,disponible:p.is_available}));
+      const remoteMenu=products.map(p=>({id:p.id,nombre:p.name,cat:catById[p.category_id]||'Tacos',precio:Number(p.price),desc:p.description||'',foto:p.image_url||null,tag:p.is_featured?'Favorito':null,featured:p.is_featured,disponible:p.is_available,customization:p.customization||{}}));
       this.setState({branchId:bid,branchLocation:branch.latitude!=null&&branch.longitude!=null?{lat:Number(branch.latitude),lng:Number(branch.longitude),address:branch.address_line}:null,remoteCategories:cats.map(c=>c.name),remoteMenu,remoteZones:zones,modifierOptions,settings:settings[0]||null,loyaltyRule:loyaltyRules[0]||null,marketingContent,combos,salesStats,loyaltyRewards});
     }catch(error){ console.error('No se pudo cargar el menú en vivo',error); this.toast('No pudimos actualizar el menú. Mostramos una copia disponible.'); }
   }
@@ -866,12 +866,13 @@ class Component extends DCLogic {
   }
 
   // ---- product sheet ----
-  proteinOptionsFor(it){if(!it||!['Quesadillas','Tortas','Tacos light'].includes(it.cat))return[];const name=String(it.nombre||'').toLocaleLowerCase('es-MX');if(name.includes('especial'))return['Lengua','Sesos'];if(name.includes('con queso'))return['Cabeza','Pastor','Bistec','Chorizo','Lengua','Sesos'];return['Cabeza','Pastor','Bistec','Chorizo'];}
-  openSheet(id){ this.setState({sheetItem:id,sheetQty:1,sheetProtein:'',sheetMods:[],sheetNota:''}); }
-  closeSheet(){ this.setState({sheetItem:null}); }
+  proteinOptionsFor(it){const configured=it?.customization?.protein_options;if(Array.isArray(configured))return configured;if(!it||!['Quesadillas','Tortas','Tacos light'].includes(it.cat))return[];const name=String(it.nombre||'').toLocaleLowerCase('es-MX');if(name.includes('especial'))return['Lengua','Sesos'];if(name.includes('con queso'))return['Cabeza','Pastor','Bistec','Chorizo','Lengua','Sesos'];return['Cabeza','Pastor','Bistec','Chorizo'];}
+  preparationOptionsFor(it){const configured=it?.customization?.preparation_options;if(Array.isArray(configured))return configured;return it?.cat==='Bebidas'?[]:this.modsLibres;}
+  openSheet(id,editUid=null){const line=editUid==null?null:this.state.cart.find(l=>l.uid===editUid);this.setState({sheetItem:id,sheetEditUid:line?.uid||null,sheetQty:line?.q||1,sheetProtein:line?.protein||'',sheetMods:[...(line?.mods||[])],sheetNota:line?.nota||''});}
+  closeSheet(){ this.setState({sheetItem:null,sheetEditUid:null}); }
   toggleMod(m){ const a=[...this.state.sheetMods]; const i=a.indexOf(m); if(i>-1)a.splice(i,1); else a.push(m); this.setState({sheetMods:a}); }
   sheetUnit(){ return this.itemById(this.state.sheetItem).precio; }
-  addSheet(){const it=this.itemById(this.state.sheetItem);if(this.proteinOptionsFor(it).length&&!this.state.sheetProtein){this.toast('Elige de qué carne lo quieres');return;}const c=[...this.state.cart];c.push({uid:Date.now()+Math.random(),id:this.state.sheetItem,q:this.state.sheetQty,protein:this.state.sheetProtein,mods:[...this.state.sheetMods],nota:this.state.sheetNota});this.setState({cart:c,sheetItem:null});this.toast('Agregado al carrito');}
+  addSheet(){const it=this.itemById(this.state.sheetItem);if(this.proteinOptionsFor(it).length&&!this.state.sheetProtein){this.toast('Elige de qué carne lo quieres');return;}const row={uid:this.state.sheetEditUid||Date.now()+Math.random(),id:this.state.sheetItem,q:this.state.sheetQty,protein:this.state.sheetProtein,mods:[...this.state.sheetMods],nota:this.state.sheetNota},editing=!!this.state.sheetEditUid,c=editing?this.state.cart.map(l=>l.uid===this.state.sheetEditUid?row:l):[...this.state.cart,row];this.setState({cart:c,sheetItem:null,sheetEditUid:null});this.toast(editing?'Producto actualizado':'Agregado al carrito');}
 
   lineUnit(l){ return this.itemById(l.id).precio; }
   lineTotal(l){ return this.lineUnit(l)*l.q; }
@@ -1267,22 +1268,22 @@ class Component extends DCLogic {
     if(sheetOpen){
       const it=this.itemById(this.state.sheetItem);
       const proteinOptions=this.proteinOptionsFor(it);
-      const hasPreparation=it.cat!=='Bebidas';
+      const preparationOptions=this.preparationOptionsFor(it),hasPreparation=preparationOptions.length>0;
       sheet={...it,noFoto:!it.foto,qty:this.state.sheetQty,precioTxt:this.MXN(it.precio),hasProtein:proteinOptions.length>0,hasPreparation,notePlaceholder:hasPreparation?'Ej. salsa aparte, sin cebolla…':'Escribe una indicación…',
         onClose:()=>this.closeSheet(),
         onInc:()=>this.setState({sheetQty:this.state.sheetQty+1}),
         onDec:()=>this.setState({sheetQty:Math.max(1,this.state.sheetQty-1)}),
         onNota:e=>this.setState({sheetNota:e.target.value}), nota:this.state.sheetNota,
         proteins:proteinOptions.map(p=>({label:p,onClick:()=>this.setState({sheetProtein:p}),style:`cursor:pointer;font-size:13.5px;font-weight:700;padding:11px 10px;border-radius:11px;border:1.5px solid ${this.state.sheetProtein===p?'#10603A':'#e0d6bf'};${this.state.sheetProtein===p?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35'}`})),
-        mods:(hasPreparation?this.modsLibres:[]).map(m=>({label:m,active:this.state.sheetMods.includes(m),onClick:()=>this.toggleMod(m),
+        mods:preparationOptions.map(m=>({label:m,active:this.state.sheetMods.includes(m),onClick:()=>this.toggleMod(m),
           style:`cursor:pointer;font-size:13px;font-weight:600;padding:9px 13px;border-radius:11px;border:1.5px solid ${this.state.sheetMods.includes(m)?'#10603A':'#e0d6bf'};${this.state.sheetMods.includes(m)?'background:#eaf4ec;color:#10603A':'background:#fff;color:#6a5f45'}`})),
-        addTxt:'Agregar '+this.MXN(this.sheetUnit()*this.state.sheetQty), onAdd:()=>this.addSheet()};
+        addTxt:(this.state.sheetEditUid?'Guardar cambios · ':'Agregar ')+this.MXN(this.sheetUnit()*this.state.sheetQty), onAdd:()=>this.addSheet()};
     }
 
     // ---- carrito ----
     const regularLines=this.state.cart.filter(l=>!l.comboUid).map(l=>({...l,nombre:this.itemById(l.id).nombre,label:this.lineLabel(l),
       totalTxt:this.MXN(this.lineTotal(l)),hasLabel:this.lineLabel(l).length>0,
-      onInc:()=>this.cartInc(l.uid),onDec:()=>this.cartDec(l.uid),onRemove:()=>this.cartRemove(l.uid)}));
+      canEdit:true,onEdit:()=>this.openSheet(l.id,l.uid),onInc:()=>this.cartInc(l.uid),onDec:()=>this.cartDec(l.uid),onRemove:()=>this.cartRemove(l.uid)}));
     const comboLines=(this.state.activeCombos||[]).map(entry=>{const combo=(this.state.combos||[]).find(c=>c.id===entry.id);if(!combo)return null;const label=comboContents(combo);return{uid:entry.uid,nombre:combo.name,label,totalTxt:this.MXN(combo.price),q:1,hasLabel:!!label,onInc:()=>this.addCombo(combo),onDec:()=>this.removeComboInstance(entry.uid),onRemove:()=>this.removeComboInstance(entry.uid)};}).filter(Boolean);
     const cartLines=[...comboLines,...regularLines];
     const sub=Math.max(0,this.cartSubtotal()-this.descuento());
