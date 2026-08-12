@@ -18,10 +18,10 @@ Deno.serve(async(req:Request)=>{
   if(!actorMembership||!["owner","admin"].includes(actorMembership.role))return json({error:"No tienes permiso para administrar usuarios"},403);
   if(req.method==="GET"){
    const {data:memberships,error}=await admin.from("branch_memberships").select("id,user_id,role,is_active,created_at").eq("branch_id",branchId).order("created_at");if(error)throw error;
-   const ids=(memberships||[]).map(m=>m.user_id);const {data:profiles}=ids.length?await admin.from("profiles").select("id,full_name,phone").in("id",ids):{data:[]};
+   const ids=(memberships||[]).map(m=>m.user_id);const [{data:profiles},{data:driverStatuses}]=ids.length?await Promise.all([admin.from("profiles").select("id,full_name,phone").in("id",ids),admin.from("driver_status").select("user_id,vehicle_type,vehicle_plate,vehicle_color").eq("branch_id",branchId).in("user_id",ids)]):[{data:[]},{data:[]}];
    const {data:usersData,error:usersError}=await admin.auth.admin.listUsers({page:1,perPage:1000});if(usersError)throw usersError;
-   const pById=Object.fromEntries((profiles||[]).map(p=>[p.id,p])),eById=Object.fromEntries(usersData.users.map(u=>[u.id,u.email]));
-   return json({users:(memberships||[]).map(m=>({...m,email:eById[m.user_id]||null,profiles:pById[m.user_id]||null}))});
+   const pById=Object.fromEntries((profiles||[]).map(p=>[p.id,p])),dById=Object.fromEntries((driverStatuses||[]).map(d=>[d.user_id,d])),eById=Object.fromEntries(usersData.users.map(u=>[u.id,u.email]));
+   return json({users:(memberships||[]).map(m=>({...m,email:eById[m.user_id]||null,profiles:pById[m.user_id]||null,driver_status:dById[m.user_id]||null}))});
   }
   if(req.method==="POST"&&body.action==="invite"){
    const email=String(body.email||"").trim().toLowerCase(),role=String(body.role||"");if(!email||!roles.includes(role))return json({error:"Correo o rol inválido"},400);
@@ -45,7 +45,13 @@ Deno.serve(async(req:Request)=>{
   if(req.method==="PATCH"&&body.membership_id){
    const patch:Record<string,unknown>={};if(body.role&&roles.includes(body.role))patch.role=body.role;if(typeof body.is_active==="boolean")patch.is_active=body.is_active;
    if(!Object.keys(patch).length)return json({error:"Sin cambios válidos"},400);
-   const {data,error}=await admin.from("branch_memberships").update(patch).eq("id",body.membership_id).eq("branch_id",branchId).select("id,user_id,role,is_active").single();if(error)throw error;return json({ok:true,membership:data});
+   const {data,error}=await admin.from("branch_memberships").update(patch).eq("id",body.membership_id).eq("branch_id",branchId).select("id,user_id,role,is_active").single();if(error)throw error;
+   if(typeof body.full_name==="string"&&body.full_name.trim())await admin.from("profiles").update({full_name:body.full_name.trim().slice(0,80)}).eq("id",data.user_id);
+   if(data.role==="driver"&&[body.vehicle_type,body.vehicle_plate,body.vehicle_color].some(v=>typeof v==="string")){
+    const vehicleType=String(body.vehicle_type||"").trim(),vehiclePlate=String(body.vehicle_plate||"").trim().toUpperCase(),vehicleColor=String(body.vehicle_color||"").trim();if(!vehicleType||vehiclePlate.length<3||!vehicleColor)return json({error:"Completa tipo, placas y color del vehículo"},400);
+    const {error:driverError}=await admin.from("driver_status").upsert({user_id:data.user_id,branch_id:branchId,vehicle_type:vehicleType.slice(0,30),vehicle_plate:vehiclePlate.slice(0,12),vehicle_color:vehicleColor.slice(0,24),updated_at:new Date().toISOString()},{onConflict:"user_id"});if(driverError)throw driverError;
+   }
+   return json({ok:true,membership:data});
   }
   return json({error:"Acción no soportada"},400);
  }catch(error){console.error(error);return json({error:error instanceof Error?error.message:"Error interno"},500)}
