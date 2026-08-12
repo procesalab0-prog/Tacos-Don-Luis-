@@ -10,7 +10,7 @@ const cors = {
 const reply = (status: number, body: unknown) => new Response(JSON.stringify(body), { status, headers: cors });
 const hex = (bytes: ArrayBuffer) => [...new Uint8Array(bytes)].map((b) => b.toString(16).padStart(2, "0")).join("");
 const sha256 = async (value: string) => hex(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value)));
-const orderSelect = "id,folio,public_code,status,fulfillment_type,payment_status,subtotal,delivery_fee,total,promised_at,created_at,order_items(product_name,quantity,line_total,notes),order_status_history(to_status,note,created_at),driver_assignments(status,picked_up_at,delivered_at,incident_note)";
+const orderSelect = "id,folio,public_code,status,fulfillment_type,payment_status,subtotal,delivery_fee,total,promised_at,created_at,order_items(product_name,quantity,line_total,notes),order_status_history(to_status,note,created_at),driver_assignments(status,picked_up_at,delivered_at,incident_note,driver_user_id)";
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
@@ -27,6 +27,25 @@ Deno.serve(async (req: Request) => {
       if (link) ({ data: order } = await db.from("orders").select(orderSelect).eq("id", link.order_id).maybeSingle());
     }
     if (!order) return reply(404, { error: "Pedido no encontrado o enlace vencido" });
+
+    // Datos del repartidor asignado, para que el cliente sepa quién le llega.
+    // Se envían solo el nombre, el vehículo y las placas: nada de contacto
+    // personal ni de su ubicación.
+    const asignacion = (order.driver_assignments || []).find((a: any) => a.driver_user_id);
+    if (asignacion?.driver_user_id) {
+      const [{ data: perfil }, { data: estado }] = await Promise.all([
+        db.from("profiles").select("full_name").eq("id", asignacion.driver_user_id).maybeSingle(),
+        db.from("driver_status").select("vehicle_type,vehicle_plate,vehicle_color").eq("user_id", asignacion.driver_user_id).maybeSingle(),
+      ]);
+      if (perfil || estado) {
+        (order as any).repartidor = {
+          nombre: perfil?.full_name ?? null,
+          vehiculo: estado?.vehicle_type ?? null,
+          placas: estado?.vehicle_plate ?? null,
+          color: estado?.vehicle_color ?? null,
+        };
+      }
+    }
     return reply(200, { order });
   } catch (error) {
     console.error(error);
