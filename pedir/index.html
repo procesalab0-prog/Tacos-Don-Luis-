@@ -249,7 +249,7 @@
                 </div>
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-top:11px">
                   <button onClick="{{ l.onRemove }}" style="cursor:pointer;background:none;border:none;color:#b23a32;font-weight:600;font-size:12.5px;display:flex;align-items:center;gap:5px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg>Quitar</button>
-                  <div style="display:flex;align-items:center;gap:11px"><button onClick="{{ l.onDec }}" style="cursor:pointer;width:30px;height:30px;border-radius:9px;border:1.5px solid #E6DCC5;background:#fff;color:#10603A;font-size:17px;line-height:1">−</button><span style="font-weight:800;min-width:16px;text-align:center">{{ l.q }}</span><button onClick="{{ l.onInc }}" style="cursor:pointer;width:30px;height:30px;border-radius:9px;border:none;background:#10603A;color:#fff;font-size:17px;line-height:1">+</button></div>
+                  <div style="display:flex;align-items:center;gap:9px"><button onClick="{{ l.onDec }}" aria-label="Quitar una unidad" style="cursor:pointer;width:44px;height:44px;border-radius:11px;border:1.5px solid #E6DCC5;background:#fff;color:#10603A;font-size:20px;line-height:1">−</button><span style="font-weight:800;min-width:16px;text-align:center">{{ l.q }}</span><button onClick="{{ l.onInc }}" aria-label="Agregar una unidad" style="cursor:pointer;width:44px;height:44px;border-radius:11px;border:none;background:#10603A;color:#fff;font-size:20px;line-height:1">+</button></div>
                 </div>
               </div>
             </sc-for>
@@ -257,7 +257,7 @@
           <sc-if value="{{ cartNotEmpty }}" hint-placeholder-val="{{ false }}">
             <div style="margin-top:16px;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:16px">
               <div style="display:flex;justify-content:space-between;font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px;color:#211E15"><span>Subtotal</span><span style="color:#10603A">{{ cartSubTxt }}</span></div>
-              <div style="font-size:12px;color:#9a8e70;margin-top:3px">Envío y descuentos se calculan en el siguiente paso</div>
+              <div style="font-size:12px;color:#9a8e70;margin-top:3px">Los precios de combos ya están aplicados. El envío se calcula en el siguiente paso.</div>
               <button onClick="{{ goCheckout }}" style="cursor:pointer;width:100%;margin-top:14px;background:#D6453D;color:#fff;border:none;border-radius:14px;padding:15px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;box-shadow:0 6px 16px rgba(214,69,61,.3)">Continuar</button>
               <button onClick="{{ goMenu }}" style="cursor:pointer;width:100%;margin-top:9px;background:none;border:none;color:#10603A;font-weight:700;font-size:13.5px">+ Agregar más productos</button>
             </div>
@@ -623,7 +623,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.14.4';
+  static APP_VERSION = '2.14.5';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
@@ -857,7 +857,7 @@ class Component extends DCLogic {
   catIcon(c){ return {Tacos:'M3 11a9 9 0 0 1 18 0M2 11h20l-2 4H4zM7 18h10',Quesadillas:'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM12 2v20',Tortas:'M4 11h16a0 0 0 0 1 0 0v2a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-2zM6 11a6 6 0 0 1 12 0',['Tacos light']:'M7 20s-3-2-3-8a8 8 0 0 1 16 0c0 6-3 8-3 8M12 4v16',Bebidas:'M5 3h14l-1.5 17a1 1 0 0 1-1 .9H7.5a1 1 0 0 1-1-.9zM5 8h14'}[c]; }
   catTint(c){ return {Tacos:'#D6453D',Quesadillas:'#E0A526',Tortas:'#10603A',['Tacos light']:'#28A54C',Bebidas:'#1f6f8b'}[c]; }
 
-  cartCount(){ return this.state.cart.reduce((s,l)=>s+l.q,0); }
+  cartCount(){ return this.state.cart.filter(l=>!l.comboUid).reduce((s,l)=>s+l.q,0)+(this.state.activeCombos||[]).length; }
   addQuick(id){ const it=this.itemById(id); if(it.disponible===false){ this.toast(it.nombre+' está agotado hoy'); return; }if(this.proteinOptionsFor(it).length){this.openSheet(id);return;}const c=[...this.state.cart];c.push({uid:Date.now()+Math.random(),id,q:1,protein:'',mods:[],nota:''});this.setState({cart:c});this.toast(it.nombre+' agregado'); }
   addCombo(combo){
     const components=Array.isArray(combo.components)?combo.components:[];if(!components.length){this.toast('Este combo aún no tiene productos');return;}
@@ -1050,7 +1050,7 @@ class Component extends DCLogic {
       const remembered=JSON.parse(localStorage.getItem('donLuisGuestOrderTokens')||'[]').filter(x=>x?.token!==result.trackingToken);
       remembered.unshift({token:result.trackingToken,folio,createdAt:new Date().toISOString()});
       localStorage.setItem('donLuisGuestOrderTokens',JSON.stringify(remembered.slice(0,10)));
-      this.setState({folio,trackingToken:result.trackingToken,liveOrder:result.order,route:'confirmacion',trackStep:0,prog:false,submitting:false,activeCombos:[]});
+      this.setState({folio,trackingToken:result.trackingToken,liveOrder:result.order,route:'confirmacion',trackStep:0,prog:false,submitting:false});
       if(this.state.session)await this.loadCustomerData(this.state.session);
       this.toast(result.duplicate?'Este pedido ya estaba recibido · no se envió dos veces':'¡Pedido recibido! 🌮');
     }catch(error){this.setState({submitting:false});this.toast(error.message||'No se pudo crear el pedido');}
@@ -1075,7 +1075,9 @@ class Component extends DCLogic {
     this._poll=setInterval(()=>this.refreshTracking(),12000);
   }
   whatsappText(){
-    const lines=this.state.cart.map(l=>{const it=this.itemById(l.id);const note=this.lineLabel(l);return l.q+'× '+it.nombre+(note?' ('+note+')':'');});
+    const standalone=this.state.cart.filter(l=>!l.comboUid).map(l=>{const it=this.itemById(l.id);const note=this.lineLabel(l);return l.q+'× '+it.nombre+(note?' ('+note+')':'');});
+    const combos=(this.state.activeCombos||[]).map(entry=>{const combo=(this.state.combos||[]).find(c=>c.id===entry.id);if(!combo)return null;const contents=(combo.components||[]).map(p=>(Number(p.quantity)||1)+'× '+this.itemById(p.product_id||p.productId).nombre).join(', ');return '1× '+combo.name+' — '+this.MXN(combo.price)+(contents?' ('+contents+')':'');}).filter(Boolean);
+    const lines=[...combos,...standalone];
     const address=this.state.entrega==='domicilio'?[this.state.dir.calle,this.state.dir.num,this.state.dir.col].filter(Boolean).join(', '):'Pasar a recoger en Punto Cañada';
     const map=this._pickedLatLng?'https://www.google.com/maps?q='+this._pickedLatLng.lat+','+this._pickedLatLng.lng:'';
     const tracking=this.trackingLink();const cash=Number(this.state.cashTender);const change=this.state.pago==='efectivo'&&Number.isFinite(cash)?'Paga con '+this.MXN(cash)+' · cambio '+this.MXN(Math.max(0,cash-this.totalFinal())):'';
@@ -1083,7 +1085,7 @@ class Component extends DCLogic {
   }
   trackingLink(token=this.state.trackingToken){return token?location.origin+'/pedir/?pedido='+encodeURIComponent(token):'';}
   openWhatsApp(){const phone=String(this.state.settings?.whatsapp_phone||'').replace(/\D/g,'');const base=phone?'https://wa.me/'+phone:'https://api.whatsapp.com/send';window.open(base+(base.includes('?')?'&':'?')+'text='+encodeURIComponent(this.whatsappText()),'_blank','noopener');}
-  nuevoPedido(){ clearInterval(this._trk); this.setState({cart:[],folio:null,trackStep:0,route:'home'}); }
+  nuevoPedido(){ clearInterval(this._trk); this.setState({cart:[],activeCombos:[],folio:null,trackStep:0,route:'home'}); }
 
   vmCheckout(){
     const entrega=this.state.entrega;
@@ -1229,7 +1231,8 @@ class Component extends DCLogic {
     const destacados=(ranked.length?ranked:favoritosRemotos.length?favoritosRemotos:(this.state.remoteMenu?this.menu.slice(0,4):this.menu.filter(m=>['t_pastor','t_bistec','q_pastor','to_pastor'].includes(m.id)))).slice(0,4).map((m,i)=>({...m,precioTxt:this.MXN(m.precio),tag:ranked.length?'#'+(i+1)+' Más vendido':m.tag||'Favorito',onAdd:()=>this.addQuick(m.id)}));
     const homePromos=(this.state.marketingContent||[]).filter(x=>x.content_type==='daily_promo'&&x.product_id).map(x=>({title:x.title,description:x.description,badge:x.badge||'PROMOCIÓN EXCLUSIVA',onAdd:()=>this.addQuick(x.product_id)}));
     const homeNews=(this.state.marketingContent||[]).filter(x=>x.content_type==='news').map(x=>({title:x.title,description:x.description,canAdd:!!x.product_id,onAdd:()=>this.addQuick(x.product_id)}));
-    const homeCombos=(this.state.combos||[]).map(c=>({name:c.name,description:c.description,price:this.MXN(c.price),badge:c.app_exclusive?'EXCLUSIVO APP':'COMBO',onAdd:()=>this.addCombo(c)}));
+    const comboContents=c=>(c.components||[]).map(p=>(Number(p.quantity)||1)+'× '+this.itemById(p.product_id||p.productId).nombre).join(' · ');
+    const homeCombos=(this.state.combos||[]).map(c=>({name:c.name,description:c.description||comboContents(c),price:this.MXN(c.price),badge:c.app_exclusive?'EXCLUSIVO APP':'COMBO',onAdd:()=>this.addCombo(c)}));
     const categoryImages={Tacos:'../assets/menu-tacos.png',Quesadillas:'../assets/menu-quesadillas.png',Tortas:'../assets/menu-tortas.png',['Tacos light']:'../assets/menu-light.png',Bebidas:'../assets/menu-bebidas.png'};
     const categoriasHome=this.cats.map(c=>({label:c,count:this.menu.filter(m=>m.cat===c).length,image:categoryImages[c],onClick:()=>{this.setState({cat:c});this.go('menu');}}));
     const opiniones=[
@@ -1277,10 +1280,12 @@ class Component extends DCLogic {
     }
 
     // ---- carrito ----
-    const cartLines=this.state.cart.map(l=>({...l,nombre:this.itemById(l.id).nombre,label:this.lineLabel(l),
+    const regularLines=this.state.cart.filter(l=>!l.comboUid).map(l=>({...l,nombre:this.itemById(l.id).nombre,label:this.lineLabel(l),
       totalTxt:this.MXN(this.lineTotal(l)),hasLabel:this.lineLabel(l).length>0,
       onInc:()=>this.cartInc(l.uid),onDec:()=>this.cartDec(l.uid),onRemove:()=>this.cartRemove(l.uid)}));
-    const sub=this.cartSubtotal();
+    const comboLines=(this.state.activeCombos||[]).map(entry=>{const combo=(this.state.combos||[]).find(c=>c.id===entry.id);if(!combo)return null;const label=comboContents(combo);return{uid:entry.uid,nombre:combo.name,label,totalTxt:this.MXN(combo.price),q:1,hasLabel:!!label,onInc:()=>this.addCombo(combo),onDec:()=>this.removeComboInstance(entry.uid),onRemove:()=>this.removeComboInstance(entry.uid)};}).filter(Boolean);
+    const cartLines=[...comboLines,...regularLines];
+    const sub=Math.max(0,this.cartSubtotal()-this.descuento());
 
     return {
       shellMax: phone?'100%':'480px',
