@@ -111,7 +111,7 @@
                       <div style="padding:0 13px 8px">
                         <div style="font-size:12.5px;color:#6a5f45;font-weight:600">{{ p.canalTxt }} · {{ p.cliente }}</div>
                         <div style="font-size:12px;color:#9a8e70;margin-top:1px">{{ p.tel }}</div>
-                        <sc-if value="{{ p.notaPago }}" hint-placeholder-val="{{ false }}"><div style="font-size:11.5px;color:#8a6d12;background:#fdf6e3;border-radius:8px;padding:6px 8px;margin-top:6px;font-weight:700">💵 {{ p.notaPago }}</div></sc-if>
+                        <sc-if value="{{ p.notaPago }}" hint-placeholder-val="{{ false }}"><div style="font-size:11.5px;color:#8a6d12;background:#fdf6e3;border-radius:8px;padding:7px 9px;margin-top:6px;font-weight:700;line-height:1.4">{{ p.notaIcon }} {{ p.notaPago }}</div></sc-if>
                       </div>
                       <div style="padding:0 13px 8px;display:flex;flex-direction:column;gap:3px">
                         <sc-for list="{{ p.items }}" as="it" hint-placeholder-count="2"><div style="font-size:12.5px;color:#3a3120"><span style="font-weight:800;color:#10603A">{{ it.q }}×</span> {{ it.nombre }}<sc-if value="{{ it.nota }}" hint-placeholder-val="{{ false }}"><span style="color:#D6453D;font-weight:600"> · {{ it.nota }}</span></sc-if></div></sc-for>
@@ -393,7 +393,7 @@
     </div>
   </sc-if></div></sc-if></x-dc><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.17.2';
+  static APP_VERSION = '2.17.3';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { rol:null, route:'pedidos', vw:1280, toast:null, sonido:true,
@@ -997,7 +997,7 @@ class Component extends DCLogic {
     const pedidosCols=cols.map(([key,title,color])=>{
       const list=filt.filter(o=>o.estado===key).map(o=>{
         const cm=this.canalMeta(o.canal), pm=this.pagoMeta(o.pago); const late=o.min>15&&['preparando','aceptado'].includes(key);
-        return {folio:o.folio,cliente:o.cliente,tel:o.tel,notaPago:o.notaPago,minTxt:o.min===0?'ahora':'hace '+o.min+' min',late,
+        return {folio:o.folio,cliente:o.cliente,tel:o.tel,notaPago:o.notaPago,notaIcon:o.notaPago?.includes('AUTO PARA RECOGER:')?'🚗':'💵',minTxt:o.min===0?'ahora':'hace '+o.min+' min',late,
           canalTxt:cm.txt,canalC:cm.c,canalBg:cm.bg,canalIcon:cm.icon,
           items:o.items,totalTxt:this.MXN(this.itemTotal(o)),pagoTxt:pm.txt,pagoC:pm.c,
           acciones:key!=='completado'&&!(key==='listo'&&o.assignedDriver),esNuevo:key==='nuevo',hasWhatsApp:!!this.customerWhatsAppNumber(o.tel),

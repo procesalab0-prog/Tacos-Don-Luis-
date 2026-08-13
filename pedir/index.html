@@ -282,6 +282,7 @@
           <sc-if value="{{ chkRecoger }}" hint-placeholder-val="{{ true }}">
             <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:15px;margin-bottom:16px">
               <div style="font-weight:700;font-size:14.5px;color:#211E15;margin-bottom:9px">Para recoger</div>
+              <label style="display:block;font-size:12px;font-weight:700;color:#6a5f45;margin-bottom:10px">¿En qué automóvil vienes? <span style="font-weight:500;color:#9a8e70">(opcional)</span><input value="{{ pickupVehicle }}" onInput="{{ onPickupVehicle }}" maxlength="100" placeholder="Ej. Nissan Versa rojo, placas 123-ABC" style="display:block;width:100%;margin-top:6px;border:1.5px solid #e0d6bf;border-radius:12px;padding:11px 13px;font:inherit;background:#fff;color:#211E15"><span style="display:block;margin-top:5px;font-weight:500;color:#9a8e70;line-height:1.35">Nos ayuda a identificarte si llevamos el pedido hasta tu carro.</span></label>
               <div style="display:flex;gap:8px;margin-bottom:9px"><sc-for list="{{ chkScheduleModes }}" as="s" hint-placeholder-count="2"><button onClick="{{ s.onClick }}" style="{{ s.style }}">{{ s.label }}</button></sc-for></div>
               <sc-if value="{{ chkScheduled }}" hint-placeholder-val="{{ false }}"><label style="display:block;font-size:12px;font-weight:700;color:#6a5f45">Hora para recoger<input type="datetime-local" value="{{ scheduledFor }}" min="{{ scheduleMin }}" max="{{ scheduleMax }}" onInput="{{ onScheduledFor }}" style="display:block;width:100%;margin-top:6px;border:1.5px solid #e0d6bf;border-radius:12px;padding:11px;font:inherit;background:#fff"></label></sc-if>
               <sc-if value="{{ chkImmediate }}" hint-placeholder-val="{{ true }}"><div style="display:flex;align-items:center;gap:9px;background:#eaf4ec;border:1px solid #cfe0c6;border-radius:12px;padding:11px 13px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#10603A" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg><span style="font-size:13px;color:#10603A;font-weight:600">Lo antes posible · listo en 15–20 min</span></div></sc-if>
@@ -647,14 +648,14 @@
     </sc-if>
   </div></div></x-dc><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.17.2';
+  static APP_VERSION = '2.17.3';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
   static PRIVACY_CONTACT = 'procesalab0@gmail.com';
   state = { route:'home', vw:1280, toast:null, cat:'Tacos', resena:null, opinionesReales:[],
     sheetItem:null, sheetEditUid:null, sheetQty:1, sheetProtein:'', sheetFlavor:'', sheetMods:[], sheetNota:'',
-    cart:[], activeCombos:[], entrega:'recoger', pago:'efectivo', cashTender:'', dir:{}, prog:false,scheduleMode:'immediate',scheduledFor:'',
+    cart:[], activeCombos:[], entrega:'recoger', pago:'efectivo', cashTender:'', pickupVehicle:'', dir:{}, prog:false,scheduleMode:'immediate',scheduledFor:'',
     folio:null, trackStep:0, cuentaTab:'perfil', logged:false,
     remoteMenu:null, remoteCategories:null, remoteZones:null, modifierOptions:null, branchId:null,branchLocation:null,
     settings:null, submitting:false, trackingToken:null, liveOrder:null,accountOrders:[],loyaltyAccount:null,loyaltyRule:null,marketingContent:[],combos:[],salesStats:[],loyaltyRewards:[],loyaltyMovements:[],loyaltyRedemptions:[],referralCode:'',
@@ -669,7 +670,7 @@ class Component extends DCLogic {
     this.loadPublicData();
     this._menuPoll=setInterval(()=>this.loadPublicData(),30000);
     const draft=JSON.parse(localStorage.getItem('donLuisCheckoutDraft')||'null');
-    if(draft?.dir){this._pickedLatLng=draft.location||null;this.setState({dir:draft.dir});}
+    if(draft?.dir){this._pickedLatLng=draft.location||null;this.setState({dir:draft.dir,pickupVehicle:draft.pickupVehicle||''});}
     const savedOrders=JSON.parse(localStorage.getItem('donLuisGuestOrderTokens')||'[]');
     const shared=new URLSearchParams(location.search).get('pedido');
     const saved=/^[a-f0-9]{64}$/i.test(shared||'')?shared:(localStorage.getItem('donLuisTrackingToken')||savedOrders[0]?.token);
@@ -985,7 +986,7 @@ class Component extends DCLogic {
     const zonas=[...this.coberturaTarifas].sort((x,y)=>x.max-y.max);
     return zonas.find(z=>km<=z.max)||null;
   }
-  persistCheckoutDraft(dir=this.state.dir){try{localStorage.setItem('donLuisCheckoutDraft',JSON.stringify({dir,location:this._pickedLatLng||null}));}catch(_){}}
+  persistCheckoutDraft(dir=this.state.dir){try{localStorage.setItem('donLuisCheckoutDraft',JSON.stringify({dir,location:this._pickedLatLng||null,pickupVehicle:this.state.pickupVehicle||''}));}catch(_){}}
   applySavedFields(){
     clearTimeout(this._fieldTimer);this._fieldTimer=setTimeout(()=>{const d=this.state.dir||{};const values={calle:d.calle,num:d.num,col:d.col,ref:d.ref,nombre:d.nombre,tel:d.tel};Object.entries(values).forEach(([field,value])=>{const input=document.querySelector('input[data-field="'+field+'"]');if(input&&!input.value&&value)input.value=value;});},0);
   }
@@ -1102,7 +1103,7 @@ class Component extends DCLogic {
           requestId,branchSlug:'punto-canada',
           fulfillmentType:this.state.entrega==='domicilio'?'delivery':'pickup',
           paymentMethod:{efectivo:'cash',transferencia:'transfer',tarjeta:'card_present'}[this.state.pago],
-          customerNotes:this.state.pago==='efectivo'?'Paga con '+this.MXN(cashTender)+' · llevar cambio de '+this.MXN(cashTender-this.totalFinal()):'',
+          customerNotes:[this.state.entrega==='recoger'&&this.state.pickupVehicle.trim()?'AUTO PARA RECOGER: '+this.state.pickupVehicle.trim():'',this.state.pago==='efectivo'?'Paga con '+this.MXN(cashTender)+' · llevar cambio de '+this.MXN(cashTender-this.totalFinal()):''].filter(Boolean).join(' · '),
           customer:{name:this.state.dir.nombre,phone:this.state.dir.tel},
           deliveryZoneId:selectedZone?.id||null,
           address:this.state.entrega==='domicilio'?{
@@ -1207,7 +1208,7 @@ class Component extends DCLogic {
     const address=this.state.entrega==='domicilio'?[this.state.dir.calle,this.state.dir.num,this.state.dir.col].filter(Boolean).join(', '):'Pasar a recoger en Punto Cañada';
     const map=this._pickedLatLng?'https://www.google.com/maps?q='+this._pickedLatLng.lat+','+this._pickedLatLng.lng:'';
     const tracking=this.trackingLink();const cash=Number(this.state.cashTender);const change=this.state.pago==='efectivo'&&Number.isFinite(cash)?'Paga con '+this.MXN(cash)+' · cambio '+this.MXN(Math.max(0,cash-this.totalFinal())):'';
-    return ['Hola, envío la confirmación de mi pedido en Tacos Don Luis 🌮','Folio: '+(this.state.folio||'Pendiente'),'Cliente: '+(this.state.dir.nombre||''),'Teléfono: '+(this.state.dir.tel||''),'','Pedido:',...lines,'','Entrega: '+address,(this.state.dir.ref?'Referencias: '+this.state.dir.ref:''),(map?'Ubicación: '+map:''),'Pago: '+({efectivo:'Efectivo',transferencia:'Transferencia',tarjeta:'Tarjeta al recibir'}[this.state.pago]||this.state.pago),change,'Total: '+this.MXN(this.state.liveOrder?.total??this.totalFinal()),(tracking?'Seguimiento: '+tracking:'')].filter(Boolean).join('\n');
+    return ['Hola, envío la confirmación de mi pedido en Tacos Don Luis 🌮','Folio: '+(this.state.folio||'Pendiente'),'Cliente: '+(this.state.dir.nombre||''),'Teléfono: '+(this.state.dir.tel||''),'','Pedido:',...lines,'','Entrega: '+address,(this.state.entrega==='recoger'&&this.state.pickupVehicle.trim()?'Automóvil: '+this.state.pickupVehicle.trim():''),(this.state.dir.ref?'Referencias: '+this.state.dir.ref:''),(map?'Ubicación: '+map:''),'Pago: '+({efectivo:'Efectivo',transferencia:'Transferencia',tarjeta:'Tarjeta al recibir'}[this.state.pago]||this.state.pago),change,'Total: '+this.MXN(this.state.liveOrder?.total??this.totalFinal()),(tracking?'Seguimiento: '+tracking:'')].filter(Boolean).join('\n');
   }
   trackingLink(token=this.state.trackingToken){return token?location.origin+'/pedir/?pedido='+encodeURIComponent(token):'';}
   openWhatsApp(){const phone=String(this.state.settings?.whatsapp_phone||'').replace(/\D/g,'');const base=phone?'https://wa.me/'+phone:'https://api.whatsapp.com/send';window.open(base+(base.includes('?')?'&':'?')+'text='+encodeURIComponent(this.whatsappText()),'_blank','noopener');}
@@ -1237,7 +1238,7 @@ class Component extends DCLogic {
     const scheduleModes=[['immediate','Lo antes posible'],['scheduled','Programar hora']].map(([key,label])=>({label,onClick:()=>this.setState({scheduleMode:key}),style:`cursor:pointer;flex:1;border:1.5px solid ${this.state.scheduleMode===key?'#10603A':'#E6DCC5'};background:${this.state.scheduleMode===key?'#eaf4ec':'#fff'};color:${this.state.scheduleMode===key?'#10603A':'#6a5f45'};border-radius:12px;padding:10px;font-weight:800`}));
     return {
       chkModos:modos, chkPagos:pagos, chkEntrega:entrega,
-      chkScheduleModes:scheduleModes,chkScheduled:this.state.scheduleMode==='scheduled',chkImmediate:this.state.scheduleMode!=='scheduled',scheduledFor:this.state.scheduledFor,scheduleMin:toLocal(min),scheduleMax:toLocal(max),onScheduledFor:e=>this.setState({scheduledFor:e.target.value}),
+      chkScheduleModes:scheduleModes,chkScheduled:this.state.scheduleMode==='scheduled',chkImmediate:this.state.scheduleMode!=='scheduled',scheduledFor:this.state.scheduledFor,scheduleMin:toLocal(min),scheduleMax:toLocal(max),onScheduledFor:e=>this.setState({scheduledFor:e.target.value}),pickupVehicle:this.state.pickupVehicle,onPickupVehicle:e=>{this.state.pickupVehicle=e?.target?.value||'';this.persistCheckoutDraft();this.forceUpdate();},
       chkDomicilio:entrega==='domicilio', chkRecoger:entrega==='recoger',
       chkTransfer:selectedPayment==='transferencia',chkCash:selectedPayment==='efectivo',chkClip:false,chkSubmitLabel:(entrega==='domicilio'&&km==null)?'Marca tu punto en el mapa':(blockedMinimum?'Faltan '+this.MXN(faltante)+' para el mínimo':'Hacer pedido'),
       chkSubmitStyle:`cursor:${blockedMinimum?'not-allowed':'pointer'};width:100%;margin-top:14px;background:${blockedMinimum?'#a99d80':'#D6453D'};color:#fff;border:none;border-radius:15px;padding:16px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;box-shadow:${blockedMinimum?'none':'0 8px 20px rgba(214,69,61,.35)'}`,
