@@ -652,7 +652,7 @@
     </sc-if>
   </div></div></x-dc><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.18.1';
+  static APP_VERSION = '2.18.2';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
@@ -1226,7 +1226,7 @@ class Component extends DCLogic {
 
   vmCheckout(){
     const entrega=this.state.entrega;
-    const modos=[['recoger','Pasar a recoger','icon-recoger'],['domicilio','Envío a domicilio','icon-domicilio']].map(([k,l,ic])=>({key:k,label:l,iconStyle:this.mascara(ic,30),active:k===entrega,onClick:()=>this.setState({entrega:k}),
+    const modos=[['recoger','Pasar a recoger','icon-recoger'],['domicilio','Envío a domicilio','icon-domicilio']].map(([k,l,ic])=>({key:k,label:l,iconStyle:this.mascara(ic,42),active:k===entrega,onClick:()=>this.setState({entrega:k}),
       style:`cursor:pointer;flex:1;padding:14px 10px;border-radius:15px;border:2px solid ${k===entrega?'#10603A':'#E6DCC5'};background:${k===entrega?'#eaf4ec':'#fff'};display:flex;flex-direction:column;align-items:center;gap:7px;color:${k===entrega?'#10603A':'#8a7f66'};font-weight:700;font-size:13px`}));
     const availablePayments=this.availablePaymentKeys(),selectedPayment=availablePayments.includes(this.state.pago)?this.state.pago:null;
     const pagos=[['efectivo','Efectivo','M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'],['transferencia','Transferencia','M4 12h16M8 8l-4 4 4 4M16 16l4-4-4-4'],['tarjeta','Tarjeta al recibir','M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 11h20']].filter(([k])=>availablePayments.includes(k)).map(([k,l,ic])=>({key:k,label:l,icon:ic,active:k===selectedPayment,onClick:()=>this.setState({pago:k}),
