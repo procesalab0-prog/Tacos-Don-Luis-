@@ -199,7 +199,7 @@
                     <span style="width:40px;height:40px;border-radius:50%;background:#1f6f8b;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex:0 0 auto">{{ r.ini }}</span>
                     <div style="flex:1"><div style="font-weight:700;font-size:14px;color:#211E15">{{ r.nombre }}</div><div style="font-size:12px;color:#9a8e70">{{ r.entregas }} entregas · efectivo {{ r.efectivoTxt }}</div></div>
                     <sc-if value="{{ r.liquidado }}" hint-placeholder-val="{{ false }}"><span style="background:#eaf4ec;color:#10603A;font-weight:800;font-size:12px;padding:6px 12px;border-radius:999px">Liquidado ✓</span></sc-if>
-                    <sc-if value="{{ r.liquidado }}" hint-placeholder-val="{{ true }}"><button onClick="{{ r.onLiquidar }}" style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:12px;padding:9px 14px;font-weight:700;font-size:12.5px">Liquidar</button></sc-if>
+                    <sc-if value="{{ r.pendiente }}" hint-placeholder-val="{{ true }}"><button onClick="{{ r.onLiquidar }}" style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:12px;padding:9px 14px;font-weight:700;font-size:12.5px">Liquidar</button></sc-if>
                   </div>
                 </sc-for>
               </div>
@@ -397,7 +397,7 @@
     </div>
   </sc-if></div></sc-if></x-dc><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.20.0';
+  static APP_VERSION = '2.21.0';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { rol:null, route:'pedidos', vw:1280, toast:null, sonido:true,
@@ -405,7 +405,7 @@ class Component extends DCLogic {
     asignarFor:null, asignando:false,
     authEmail:'',authPassword:'',authBusy:false,authError:null,session:null,live:false,branchId:null,logoTaps:0,showEasterEgg:false,
     inviteMode:false,invitePassword:'',inviteConfirm:'',liveSettings:null,liveProducts:null,liveStocks:null,
-    liveCashShifts:null,liveCashMovements:null,liveCustomers:null,livePurchases:null,liveSuppliers:null,liveUsers:null,liveReviews:null,liveCategories:null,liveZones:null,liveLoyaltyRule:null,liveMarketing:null,liveCombos:null,liveRewards:null,liveIngredients:null,liveInventoryMovements:null,liveRecipes:null };
+    liveCashShifts:null,liveCashMovements:null,liveCustomers:null,livePurchases:null,liveSuppliers:null,liveUsers:null,liveReviews:null,liveSettlements:null,liveCategories:null,liveZones:null,liveLoyaltyRule:null,liveMarketing:null,liveCombos:null,liveRewards:null,liveIngredients:null,liveInventoryMovements:null,liveRecipes:null };
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
   componentDidMount(){
@@ -517,7 +517,7 @@ class Component extends DCLogic {
   async loadSettings(token=this.state.session?.access_token,branchId=this.state.branchId){
     if(!token||!branchId)return;
     try{
-      const [settings,products,categories,zones,rules,staff,resenas,ingredients,movements,recipes,shifts,cashMovements,purchases,suppliers,marketing,combos,rewards]=await Promise.all([
+      const [settings,products,categories,zones,rules,staff,resenas,ingredients,movements,recipes,shifts,cashMovements,purchases,suppliers,marketing,combos,rewards,liquidaciones]=await Promise.all([
         this.api('/rest/v1/business_settings?branch_id=eq.'+branchId+'&select=*',{token}),
         this.api('/rest/v1/products?branch_id=eq.'+branchId+'&select=*&order=sort_order,name',{token}),
         this.api('/rest/v1/categories?branch_id=eq.'+branchId+'&select=*&order=sort_order',{token}),
@@ -534,11 +534,26 @@ class Component extends DCLogic {
         this.api('/rest/v1/suppliers?branch_id=eq.'+branchId+'&select=*&order=name',{token}).catch(()=>[]),
         this.api('/rest/v1/marketing_content?branch_id=eq.'+branchId+'&select=*&order=sort_order',{token}).catch(()=>[]),
         this.api('/rest/v1/combos?branch_id=eq.'+branchId+'&select=*&order=sort_order',{token}).catch(()=>[]),
-        this.api('/rest/v1/loyalty_rewards?branch_id=eq.'+branchId+'&select=*&order=sort_order',{token}).catch(()=>[])
+        this.api('/rest/v1/loyalty_rewards?branch_id=eq.'+branchId+'&select=*&order=sort_order',{token}).catch(()=>[]),
+        this.api('/rest/v1/driver_settlements?branch_id=eq.'+branchId+'&select=*&order=requested_at.desc&limit=60',{token}).catch(()=>[])
       ]);
-      this.setState({liveSettings:settings[0]||null,liveProducts:products,liveCategories:categories,liveZones:zones,liveLoyaltyRule:rules[0]||null,liveUsers:staff.users||[],liveReviews:resenas||[],liveIngredients:ingredients,liveInventoryMovements:movements,liveRecipes:recipes,liveCashShifts:shifts,liveCashMovements:cashMovements,livePurchases:purchases,liveSuppliers:suppliers,liveMarketing:marketing,liveCombos:combos,liveRewards:rewards});
+      this.setState({liveSettings:settings[0]||null,liveSettlements:liquidaciones||[],liveProducts:products,liveCategories:categories,liveZones:zones,liveLoyaltyRule:rules[0]||null,liveUsers:staff.users||[],liveReviews:resenas||[],liveIngredients:ingredients,liveInventoryMovements:movements,liveRecipes:recipes,liveCashShifts:shifts,liveCashMovements:cashMovements,livePurchases:purchases,liveSuppliers:suppliers,liveMarketing:marketing,liveCombos:combos,liveRewards:rewards});
     }catch(error){console.error(error);this.toast('No se pudo actualizar la configuración');}
   }
+  // Cerrar una liquidación significa que caja ya recibió el efectivo.
+  async liquidarRepartidor(id,nombre){
+    if(!window.confirm('¿Confirmas que ya recibiste el efectivo de '+nombre+'?'))return;
+    try{
+      await this.api('/rest/v1/driver_settlements?id=eq.'+id,{method:'PATCH',
+        headers:{Prefer:'return=minimal'},
+        body:JSON.stringify({status:'settled',settled_at:new Date().toISOString(),
+          settled_by:this.state.session?.user?.id||null})});
+      const l=(this.state.liveSettlements||[]).map(x=>x.id===id?{...x,status:'settled'}:x);
+      this.setState({liveSettlements:l});
+      this.toast('Liquidación cerrada');
+    }catch(error){this.toast(error.message||'No se pudo cerrar la liquidación');}
+  }
+
   // Publicar una reseña la convierte en testimonio visible en la página pública.
   async publicarResena(id,publicar){
     try{
@@ -934,7 +949,27 @@ class Component extends DCLogic {
     const metodos=methodMeta.map(([key,m,icon])=>{const rows=hoy.filter(o=>o.pago.metodo===key),v=rows.reduce((n,o)=>n+this.itemTotal(o),0),pending=rows.filter(o=>o.pago.estado==='por_verificar').length;return{m,v,n:rows.length+' tickets'+(pending?' · '+pending+' por verificar':''),icon,vTxt:this.MXN(v)};});
     const shift=(this.state.liveCashShifts||[]).find(s=>s.status==='open')||(this.state.liveCashShifts||[])[0];const cancelled=this.orders.filter(o=>['cancelado','rechazado'].includes(o.estado));
     const corte=[{k:'Apertura de caja',v:this.MXN(shift?.opening_amount||0),sub:shift?'Turno '+shift.status:'Sin turno abierto'},{k:'Total vendido hoy',v:this.MXN(total),sub:hoy.length+' pedidos'},{k:'Cancelaciones',v:this.MXN(cancelled.reduce((n,o)=>n+this.itemTotal(o),0)),sub:cancelled.length+' pedidos'},{k:'Movimientos manuales',v:this.MXN((this.state.liveCashMovements||[]).filter(m=>m.movement_type!=='sale').reduce((n,m)=>n+Number(m.amount),0)),sub:(this.state.liveCashMovements||[]).length+' movimientos'}];
-    const repartidores=[];
+    // Liquidaciones que pidieron los repartidores. Antes esta lista estaba
+    // vacía y la sección de caja no mostraba nunca a nadie.
+    const usuarios=this.state.liveUsers||[];
+    const nombreDe=id=>{
+      const u=usuarios.find(x=>x.user_id===id||x.id===id);
+      return (u?.driver_status?.full_name||u?.profiles?.full_name||u?.email||'Repartidor').trim();
+    };
+    const inicialesDe=n=>n.split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase()||'R';
+    const repartidores=(this.state.liveSettlements||[])
+      .filter(l=>l.status!=='cancelled')
+      .map(l=>{
+        const nombre=nombreDe(l.driver_user_id);
+        return {
+          id:l.id, ini:inicialesDe(nombre), nombre,
+          entregas:l.deliveries_count,
+          efectivoTxt:this.MXN(Number(l.cash_amount||0)),
+          liquidado:l.status==='settled',
+          pendiente:l.status!=='settled',
+          onLiquidar:()=>this.liquidarRepartidor(l.id,nombre)
+        };
+      });
     const cashTotal=hoy.filter(o=>o.pago.metodo==='efectivo').reduce((n,o)=>n+this.itemTotal(o),0),opening=Number(shift?.opening_amount||0),counted=Number(shift?.counted_cash||0);
     return {cajaCanales:canalVentas, cajaMetodos:metodos, cajaCorte:corte, cajaReps:repartidores,
       cajaEsperado:this.MXN(opening+cashTotal), cajaRecibido:this.MXN(counted), cajaDif:this.MXN(counted-(opening+cashTotal)), cajaGrid:phone?'1fr':'1.4fr 1fr',
