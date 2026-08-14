@@ -59,12 +59,12 @@
       <!--LANDING-->
       <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
         <div style="animation:dlfade .3s ease both">
-          <div style="position:relative;min-height:clamp(560px,150vw,720px);aspect-ratio:2/3;display:flex;align-items:flex-end;background:#0b3f2a;overflow:hidden">
+          <div style="position:relative;min-height:clamp(560px,150vw,720px);aspect-ratio:2/3;max-width:100%;display:flex;align-items:flex-end;background:#0b3f2a;overflow:hidden">
             <img src="../assets/hero-pedir.jpg" alt="Tacos Don Luis preparados al momento" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;display:block">
             <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,24,15,.02) 0%,rgba(3,24,15,.08) 36%,rgba(3,24,15,.34) 62%,rgba(3,24,15,.78) 100%)"></div>
             <div style="position:absolute;top:0;left:0;right:0;height:12px" class="dl-check"></div>
             <div style="position:relative;padding:26px 22px 28px;color:#fff;width:100%">
-              <span style="display:inline-flex;align-items:center;gap:7px;background:#F2C230;color:#3a2c00;font-weight:800;font-size:11px;letter-spacing:.12em;padding:5px 12px;border-radius:999px">FRESCO · SABROSO · HECHO CON ORGULLO</span>
+              <span style="display:inline-flex;align-items:center;gap:7px;background:#F2C230;color:#3a2c00;font-weight:800;font-size:11px;letter-spacing:.12em;padding:5px 12px;border-radius:999px;max-width:100%;box-sizing:border-box;white-space:normal;text-align:center;line-height:1.35">FRESCO · SABROSO · HECHO CON ORGULLO</span>
               <div style="margin-top:11px;display:inline-flex;align-items:center;gap:7px;background:rgba(5,35,23,.72);border:1px solid rgba(255,255,255,.22);color:#fff;font-size:12px;font-weight:700;padding:7px 11px;border-radius:12px"><span style="width:7px;height:7px;border-radius:50%;background:{{ estadoDot }}"></span>{{ horarioMensaje }}</div>
               <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:40px;line-height:.95;margin:14px 0 8px;text-shadow:0 2px 12px rgba(0,0,0,.35)">Los mejores tacos<br>de la zona norte</div>
               <div style="font-size:15px;color:#fff;max-width:440px;line-height:1.4;text-shadow:0 2px 9px rgba(0,0,0,.9)">Preparados al momento, con recetas de casa. Pide para recoger o a domicilio en Punto Cañada, León.</div>
@@ -133,9 +133,9 @@
             <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px;color:#10603A;margin-bottom:12px">Explora el menú</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
               <sc-for list="{{ categoriasHome }}" as="c" hint-placeholder-count="5">
-                <button onClick="{{ c.onClick }}" style="cursor:pointer;text-align:left;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:15px;display:flex;align-items:center;gap:12px" style-hover="border-color:#10603A">
+                <button onClick="{{ c.onClick }}" style="cursor:pointer;text-align:left;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:15px;display:flex;align-items:center;gap:12px;min-width:0" style-hover="border-color:#10603A">
                   <span style="width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;overflow:hidden"><img sc-camel-src="{{ c.image }}" alt="{{ c.label }}" style="width:100%;height:100%;object-fit:cover"></span>
-                  <span><span style="display:block;font-weight:700;font-size:14.5px;color:#211E15">{{ c.label }}</span><span style="font-size:12px;color:#9a8e70">{{ c.count }} productos</span></span>
+                  <span style="min-width:0;flex:1"><span style="display:block;font-weight:700;font-size:14.5px;color:#211E15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ c.label }}</span><span style="font-size:12px;color:#9a8e70">{{ c.count }} productos</span></span>
                 </button>
               </sc-for>
             </div>
@@ -653,7 +653,7 @@
     </sc-if>
   </div></div></x-dc><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.18.4';
+  static APP_VERSION = '2.19.0';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
@@ -687,6 +687,25 @@ class Component extends DCLogic {
   componentDidUpdate(){ if(this.state.route==='checkout'){this.applySavedFields();if(this.state.entrega==='domicilio')this.scheduleMap();} if(this.state.route==='cuenta'){this.applySavedFields();if(this.state.cuentaTab==='direcciones')this.scheduleMap();} }
   componentWillUnmount(){ window.removeEventListener('resize',this._onR); clearInterval(this._trk); clearInterval(this._poll); clearInterval(this._menuPoll); clearInterval(this._sessionRefresh); clearTimeout(this._mapTimer);clearTimeout(this._fieldTimer);clearTimeout(this._geocodeTimer); if(this._map)try{this._map.remove();}catch(_){} }
   toast(m){ clearTimeout(this._t); this.setState({toast:m}); this._t=setTimeout(()=>this.setState({toast:null}),2400); }
+  // Los errores que vienen del servidor o del navegador llegan en inglés y con
+  // jerga técnica. Al cliente le tocaba leer "Failed to fetch" o el texto crudo
+  // que devolviera la función. Aquí se traducen a algo accionable.
+  traducirError(mensaje){
+    const m=String(mensaje||'');
+    if(/failed to fetch|networkerror|load failed|network request failed/i.test(m))
+      return 'No hay conexión. Revisa tu internet y vuelve a intentar.';
+    if(/timeout|timed out|aborted/i.test(m))
+      return 'La conexión tardó demasiado. Vuelve a intentar.';
+    if(/closed|cerrado|not accepting/i.test(m))
+      return 'La sucursal no está recibiendo pedidos en este momento.';
+    if(/out of range|fuera de cobertura|coverage/i.test(m))
+      return 'Esa dirección queda fuera de nuestra zona de reparto.';
+    if(/unavailable|agotado|sold out/i.test(m))
+      return 'Alguno de los productos se acaba de agotar. Revisa tu carrito.';
+    // Si el mensaje trae acentos o eñes ya viene en español desde el servidor.
+    if(/[áéíóúñ¿¡]/i.test(m)&&m.length<120) return m;
+    return 'No pudimos enviar tu pedido. Vuelve a intentar en un momento.';
+  }
   go(r){ this.setState({route:r}); if(typeof window!=='undefined') window.scrollTo?.({top:0}); }
   tapLogo(){ clearTimeout(this._logoTapTimer); const taps=(this.state.logoTaps||0)+1; if(taps>=6){this.setState({logoTaps:0,showEasterEgg:true});return;} this.setState({logoTaps:taps}); this._logoTapTimer=setTimeout(()=>this.setState({logoTaps:0}),1200); }
 
@@ -1086,13 +1105,16 @@ class Component extends DCLogic {
     // Para domicilio el punto en el mapa es obligatorio: de ahí sale la tarifa.
     if(this.state.entrega==='domicilio'&&this.distanciaKm()==null){this.toast('Marca tu punto en el mapa para calcular el envío');return;}
     if(this.fueraCobertura()){ this.toast('Esa dirección está fuera de cobertura'); return; }
+    // Primero quién eres y a dónde va, y hasta el final el detalle del pago.
+    // Con el formulario en blanco el primer aviso era 'indica con cuánto
+    // pagarás', que desorienta a quien ni siquiera ha escrito su nombre.
+    if(!this.state.dir.nombre?.trim()||!this.state.dir.tel?.trim()){this.toast('Agrega tu nombre y teléfono');return;}
+    if(this.state.entrega==='domicilio' && !this.state.dir.calle){ this.toast('Agrega tu dirección de entrega'); return; }
+    const cashTender=Number(this.state.cashTender);if(this.state.pago==='efectivo'&&(!Number.isFinite(cashTender)||cashTender<this.totalFinal())){this.toast('Indica con cuánto pagarás; debe cubrir el total');return;}
     const selectedZone=this.zonaCalculada();
     if(this.state.entrega==='domicilio'&&!selectedZone){this.toast('No pudimos calcular tu zona de entrega');return;}
     const minimum=Number(this.state.remoteZones?.find(z=>z.id===selectedZone?.id)?.minimum_order||this.state.settings?.minimum_delivery_amount||100);
     const discountedSubtotal=Math.max(0,this.cartSubtotal()-this.descuento());if(this.state.entrega==='domicilio'&&discountedSubtotal<minimum){this.toast('El pedido mínimo para envío es '+this.MXN(minimum)+' · agrega '+this.MXN(minimum-discountedSubtotal)+' más');return;}
-    const cashTender=Number(this.state.cashTender);if(this.state.pago==='efectivo'&&(!Number.isFinite(cashTender)||cashTender<this.totalFinal())){this.toast('Indica con cuánto pagarás; debe cubrir el total');return;}
-    if(this.state.entrega==='domicilio' && !this.state.dir.calle){ this.toast('Agrega tu dirección de entrega'); return; }
-    if(!this.state.dir.nombre?.trim()||!this.state.dir.tel?.trim()){this.toast('Agrega tu nombre y teléfono');return;}
     if(this.state.entrega==='recoger'&&this.state.scheduleMode==='scheduled'&&(!this.state.scheduledFor||Date.parse(this.state.scheduledFor)<Date.now()+10*60000)){this.toast('Elige una hora válida, al menos 10 minutos después');return;}
     if(!this.state.remoteMenu){this.toast('Espera a que termine de cargar el menú');return;}
     if(this.state.submitting)return;
@@ -1137,12 +1159,13 @@ class Component extends DCLogic {
       this.setState({folio,trackingToken:result.trackingToken,liveOrder:result.order,route:'confirmacion',trackStep:0,prog:false,submitting:false});
       if(this.state.session)await this.loadCustomerData(this.state.session);
       this.toast(result.duplicate?'Este pedido ya estaba recibido · no se envió dos veces':'¡Pedido recibido! 🌮');
-    }catch(error){this.setState({submitting:false});this.toast(error.message||'No se pudo crear el pedido');}
+    }catch(error){console.error(error);this.setState({submitting:false});this.toast(this.traducirError(error?.message));}
   }
   async refreshTracking(){
     if(!this.state.trackingToken){if(this.state.session)await this.loadCustomerData(this.state.session);return;}
     try{
       const result=await this.api('/functions/v1/track-order',{method:'POST',body:JSON.stringify({token:this.state.trackingToken})});
+      this._avisoRed=false; // si vuelve la red, el aviso puede repetirse en la siguiente caída
       const order=result.order;
       const dom=order.fulfillment_type==='delivery';
       const steps=dom?['pending_acceptance','pending_acceptance','confirmed','preparing','ready','assigned','on_the_way','delivered']:['pending_acceptance','pending_acceptance','confirmed','preparing','ready','ready'];
@@ -1171,7 +1194,26 @@ class Component extends DCLogic {
         return;
       }
       this.setState({liveOrder:order,trackStep:index,folio:'DL-'+order.folio,entrega:dom?'domicilio':'recoger'});
-    }catch(error){console.error(error);}
+    }catch(error){
+      console.error(error);
+      // Antes esto se tragaba el error: quien abría un enlace de seguimiento
+      // vencido o mal copiado se quedaba en el inicio sin explicación.
+      // Un pedido que no existe no se va a arreglar reintentando, así que se
+      // deja de consultar y se limpia el token. Un fallo de red sí se reintenta
+      // en silencio, para no repetir el aviso cada doce segundos.
+      const m=String(error?.message||'');
+      const noExiste=/not found|no encontrad|invalid|inválid|404|expired|venc/i.test(m);
+      if(noExiste){
+        clearInterval(this._poll);
+        const token=this.state.trackingToken;
+        this.clearFinishedTracking(token);
+        this.setState({trackingToken:null,liveOrder:null,folio:null,route:'pedidos'});
+        this.toast('No encontramos ese pedido. Revisa el enlace o consúltalo desde tus pedidos.');
+      }else if(!this._avisoRed){
+        this._avisoRed=true;
+        this.toast('No pudimos actualizar el estado de tu pedido. Seguimos intentando.');
+      }
+    }
   }
   clearFinishedTracking(token){const remembered=JSON.parse(localStorage.getItem('donLuisGuestOrderTokens')||'[]').filter(x=>x?.token!==token);localStorage.setItem('donLuisGuestOrderTokens',JSON.stringify(remembered));if(localStorage.getItem('donLuisTrackingToken')===token)localStorage.removeItem('donLuisTrackingToken');}
 
