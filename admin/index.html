@@ -252,38 +252,20 @@
       <sc-if value="{{ isReportes }}" hint-placeholder-val="{{ false }}">
         <div style="animation:dlfade .3s ease both">
           <div style="display:flex;gap:7px;overflow-x:auto;margin-bottom:14px;padding-bottom:2px"><sc-for list="{{ repPeriodos }}" as="p"><button onClick="{{ p.onClick }}" style="{{ p.style }}">{{ p.label }}</button></sc-for></div>
-          <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:16px 18px;margin-bottom:14px">
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
-              <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#10603A">Calificaciones de clientes</span>
-              <span style="font-size:12.5px;color:#8a7f66;font-weight:700">{{ resenasResumen }}</span>
-            </div>
-            <div style="font-size:12px;color:#9a8e70;margin-bottom:12px">Publica las mejores para que aparezcan como testimonios en la página.</div>
-            <sc-if value="{{ resenasVacio }}" hint-placeholder-val="{{ true }}">
-              <div style="text-align:center;padding:22px 10px;color:#9a8e70;font-size:13.5px">Aún no hay calificaciones. Aparecerán cuando los clientes califiquen sus pedidos entregados.</div>
-            </sc-if>
-            <div style="display:flex;flex-direction:column;gap:10px">
-              <sc-for list="{{ resenasLista }}" as="r" hint-placeholder-count="3">
-                <div style="{{ r.cardStyle }}">
-                  <div style="display:flex;align-items:center;gap:9px;margin-bottom:5px">
-                    <span style="font-size:14px;letter-spacing:1px;color:#E0A526">{{ r.estrellas }}</span>
-                    <span style="font-weight:700;font-size:13.5px;color:#211E15">{{ r.nombre }}</span>
-                    <span style="margin-left:auto;font-size:11.5px;color:#9a8e70">{{ r.fecha }}</span>
-                  </div>
-                  <sc-if value="{{ r.tieneComentario }}" hint-placeholder-val="{{ true }}">
-                    <div style="font-size:13.5px;color:#3a3120;line-height:1.5;margin-bottom:9px">{{ r.comentario }}</div>
-                  </sc-if>
-                  <button onClick="{{ r.onToggle }}" style="{{ r.btnStyle }}">{{ r.btnTxt }}</button>
-                </div>
-              </sc-for>
-            </div>
-          </div>
           <div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button onClick="{{ onExportReports }}" style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:12px;padding:10px 16px;font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg>Exportar</button></div>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:13px;margin-bottom:16px"><sc-for list="{{ repKpis }}" as="k" hint-placeholder-count="4"><div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:15px 17px;box-shadow:0 2px 0 #ece2cc"><div style="display:flex;align-items:center;gap:9px;margin-bottom:9px"><span style="width:32px;height:32px;border-radius:9px;background:{{ k.t }};color:#fff;display:flex;align-items:center;justify-content:center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path sc-camel-d="{{ k.icon }}"></path></svg></span><span style="font-size:12px;color:#8a7f66;font-weight:600">{{ k.l }}</span></div><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:24px;color:#211E15">{{ k.v }}</div><div style="font-size:11.5px;font-weight:700;color:{{ k.dc }};margin-top:3px">{{ k.d }}</div></div></sc-for></div>
           <div style="display:grid;grid-template-columns:{{ repGrid }};gap:16px">
             <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:18px 20px"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#10603A;margin-bottom:14px">Ventas por hora</div><div style="display:flex;align-items:flex-end;gap:3%;height:150px"><sc-for list="{{ repHora }}" as="h" hint-placeholder-count="10"><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><div style="width:70%;background:linear-gradient(#28A54C,#10603A);border-radius:5px 5px 0 0;height:{{ h.ht }}"></div><span style="font-size:10px;color:#9a8e70;font-weight:600">{{ h.h }}</span></div></sc-for></div></div>
             <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:18px 20px"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#10603A;margin-bottom:14px">Más vendidos</div><div style="display:flex;flex-direction:column;gap:12px"><sc-for list="{{ repTop }}" as="t" hint-placeholder-count="4"><div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span style="font-weight:600;color:#3a3120">{{ t.n }}</span><span style="color:#8a7f66;font-weight:700">{{ t.q }}</span></div><div style="height:8px;background:#efe6d2;border-radius:999px;overflow:hidden"><div style="height:100%;width:{{ t.pct }};background:linear-gradient(90deg,#28A54C,#10603A)"></div></div></div></sc-for></div></div>
             <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:18px 20px"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#10603A;margin-bottom:14px">Ventas por canal</div><div style="display:flex;flex-direction:column;gap:10px"><sc-for list="{{ repCanal }}" as="c" hint-placeholder-count="4"><div style="display:flex;align-items:center;gap:11px"><span style="width:11px;height:11px;border-radius:3px;background:{{ c.c }}"></span><span style="flex:1;font-size:13px;color:#3a3120;font-weight:600">{{ c.n }}</span><span style="font-weight:700;color:#10603A">{{ c.p }}</span></div></sc-for></div></div>
-            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:18px 20px"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#10603A;margin-bottom:14px">Repartidores</div><div style="display:flex;flex-direction:column;gap:10px"><sc-for list="{{ repReps }}" as="r" hint-placeholder-count="2"><div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px dotted #e6dcc5"><span style="font-weight:600;font-size:13.5px;color:#3a3120">{{ r.n }}</span><span style="font-size:12.5px;color:#8a7f66">{{ r.e }} entregas · {{ r.t }} prom.</span></div></sc-for></div></div>
+            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:18px 20px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px"><div><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#10603A">Repartidores y liquidaciones</div><div style="font-size:11.5px;color:#8a7f66;margin-top:2px">Datos, entregas, efectivo y evidencias</div></div><span style="background:#eaf4ec;color:#10603A;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:800">{{ repRepsCount }}</span></div><sc-if value="{{ repRepsEmpty }}" hint-placeholder-val="{{ false }}"><div style="text-align:center;padding:20px 8px;color:#9a8e70;font-size:13px">No hay repartidores activos. Agrégalos desde Configuración.</div></sc-if><div style="display:flex;flex-direction:column;gap:10px"><sc-for list="{{ repReps }}" as="r" hint-placeholder-count="2"><div style="padding:12px;border:1px solid #E6DCC5;border-radius:12px;background:#fff"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px"><div style="min-width:0"><div style="font-weight:700;font-size:13.5px;color:#3a3120">{{ r.n }}</div><div style="font-size:11.5px;color:#8a7f66;margin-top:3px">{{ r.vehiculo }}</div></div><button onClick="{{ r.onEdit }}" style="cursor:pointer;border:1px solid #cfe0c6;background:#eaf4ec;color:#10603A;border-radius:9px;padding:6px 9px;font-size:11px;font-weight:800">Editar</button></div><div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:9px;font-size:11.5px;color:#6a5f45"><span><strong>{{ r.e }}</strong> entregas</span><span>{{ r.estado }}</span><span>{{ r.liquidaciones }}</span><span>{{ r.evidencias }}</span></div><sc-if value="{{ r.tieneEvidencia }}" hint-placeholder-val="{{ false }}"><button onClick="{{ r.onEvidence }}" style="cursor:pointer;margin-top:8px;border:1px solid #1f6f8b;background:#eef7fa;color:#1f6f8b;border-radius:8px;padding:6px 9px;font-size:10.5px;font-weight:800">Ver última foto</button></sc-if><sc-if value="{{ r.tienePendiente }}" hint-placeholder-val="{{ false }}"><div style="margin-top:9px;padding:9px 10px;background:#fdf6e3;border-radius:9px;display:flex;align-items:center;justify-content:space-between;gap:8px"><span style="font-size:11.5px;font-weight:700;color:#6f5914">Pendiente: {{ r.pendienteTxt }}</span><button onClick="{{ r.onLiquidar }}" style="cursor:pointer;border:0;background:#10603A;color:#fff;border-radius:8px;padding:6px 9px;font-size:10.5px;font-weight:800">Liquidar</button></div></sc-if></div></sc-for></div></div>
+          </div>
+          <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:16px 18px;margin-top:16px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px"><div><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#10603A">Cuentas activas</div><div style="font-size:12px;color:#9a8e70;margin-top:2px">Clientes y personal registrados en Don Luis</div></div><span style="background:#10603A;color:#fff;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:800">{{ repAccountsCount }}</span></div><sc-if value="{{ repAccountsEmpty }}" hint-placeholder-val="{{ false }}"><div style="text-align:center;padding:18px 8px;color:#9a8e70;font-size:13px">Todavía no hay cuentas activas.</div></sc-if><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:9px"><sc-for list="{{ repAccounts }}" as="a" hint-placeholder-count="2"><div style="background:#fff;border:1px solid #E6DCC5;border-radius:11px;padding:11px 12px"><div style="font-size:13px;font-weight:700;color:#211E15">{{ a.nombre }}</div><div style="font-size:11.5px;color:#6a5f45;margin-top:4px;overflow-wrap:anywhere">{{ a.email }}</div><div style="font-size:11.5px;color:#8a7f66;margin-top:3px">{{ a.telefono }}</div><div style="font-size:10.5px;color:#9a8e70;margin-top:7px">Desde {{ a.fecha }} · {{ a.pedidos }}</div></div></sc-for></div></div>
+          <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:16px 18px;margin-top:16px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#10603A">Calificaciones de clientes</span><span style="font-size:12.5px;color:#8a7f66;font-weight:700">{{ resenasResumen }}</span></div>
+            <div style="font-size:12px;color:#9a8e70;margin-bottom:12px">Publica las mejores para que aparezcan como testimonios en la página.</div>
+            <sc-if value="{{ resenasVacio }}" hint-placeholder-val="{{ true }}"><div style="text-align:center;padding:22px 10px;color:#9a8e70;font-size:13.5px">Aún no hay calificaciones. Aparecerán cuando los clientes califiquen sus pedidos entregados.</div></sc-if>
+            <div style="display:flex;flex-direction:column;gap:10px"><sc-for list="{{ resenasLista }}" as="r" hint-placeholder-count="3"><div style="{{ r.cardStyle }}"><div style="display:flex;align-items:center;gap:9px;margin-bottom:5px"><span style="font-size:14px;letter-spacing:1px;color:#E0A526">{{ r.estrellas }}</span><span style="font-weight:700;font-size:13.5px;color:#211E15">{{ r.nombre }}</span><span style="margin-left:auto;font-size:11.5px;color:#9a8e70">{{ r.fecha }}</span></div><sc-if value="{{ r.tieneComentario }}" hint-placeholder-val="{{ true }}"><div style="font-size:13.5px;color:#3a3120;line-height:1.5;margin-bottom:9px">{{ r.comentario }}</div></sc-if><button onClick="{{ r.onToggle }}" style="{{ r.btnStyle }}">{{ r.btnTxt }}</button></div></sc-for></div>
           </div>
         </div>
       </sc-if>
@@ -397,7 +379,7 @@
     </div>
   </sc-if></div></sc-if></x-dc><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.22.1';
+  static APP_VERSION = '2.22.2';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { rol:null, route:'pedidos', vw:1280, toast:null, sonido:true,
@@ -405,7 +387,7 @@ class Component extends DCLogic {
     asignarFor:null, asignando:false,
     authEmail:'',authPassword:'',authBusy:false,authError:null,session:null,live:false,branchId:null,logoTaps:0,showEasterEgg:false,
     inviteMode:false,invitePassword:'',inviteConfirm:'',liveSettings:null,liveProducts:null,liveStocks:null,
-    liveCashShifts:null,liveCashMovements:null,liveCustomers:null,livePurchases:null,liveSuppliers:null,liveUsers:null,liveReviews:null,liveSettlements:null,liveCategories:null,liveZones:null,liveLoyaltyRule:null,liveMarketing:null,liveCombos:null,liveRewards:null,liveIngredients:null,liveInventoryMovements:null,liveRecipes:null };
+    liveCashShifts:null,liveCashMovements:null,liveCustomers:null,livePurchases:null,liveSuppliers:null,liveUsers:null,liveReviews:null,liveSettlements:null,liveDriverAssignments:null,liveAccounts:null,liveCategories:null,liveZones:null,liveLoyaltyRule:null,liveMarketing:null,liveCombos:null,liveRewards:null,liveIngredients:null,liveInventoryMovements:null,liveRecipes:null };
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
   componentDidMount(){
@@ -517,7 +499,7 @@ class Component extends DCLogic {
   async loadSettings(token=this.state.session?.access_token,branchId=this.state.branchId){
     if(!token||!branchId)return;
     try{
-      const [settings,products,categories,zones,rules,staff,resenas,ingredients,movements,recipes,shifts,cashMovements,purchases,suppliers,marketing,combos,rewards,liquidaciones]=await Promise.all([
+      const [settings,products,categories,zones,rules,staff,resenas,ingredients,movements,recipes,shifts,cashMovements,purchases,suppliers,marketing,combos,rewards,liquidaciones,driverAssignments,accounts]=await Promise.all([
         this.api('/rest/v1/business_settings?branch_id=eq.'+branchId+'&select=*',{token}),
         this.api('/rest/v1/products?branch_id=eq.'+branchId+'&select=*&order=sort_order,name',{token}),
         this.api('/rest/v1/categories?branch_id=eq.'+branchId+'&select=*&order=sort_order',{token}),
@@ -535,9 +517,11 @@ class Component extends DCLogic {
         this.api('/rest/v1/marketing_content?branch_id=eq.'+branchId+'&select=*&order=sort_order',{token}).catch(()=>[]),
         this.api('/rest/v1/combos?branch_id=eq.'+branchId+'&select=*&order=sort_order',{token}).catch(()=>[]),
         this.api('/rest/v1/loyalty_rewards?branch_id=eq.'+branchId+'&select=*&order=sort_order',{token}).catch(()=>[]),
-        this.api('/rest/v1/driver_settlements?branch_id=eq.'+branchId+'&select=*&order=requested_at.desc&limit=60',{token}).catch(()=>[])
+        this.api('/rest/v1/driver_settlements?branch_id=eq.'+branchId+'&select=*&order=requested_at.desc&limit=60',{token}).catch(()=>[]),
+        this.api('/rest/v1/driver_assignments?select=id,driver_user_id,status,evidence_path,delivered_at,orders!inner(branch_id,folio)&orders.branch_id=eq.'+branchId+'&order=assigned_at.desc&limit=200',{token}).catch(()=>[]),
+        this.api('/rest/v1/rpc/admin_list_active_accounts',{method:'POST',token,body:JSON.stringify({target_branch_id:branchId})}).catch(()=>[])
       ]);
-      this.setState({liveSettings:settings[0]||null,liveSettlements:liquidaciones||[],liveProducts:products,liveCategories:categories,liveZones:zones,liveLoyaltyRule:rules[0]||null,liveUsers:staff.users||[],liveReviews:resenas||[],liveIngredients:ingredients,liveInventoryMovements:movements,liveRecipes:recipes,liveCashShifts:shifts,liveCashMovements:cashMovements,livePurchases:purchases,liveSuppliers:suppliers,liveMarketing:marketing,liveCombos:combos,liveRewards:rewards});
+      this.setState({liveSettings:settings[0]||null,liveSettlements:liquidaciones||[],liveDriverAssignments:driverAssignments||[],liveAccounts:accounts||[],liveProducts:products,liveCategories:categories,liveZones:zones,liveLoyaltyRule:rules[0]||null,liveUsers:staff.users||[],liveReviews:resenas||[],liveIngredients:ingredients,liveInventoryMovements:movements,liveRecipes:recipes,liveCashShifts:shifts,liveCashMovements:cashMovements,livePurchases:purchases,liveSuppliers:suppliers,liveMarketing:marketing,liveCombos:combos,liveRewards:rewards});
     }catch(error){console.error(error);this.toast('No se pudo actualizar la configuración');}
   }
   // Cerrar una liquidación significa que caja ya recibió el efectivo.
@@ -552,6 +536,15 @@ class Component extends DCLogic {
       this.setState({liveSettlements:l});
       this.toast('Liquidación cerrada');
     }catch(error){this.toast(error.message||'No se pudo cerrar la liquidación');}
+  }
+  async verEvidencia(path){
+    if(!path)return;
+    try{
+      const encoded=path.split('/').map(encodeURIComponent).join('/');
+      const signed=await this.api('/storage/v1/object/sign/delivery-evidence/'+encoded,{method:'POST',body:JSON.stringify({expiresIn:300})});
+      const url=signed?.signedURL||signed?.signedUrl;if(!url)throw Error('No se pudo abrir la fotografía');
+      window.open(Component.SUPABASE_URL+'/storage/v1'+url,'_blank','noopener');
+    }catch(error){this.toast(error.message||'No se pudo abrir la evidencia');}
   }
 
   // Publicar una reseña la convierte en testimonio visible en la página pública.
@@ -583,6 +576,11 @@ class Component extends DCLogic {
     if(type==='users'){const u=users[0];form={userMode:'invite',userId:u?.id||'',name:'',email:'',role:'driver',active:true};}
     if(type==='growth')form={growthType:'daily_promo',title:'',description:'',productId:'',components:[],value:'',exclusive:true};
     this.setState({configEditor:type,cfgForm:form});
+  }
+  openDriverEditor(membershipId){
+    const u=(this.state.liveUsers||[]).find(x=>x.id===membershipId),d=u?.driver_status||{};
+    if(!u){this.toast('No se encontró el repartidor');return;}
+    this.setState({configEditor:'users',cfgForm:{userMode:'edit',userId:u.id,role:u.role||'driver',active:u.is_active!==false,driverName:d.full_name||u.profiles?.full_name||'',driverVehicle:d.vehicle_type||'Moto',driverPlate:d.vehicle_plate||'',driverColor:d.vehicle_color||''}});
   }
   openGrowthEditor(kind,row){const type=kind==='marketing'?row.content_type:kind==='combo'?'combo':row.reward_type,components=Array.isArray(row.components)?row.components.map(c=>({product_id:c.product_id||c.productId,quantity:Math.max(1,Number(c.quantity)||1)})):[];this.setState({configEditor:'growth',cfgForm:{entryKind:kind,entryId:row.id,entryActive:row.is_active!==false,growthType:type,title:row.title||row.name||'',description:row.description||'',productId:row.product_id||row.reward_product_id||'',components,value:type==='combo'?String(row.price??''):type==='points'?String(row.points_cost??''):type==='purchase_count'?String(row.required_purchases??''):String(row.required_product_quantity??''),exclusive:row.app_exclusive!==false}});}
   async toggleGrowth(kind,row){const table=kind==='marketing'?'marketing_content':kind==='combo'?'combos':'loyalty_rewards';try{await this.api('/rest/v1/'+table+'?id=eq.'+row.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({is_active:!row.is_active,updated_at:new Date().toISOString()})});await this.loadSettings();this.toast(row.is_active?'Contenido ocultado':'Contenido publicado');}catch(error){this.toast(error.message||'No se pudo cambiar');}}
@@ -1001,7 +999,18 @@ class Component extends DCLogic {
     const hourTotals={};completed.forEach(o=>{const h=new Date(o.createdAt||Date.now()).getHours();hourTotals[h]=(hourTotals[h]||0)+this.itemTotal(o);});const hours=Object.keys(hourTotals).map(Number).sort((a,b)=>a-b);const maxHour=Math.max(1,...Object.values(hourTotals));const ventasHora=(hours.length?hours:[12,13,14,15,16,17,18,19,20,21]).map(h=>({h:String(h),ht:((hourTotals[h]||0)/maxHour*100)+'%'}));
     const counts={};completed.forEach(o=>o.items.forEach(i=>counts[i.nombre]=(counts[i.nombre]||0)+Number(i.q||0)));const top=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);const maxTop=Math.max(1,...top.map(x=>x[1]));const topProd=top.map(([n,q])=>({n,q,pct:(q/maxTop*100)+'%'}));
     const metas={establecimiento:['En mesa','#10603A'],domicilio:['Domicilio','#1f6f8b'],recoger:['Recoger','#E0A526'],whatsapp:['WhatsApp','#128C4B']};const canal=Object.entries(metas).map(([key,[n,c]])=>{const amount=completed.filter(o=>o.canal===key).reduce((sum,o)=>sum+this.itemTotal(o),0);return{n,p:sales?Math.round(amount/sales*100)+'%':'0%',c};});
-    const repPeriodos=[['day','Día'],['week','Semana'],['month','Mes'],['year','Año']].map(([key,label])=>({label,onClick:()=>this.setState({reportPeriod:key}),style:`cursor:pointer;white-space:nowrap;border:1.5px solid ${period===key?'#10603A':'#E6DCC5'};background:${period===key?'#10603A':'#fff'};color:${period===key?'#fff':'#5a4e35'};border-radius:999px;padding:9px 15px;font-weight:800;font-size:12.5px`}));return {repPeriodos,repKpis:kpis,repHora:ventasHora,repTop:topProd,repCanal:canal,repReps:[],repGrid:phone?'1fr':'1.4fr 1fr',onExportReports:()=>this.exportReports(completed)};
+    const settlements=this.state.liveSettlements||[],assignments=this.state.liveDriverAssignments||[];
+    const drivers=(this.state.liveUsers||[]).filter(u=>u.role==='driver'&&u.is_active!==false);
+    const repReps=drivers.map(u=>{
+      const d=u.driver_status||{},userId=u.user_id||u.profiles?.id||u.id;
+      const ownOrders=completed.filter(o=>o.assignedDriver===userId),ownSettlements=settlements.filter(l=>l.driver_user_id===userId&&l.status!=='cancelled');
+      const pending=ownSettlements.find(l=>l.status==='pending'),evidence=assignments.filter(a=>a.driver_user_id===userId&&a.evidence_path);
+      const vehicle=[d.vehicle_type,d.vehicle_color,d.vehicle_plate].filter(Boolean).join(' · ')||'Vehículo pendiente de registrar';
+      const name=(d.full_name||u.profiles?.full_name||u.email||'Repartidor').trim();
+      return {n:name,vehiculo:vehicle,e:ownOrders.length,estado:d.is_available?'Disponible':'No disponible',liquidaciones:ownSettlements.length+' liquidaciones',evidencias:evidence.length+' fotos',tieneEvidencia:evidence.length>0,onEvidence:()=>evidence[0]&&this.verEvidencia(evidence[0].evidence_path),tienePendiente:!!pending,pendienteTxt:pending?this.MXN(Number(pending.cash_amount||0)):'',onEdit:()=>this.openDriverEditor(u.id),onLiquidar:()=>pending&&this.liquidarRepartidor(pending.id,name)};
+    });
+    const repAccounts=(this.state.liveAccounts||[]).map(a=>({nombre:a.full_name||'Cuenta sin nombre',email:a.email||'Sin correo',telefono:a.phone||'Sin teléfono',fecha:a.created_at?new Date(a.created_at).toLocaleDateString('es-MX'):'—',pedidos:Number(a.orders_count||0)+' pedidos'}));
+    const repPeriodos=[['day','Día'],['week','Semana'],['month','Mes'],['year','Año']].map(([key,label])=>({label,onClick:()=>this.setState({reportPeriod:key}),style:`cursor:pointer;white-space:nowrap;border:1.5px solid ${period===key?'#10603A':'#E6DCC5'};background:${period===key?'#10603A':'#fff'};color:${period===key?'#fff':'#5a4e35'};border-radius:999px;padding:9px 15px;font-weight:800;font-size:12.5px`}));return {repPeriodos,repKpis:kpis,repHora:ventasHora,repTop:topProd,repCanal:canal,repReps,repRepsCount:String(repReps.length),repRepsEmpty:repReps.length===0,repAccounts,repAccountsCount:String(repAccounts.length),repAccountsEmpty:repAccounts.length===0,repGrid:phone?'1fr':'1.4fr 1fr',onExportReports:()=>this.exportReports(completed)};
   }
 
   vmConfigEditor(){
