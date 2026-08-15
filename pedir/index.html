@@ -227,7 +227,7 @@
           <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:24px;color:#10603A;margin-bottom:14px">Tu pedido</div>
           <sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ true }}">
             <div style="text-align:center;padding:50px 20px;color:#9a8e70;background:#FFFDF7;border:1px dashed #d7ccb0;border-radius:14px">
-              <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#d0c4a6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:12px"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              <img src="../assets/iconos/icon-carrito.png" alt="Don Luis con carrito de tacos" style="width:112px;height:112px;object-fit:contain;margin-bottom:12px;background:#10603A;border-radius:24px;padding:10px;box-sizing:border-box">
               <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:18px;color:#10603A">Tu carrito está vacío</div>
               <div style="font-size:13.5px;margin:6px 0 16px">Agrega unos tacos para empezar 🌮</div>
               <button onClick="{{ goMenu }}" style="cursor:pointer;background:#D6453D;color:#fff;border:none;border-radius:14px;padding:13px 22px;font-weight:700;font-size:14.5px">Ver el menú</button>
@@ -653,7 +653,7 @@
     </sc-if>
   </div></div></x-dc><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.24.3';
+  static APP_VERSION = '2.24.4';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
