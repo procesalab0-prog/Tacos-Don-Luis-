@@ -64,7 +64,7 @@
             <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,24,15,.02) 0%,rgba(3,24,15,.08) 36%,rgba(3,24,15,.34) 62%,rgba(3,24,15,.78) 100%)"></div>
             <div style="position:absolute;top:0;left:0;right:0;height:12px" class="dl-check"></div>
             <div style="position:relative;padding:26px 22px 28px;color:#fff;width:100%">
-              <span style="display:inline-flex;align-items:center;gap:7px;background:#F2C230;color:#3a2c00;font-weight:800;font-size:11px;letter-spacing:.12em;padding:5px 12px;border-radius:999px;max-width:100%;box-sizing:border-box;white-space:normal;text-align:center;line-height:1.35">PURO SABOR</span>
+              <span style="display:inline-flex;align-items:center;gap:7px;background:#F2C230;color:#3a2c00;font-weight:800;font-size:11px;letter-spacing:.12em;padding:5px 12px;border-radius:999px;max-width:100%;box-sizing:border-box;white-space:normal;text-align:center;line-height:1.35">SABROSO · MEXICANO · HECHO CON ORGULLO</span>
               <div style="margin-top:11px;display:inline-flex;align-items:center;gap:7px;background:rgba(5,35,23,.72);border:1px solid rgba(255,255,255,.22);color:#fff;font-size:12px;font-weight:700;padding:7px 11px;border-radius:12px"><span style="width:7px;height:7px;border-radius:50%;background:{{ estadoDot }}"></span>{{ horarioMensaje }}</div>
               <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:40px;line-height:.95;margin:14px 0 8px;text-shadow:0 2px 12px rgba(0,0,0,.35)">Los mejores tacos<br>de la zona norte</div>
               <div style="font-size:15px;color:#fff;max-width:440px;line-height:1.4;text-shadow:0 2px 9px rgba(0,0,0,.9)">Preparados al momento, con recetas de casa. Pide para recoger o a domicilio en Punto Cañada, León.</div>
@@ -653,7 +653,7 @@
     </sc-if>
   </div></div></x-dc><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.24.2';
+  static APP_VERSION = '2.24.3';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
@@ -1443,8 +1443,8 @@ class Component extends DCLogic {
     // Los tres PNG están recortados al dibujo y centrados en un lienzo de 256px
     // con la misma altura, así que ya no hace falta escalar ninguno a mano.
     const valores=[
-      {label:'FRESCO',image:'../assets/value-fresco.png',imageStyle:'width:100%;height:100%;object-fit:contain'},
-      {label:'SABROSO',image:'../assets/value-sabroso.png',imageStyle:'width:100%;height:100%;object-fit:contain'},
+      {label:'PURO SABOR',image:'../assets/value-fresco.png',imageStyle:'width:100%;height:100%;object-fit:contain'},
+      {label:'TRADICIÓN',image:'../assets/value-sabroso.png',imageStyle:'width:100%;height:100%;object-fit:contain'},
       {label:'CON ORGULLO',image:'../assets/value-orgullo.png',imageStyle:'width:100%;height:100%;object-fit:contain'},
     ];
     const ranked=(this.state.salesStats||[]).map(s=>this.itemById(s.product_id)).filter(p=>p?.id&&p.disponible!==false);
