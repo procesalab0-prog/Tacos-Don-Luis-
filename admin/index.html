@@ -253,6 +253,16 @@
         <div style="animation:dlfade .3s ease both">
           <div style="display:flex;gap:7px;overflow-x:auto;margin-bottom:14px;padding-bottom:2px"><sc-for list="{{ repPeriodos }}" as="p"><button onClick="{{ p.onClick }}" style="{{ p.style }}">{{ p.label }}</button></sc-for></div>
           <div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button onClick="{{ onExportReports }}" style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:12px;padding:10px 16px;font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg>Exportar</button></div>
+          <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:16px 18px;margin-bottom:16px">
+            <div style="margin-bottom:14px"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:18px;color:#10603A">Operación financiera de hoy</div><div style="font-size:12px;color:#8a7f66;margin-top:2px">Ventas, métodos de pago, corte y movimientos de efectivo</div></div>
+            <div style="display:grid;grid-template-columns:{{ cajaGrid }};gap:14px;align-items:start">
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <div style="background:#fff;border:1px solid #E6DCC5;border-radius:13px;padding:14px"><div style="font-weight:700;font-size:14px;color:#211E15;margin-bottom:11px">Ventas por canal</div><div style="display:flex;flex-direction:column;gap:10px"><sc-for list="{{ cajaCanales }}" as="c" hint-placeholder-count="4"><div><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px"><span style="font-weight:600;color:#3a3120">{{ c.canal }}</span><span style="font-weight:700;color:#10603A">{{ c.montoTxt }} · {{ c.pctTxt }}</span></div><div style="height:7px;background:#efe6d2;border-radius:999px;overflow:hidden"><div style="height:100%;width:{{ c.pctTxt }};background:{{ c.c }}"></div></div></div></sc-for></div></div>
+                <div style="background:#fff;border:1px solid #E6DCC5;border-radius:13px;padding:14px"><div style="font-weight:700;font-size:14px;color:#211E15;margin-bottom:11px">Métodos de pago</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:9px"><sc-for list="{{ cajaMetodos }}" as="m" hint-placeholder-count="3"><div style="background:#fbf7ec;border-radius:10px;padding:10px"><div style="font-size:11.5px;color:#6a5f45">{{ m.m }}</div><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:17px;color:#10603A;margin-top:3px">{{ m.vTxt }}</div><div style="font-size:10.5px;color:#9a8e70">{{ m.n }}</div></div></sc-for></div></div>
+              </div>
+              <div style="background:#0f3d24;border-radius:13px;padding:15px;color:#eaf3ec"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:#F2C230;margin-bottom:11px">Corte del turno</div><div style="display:flex;flex-direction:column;gap:9px"><sc-for list="{{ cajaCorte }}" as="c" hint-placeholder-count="4"><div style="display:flex;justify-content:space-between;gap:9px"><div><div style="font-size:12px;font-weight:600">{{ c.k }}</div><div style="font-size:10.5px;color:#8bb193">{{ c.sub }}</div></div><strong style="font-size:13px">{{ c.v }}</strong></div></sc-for></div><div style="border-top:1px dashed rgba(255,255,255,.2);margin-top:11px;padding-top:10px;display:flex;flex-direction:column;gap:7px"><div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:#bcd6c1">Efectivo esperado</span><strong>{{ cajaEsperado }}</strong></div><div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:#bcd6c1">Efectivo recibido</span><strong>{{ cajaRecibido }}</strong></div><div style="display:flex;justify-content:space-between;font-size:13px;color:#F2C230"><strong>Diferencia</strong><strong>{{ cajaDif }}</strong></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px"><button onClick="{{ onCashAction }}" style="cursor:pointer;border:0;background:#F2C230;color:#0f3d24;border-radius:10px;padding:10px 7px;font-weight:800;font-size:11px">{{ cashActionTxt }}</button><button onClick="{{ onCashMovement }}" style="cursor:pointer;border:1px solid #bcd6c1;background:transparent;color:#fff;border-radius:10px;padding:10px 7px;font-weight:800;font-size:11px">Movimiento</button></div></div>
+            </div>
+          </div>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:13px;margin-bottom:16px"><sc-for list="{{ repKpis }}" as="k" hint-placeholder-count="4"><div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:15px 17px;box-shadow:0 2px 0 #ece2cc"><div style="display:flex;align-items:center;gap:9px;margin-bottom:9px"><span style="width:32px;height:32px;border-radius:9px;background:{{ k.t }};color:#fff;display:flex;align-items:center;justify-content:center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path sc-camel-d="{{ k.icon }}"></path></svg></span><span style="font-size:12px;color:#8a7f66;font-weight:600">{{ k.l }}</span></div><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:24px;color:#211E15">{{ k.v }}</div><div style="font-size:11.5px;font-weight:700;color:{{ k.dc }};margin-top:3px">{{ k.d }}</div></div></sc-for></div>
           <div style="display:grid;grid-template-columns:{{ repGrid }};gap:16px">
             <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:18px 20px"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#10603A;margin-bottom:14px">Ventas por hora</div><div style="display:flex;align-items:flex-end;gap:3%;height:150px"><sc-for list="{{ repHora }}" as="h" hint-placeholder-count="10"><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><div style="width:70%;background:linear-gradient(#28A54C,#10603A);border-radius:5px 5px 0 0;height:{{ h.ht }}"></div><span style="font-size:10px;color:#9a8e70;font-weight:600">{{ h.h }}</span></div></sc-for></div></div>
@@ -380,7 +390,7 @@
     </div>
   </sc-if></div></sc-if></x-dc><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.23.0';
+  static APP_VERSION = '2.23.1';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { rol:null, route:'pedidos', vw:1280, toast:null, sonido:true,
@@ -842,15 +852,14 @@ class Component extends DCLogic {
   get nav(){ return [
     {id:'pedidos',label:'Centro de pedidos',short:'Pedidos',icon:'M9 2h6a2 2 0 0 1 2 2v0H7a2 2 0 0 1 2-2zM7 4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2M9 12h6M9 16h4'},
     {id:'cocina',label:'Cocina',short:'Cocina',icon:'M8 3v6M12 3v6M10 9v12M17 3c-1.5 0-3 1.5-3 4v5h3zM17 12v9'},
-    {id:'caja',label:'Caja',short:'Caja',icon:'M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 7l2-4h16l2 4M12 11v5M9 13h6'},
     {id:'inventario',label:'Inventario',short:'Invent.',icon:'M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3M21 8H3M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8'},
     {id:'reportes',label:'Reportes',short:'Reportes',icon:'M3 3v18h18M7 14l4-4 3 3 5-6'},
     {id:'config',label:'Configuración',short:'Config',icon:'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 0 1-4 0v-.1A1.6 1.6 0 0 0 6.6 19l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 4 12.6H3.9a2 2 0 0 1 0-4H4a1.6 1.6 0 0 0 1.5-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 11 3.9V3.9a2 2 0 0 1 4 0V4a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V12a1.6 1.6 0 0 0 1.5 1h.1a2 2 0 0 1 0 4H21a1.6 1.6 0 0 0-1.5 1z'},
   ]; }
   rolNav(){ const perms={
-    'Dueño':['pedidos','cocina','caja','inventario','reportes','config'],
-    'Administrador':['pedidos','cocina','caja','inventario','reportes','config'],
-    'Caja':['pedidos','caja','inventario'],
+    'Dueño':['pedidos','cocina','inventario','reportes','config'],
+    'Administrador':['pedidos','cocina','inventario','reportes','config'],
+    'Caja':['pedidos','reportes','inventario'],
     'Cocina':['cocina'],
     'Mesero':['pedidos','cocina'],
   }; return perms[this.state.rol]||['pedidos']; }
@@ -859,7 +868,7 @@ class Component extends DCLogic {
     const vw=this.state.vw, phone=vw>0&&vw<820, route=this.state.route;
     const allowed=this.rolNav();
     const cur=this.nav.find(n=>n.id===route);
-    const subs={pedidos:'Todos los canales en un solo lugar',cocina:'Tablero de preparación',caja:'Cobro, cortes y liquidación',inventario:'Existencias y recetas',reportes:'Ventas y desempeño',config:'Negocio, horarios y usuarios'};
+    const subs={pedidos:'Todos los canales en un solo lugar',cocina:'Tablero de preparación',inventario:'Existencias y recetas',reportes:'Ventas, cortes y desempeño',config:'Negocio, horarios y usuarios'};
     const nuevosCount=this.orders.filter(o=>o.estado==='nuevo').length;
     const navItems=this.nav.filter(n=>allowed.includes(n.id)).map(n=>{
       const active=n.id===route; const badge=n.id==='pedidos'&&nuevosCount?String(nuevosCount):null;
@@ -911,11 +920,11 @@ class Component extends DCLogic {
       onCancelAsignar:()=>this.setState({asignarFor:null}),
       isPedidos: route==='pedidos',
       isCocina: route==='cocina',
-      isCaja: route==='caja',
+      isCaja: false,
       isInventario: route==='inventario',
       isReportes: route==='reportes',
       isConfig: route==='config',
-      isOtro: !['pedidos','cocina','caja','inventario','reportes','config'].includes(route),
+      isOtro: !['pedidos','cocina','inventario','reportes','config'].includes(route),
       ...this.vmPedidos(), ...this.vmCocina(), ...this.vmCaja(phone), ...this.vmInventario(), ...this.vmReportes(phone), ...this.vmConfig(),
     };
   }
