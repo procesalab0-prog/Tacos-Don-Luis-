@@ -32,6 +32,8 @@ with fotos as (
       when c.name ilike '%taco%'       and p.name ilike '%chorizo%'   then 't_chorizo'
       when c.name ilike '%taco%'       and p.name ilike '%lengua%'    then 't_lengua'
       when c.name ilike '%taco%'       and p.name ilike '%seso%'      then 't_sesos'
+      when c.name ilike '%taco%'       and p.name ilike '%costilla%'  then 't_costilla'
+      when c.name ilike '%taco%'       and p.name ilike '%cachete%'   then 't_cachete'
       -- Bebidas
       when p.name ilike '%refresco%' or p.name ilike '%coca%'         then 'refresco'
       when p.name ilike '%agua%' and (p.name ilike '%litro%' and p.name not ilike '%medio%' and p.name not ilike '%½%' and p.name not ilike '%1/2%') then 'agua_litro'
@@ -74,6 +76,8 @@ with fotos as (
       when c.name ilike '%taco%'       and p.name ilike '%chorizo%'   then 't_chorizo'
       when c.name ilike '%taco%'       and p.name ilike '%lengua%'    then 't_lengua'
       when c.name ilike '%taco%'       and p.name ilike '%seso%'      then 't_sesos'
+      when c.name ilike '%taco%'       and p.name ilike '%costilla%'  then 't_costilla'
+      when c.name ilike '%taco%'       and p.name ilike '%cachete%'   then 't_cachete'
       when p.name ilike '%refresco%' or p.name ilike '%coca%'         then 'refresco'
       when p.name ilike '%agua%' and (p.name ilike '%litro%' and p.name not ilike '%medio%' and p.name not ilike '%½%' and p.name not ilike '%1/2%') then 'agua_litro'
       when p.name ilike '%agua%'                                      then 'agua_medio'
