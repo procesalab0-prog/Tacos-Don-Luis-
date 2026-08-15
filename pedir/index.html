@@ -105,7 +105,7 @@
               <sc-for list="{{ destacados }}" as="d" hint-placeholder-count="4">
                 <div style="flex:0 0 auto;width:172px;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,.06)">
                   <div style="height:112px;background:#f0e8d4;position:relative">
-                    <sc-if value="{{ d.foto }}" hint-placeholder-val="{{ false }}"><img sc-camel-src="{{ d.foto }}" alt="{{ d.nombre }}" style="width:100%;height:100%;object-fit:cover"></sc-if>
+                    <sc-if value="{{ d.mini }}" hint-placeholder-val="{{ false }}"><img sc-camel-src="{{ d.mini }}" alt="{{ d.nombre }}" style="width:100%;height:100%;object-fit:cover"></sc-if>
                     <span style="position:absolute;top:8px;left:8px;background:#F2C230;color:#3a2c00;font-size:10px;font-weight:800;padding:3px 8px;border-radius:999px">{{ d.tag }}</span>
                   </div>
                   <div style="padding:11px 13px">
@@ -208,7 +208,7 @@
             <sc-for list="{{ menuItems }}" as="m" hint-placeholder-count="6">
               <button onClick="{{ m.onOpen }}" style="cursor:pointer;text-align:left;background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:12px;display:flex;gap:13px;align-items:center;box-shadow:0 2px 0 #ece2cc" style-hover="border-color:#10603A">
                 <div style="width:88px;height:88px;flex:0 0 auto;border-radius:14px;overflow:hidden;background:#f0e8d4;display:flex;align-items:center;justify-content:center">
-                  <sc-if value="{{ m.foto }}" hint-placeholder-val="{{ false }}"><img sc-camel-src="{{ m.foto }}" alt="{{ m.nombre }}" style="width:100%;height:100%;object-fit:cover"></sc-if>
+                  <sc-if value="{{ m.foto }}" hint-placeholder-val="{{ false }}"><img sc-camel-src="{{ m.mini }}" alt="{{ m.nombre }}" style="width:100%;height:100%;object-fit:cover"></sc-if>
                   <sc-if value="{{ m.noFoto }}" hint-placeholder-val="{{ true }}"><span style="color:#c2b48f;display:flex;flex-direction:column;align-items:center;gap:4px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11a9 9 0 0 1 18 0M2 11h20l-2 4H4zM7 18h10"></path></svg><span style="font-size:8.5px;font-weight:700">Foto pronto</span></span></sc-if>
                 </div>
                 <div style="flex:1;min-width:0">
@@ -653,7 +653,7 @@
     </sc-if>
   </div></div></x-dc><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.22.3';
+  static APP_VERSION = '2.23.0';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
@@ -758,7 +758,7 @@ class Component extends DCLogic {
         this.publicRead('/rest/v1/loyalty_rewards?branch_id=eq.'+bid+'&select=*&order=sort_order').catch(()=>[])
       ]);
       const catById=Object.fromEntries(cats.map(c=>[c.id,c.name]));
-      const remoteMenu=products.map(p=>({id:p.id,nombre:p.name,cat:catById[p.category_id]||'Tacos',precio:Number(p.price),desc:p.description||'',foto:p.image_url||null,tag:p.is_featured?'Favorito':null,featured:p.is_featured,disponible:p.is_available,customization:p.customization||{}}));
+      const remoteMenu=products.map(p=>({id:p.id,nombre:p.name,cat:catById[p.category_id]||'Tacos',precio:Number(p.price),desc:p.description||'',foto:p.image_url||null,fotoMini:(p.image_url&&p.image_url.includes('/assets/productos/')?p.image_url.replace(/\.jpg$/,'-mini.jpg'):p.image_url||null),tag:p.is_featured?'Favorito':null,featured:p.is_featured,disponible:p.is_available,customization:p.customization||{}}));
       const resenas=await this.publicRead('/rest/v1/order_reviews?branch_id=eq.'+bid+'&is_published=eq.true&select=rating,comment,display_name,created_at&order=created_at.desc&limit=6').catch(()=>[]);
       this.setState({opinionesReales:(resenas||[]).filter(r=>r.comment),branchId:bid,branchLocation:branch.latitude!=null&&branch.longitude!=null?{lat:Number(branch.latitude),lng:Number(branch.longitude),address:branch.address_line}:null,remoteCategories:cats.map(c=>c.name),remoteMenu,remoteZones:zones,modifierOptions,settings:settings[0]||null,loyaltyRule:loyaltyRules[0]||null,marketingContent,combos,salesStats,loyaltyRewards});
       this.asegurarCodigoReferido();
@@ -883,34 +883,34 @@ class Component extends DCLogic {
     }catch(error){console.error(error);this.toast(error.message||'No se pudo guardar la dirección');}
   }
   get menu(){ if(this.state.remoteMenu?.length)return this.state.remoteMenu; return [
-    {id:'t_pastor',nombre:'Taco al pastor',cat:'Tacos',precio:17,desc:'Cerdo al pastor, cebolla y cilantro',foto:null,tag:'Favorito'},
-    {id:'t_bistec',nombre:'Taco de bistec',cat:'Tacos',precio:17,desc:'Res a la plancha, cebolla y cilantro',foto:null,tag:'Top'},
-    {id:'t_cabeza',nombre:'Taco de cabeza',cat:'Tacos',precio:17,desc:'Cabeza suave en su jugo',foto:null},
-    {id:'t_chorizo',nombre:'Taco de chorizo',cat:'Tacos',precio:17,desc:'Chorizo artesanal dorado',foto:null},
-    {id:'t_lengua',nombre:'Taco de lengua',cat:'Tacos',precio:25,desc:'Lengua de res suave',foto:null},
-    {id:'t_sesos',nombre:'Taco de sesos',cat:'Tacos',precio:25,desc:'Sesos preparados al momento',foto:null},
-    {id:'t_arrachera',nombre:'Taco de arrachera',cat:'Tacos',precio:25,desc:'Arrachera sazonada',foto:null,disponible:false},
-    {id:'q_pastor',nombre:'Quesadilla de pastor',cat:'Quesadillas',precio:34,desc:'Queso Oaxaca y pastor',foto:null,tag:'Recomendado'},
-    {id:'q_bistec',nombre:'Quesadilla de bistec',cat:'Quesadillas',precio:34,desc:'Queso Oaxaca y bistec',foto:null},
-    {id:'q_cabeza',nombre:'Quesadilla de cabeza',cat:'Quesadillas',precio:34,desc:'Queso Oaxaca y cabeza',foto:null},
-    {id:'q_chorizo',nombre:'Quesadilla de chorizo',cat:'Quesadillas',precio:34,desc:'Queso Oaxaca y chorizo',foto:null},
-    {id:'q_lengua',nombre:'Quesadilla de lengua',cat:'Quesadillas',precio:40,desc:'Queso Oaxaca y lengua',foto:null},
-    {id:'q_sesos',nombre:'Quesadilla de sesos',cat:'Quesadillas',precio:40,desc:'Queso Oaxaca y sesos',foto:null},
-    {id:'to_pastor',nombre:'Torta de pastor',cat:'Tortas',precio:40,desc:'Pan telera, pastor, aguacate y frijol',foto:null,tag:'Favorito'},
-    {id:'to_bistec',nombre:'Torta de bistec',cat:'Tortas',precio:40,desc:'Pan telera, bistec, aguacate y frijol',foto:null},
-    {id:'to_cabeza',nombre:'Torta de cabeza',cat:'Tortas',precio:40,desc:'Pan telera, cabeza, aguacate y frijol',foto:null},
-    {id:'to_chorizo',nombre:'Torta de chorizo',cat:'Tortas',precio:40,desc:'Pan telera, chorizo, aguacate y frijol',foto:null},
-    {id:'to_lengua',nombre:'Torta de lengua',cat:'Tortas',precio:45,desc:'Pan telera, lengua, aguacate y frijol',foto:null},
-    {id:'to_sesos',nombre:'Torta de sesos',cat:'Tortas',precio:45,desc:'Pan telera, sesos, aguacate y frijol',foto:null},
-    {id:'l_pastor',nombre:'Taco light de pastor',cat:'Tacos light',precio:80,desc:'Orden light de pastor, tortilla especial',foto:null,tag:'Light'},
-    {id:'l_bistec',nombre:'Taco light de bistec',cat:'Tacos light',precio:80,desc:'Orden light de bistec, tortilla especial',foto:null},
-    {id:'l_cabeza',nombre:'Taco light de cabeza',cat:'Tacos light',precio:80,desc:'Orden light de cabeza, tortilla especial',foto:null},
-    {id:'l_chorizo',nombre:'Taco light de chorizo',cat:'Tacos light',precio:80,desc:'Orden light de chorizo, tortilla especial',foto:null},
-    {id:'l_lengua',nombre:'Taco light de lengua',cat:'Tacos light',precio:100,desc:'Orden light de lengua, tortilla especial',foto:null},
-    {id:'l_sesos',nombre:'Taco light de sesos',cat:'Tacos light',precio:100,desc:'Orden light de sesos, tortilla especial',foto:null},
-    {id:'refresco',nombre:'Refresco',cat:'Bebidas',precio:30,desc:'Lata / botella',foto:null},
-    {id:'agua_medio',nombre:'Agua de sabor ½ litro',cat:'Bebidas',precio:30,desc:'Horchata, jamaica o del día',foto:null},
-    {id:'agua_litro',nombre:'Agua de sabor 1 litro',cat:'Bebidas',precio:50,desc:'Horchata, jamaica o del día',foto:null},
+    {id:'t_pastor',nombre:'Taco al pastor',cat:'Tacos',precio:17,desc:'Cerdo al pastor, cebolla y cilantro',foto:'../assets/productos/t_pastor.jpg',fotoMini:'../assets/productos/t_pastor-mini.jpg',tag:'Favorito'},
+    {id:'t_bistec',nombre:'Taco de bistec',cat:'Tacos',precio:17,desc:'Res a la plancha, cebolla y cilantro',foto:'../assets/productos/t_bistec.jpg',fotoMini:'../assets/productos/t_bistec-mini.jpg',tag:'Top'},
+    {id:'t_cabeza',nombre:'Taco de cabeza',cat:'Tacos',precio:17,desc:'Cabeza suave en su jugo',foto:'../assets/productos/t_cabeza.jpg',fotoMini:'../assets/productos/t_cabeza-mini.jpg'},
+    {id:'t_chorizo',nombre:'Taco de chorizo',cat:'Tacos',precio:17,desc:'Chorizo artesanal dorado',foto:'../assets/productos/t_chorizo.jpg',fotoMini:'../assets/productos/t_chorizo-mini.jpg'},
+    {id:'t_lengua',nombre:'Taco de lengua',cat:'Tacos',precio:25,desc:'Lengua de res suave',foto:'../assets/productos/t_lengua.jpg',fotoMini:'../assets/productos/t_lengua-mini.jpg'},
+    {id:'t_sesos',nombre:'Taco de sesos',cat:'Tacos',precio:25,desc:'Sesos preparados al momento',foto:'../assets/productos/t_sesos.jpg',fotoMini:'../assets/productos/t_sesos-mini.jpg'},
+    {id:'t_arrachera',nombre:'Taco de arrachera',cat:'Tacos',precio:25,desc:'Arrachera sazonada',foto:'../assets/productos/t_arrachera.jpg',fotoMini:'../assets/productos/t_arrachera-mini.jpg',disponible:false},
+    {id:'q_pastor',nombre:'Quesadilla de pastor',cat:'Quesadillas',precio:34,desc:'Queso Oaxaca y pastor',foto:'../assets/productos/quesadilla_clasica.jpg',fotoMini:'../assets/productos/quesadilla_clasica-mini.jpg',tag:'Recomendado'},
+    {id:'q_bistec',nombre:'Quesadilla de bistec',cat:'Quesadillas',precio:34,desc:'Queso Oaxaca y bistec',foto:'../assets/productos/quesadilla_clasica.jpg',fotoMini:'../assets/productos/quesadilla_clasica-mini.jpg'},
+    {id:'q_cabeza',nombre:'Quesadilla de cabeza',cat:'Quesadillas',precio:34,desc:'Queso Oaxaca y cabeza',foto:'../assets/productos/quesadilla_clasica.jpg',fotoMini:'../assets/productos/quesadilla_clasica-mini.jpg'},
+    {id:'q_chorizo',nombre:'Quesadilla de chorizo',cat:'Quesadillas',precio:34,desc:'Queso Oaxaca y chorizo',foto:'../assets/productos/quesadilla_clasica.jpg',fotoMini:'../assets/productos/quesadilla_clasica-mini.jpg'},
+    {id:'q_lengua',nombre:'Quesadilla de lengua',cat:'Quesadillas',precio:40,desc:'Queso Oaxaca y lengua',foto:'../assets/productos/quesadilla_especial.jpg',fotoMini:'../assets/productos/quesadilla_especial-mini.jpg'},
+    {id:'q_sesos',nombre:'Quesadilla de sesos',cat:'Quesadillas',precio:40,desc:'Queso Oaxaca y sesos',foto:'../assets/productos/quesadilla_especial.jpg',fotoMini:'../assets/productos/quesadilla_especial-mini.jpg'},
+    {id:'to_pastor',nombre:'Torta de pastor',cat:'Tortas',precio:40,desc:'Pan telera, pastor, aguacate y frijol',foto:'../assets/productos/torta_clasica.jpg',fotoMini:'../assets/productos/torta_clasica-mini.jpg',tag:'Favorito'},
+    {id:'to_bistec',nombre:'Torta de bistec',cat:'Tortas',precio:40,desc:'Pan telera, bistec, aguacate y frijol',foto:'../assets/productos/torta_clasica.jpg',fotoMini:'../assets/productos/torta_clasica-mini.jpg'},
+    {id:'to_cabeza',nombre:'Torta de cabeza',cat:'Tortas',precio:40,desc:'Pan telera, cabeza, aguacate y frijol',foto:'../assets/productos/torta_clasica.jpg',fotoMini:'../assets/productos/torta_clasica-mini.jpg'},
+    {id:'to_chorizo',nombre:'Torta de chorizo',cat:'Tortas',precio:40,desc:'Pan telera, chorizo, aguacate y frijol',foto:'../assets/productos/torta_clasica.jpg',fotoMini:'../assets/productos/torta_clasica-mini.jpg'},
+    {id:'to_lengua',nombre:'Torta de lengua',cat:'Tortas',precio:45,desc:'Pan telera, lengua, aguacate y frijol',foto:'../assets/productos/torta_especial.jpg',fotoMini:'../assets/productos/torta_especial-mini.jpg'},
+    {id:'to_sesos',nombre:'Torta de sesos',cat:'Tortas',precio:45,desc:'Pan telera, sesos, aguacate y frijol',foto:'../assets/productos/torta_especial.jpg',fotoMini:'../assets/productos/torta_especial-mini.jpg'},
+    {id:'l_pastor',nombre:'Taco light de pastor',cat:'Tacos light',precio:80,desc:'Orden light de pastor, tortilla especial',foto:'../assets/productos/light_clasico.jpg',fotoMini:'../assets/productos/light_clasico-mini.jpg',tag:'Light'},
+    {id:'l_bistec',nombre:'Taco light de bistec',cat:'Tacos light',precio:80,desc:'Orden light de bistec, tortilla especial',foto:'../assets/productos/light_clasico.jpg',fotoMini:'../assets/productos/light_clasico-mini.jpg'},
+    {id:'l_cabeza',nombre:'Taco light de cabeza',cat:'Tacos light',precio:80,desc:'Orden light de cabeza, tortilla especial',foto:'../assets/productos/light_clasico.jpg',fotoMini:'../assets/productos/light_clasico-mini.jpg'},
+    {id:'l_chorizo',nombre:'Taco light de chorizo',cat:'Tacos light',precio:80,desc:'Orden light de chorizo, tortilla especial',foto:'../assets/productos/light_clasico.jpg',fotoMini:'../assets/productos/light_clasico-mini.jpg'},
+    {id:'l_lengua',nombre:'Taco light de lengua',cat:'Tacos light',precio:100,desc:'Orden light de lengua, tortilla especial',foto:'../assets/productos/light_especial.jpg',fotoMini:'../assets/productos/light_especial-mini.jpg'},
+    {id:'l_sesos',nombre:'Taco light de sesos',cat:'Tacos light',precio:100,desc:'Orden light de sesos, tortilla especial',foto:'../assets/productos/light_especial.jpg',fotoMini:'../assets/productos/light_especial-mini.jpg'},
+    {id:'refresco',nombre:'Refresco',cat:'Bebidas',precio:30,desc:'Lata / botella',foto:'../assets/productos/refresco.jpg',fotoMini:'../assets/productos/refresco-mini.jpg'},
+    {id:'agua_medio',nombre:'Agua de sabor ½ litro',cat:'Bebidas',precio:30,desc:'Horchata, jamaica o del día',foto:'../assets/productos/agua_medio.jpg',fotoMini:'../assets/productos/agua_medio-mini.jpg'},
+    {id:'agua_litro',nombre:'Agua de sabor 1 litro',cat:'Bebidas',precio:50,desc:'Horchata, jamaica o del día',foto:'../assets/productos/agua_litro.jpg',fotoMini:'../assets/productos/agua_litro-mini.jpg'},
   ]; }
   get cats(){ return this.state.remoteCategories?.length?this.state.remoteCategories:['Tacos','Quesadillas','Tortas','Tacos light','Bebidas']; }
   itemById(id){ return this.menu.find(m=>m.id===id)||{nombre:id,precio:0}; }
@@ -1449,7 +1449,7 @@ class Component extends DCLogic {
     ];
     const ranked=(this.state.salesStats||[]).map(s=>this.itemById(s.product_id)).filter(p=>p?.id&&p.disponible!==false);
     const favoritosRemotos=this.menu.filter(m=>m.featured);
-    const destacados=(ranked.length?ranked:favoritosRemotos.length?favoritosRemotos:(this.state.remoteMenu?this.menu.slice(0,4):this.menu.filter(m=>['t_pastor','t_bistec','q_pastor','to_pastor'].includes(m.id)))).slice(0,4).map((m,i)=>({...m,precioTxt:this.MXN(m.precio),tag:ranked.length?'#'+(i+1)+' Más vendido':m.tag||'Favorito',onAdd:()=>this.addQuick(m.id)}));
+    const destacados=(ranked.length?ranked:favoritosRemotos.length?favoritosRemotos:(this.state.remoteMenu?this.menu.slice(0,4):this.menu.filter(m=>['t_pastor','t_bistec','q_pastor','to_pastor'].includes(m.id)))).slice(0,4).map((m,i)=>({...m,precioTxt:this.MXN(m.precio),mini:m.fotoMini||m.foto,tag:ranked.length?'#'+(i+1)+' Más vendido':m.tag||'Favorito',onAdd:()=>this.addQuick(m.id)}));
     const homePromos=(this.state.marketingContent||[]).filter(x=>x.content_type==='daily_promo'&&x.product_id).map(x=>({title:x.title,description:x.description,badge:x.badge||'PROMOCIÓN EXCLUSIVA',onAdd:()=>this.addQuick(x.product_id)}));
     const homeNews=(this.state.marketingContent||[]).filter(x=>x.content_type==='news').map(x=>({title:x.title,description:x.description,canAdd:!!x.product_id,onAdd:()=>this.addQuick(x.product_id)}));
     const comboContents=c=>(c.components||[]).map(p=>(Number(p.quantity)||1)+'× '+this.itemById(p.product_id||p.productId).nombre).join(' · ');
@@ -1485,7 +1485,7 @@ class Component extends DCLogic {
     // ---- menú ----
     const menuCats=this.cats.map(c=>({label:c,active:c===this.state.cat,onClick:()=>this.setState({cat:c}),
       style:`cursor:pointer;padding:9px 15px;border-radius:999px;font-weight:700;font-size:13.5px;border:none;white-space:nowrap;${c===this.state.cat?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35;border:1px solid #E6DCC5'}`}));
-    const menuItems=this.menu.filter(m=>m.cat===this.state.cat).map(m=>({...m,precioTxt:this.MXN(m.precio),noFoto:!m.foto,agotado:m.disponible===false,onOpen:()=>{ if(m.disponible===false){this.toast(m.nombre+' está agotado hoy');return;} this.openSheet(m.id); }}));
+    const menuItems=this.menu.filter(m=>m.cat===this.state.cat).map(m=>({...m,precioTxt:this.MXN(m.precio),noFoto:!m.foto,mini:m.fotoMini||m.foto,agotado:m.disponible===false,onOpen:()=>{ if(m.disponible===false){this.toast(m.nombre+' está agotado hoy');return;} this.openSheet(m.id); }}));
 
     // ---- product sheet ----
     const sheetOpen=this.state.sheetItem!=null;
