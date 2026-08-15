@@ -653,7 +653,7 @@
     </sc-if>
   </div></div></x-dc><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.24.4';
+  static APP_VERSION = '2.24.5';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
@@ -1569,7 +1569,7 @@ class Component extends DCLogic {
       tRecoger:(this.state.settings?.pickup_eta_minutes||20)+' min', tEntrega:(this.state.settings?.delivery_eta_minutes||40)+' min',
       cartCount:this.cartCount()||null,
       valores, destacados, categoriasHome, opiniones, hayOpiniones:opiniones.length>0, faqs, tabs,
-      coberturaHome:['Punto Cañada','Jardines de Oriente','Valle del Campestre','San Isidro'],
+      coberturaHome:['Punto Cañada'],
       toast:this.state.toast,
     };
   }
