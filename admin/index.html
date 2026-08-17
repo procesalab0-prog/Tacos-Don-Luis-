@@ -114,6 +114,7 @@
                       <div style="padding:0 13px 8px">
                         <div style="font-size:12.5px;color:#6a5f45;font-weight:600">{{ p.canalTxt }} · {{ p.cliente }}</div>
                         <div style="font-size:12px;color:#9a8e70;margin-top:1px">{{ p.tel }}</div>
+                        <sc-if value="{{ p.programadoTxt }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:#10603A;background:#eaf4ec;border:1px solid #b9d8c0;border-radius:8px;padding:7px 9px;margin-top:6px;font-weight:800;line-height:1.35">🕐 {{ p.programadoTxt }}</div></sc-if>
                         <sc-if value="{{ p.notaPago }}" hint-placeholder-val="{{ false }}"><div style="font-size:11.5px;color:#8a6d12;background:#fdf6e3;border-radius:8px;padding:7px 9px;margin-top:6px;font-weight:700;line-height:1.4">{{ p.notaIcon }} {{ p.notaPago }}</div></sc-if>
                       </div>
                       <div style="padding:0 13px 8px;display:flex;flex-direction:column;gap:3px">
@@ -156,6 +157,7 @@
                       <div style="display:flex;align-items:center;gap:7px;margin-bottom:9px">
                         <span style="font-size:12px;font-weight:700;color:#10603A;background:#eaf4ec;padding:3px 9px;border-radius:8px">{{ o.mesaTxt }}</span>
                         <sc-if value="{{ o.prio }}" hint-placeholder-val="{{ false }}"><span style="font-size:10.5px;font-weight:800;color:#b23a32;background:#fdeceb;padding:3px 8px;border-radius:8px">PRIORIDAD</span></sc-if>
+                        <sc-if value="{{ o.programadoTxt }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;color:#10603A;background:#eaf4ec;padding:4px 7px;border-radius:7px;font-weight:800;margin-left:auto">{{ o.programadoTxt }}</span></sc-if>
                         <sc-if value="{{ o.promTxt }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;color:#9a8e70;margin-left:auto">{{ o.promTxt }}</span></sc-if>
                       </div>
                       <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:11px">
@@ -380,10 +382,11 @@
   <sc-if value="{{ aceptarOpen }}" hint-placeholder-val="{{ false }}">
     <div onClick="{{ cerrarAceptar }}" style="position:fixed;inset:0;z-index:90;background:rgba(20,15,5,.5);display:flex;align-items:center;justify-content:center;padding:20px;animation:dlfade .2s">
       <div onClick="{{ stop }}" style="width:100%;max-width:400px;background:#FFFDF7;border-radius:20px;overflow:hidden;animation:dlpop .25s">
-        <div style="background:#10603A;color:#fff;padding:16px 20px"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px">Aceptar {{ aceptarFolio }}</div><div style="font-size:12.5px;color:#cfe3d3">Confirma el tiempo estimado</div></div>
+        <div style="background:#10603A;color:#fff;padding:16px 20px"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px">Aceptar {{ aceptarFolio }}</div><div style="font-size:12.5px;color:#cfe3d3">{{ aceptarSubtitulo }}</div></div>
         <div style="padding:18px 20px">
           <div style="font-size:12.5px;font-weight:800;color:#8a7f66;text-transform:uppercase;letter-spacing:.04em;margin-bottom:9px">Tiempo estimado</div>
-          <div style="display:flex;gap:8px;margin-bottom:16px"><sc-for list="{{ tiempoOpts }}" as="t" hint-placeholder-count="4"><button onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}</button></sc-for></div>
+          <sc-if value="{{ aceptarEsProgramado }}" hint-placeholder-val="{{ false }}"><div style="background:#eaf4ec;border:1px solid #b9d8c0;color:#10603A;border-radius:12px;padding:12px 14px;margin-bottom:16px;font-weight:800">🕐 {{ aceptarProgramadoTxt }}</div></sc-if>
+          <sc-if value="{{ aceptarNoProgramado }}" hint-placeholder-val="{{ true }}"><div style="display:flex;gap:8px;margin-bottom:16px"><sc-for list="{{ tiempoOpts }}" as="t" hint-placeholder-count="4"><button onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}</button></sc-for></div></sc-if>
           <div style="background:#eaf4ec;border:1px solid #cfe0c6;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:16px"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color:#25D366;flex:0 0 auto"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2z"></path></svg><span style="font-size:12.5px;color:#10603A;font-weight:600">La confirmación queda registrada y puede compartirse por WhatsApp.</span></div>
           <button onClick="{{ confirmarAceptar }}" style="cursor:pointer;width:100%;background:#10603A;color:#fff;border:none;border-radius:14px;padding:14px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px">Aceptar y confirmar</button>
           <button onClick="{{ cerrarAceptar }}" style="cursor:pointer;width:100%;margin-top:8px;background:none;border:none;color:#8a7f66;font-weight:700;font-size:13.5px;padding:6px">Cancelar</button>
@@ -392,7 +395,7 @@
     </div>
   </sc-if></div></sc-if></x-dc><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.24.7';
+  static APP_VERSION = '2.24.8';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { rol:null, route:'pedidos', vw:1280, toast:null, sonido:true,
@@ -503,7 +506,7 @@ class Component extends DCLogic {
   async loadLiveOrders(token=this.state.session?.access_token,branchId=this.state.branchId){
     if(!token||!branchId)return;
     try{
-      const select='id,folio,channel,fulfillment_type,status,payment_method,payment_status,guest_name,guest_phone,delivery_address,table_number,total,created_at,promised_at,customer_notes,cancellation_reason,is_demo,assigned_driver_user_id,order_items(product_name,quantity,notes,line_total)';let rows=[],offset=0,page=[];do{page=await this.api('/rest/v1/orders?branch_id=eq.'+branchId+'&select='+select+'&order=created_at.desc&limit=1000&offset='+offset,{token});rows.push(...page);offset+=page.length;}while(page.length===1000);
+      const select='id,folio,channel,fulfillment_type,status,payment_method,payment_status,guest_name,guest_phone,delivery_address,table_number,total,created_at,promised_at,scheduled_for,customer_notes,cancellation_reason,is_demo,assigned_driver_user_id,order_items(product_name,quantity,notes,line_total)';let rows=[],offset=0,page=[];do{page=await this.api('/rest/v1/orders?branch_id=eq.'+branchId+'&select='+select+'&order=created_at.desc&limit=1000&offset='+offset,{token});rows.push(...page);offset+=page.length;}while(page.length===1000);
       const pendingIds=new Set(rows.filter(o=>o.status==='pending_acceptance').map(o=>o.id));
       if(this._knownPendingIds){const hasNew=[...pendingIds].some(id=>!this._knownPendingIds.has(id));if(hasNew)this.playNewOrderSound();}
       this._knownPendingIds=pendingIds;this._orders=rows.map(o=>this.mapRemoteOrder(o)); this.forceUpdate();
@@ -783,7 +786,9 @@ class Component extends DCLogic {
     const canal=o.fulfillment_type==='delivery'?'domicilio':o.fulfillment_type==='dine_in'?'establecimiento':(o.channel==='whatsapp'?'whatsapp':'recoger');
     const created=new Date(o.created_at); const min=Math.max(0,Math.floor((Date.now()-created.getTime())/60000));
     const addr=o.delivery_address||{}; const dir=canal==='domicilio'?[addr.street,addr.exterior_number,addr.neighborhood].filter(Boolean).join(' '):(canal==='establecimiento'?'Mesa '+(o.table_number||''):'Recoger en sucursal');
-    return {id:o.id,remoteStatus:o.status,assignedDriver:o.assigned_driver_user_id,createdAt:o.created_at,folio:'DL-'+o.folio,canal,estado:status,min,cliente:o.guest_name||(canal==='establecimiento'?'Mesa '+(o.table_number||''):'Cliente'),tel:o.guest_phone||'—',dir,notaPago:o.customer_notes||'',rechazoMotivo:o.cancellation_reason||'',pago:{metodo:o.payment_method==='transfer'?'transferencia':o.payment_method==='card_present'?'tarjeta':'efectivo',estado:o.payment_status==='paid'?'pagado':o.payment_status==='verification_pending'?'por_verificar':'pendiente'},items:(o.order_items||[]).map(i=>({q:i.quantity,nombre:i.product_name,nota:i.notes||'',lineTotal:Number(i.line_total)})),total:Number(o.total),tiempo:o.promised_at?Math.max(0,Math.round((new Date(o.promised_at)-created)/60000)):null};
+    const scheduledAt=o.scheduled_for||null;
+    const programadoTxt=scheduledAt?'Programado: '+new Intl.DateTimeFormat('es-MX',{timeZone:'America/Mexico_City',weekday:'short',day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}).format(new Date(scheduledAt)):'';
+    return {id:o.id,remoteStatus:o.status,assignedDriver:o.assigned_driver_user_id,createdAt:o.created_at,scheduledAt,programadoTxt,folio:'DL-'+o.folio,canal,estado:status,min,cliente:o.guest_name||(canal==='establecimiento'?'Mesa '+(o.table_number||''):'Cliente'),tel:o.guest_phone||'—',dir,notaPago:o.customer_notes||'',rechazoMotivo:o.cancellation_reason||'',pago:{metodo:o.payment_method==='transfer'?'transferencia':o.payment_method==='card_present'?'tarjeta':'efectivo',estado:o.payment_status==='paid'?'pagado':o.payment_status==='verification_pending'?'por_verificar':'pendiente'},items:(o.order_items||[]).map(i=>({q:i.quantity,nombre:i.product_name,nota:i.notes||'',lineTotal:Number(i.line_total)})),total:Number(o.total),tiempo:o.promised_at?Math.max(0,Math.round((new Date(o.promised_at)-created)/60000)):null};
   }
   async patchOrder(o,changes,success){
     try{await this.api('/rest/v1/orders?id=eq.'+o.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(changes.remote||{})});await this.loadLiveOrders();this.toast(success);}catch(error){this.toast(error.message);}
@@ -830,7 +835,7 @@ class Component extends DCLogic {
     const items=(o.items||[]).map(i=>i.q+'× '+i.nombre+(i.nota?' ('+i.nota+')':'')).join('\n');
     const estado={nuevo:'recibido y pendiente de aceptación',aceptado:'confirmado',preparando:'en preparación',listo:'listo',en_camino:'en camino',completado:'entregado'}[o.estado]||o.estado;
     const entrega=o.canal==='domicilio'?'Entrega a domicilio: '+o.dir:'Para recoger en Punto Cañada';
-    const tiempo=o.tiempo?('\nTiempo estimado: '+o.tiempo+' min'):'';
+    const tiempo=o.scheduledAt?('\n'+o.programadoTxt):(o.tiempo?('\nTiempo estimado: '+o.tiempo+' min'):'');
     return ['Hola '+(o.cliente||'')+' 👋','Tacos Don Luis confirma tu pedido '+o.folio+'.','','Estado: '+estado,entrega+tiempo,'','Pedido:',items,'','Total: '+this.MXN(this.itemTotal(o)),o.notaPago||'',(trackingLink?'Sigue tu pedido aquí: '+trackingLink:''),'¡Gracias por tu compra! 🌮'].filter(Boolean).join('\n');
   }
   async confirmByWhatsApp(o){
@@ -854,14 +859,14 @@ class Component extends DCLogic {
   pagoMeta(p){ if(p.estado==='pagado')return{txt:'Pagado',c:'#10603A'}; if(p.estado==='por_verificar')return{txt:'Transf. por verificar',c:'#E0A526'}; return{txt:'Por cobrar',c:'#b23a32'}; }
 
   // acciones
-  aceptar(folio){ this.setState({aceptarFor:folio,aceptarTiempo:this.orders.find(o=>o.folio===folio)?.canal==='domicilio'?35:20}); }
-  confirmarAceptar(){ const o=this.orders.find(x=>x.folio===this.state.aceptarFor); this.setState({aceptarFor:null}); if(!o)return; const promised=new Date(Date.now()+this.state.aceptarTiempo*60000).toISOString(); this.patchOrder(o,{local:{estado:'aceptado',tiempo:this.state.aceptarTiempo},remote:{status:'confirmed',promised_at:promised,accepted_at:new Date().toISOString(),accepted_by:this.state.session?.user?.id}},'Pedido aceptado · confirmación registrada'); }
+  aceptar(folio){ const order=this.orders.find(o=>o.folio===folio);this.setState({aceptarFor:folio,aceptarTiempo:order?.canal==='domicilio'?35:20}); }
+  confirmarAceptar(){ const o=this.orders.find(x=>x.folio===this.state.aceptarFor); this.setState({aceptarFor:null}); if(!o)return; const promised=o.scheduledAt||new Date(Date.now()+this.state.aceptarTiempo*60000).toISOString(); this.patchOrder(o,{local:{estado:'aceptado',tiempo:this.state.aceptarTiempo},remote:{status:'confirmed',promised_at:promised,accepted_at:new Date().toISOString(),accepted_by:this.state.session?.user?.id}},o.scheduledAt?'Pedido programado aceptado · horario conservado':'Pedido aceptado · confirmación registrada'); }
   avanzar(folio){ const o=this.orders.find(x=>x.folio===folio); if(!o)return;
     if(o.canal==='domicilio'&&o.estado==='listo'){this.assignDelivery(o);return;}
     const flow=o.canal==='domicilio'?['nuevo','aceptado','preparando','listo','en_camino','completado']:['nuevo','aceptado','preparando','listo','completado'];
     const i=flow.indexOf(o.estado); if(i<0||i>=flow.length-1)return; const next=flow[i+1];
     const remote={aceptado:'confirmed',preparando:'preparing',listo:'ready',en_camino:'on_the_way',completado:'delivered'}[next];
-    const extra=next==='completado'?{completed_at:new Date().toISOString()}:(next==='aceptado'?{accepted_at:new Date().toISOString(),accepted_by:this.state.session?.user?.id,promised_at:new Date(Date.now()+20*60000).toISOString()}:{});
+    const extra=next==='completado'?{completed_at:new Date().toISOString()}:(next==='aceptado'?{accepted_at:new Date().toISOString(),accepted_by:this.state.session?.user?.id,promised_at:o.scheduledAt||new Date(Date.now()+20*60000).toISOString()}:{});
     const lbl={aceptado:'Confirmado',preparando:'En preparación',listo:'Listo',en_camino:'En camino',completado:'Completado'}[next]||next;
     this.patchOrder(o,{local:{estado:next,min:0},remote:{status:remote,...extra}},o.folio+' → '+lbl);
   }
@@ -954,8 +959,8 @@ class Component extends DCLogic {
     const board=cols.map(([key,title,color])=>{
       const list=cocinables.filter(o=>o.estado===key).map(o=>{
         const cm=this.canalMeta(o.canal); const late=o.min>15&&key!=='listo'; const prio=late||o.canal==='domicilio';
-        return {folio:o.folio,mesaTxt:o.canal==='establecimiento'?o.cliente:cm.txt,minTxt:o.min===0?'ahora':o.min+' min',late,prio,
-          promTxt:o.tiempo?('promesa '+o.tiempo+' min'):'',
+        return {folio:o.folio,mesaTxt:o.canal==='establecimiento'?o.cliente:cm.txt,minTxt:o.min===0?'ahora':o.min+' min',late,prio,programadoTxt:o.programadoTxt,
+          promTxt:!o.scheduledAt&&o.tiempo?('promesa '+o.tiempo+' min'):'',
           items:o.rechazoMotivo?[...o.items,{q:'',nombre:'Motivo: '+o.rechazoMotivo,nota:''}]:o.items,
           canAvanzar:!['listo','rechazado'].includes(key), canRetro:false,
           nextTxt:{nuevo:'Confirmar',aceptado:'Empezar',preparando:'¡Lista!'}[key]||'Avanzar',
@@ -1086,7 +1091,7 @@ class Component extends DCLogic {
     const pedidosCols=cols.map(([key,title,color])=>{
       const list=filt.filter(o=>o.estado===key).map(o=>{
         const cm=this.canalMeta(o.canal), pm=this.pagoMeta(o.pago); const late=o.min>15&&['preparando','aceptado'].includes(key);
-        return {folio:o.folio,cliente:o.cliente,tel:o.tel,notaPago:o.notaPago,notaIcon:o.notaPago?.includes('AUTO PARA RECOGER:')?'🚗':'💵',minTxt:o.min===0?'ahora':'hace '+o.min+' min',late,
+        return {folio:o.folio,cliente:o.cliente,tel:o.tel,programadoTxt:o.programadoTxt,notaPago:o.notaPago,notaIcon:o.notaPago?.includes('AUTO PARA RECOGER:')?'🚗':'💵',minTxt:o.min===0?'ahora':'hace '+o.min+' min',late,
           canalTxt:cm.txt,canalC:cm.c,canalBg:cm.bg,canalIcon:cm.icon,
           items:o.rechazoMotivo?[...o.items,{q:'',nombre:'Motivo: '+o.rechazoMotivo,nota:'',lineTotal:0}]:o.items,totalTxt:this.MXN(this.itemTotal(o)),pagoTxt:pm.txt,pagoC:pm.c,
           acciones:!['completado','rechazado'].includes(key)&&!(key==='listo'&&o.assignedDriver),esNuevo:key==='nuevo',hasWhatsApp:!!this.customerWhatsAppNumber(o.tel),
@@ -1104,10 +1109,11 @@ class Component extends DCLogic {
     const tiempoOpts=[15,20,30,45].map(t=>({label:t+' min',onClick:()=>this.setState({aceptarTiempo:t}),
       style:`cursor:pointer;flex:1;padding:11px;border-radius:12px;font-weight:700;font-size:14px;border:1.5px solid ${t===this.state.aceptarTiempo?'#10603A':'#E6DCC5'};background:${t===this.state.aceptarTiempo?'#10603A':'#fff'};color:${t===this.state.aceptarTiempo?'#fff':'#5a4e35'}`}));
 
+    const aceptarOrder=this.orders.find(o=>o.folio===this.state.aceptarFor);
     return {pedidosCols, canalFiltros, hayNuevos:pedidosCols[0].count>0, nuevosCount:pedidosCols[0].count,
       rechazoOpen:this.state.rechazoFor!=null, cerrarRechazo:()=>this.setState({rechazoFor:null}), motivos,
       aceptarOpen:this.state.aceptarFor!=null, cerrarAceptar:()=>this.setState({aceptarFor:null}),
-      aceptarFolio:this.state.aceptarFor||'', tiempoOpts, confirmarAceptar:()=>this.confirmarAceptar(),
+      aceptarFolio:this.state.aceptarFor||'',aceptarEsProgramado:!!aceptarOrder?.scheduledAt,aceptarNoProgramado:!aceptarOrder?.scheduledAt,aceptarProgramadoTxt:aceptarOrder?.programadoTxt||'',aceptarSubtitulo:aceptarOrder?.scheduledAt?'Confirma el horario solicitado':'Confirma el tiempo estimado', tiempoOpts, confirmarAceptar:()=>this.confirmarAceptar(),
       stop:(e)=>{e&&e.stopPropagation&&e.stopPropagation();}};
   }
 }
