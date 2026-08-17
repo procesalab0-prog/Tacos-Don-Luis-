@@ -1,17 +1,20 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.4";
 
-const cors = {
-  "Access-Control-Allow-Origin": "https://tacos-don-luis.vercel.app",
+const allowedOrigins = new Set(["https://tacosdonluis.app", "https://www.tacosdonluis.app", "https://tacos-don-luis.vercel.app"]);
+const corsFor = (req: Request) => ({
+  "Access-Control-Allow-Origin": allowedOrigins.has(req.headers.get("origin") || "") ? req.headers.get("origin")! : "https://tacosdonluis.app",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Content-Type": "application/json",
-};
-const reply = (status: number, body: unknown) => new Response(JSON.stringify(body), { status, headers: cors });
+  "Vary": "Origin",
+});
 const hex = (bytes: ArrayBuffer | Uint8Array) => [...new Uint8Array(bytes)].map((b) => b.toString(16).padStart(2, "0")).join("");
 const sha256 = async (value: string) => hex(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value)));
 
 Deno.serve(async (req: Request) => {
+  const cors = corsFor(req);
+  const reply = (status: number, body: unknown) => new Response(JSON.stringify(body), { status, headers: cors });
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (req.method !== "POST") return reply(405, { error: "Método no permitido" });
   try {

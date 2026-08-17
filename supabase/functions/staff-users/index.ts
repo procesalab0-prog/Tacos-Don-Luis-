@@ -1,11 +1,12 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.4";
 
-const cors={"Access-Control-Allow-Origin":"https://tacos-don-luis.vercel.app","Access-Control-Allow-Headers":"authorization, apikey, content-type","Access-Control-Allow-Methods":"GET, POST, PATCH, OPTIONS","Content-Type":"application/json"};
-const json=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:cors});
+const allowedOrigins=new Set(["https://tacosdonluis.app","https://www.tacosdonluis.app","https://tacos-don-luis.vercel.app"]);
+const corsFor=(req:Request)=>({"Access-Control-Allow-Origin":allowedOrigins.has(req.headers.get("origin")||"")?req.headers.get("origin")!:"https://tacosdonluis.app","Access-Control-Allow-Headers":"authorization, apikey, content-type","Access-Control-Allow-Methods":"GET, POST, PATCH, OPTIONS","Content-Type":"application/json","Vary":"Origin"});
 const roles=["owner","admin","cashier","kitchen","waiter","driver"];
 
 Deno.serve(async(req:Request)=>{
+ const cors=corsFor(req),json=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:cors});
  if(req.method==="OPTIONS")return new Response("ok",{headers:cors});
  try{
   const url=new URL(req.url),token=(req.headers.get("Authorization")||"").replace(/^Bearer\s+/i,"");
@@ -25,7 +26,7 @@ Deno.serve(async(req:Request)=>{
   }
   if(req.method==="POST"&&body.action==="invite"){
    const email=String(body.email||"").trim().toLowerCase(),role=String(body.role||"");if(!email||!roles.includes(role))return json({error:"Correo o rol inválido"},400);
-   const {data,error}=await admin.auth.admin.inviteUserByEmail(email,{redirectTo:"https://tacos-don-luis.vercel.app/admin/",data:{full_name:String(body.full_name||"").trim()}});if(error||!data.user)return json({error:error?.message||"No se pudo invitar"},400);
+   const {data,error}=await admin.auth.admin.inviteUserByEmail(email,{redirectTo:"https://tacosdonluis.app/admin/",data:{full_name:String(body.full_name||"").trim()}});if(error||!data.user)return json({error:error?.message||"No se pudo invitar"},400);
    await admin.from("profiles").upsert({id:data.user.id,full_name:String(body.full_name||"").trim()||null,phone:String(body.phone||"").trim()||null,account_type:"staff"});
    const {error:memberError}=await admin.from("branch_memberships").insert({branch_id:branchId,user_id:data.user.id,role,is_active:true});if(memberError)throw memberError;
    return json({ok:true,user_id:data.user.id});
