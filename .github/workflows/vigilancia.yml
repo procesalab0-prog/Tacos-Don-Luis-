@@ -1,0 +1,118 @@
+name: Vigilancia del sitio
+
+# Revisa cada 10 minutos que la página de pedidos y la base de datos sigan
+# respondiendo. Si algo se cae abre un issue; cuando se recupera lo cierra solo.
+#
+# Por qué existe: hoy nadie se entera de que el sitio está caído hasta que un
+# cliente llama a la taquería. Esto no arregla nada por su cuenta, pero avisa.
+#
+# DOS COSAS QUE HAY QUE SABER
+#
+#  1. El cron de GitHub es "cuando se pueda", no a la hora exacta. En horas
+#     pico se retrasa entre 5 y 15 minutos. Sirve para enterarse de una caída
+#     larga, no para medir disponibilidad al minuto.
+#  2. GitHub apaga los cron de los repos públicos después de 60 días sin
+#     commits. Si deja de correr sin explicación, es eso: se vuelve a prender
+#     desde la pestaña Actions.
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+concurrency:
+  group: vigilancia
+  cancel-in-progress: false
+
+env:
+  SITIO: https://tacosdonluis.app/pedir/
+  SUPABASE: https://qvzgwjddeybktpwqcoko.supabase.co
+  # Clave publicable: es la que ya viaja en el HTML del cliente. No es secreta.
+  SUPABASE_KEY: sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD
+  TITULO: 'Caída detectada: el sitio no responde'
+
+jobs:
+  revisar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Revisar la página de pedidos
+        id: sitio
+        run: |
+          set +e
+          # Dos intentos antes de dar por caído: un timeout suelto no es
+          # una caída, y no queremos despertar a nadie por eso.
+          for intento in 1 2; do
+            cuerpo=$(curl -sS --max-time 20 -w '\n%{http_code}' "$SITIO")
+            codigo=$(printf '%s' "$cuerpo" | tail -n1)
+            html=$(printf '%s' "$cuerpo" | sed '$d')
+            if [ "$codigo" = "200" ] && printf '%s' "$html" | grep -q 'Tacos Don Luis'; then
+              echo "estado=ok" >> "$GITHUB_OUTPUT"
+              echo "Página OK (HTTP $codigo)"
+              exit 0
+            fi
+            echo "Intento $intento falló (HTTP $codigo)"
+            [ "$intento" = 1 ] && sleep 20
+          done
+          echo "estado=falla" >> "$GITHUB_OUTPUT"
+          echo "detalle=La página respondió HTTP $codigo o no traía el contenido esperado." >> "$GITHUB_OUTPUT"
+
+      - name: Revisar la base de datos
+        id: datos
+        if: steps.sitio.outputs.estado == 'ok'
+        run: |
+          set +e
+          for intento in 1 2; do
+            codigo=$(curl -sS --max-time 20 -o /dev/null -w '%{http_code}' \
+              -H "apikey: $SUPABASE_KEY" \
+              -H "Authorization: Bearer $SUPABASE_KEY" \
+              "$SUPABASE/rest/v1/branches?select=id&limit=1")
+            if [ "$codigo" = "200" ]; then
+              echo "estado=ok" >> "$GITHUB_OUTPUT"
+              echo "Base de datos OK"
+              exit 0
+            fi
+            echo "Intento $intento falló (HTTP $codigo)"
+            [ "$intento" = 1 ] && sleep 20
+          done
+          echo "estado=falla" >> "$GITHUB_OUTPUT"
+          echo "detalle=Supabase respondió HTTP $codigo al pedir la sucursal. El menú y los pedidos dependen de esto." >> "$GITHUB_OUTPUT"
+
+      - name: Abrir o actualizar el aviso
+        if: steps.sitio.outputs.estado == 'falla' || steps.datos.outputs.estado == 'falla'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DETALLE: ${{ steps.sitio.outputs.detalle }}${{ steps.datos.outputs.detalle }}
+        run: |
+          set -e
+          abierto=$(gh issue list --state open --label caida --limit 1 --json number --jq '.[0].number // empty')
+          cuando=$(date -u '+%Y-%m-%d %H:%M UTC')
+          if [ -n "$abierto" ]; then
+            printf '%s\n\n%s\n' "Sigue caído · $cuando" "$DETALLE" > cuerpo.md
+            gh issue comment "$abierto" --body-file cuerpo.md
+          else
+            gh label create caida --color d73a4a --description "El sitio no responde" 2>/dev/null || true
+            {
+              printf '%s\n\n' "$DETALLE"
+              printf 'Detectado el %s por la vigilancia automática.\n\n' "$cuando"
+              printf 'Qué revisar, en orden:\n\n'
+              printf '1. Vercel → Deployments: si el último despliegue falló, se revierte desde ahí.\n'
+              printf '2. Supabase → Project: si el proyecto está pausado, se reanuda desde el panel.\n'
+              printf '3. Si las dos están bien, puede ser el dominio: revisar DNS en Vercel.\n\n'
+              printf 'Este issue se cierra solo cuando el sitio vuelva a responder.\n'
+            } > cuerpo.md
+            gh issue create --title "$TITULO" --label caida --body-file cuerpo.md
+          fi
+
+      - name: Cerrar el aviso si ya se recuperó
+        if: steps.sitio.outputs.estado == 'ok' && steps.datos.outputs.estado == 'ok'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          abierto=$(gh issue list --state open --label caida --limit 1 --json number --jq '.[0].number // empty')
+          if [ -n "$abierto" ]; then
+            gh issue close "$abierto" --comment "Ya respondiendo · $(date -u '+%Y-%m-%d %H:%M UTC'). Se cierra solo."
+          fi
