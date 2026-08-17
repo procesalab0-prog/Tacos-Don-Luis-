@@ -4,36 +4,13 @@ Este archivo lleva el control de qué migraciones y qué Edge Functions ya está
 aplicadas en el proyecto, para no volver a aplicarlas ni darlas por hechas sin
 comprobar. Actualizar aquí cada vez que se despliegue algo.
 
-> **Este archivo se quedó atrás.** Decía que no había nada pendiente, pero desde
-> entonces entraron migraciones de dos lados a la vez. Lo de abajo es el estado
-> real al 17 de agosto. Antes de dar algo por aplicado, córrele la comprobación
-> que viene al final.
+**Al día de hoy no hay nada pendiente.** Las cuatro tareas del 17 de agosto ya fueron aplicadas y verificadas en producción.
 
 ---
 
 ## Pendiente de aplicar
 
-Correr en el SQL Editor **en este orden**:
-
-| # | Archivo | Qué hace |
-|---|---|---|
-| 1 | `migrations/20260814_driver_settlements.sql` | Tabla `driver_settlements`. Sin esto el botón "Solicitar liquidación" del repartidor no guarda nada y administración no muestra cortes. |
-| 2 | `migrations/20260814_index_driver_settlements_settled_by.sql` | Índice sobre `settled_by`. Va después de la tabla. |
-| 3 | `migrations/20260817_consolidar_politicas_evidencia.sql` | Deja una sola versión de las políticas de la evidencia de entrega. **Léelo: cierra un permiso que quedó abierto.** |
-| 4 | `fotos-productos.sql` | Asigna la foto a cada producto. Trae un bloque de revisión que se corre primero. |
-
-Sobre el punto 3: la evidencia se construyó dos veces en paralelo, con rutas
-distintas, y las políticas de la primera versión nunca se borraron. En Postgres
-las políticas de un mismo comando se suman, así que la regla vieja dejaba a
-cualquier usuario con sesión escribir en el depósito. El archivo borra las de
-las dos versiones y vuelve a crear solo las correctas. Se puede correr varias
-veces sin romper nada.
-
-Los archivos `20260814_delivery_evidence.sql` y
-`20260814_admin_accounts_and_delivery_evidence.sql` ya no hace falta correrlos
-por separado: el 3 los deja en su estado final.
-
-Ninguno de estos toca Edge Functions. No hay funciones pendientes de desplegar.
+Nada pendiente.
 
 ---
 
@@ -45,6 +22,10 @@ Ninguno de estos toca Edge Functions. No hay funciones pendientes de desplegar.
 | 2026-08-12 | Edge Function `submit-review` | Panel de Supabase |
 | 2026-08-13 | `20260813_driver_vehicle.sql` — columnas `vehicle_type`, `vehicle_plate`, `vehicle_color` en `driver_status` | SQL Editor |
 | 2026-08-13 | Edge Function `track-order` (redespliegue: ahora devuelve `repartidor`) | Panel de Supabase |
+| 2026-08-17 | `20260814_driver_settlements.sql` — tabla, RLS y políticas de liquidaciones | Conexión administrada de Supabase |
+| 2026-08-17 | `20260814_index_driver_settlements_settled_by.sql` — índice de liquidaciones completadas | Conexión administrada de Supabase |
+| 2026-08-17 | `20260817_consolidar_politicas_evidencia.sql` — consolidación y cierre de políticas abiertas | Conexión administrada de Supabase |
+| 2026-08-17 | `fotos-productos.sql` — asignación de imágenes (19 de 19 productos con foto) | Conexión administrada de Supabase |
 
 ---
 
@@ -71,7 +52,7 @@ select to_regclass('public.driver_settlements');
 select policyname
 from pg_policies
 where schemaname = 'storage' and tablename = 'objects'
-  and qual || coalesce(with_check,'') like '%delivery-evidence%'
+  and coalesce(qual,'') || coalesce(with_check,'') like '%delivery-evidence%'
 order by policyname;
 
 -- fotos de los productos: no debería quedar ninguno en null
