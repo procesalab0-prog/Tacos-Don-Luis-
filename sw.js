@@ -1,6 +1,6 @@
-self.__DON_LUIS_PWA_VERSION__='2.24.6';
-// release-sync: 2.24.6
-const CACHE='don-luis-2.24.6';
+self.__DON_LUIS_PWA_VERSION__='2.24.7';
+// release-sync: 2.24.7
+const CACHE='don-luis-2.24.7';
 
 // Solo se guardan archivos propios y estáticos. Nunca se cachean las respuestas
 // de Supabase: el menú, los precios y el estado de los pedidos deben venir en vivo.
