@@ -45,7 +45,9 @@ jobs:
           # Dos intentos antes de dar por caído: un timeout suelto no es
           # una caída, y no queremos despertar a nadie por eso.
           for intento in 1 2; do
-            cuerpo=$(curl -sS --max-time 20 -w '\n%{http_code}' "$SITIO")
+            # El dominio sin www redirige al canónico. -L evita interpretar
+            # esa redirección 308 como una caída del sitio.
+            cuerpo=$(curl -sSL --max-time 20 -w '\n%{http_code}' "$SITIO")
             codigo=$(printf '%s' "$cuerpo" | tail -n1)
             html=$(printf '%s' "$cuerpo" | sed '$d')
             if [ "$codigo" = "200" ] && printf '%s' "$html" | grep -q 'Tacos Don Luis'; then

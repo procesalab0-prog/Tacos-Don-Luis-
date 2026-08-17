@@ -26,6 +26,9 @@ Nada pendiente.
 | 2026-08-17 | `20260814_index_driver_settlements_settled_by.sql` — índice de liquidaciones completadas | Conexión administrada de Supabase |
 | 2026-08-17 | `20260817_consolidar_politicas_evidencia.sql` — consolidación y cierre de políticas abiertas | Conexión administrada de Supabase |
 | 2026-08-17 | `fotos-productos.sql` — asignación de imágenes (19 de 19 productos con foto) | Conexión administrada de Supabase |
+| 2026-08-17 | `20260817_loyalty_points_payment.sql` — pago parcial/total con puntos, devolución por rechazo/cancelación e índice de reseñas | Conexión administrada de Supabase |
+| 2026-08-17 | `20260817_remove_duplicate_driver_settlement_index.sql` — retiro de índice duplicado de liquidaciones | Conexión administrada de Supabase |
+| 2026-08-17 | Edge Function `create-guest-order` v9 — aplicación segura de puntos y respeto de métodos de pago configurados | Conexión administrada de Supabase |
 
 ---
 

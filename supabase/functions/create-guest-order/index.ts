@@ -40,6 +40,7 @@ Deno.serve(async (req: Request) => {
     const customer = body.customer || {};
     const items = Array.isArray(body.items) ? body.items : [];
     const comboIds = Array.isArray(body.comboIds) ? body.comboIds.map(String).slice(0, 20) : [];
+    const requestedLoyaltyPoints = Math.max(0, Math.floor(Number(body.loyaltyPoints) || 0));
 
     if (!/^[0-9a-f-]{36}$/i.test(requestId)) return reply(400, { error: "Solicitud inválida" });
     if (!["pickup", "delivery"].includes(fulfillment)) return reply(400, { error: "Tipo de entrega inválido" });
@@ -80,10 +81,13 @@ Deno.serve(async (req: Request) => {
         customerId = customerRecord?.id || null;
       }
     }
+    if (requestedLoyaltyPoints > 0 && !customerId) {
+      return reply(401, { error: "Inicia sesión para pagar con puntos" });
+    }
 
     const { data: existing } = await supabase
       .from("orders")
-      .select("id,folio,public_code,status,total,promised_at")
+      .select("id,folio,public_code,status,total,promised_at,loyalty_points_redeemed,loyalty_discount")
       .eq("client_request_id", requestId)
       .maybeSingle();
     if (existing) return reply(200, { order: existing, trackingToken: secureTrackingToken, duplicate: true });
@@ -100,6 +104,10 @@ Deno.serve(async (req: Request) => {
       ? branch.business_settings[0]
       : branch.business_settings;
     if (!settings?.is_open) return reply(409, { error: "La sucursal está cerrada" });
+    const paymentMethods = settings?.payment_methods || {};
+    if (paymentMethod !== "clip_simulated" && paymentMethods[paymentMethod] === false) {
+      return reply(409, { error: "Ese método de pago no está disponible" });
+    }
     // Saturated mode keeps ordering open but extends the promise shown to customers.
     if (paymentMethod === "clip_simulated" && !settings?.demo_mode) return reply(409, { error: "El pago en línea con Clip aún no está habilitado" });
     if (fulfillment === "pickup" && !settings?.pickup_enabled) return reply(409, { error: "Los pedidos para recoger están pausados" });
@@ -194,7 +202,7 @@ Deno.serve(async (req: Request) => {
     const scheduledFor = scheduledForRaw ? new Date(scheduledForRaw).toISOString() : null;
     const promisedAt = scheduledFor || new Date(Date.now() + eta * 60000).toISOString();
 
-    const { data: order, error: orderError } = await supabase
+    const { data: createdOrder, error: orderError } = await supabase
       .from("orders")
       .insert({
         client_request_id: requestId,
@@ -227,18 +235,19 @@ Deno.serve(async (req: Request) => {
         delivery_fee: deliveryFee,
         total,
       })
-      .select("id,folio,public_code,status,total,promised_at")
+      .select("id,folio,public_code,status,total,promised_at,loyalty_points_redeemed,loyalty_discount")
       .single();
 
-    if (orderError || !order) {
+    if (orderError || !createdOrder) {
       if (orderError?.code === "23505") {
         const { data: duplicate } = await supabase.from("orders")
-          .select("id,folio,public_code,status,total,promised_at")
+          .select("id,folio,public_code,status,total,promised_at,loyalty_points_redeemed,loyalty_discount")
           .eq("client_request_id", requestId).single();
         if (duplicate) return reply(200, { order: duplicate, trackingToken: secureTrackingToken, duplicate: true });
       }
       throw orderError || new Error("No fue posible crear el pedido");
     }
+    let order = createdOrder;
 
     const orderItems = pricedItems.map((line: any) => ({
       order_id: order.id,
@@ -274,6 +283,18 @@ Deno.serve(async (req: Request) => {
       to_status: "pending_acceptance",
       note: "Pedido recibido desde la web",
     });
+
+    if (requestedLoyaltyPoints > 0 && customerId) {
+      const { data: pointsResult, error: pointsError } = await supabase.rpc(
+        "apply_loyalty_points_to_order",
+        { p_order_id: order.id, p_customer_id: customerId, p_requested_points: requestedLoyaltyPoints },
+      );
+      if (pointsError) {
+        await supabase.from("orders").delete().eq("id", order.id);
+        return reply(409, { error: pointsError.message || "No fue posible aplicar los puntos" });
+      }
+      order = { ...order, total: Number(pointsResult.total), loyalty_points_redeemed: Number(pointsResult.points_used), loyalty_discount: Number(pointsResult.discount) };
+    }
 
     return reply(201, { order, trackingToken: secureTrackingToken });
   } catch (error) {
