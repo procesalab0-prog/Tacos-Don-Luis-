@@ -30,6 +30,8 @@ concurrency:
 env:
   SITIO: https://tacosdonluis.app/pedir/
   SUPABASE: https://qvzgwjddeybktpwqcoko.supabase.co
+  # Permite que GitHub CLI gestione avisos sin depender de un checkout local.
+  GH_REPO: ${{ github.repository }}
   # Clave publicable: es la que ya viaja en el HTML del cliente. No es secreta.
   SUPABASE_KEY: sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD
   TITULO: 'Caída detectada: el sitio no responde'
