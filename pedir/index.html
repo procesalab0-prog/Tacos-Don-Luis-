@@ -42,6 +42,25 @@
 <div style="min-height:100vh;display:flex;justify-content:center;background:#e7ddc8;background-image:radial-gradient(circle at 20% 10%,#efe7d5,#e2d6bd)">
   <div style="width:100%;max-width:{{ shellMax }};background:#F3F0E6;min-height:100vh;position:relative;box-shadow:0 0 60px rgba(0,0,0,.12);display:flex;flex-direction:column">
 
+
+    <sc-if value="{{ showPrelaunch }}" hint-placeholder-val="{{ true }}">
+      <section role="dialog" aria-modal="true" aria-labelledby="prelaunch-title" style="position:fixed;inset:0;z-index:1000;min-height:100dvh;overflow:auto;background:#063c24;color:#fff;display:flex;align-items:center;justify-content:center;padding:22px">
+        <img src="../assets/hero-pedir.jpg" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:.42">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,28,17,.48),rgba(3,28,17,.9) 68%,#063c24 100%)"></div>
+        <div style="position:relative;width:min(100%,440px);text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;animation:dlpop .35s ease both">
+          <div style="width:112px;height:112px;border-radius:28px;background:#F3F0E6;padding:8px;box-shadow:0 14px 35px rgba(0,0,0,.28)"><img src="../assets/logo-don-luis-oficial.png" alt="Tacos Don Luis" style="width:100%;height:100%;object-fit:contain"></div>
+          <span style="display:inline-flex;align-items:center;background:#F2C230;color:#3a2c00;border-radius:999px;padding:7px 15px;font-size:12px;font-weight:800;letter-spacing:.13em">MUY PRONTO</span>
+          <div>
+            <h1 id="prelaunch-title" style="font-family:'Fredoka',sans-serif;font-size:clamp(38px,11vw,58px);line-height:.98;margin:0;color:#fff">Próximamente</h1>
+            <p style="font-size:16px;line-height:1.55;color:#e3f0e6;margin:14px auto 0;max-width:360px">Estamos preparando una nueva forma de pedir tus favoritos de Tacos Don Luis.</p>
+          </div>
+          <button type="button" onClick="{{ onPrelaunchWA }}" style="cursor:pointer;width:100%;min-height:56px;border:0;border-radius:16px;background:#25D366;color:#062f1d;font-family:'Fredoka',sans-serif;font-size:18px;font-weight:700;box-shadow:0 10px 25px rgba(0,0,0,.24)">Pedir por WhatsApp</button>
+          <button type="button" onClick="{{ onExplorePreview }}" style="cursor:pointer;width:100%;min-height:50px;border:1.5px solid rgba(255,255,255,.72);border-radius:15px;background:rgba(255,255,255,.1);color:#fff;font-family:'Rubik',sans-serif;font-size:14px;font-weight:700;backdrop-filter:blur(7px)">Conocer el menú</button>
+          <p style="margin:0;color:#bdd6c3;font-size:12px;line-height:1.45">El catálogo está disponible para conocerlo. Los pedidos dentro de la app se habilitarán próximamente.</p>
+        </div>
+      </section>
+    </sc-if>
+
     <header style="position:sticky;top:0;z-index:30;background:#10603A;color:#fff;padding:11px 16px;display:flex;align-items:center;gap:12px">
       <button onClick="{{ onTapLogo }}" style="cursor:pointer;background:none;border:none;display:flex;align-items:center;gap:9px;padding:0;min-height:44px">
         <span style="width:42px;height:42px;border-radius:14px;background:#F3F0E6;display:flex;align-items:center;justify-content:center;flex:0 0 auto;padding:3px"><img src="../assets/logo-don-luis-oficial.png" alt="Tacos Don Luis" style="display:block;width:100%;height:100%;object-fit:contain"></span>
@@ -655,7 +674,10 @@
     </sc-if>
   </div></div></x-dc><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.25.2';
+  static APP_VERSION = '2.25.3';
+  // Una sola bandera controla el prelanzamiento. Al ponerla en false vuelve la operación normal.
+  static PRELAUNCH_MODE = true;
+  static PRELAUNCH_MESSAGE = '¡Hola! Vi la nueva app de Tacos Don Luis y me gustaría hacer un pedido por WhatsApp.';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   // Correo al que llegan las solicitudes de derechos ARCO. Debe ser un buzón real y atendido.
@@ -666,7 +688,7 @@ class Component extends DCLogic {
     folio:null, trackStep:0, cuentaTab:'perfil', logged:false,
     remoteMenu:null, remoteCategories:null, remoteZones:null, modifierOptions:null, branchId:null,branchLocation:null,
     settings:null, submitting:false, trackingToken:null, liveOrder:null,accountOrders:[],loyaltyAccount:null,loyaltyRule:null,marketingContent:[],combos:[],salesStats:[],loyaltyRewards:[],loyaltyMovements:[],loyaltyRedemptions:[],referralCode:'',
-    authEmail:'',authPassword:'',signupMode:false,signupName:'',signupPhone:'',signupConfirm:'',referralInput:'',session:null,currentUser:null,logoTaps:0,showEasterEgg:false,showPrivacidad:false };
+    authEmail:'',authPassword:'',signupMode:false,signupName:'',signupPhone:'',signupConfirm:'',referralInput:'',session:null,currentUser:null,logoTaps:0,showEasterEgg:false,showPrivacidad:false,showPrelaunch:Component.PRELAUNCH_MODE };
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
   componentDidMount(){
@@ -691,6 +713,8 @@ class Component extends DCLogic {
   // Los avisos son la única explicación que recibe el cliente cuando algo
   // falla, así que se quedan el tiempo suficiente para alcanzar a leerlos.
   toast(m){ clearTimeout(this._t); this.setState({toast:m}); this._t=setTimeout(()=>this.setState({toast:null}),5000); }
+  prelaunchNotice(){if(!Component.PRELAUNCH_MODE)return false;this.toast('Los pedidos desde la app estarán disponibles próximamente. Por ahora pide por WhatsApp.');return true;}
+  openPrelaunchWhatsApp(){const phone='524775222095';window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(Component.PRELAUNCH_MESSAGE),'_blank','noopener');}
   // Los errores que vienen del servidor o del navegador llegan en inglés y con
   // jerga técnica. Al cliente le tocaba leer "Failed to fetch" o el texto crudo
   // que devolviera la función. Aquí se traducen a algo accionable.
@@ -941,8 +965,9 @@ class Component extends DCLogic {
   catTint(c){ return {Tacos:'#D6453D',Quesadillas:'#E0A526',Tortas:'#10603A',['Tacos light']:'#28A54C',Bebidas:'#1f6f8b'}[c]; }
 
   cartCount(){ return this.state.cart.filter(l=>!l.comboUid).reduce((s,l)=>s+l.q,0)+(this.state.activeCombos||[]).length; }
-  addQuick(id){ const it=this.itemById(id); if(it.disponible===false){ this.toast(it.nombre+' está agotado hoy'); return; }if(this.proteinOptionsFor(it).length){this.openSheet(id);return;}const c=[...this.state.cart];c.push({uid:Date.now()+Math.random(),id,q:1,protein:'',mods:[],nota:''});this.setState({cart:c});this.toast(it.nombre+' agregado'); }
+  addQuick(id){ if(this.prelaunchNotice())return; const it=this.itemById(id); if(it.disponible===false){ this.toast(it.nombre+' está agotado hoy'); return; }if(this.proteinOptionsFor(it).length){this.openSheet(id);return;}const c=[...this.state.cart];c.push({uid:Date.now()+Math.random(),id,q:1,protein:'',mods:[],nota:''});this.setState({cart:c});this.toast(it.nombre+' agregado'); }
   addCombo(combo){
+    if(this.prelaunchNotice())return;
     const components=Array.isArray(combo.components)?combo.components:[];if(!components.length){this.toast('Este combo aún no tiene productos');return;}
     const comboUid=crypto.randomUUID(),cart=[...this.state.cart];for(const part of components){const id=part.product_id||part.productId,product=this.itemById(id);if(!product?.id||product.disponible===false){this.toast('Un producto del combo no está disponible');return;}cart.push({uid:Date.now()+Math.random(),id,q:Math.max(1,Number(part.quantity)||1),protein:'',mods:[],nota:'Combo: '+combo.name,comboId:combo.id,comboUid});}
     this.setState({cart,activeCombos:[...this.state.activeCombos,{id:combo.id,uid:comboUid}]});this.toast(combo.name+' agregado');
@@ -954,7 +979,7 @@ class Component extends DCLogic {
   sauceOptionsFor(it){const value=it?.customization?.sauce_options;return Array.isArray(value)?value:it?.cat==='Bebidas'?[]:['Salsa roja','Salsa verde'];}
   asideOptionsFor(it){const value=it?.customization?.aside_options;return Array.isArray(value)?value:it?.cat==='Bebidas'?[]:['Cebolla aparte','Cilantro aparte','Salsa roja aparte','Salsa verde aparte','Todo aparte'];}
   flavorOptionsFor(it){const value=it?.customization?.flavor_options;return Array.isArray(value)?value:[];}
-  openSheet(id,editUid=null){const line=editUid==null?null:this.state.cart.find(l=>l.uid===editUid);this.setState({sheetItem:id,sheetEditUid:line?.uid||null,sheetQty:line?.q||1,sheetProtein:line?.protein||'',sheetFlavor:line?.flavor||'',sheetMods:[...(line?.mods||[])],sheetNota:line?.nota||''});}
+  openSheet(id,editUid=null){if(this.prelaunchNotice())return;const line=editUid==null?null:this.state.cart.find(l=>l.uid===editUid);this.setState({sheetItem:id,sheetEditUid:line?.uid||null,sheetQty:line?.q||1,sheetProtein:line?.protein||'',sheetFlavor:line?.flavor||'',sheetMods:[...(line?.mods||[])],sheetNota:line?.nota||''});}
   closeSheet(){ this.setState({sheetItem:null,sheetEditUid:null}); }
   toggleMod(m){ const a=[...this.state.sheetMods]; const i=a.indexOf(m); if(i>-1)a.splice(i,1); else a.push(m); this.setState({sheetMods:a}); }
   esSinPicante(m){return /sin\s*(picante|salsa|chile)/i.test(String(m||''));}
@@ -980,7 +1005,7 @@ class Component extends DCLogic {
     this.setState({sheetMods:limpio});}
   toggleAside(m){const it=this.itemById(this.state.sheetItem),all=this.asideOptionsFor(it),prep=this.preparationOptionsFor(it),sauces=this.sauceOptionsFor(it),rest=this.state.sheetMods.filter(x=>!all.includes(x));if(m==='Todo aparte'){const limpio=rest.filter(x=>!prep.includes(x)&&!sauces.includes(x));this.setState({sheetMods:this.state.sheetMods.includes(m)?limpio:[...limpio,m]});return;}const selected=this.state.sheetMods.filter(x=>all.includes(x)&&x!=='Todo aparte'),next=selected.includes(m)?selected.filter(x=>x!==m):[...selected,m];this.setState({sheetMods:[...rest.filter(x=>x!=='Todo aparte'),...next]});}
   sheetUnit(){ return this.itemById(this.state.sheetItem).precio; }
-  addSheet(){const it=this.itemById(this.state.sheetItem);if(this.proteinOptionsFor(it).length&&!this.state.sheetProtein){this.toast('Elige de qué carne lo quieres');return;}const prep=this.preparationOptionsFor(it),todoAparte=this.state.sheetMods.includes('Todo aparte');if(prep.length&&!todoAparte&&!prep.some(o=>this.state.sheetMods.includes(o))){this.toast('Elige cómo lo preparamos o selecciona Todo aparte');return;}if(this.flavorOptionsFor(it).length&&!this.state.sheetFlavor){this.toast('Elige el sabor del agua');return;}const row={uid:this.state.sheetEditUid||Date.now()+Math.random(),id:this.state.sheetItem,q:this.state.sheetQty,protein:this.state.sheetProtein,flavor:this.state.sheetFlavor,mods:[...this.state.sheetMods],nota:this.state.sheetNota},editing=!!this.state.sheetEditUid,c=editing?this.state.cart.map(l=>l.uid===this.state.sheetEditUid?row:l):[...this.state.cart,row];this.setState({cart:c,sheetItem:null,sheetEditUid:null});this.toast(editing?'Producto actualizado':'Agregado al carrito');}
+  addSheet(){if(this.prelaunchNotice())return;const it=this.itemById(this.state.sheetItem);if(this.proteinOptionsFor(it).length&&!this.state.sheetProtein){this.toast('Elige de qué carne lo quieres');return;}const prep=this.preparationOptionsFor(it),todoAparte=this.state.sheetMods.includes('Todo aparte');if(prep.length&&!todoAparte&&!prep.some(o=>this.state.sheetMods.includes(o))){this.toast('Elige cómo lo preparamos o selecciona Todo aparte');return;}if(this.flavorOptionsFor(it).length&&!this.state.sheetFlavor){this.toast('Elige el sabor del agua');return;}const row={uid:this.state.sheetEditUid||Date.now()+Math.random(),id:this.state.sheetItem,q:this.state.sheetQty,protein:this.state.sheetProtein,flavor:this.state.sheetFlavor,mods:[...this.state.sheetMods],nota:this.state.sheetNota},editing=!!this.state.sheetEditUid,c=editing?this.state.cart.map(l=>l.uid===this.state.sheetEditUid?row:l):[...this.state.cart,row];this.setState({cart:c,sheetItem:null,sheetEditUid:null});this.toast(editing?'Producto actualizado':'Agregado al carrito');}
 
   lineUnit(l){ return this.itemById(l.id).precio; }
   lineTotal(l){ return this.lineUnit(l)*l.q; }
@@ -1134,6 +1159,7 @@ class Component extends DCLogic {
   }
 
   async hacerPedido(){
+    if(this.prelaunchNotice())return;
     if(this.state.settings?.is_open===false){this.toast('Los pedidos en línea están pausados por el momento');return;}
     const scheduleStatus=this.weeklyScheduleStatus();if(!scheduleStatus.isOpen){this.toast(scheduleStatus.label);return;}
     if(!this.availablePaymentKeys().includes(this.state.pago)){this.toast('Elige un método de pago disponible');return;}
@@ -1429,7 +1455,7 @@ class Component extends DCLogic {
   }
   async redeemReward(reward){if(!this.state.session){this.toast('Inicia sesión para canjear');return;}try{const result=await this.api('/rest/v1/rpc/redeem_loyalty_reward',{method:'POST',body:JSON.stringify({p_reward_id:reward.id})});this.toast('Canje confirmado · código '+result.code);await this.loadCustomerData();}catch(error){this.toast(error.message||'No se pudo realizar el canje');}}
   async claimReferral(){const code=String(this.state.referralInput||'').trim();if(!code){this.toast('Escribe un código');return;}try{await this.api('/rest/v1/rpc/claim_referral_code',{method:'POST',body:JSON.stringify({p_branch_id:this.state.branchId,p_code:code})});this.toast('Código aplicado; ambos recibirán puntos tras tu primera compra');this.setState({referralInput:''});}catch(error){this.toast(error.message||'No se pudo aplicar el código');}}
-  repeatOrder(order){const cart=[];for(const line of order.order_items||[]){const product=this.itemById(line.product_id);if(!line.product_id||!product?.id||product.disponible===false)continue;cart.push({uid:Date.now()+Math.random(),id:line.product_id,q:Number(line.quantity)||1,protein:'',mods:[],nota:line.notes||''});}if(!cart.length){this.toast('Los productos de ese pedido ya no están disponibles');return;}this.setState({cart,activeCombos:[],route:'carrito'});this.toast('Pedido agregado al carrito; revisa disponibilidad y total');}
+  repeatOrder(order){if(this.prelaunchNotice())return;const cart=[];for(const line of order.order_items||[]){const product=this.itemById(line.product_id);if(!line.product_id||!product?.id||product.disponible===false)continue;cart.push({uid:Date.now()+Math.random(),id:line.product_id,q:Number(line.quantity)||1,protein:'',mods:[],nota:line.notes||''});}if(!cart.length){this.toast('Los productos de ese pedido ya no están disponibles');return;}this.setState({cart,activeCombos:[],route:'carrito'});this.toast('Pedido agregado al carrito; revisa disponibilidad y total');}
   vmPedidos(){
     const terminal=['delivered','cancelled','rejected','failed_delivery'];
     const statusLabel={pending_acceptance:'Por aceptar',confirmed:'Confirmado',preparing:'En preparación',ready:'Listo',assigned:'Repartidor asignado',on_the_way:'En camino',delivered:'Entregado',cancelled:'Cancelado',rejected:'Rechazado',failed_delivery:'No entregado'};
@@ -1550,8 +1576,9 @@ class Component extends DCLogic {
       menuCats, menuItems,
       sheetOpen, sheet,
       cartLines, cartEmpty:cartLines.length===0, cartNotEmpty:cartLines.length>0, cartSubTxt:this.MXN(sub),
-      goCheckout:()=>{ if(!this.state.cart.length){this.toast('Tu carrito está vacío');return;} this.go('checkout'); },
-      goHome:()=>this.go('home'), goMenu:()=>this.go('menu'), goCart:()=>this.go('carrito'), goCuenta:()=>this.go('cuenta'),
+      goCheckout:()=>{ if(this.prelaunchNotice())return; if(!this.state.cart.length){this.toast('Tu carrito está vacío');return;} this.go('checkout'); },
+      goHome:()=>this.go('home'), goMenu:()=>this.go('menu'), goCart:()=>{if(this.prelaunchNotice())return;this.go('carrito');}, goCuenta:()=>this.go('cuenta'),
+      showPrelaunch:!!this.state.showPrelaunch,onPrelaunchWA:()=>this.openPrelaunchWhatsApp(),onExplorePreview:()=>{this.setState({showPrelaunch:false,route:'menu'});window.scrollTo?.({top:0});},
       onTapLogo:()=>{this.tapLogo();this.go('home');},showEasterEgg:this.state.showEasterEgg,onCloseEasterEgg:()=>this.setState({showEasterEgg:false}),appVersion:Component.APP_VERSION,
       showPrivacidad:this.state.showPrivacidad,
       hayRepartidor:!!(this.state.liveOrder?.repartidor?.nombre||this.state.liveOrder?.repartidor?.placas),
