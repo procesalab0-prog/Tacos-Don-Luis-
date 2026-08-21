@@ -10,6 +10,17 @@ async function alCheckout(b,resp){
   await p.addInitScript(()=>{const v=new Set();setInterval(()=>{if(!document.body)return;
     document.querySelectorAll('div').forEach(e=>{if(getComputedStyle(e).position!=='fixed')return;
       const t=(e.innerText||'').trim(); if(t&&t.length<160&&!v.has(t)){v.add(t);window.__t&&window.__t(t);}});},120);});
+  // El prelanzamiento apaga el flujo de pedido a propósito: tapa la pantalla y
+  // openSheet/addQuick se cortan solos. Esa es la conducta correcta en
+  // producción, pero deja la suite ciega sobre el código que tiene que
+  // funcionar el día del lanzamiento. Se sirve el HTML con la bandera apagada
+  // para probar lo de abajo. Si el prelanzamiento en sí se rompiera, eso lo
+  // cubre 1-estructura, que carga la página tal cual.
+  await p.route(URL,async r=>{
+    const original=await r.fetch();
+    const html=(await original.text()).replace('PRELAUNCH_MODE = true','PRELAUNCH_MODE = false');
+    await r.fulfill({response:original,body:html});
+  });
   await p.route(/fonts\.(googleapis|gstatic)\.com/,r=>r.abort());
   await p.route(/functions\/v1\/create-guest-order/,r=>{p._envios++;resp(r);});
   await p.route(/supabase\.co\/rest/,r=>{

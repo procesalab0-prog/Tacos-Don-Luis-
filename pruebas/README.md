@@ -32,7 +32,7 @@ En admin ese mensaje no existía hasta 2.19.0.
 **4-seguimiento** — que un enlace de un pedido que no existe avise y limpie el
 token, y que una caída de red avise pero conserve el token y siga reintentando.
 
-## Dos trampas al escribir escenarios nuevos
+## Tres trampas al escribir escenarios nuevos
 
 - **El token de seguimiento debe ser hexadecimal.** `/^[a-f0-9]{64}$/`. Un token
   con otras letras se descarta antes de llamar al servidor, y la prueba mide
@@ -40,3 +40,11 @@ token, y que una caída de red avise pero conserve el token y siga reintentando.
 - **Hay que simular la sucursal.** Si `/rest/v1/branches` devuelve vacío, la app
   aborta la carga y no llega a ejecutarse lo que se quería probar. Las pruebas
   2 y 4 traen una simulación mínima que sí funciona; conviene copiarla.
+- **El prelanzamiento apaga el flujo de pedido.** Con
+  `PRELAUNCH_MODE = true` una capa cubre toda la pantalla y además `openSheet`
+  y `addQuick` se cortan solos. Es lo correcto en producción, pero una prueba
+  que intente pedir se queda esperando un clic que nunca va a responder, y el
+  fallo parece un error de la app cuando no lo es. La prueba 2 sirve el HTML
+  con la bandera apagada para poder ejercitar lo de abajo, que es el código que
+  tiene que funcionar el día del lanzamiento. La pantalla de prelanzamiento en
+  sí la cubre la prueba 1, que carga la página tal cual está.
