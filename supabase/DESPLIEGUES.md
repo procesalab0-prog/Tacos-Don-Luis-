@@ -4,13 +4,24 @@ Este archivo lleva el control de qué migraciones y qué Edge Functions ya está
 aplicadas en el proyecto, para no volver a aplicarlas ni darlas por hechas sin
 comprobar. Actualizar aquí cada vez que se despliegue algo.
 
-**Al día de hoy no hay nada pendiente.** Las cuatro tareas del 17 de agosto ya fueron aplicadas y verificadas en producción.
+**Hay una migración pendiente.** Lo del 17 de agosto ya está aplicado y verificado.
 
 ---
 
 ## Pendiente de aplicar
 
-Nada pendiente.
+| # | Archivo | Qué hace |
+|---|---|---|
+| 1 | `migrations/20260827_prelaunch_whatsapp_taps.sql` | Conteo de cuánta gente toca el botón de WhatsApp durante el prelanzamiento, y la tarjeta que lo muestra en Reportes. Sin esto la app sigue funcionando igual: el registro falla en silencio y la tarjeta no aparece. |
+
+Qué mide y qué no: cuenta **toques al botón**, no mensajes enviados. Cuando la
+persona sale hacia WhatsApp el sistema deja de verla, así que la cifra es un
+techo de la intención, no un conteo de pedidos.
+
+Guarda una fila por dispositivo, con un identificador aleatorio que genera el
+navegador. No sale del navegador de la persona, no viene del teléfono ni de
+una cuenta, y se pierde si borra los datos del sitio. Solo sirve para no
+contar diez veces a quien tocó diez veces.
 
 ---
 
@@ -57,6 +68,10 @@ from pg_policies
 where schemaname = 'storage' and tablename = 'objects'
   and coalesce(qual,'') || coalesce(with_check,'') like '%delivery-evidence%'
 order by policyname;
+
+-- interés del prelanzamiento: personas y toques
+select count(*) as personas, coalesce(sum(taps),0) as toques
+from public.prelaunch_whatsapp_taps;
 
 -- fotos de los productos: no debería quedar ninguno en null
 select count(*) filter (where image_url is null) as sin_foto, count(*) as total

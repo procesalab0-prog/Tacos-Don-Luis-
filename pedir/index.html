@@ -732,7 +732,36 @@ class Component extends DCLogic {
   // falla, así que se quedan el tiempo suficiente para alcanzar a leerlos.
   toast(m){ clearTimeout(this._t); this.setState({toast:m}); this._t=setTimeout(()=>this.setState({toast:null}),5000); }
   prelaunchNotice(){if(!Component.PRELAUNCH_MODE)return false;this.toast('Los pedidos desde la app estarán disponibles próximamente. Por ahora pide por WhatsApp.');return true;}
-  openPrelaunchWhatsApp(){const phone='524775222095';window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(Component.PRELAUNCH_MESSAGE),'_blank','noopener');}
+  // Identificador aleatorio que vive solo en este navegador. No viene del
+  // teléfono ni de una cuenta: sirve para no contar diez veces a quien tocó
+  // diez veces, y se pierde si la persona borra los datos del sitio.
+  idDispositivo(){
+    try{
+      let d=localStorage.getItem('donLuisDispositivo');
+      if(!d){ if(!window.crypto?.randomUUID)return null; d=crypto.randomUUID(); localStorage.setItem('donLuisDispositivo',d); }
+      return d;
+    }catch(_){ return null; }
+  }
+  // Deja constancia de que alguien quiso pedir. Ojo con lo que mide: es el
+  // toque en el botón, no el mensaje enviado. En cuanto la persona sale a
+  // WhatsApp dejamos de verla, así que esto es un techo, no un conteo de
+  // pedidos.
+  //
+  // Va con keepalive porque el navegador está por cambiar de app: sin eso
+  // puede cancelar la petición y el conteo se perdería justo cuando ocurre.
+  // Si falla, se ignora: nadie se queda sin poder escribir por una métrica.
+  registrarInteresWhatsApp(){
+    const branch=this.state.branchId, device=this.idDispositivo();
+    if(!branch||!device)return;
+    try{
+      fetch(Component.SUPABASE_URL+'/rest/v1/rpc/register_prelaunch_tap',{
+        method:'POST', keepalive:true,
+        headers:{apikey:Component.SUPABASE_KEY,'Content-Type':'application/json'},
+        body:JSON.stringify({target_branch_id:branch,device})
+      }).catch(()=>{});
+    }catch(_){}
+  }
+  openPrelaunchWhatsApp(){this.registrarInteresWhatsApp();const phone='524775222095';window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(Component.PRELAUNCH_MESSAGE),'_blank','noopener');}
   // Los errores que vienen del servidor o del navegador llegan en inglés y con
   // jerga técnica. Al cliente le tocaba leer "Failed to fetch" o el texto crudo
   // que devolviera la función. Aquí se traducen a algo accionable.

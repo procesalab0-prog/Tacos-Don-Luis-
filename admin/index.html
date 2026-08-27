@@ -253,6 +253,18 @@
 
       <sc-if value="{{ isReportes }}" hint-placeholder-val="{{ false }}">
         <div style="animation:dlfade .3s ease both">
+          <sc-if value="{{ prelanzHay }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:16px 18px;margin-bottom:16px">
+              <div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:18px;color:#10603A">Interés en el prelanzamiento</div>
+              <div style="font-size:12px;color:#8a7f66;margin-top:3px;line-height:1.45">Gente que tocó el botón de WhatsApp en la app. Mide la intención, no el mensaje: al salir a WhatsApp ya no se puede saber quién escribió, así que es un techo y no un conteo de pedidos.</div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:12px;margin-top:14px">
+                <div style="background:#fff;border:1px solid #E6DCC5;border-radius:13px;padding:13px"><div style="font-size:12px;color:#8a7f66">Personas</div><div style="font-family:'Fredoka',sans-serif;font-size:26px;font-weight:700;color:#10603A;line-height:1.2">{{ prelanzPersonas }}</div></div>
+                <div style="background:#fff;border:1px solid #E6DCC5;border-radius:13px;padding:13px"><div style="font-size:12px;color:#8a7f66">Nuevas hoy</div><div style="font-family:'Fredoka',sans-serif;font-size:26px;font-weight:700;color:#211E15;line-height:1.2">{{ prelanzHoy }}</div></div>
+                <div style="background:#fff;border:1px solid #E6DCC5;border-radius:13px;padding:13px"><div style="font-size:12px;color:#8a7f66">Toques totales</div><div style="font-family:'Fredoka',sans-serif;font-size:26px;font-weight:700;color:#211E15;line-height:1.2">{{ prelanzToques }}</div></div>
+                <div style="background:#fff;border:1px solid #E6DCC5;border-radius:13px;padding:13px"><div style="font-size:12px;color:#8a7f66">Último</div><div style="font-size:14px;font-weight:700;color:#211E15;margin-top:7px">{{ prelanzUltima }}</div></div>
+              </div>
+            </div>
+          </sc-if>
           <div style="display:flex;gap:7px;overflow-x:auto;margin-bottom:14px;padding-bottom:2px"><sc-for list="{{ repPeriodos }}" as="p"><button onClick="{{ p.onClick }}" style="{{ p.style }}">{{ p.label }}</button></sc-for></div>
           <div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button onClick="{{ onExportReports }}" style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:12px;padding:10px 16px;font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg>Exportar</button></div>
           <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:16px;padding:16px 18px;margin-bottom:16px">
@@ -403,7 +415,7 @@ class Component extends DCLogic {
     asignarFor:null, asignando:false,
     authEmail:'',authPassword:'',authBusy:false,authError:null,session:null,live:false,branchId:null,logoTaps:0,showEasterEgg:false,
     inviteMode:false,invitePassword:'',inviteConfirm:'',mediaUploading:false,liveSettings:null,liveProducts:null,liveStocks:null,
-    liveCashShifts:null,liveCashMovements:null,liveCustomers:null,livePurchases:null,liveSuppliers:null,liveUsers:null,liveReviews:null,liveSettlements:null,liveDriverAssignments:null,liveAccounts:null,liveCategories:null,liveZones:null,liveLoyaltyRule:null,liveMarketing:null,liveCombos:null,liveRewards:null,liveIngredients:null,liveInventoryMovements:null,liveRecipes:null };
+    liveCashShifts:null,liveCashMovements:null,liveCustomers:null,livePurchases:null,liveSuppliers:null,liveUsers:null,liveReviews:null,liveSettlements:null,liveDriverAssignments:null,liveAccounts:null,livePrelaunchTaps:null,liveCategories:null,liveZones:null,liveLoyaltyRule:null,liveMarketing:null,liveCombos:null,liveRewards:null,liveIngredients:null,liveInventoryMovements:null,liveRecipes:null };
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
   componentDidMount(){
@@ -515,7 +527,7 @@ class Component extends DCLogic {
   async loadSettings(token=this.state.session?.access_token,branchId=this.state.branchId){
     if(!token||!branchId)return;
     try{
-      const [settings,products,categories,zones,rules,staff,resenas,ingredients,movements,recipes,shifts,cashMovements,purchases,suppliers,marketing,combos,rewards,liquidaciones,driverAssignments,accounts]=await Promise.all([
+      const [settings,products,categories,zones,rules,staff,resenas,ingredients,movements,recipes,shifts,cashMovements,purchases,suppliers,marketing,combos,rewards,liquidaciones,driverAssignments,accounts,interes]=await Promise.all([
         this.api('/rest/v1/business_settings?branch_id=eq.'+branchId+'&select=*',{token}),
         this.api('/rest/v1/products?branch_id=eq.'+branchId+'&select=*&order=sort_order,name',{token}),
         this.api('/rest/v1/categories?branch_id=eq.'+branchId+'&select=*&order=sort_order',{token}),
@@ -535,9 +547,10 @@ class Component extends DCLogic {
         this.api('/rest/v1/loyalty_rewards?branch_id=eq.'+branchId+'&select=*&order=sort_order',{token}).catch(()=>[]),
         this.api('/rest/v1/driver_settlements?branch_id=eq.'+branchId+'&select=*&order=requested_at.desc&limit=60',{token}).catch(()=>[]),
         this.api('/rest/v1/driver_assignments?select=id,driver_user_id,status,evidence_path,delivered_at,orders!inner(branch_id,folio)&orders.branch_id=eq.'+branchId+'&order=assigned_at.desc&limit=200',{token}).catch(()=>[]),
-        this.api('/rest/v1/rpc/admin_list_active_accounts',{method:'POST',token,body:JSON.stringify({target_branch_id:branchId})}).catch(()=>[])
+        this.api('/rest/v1/rpc/admin_list_active_accounts',{method:'POST',token,body:JSON.stringify({target_branch_id:branchId})}).catch(()=>[]),
+        this.api('/rest/v1/prelaunch_whatsapp_taps?branch_id=eq.'+branchId+'&select=device_id,taps,first_tap_at,last_tap_at&order=first_tap_at.desc',{token}).catch(()=>[])
       ]);
-      this.setState({liveSettings:settings[0]||null,liveSettlements:liquidaciones||[],liveDriverAssignments:driverAssignments||[],liveAccounts:accounts||[],liveProducts:products,liveCategories:categories,liveZones:zones,liveLoyaltyRule:rules[0]||null,liveUsers:staff.users||[],liveReviews:resenas||[],liveIngredients:ingredients,liveInventoryMovements:movements,liveRecipes:recipes,liveCashShifts:shifts,liveCashMovements:cashMovements,livePurchases:purchases,liveSuppliers:suppliers,liveMarketing:marketing,liveCombos:combos,liveRewards:rewards});
+      this.setState({livePrelaunchTaps:interes||[],liveSettings:settings[0]||null,liveSettlements:liquidaciones||[],liveDriverAssignments:driverAssignments||[],liveAccounts:accounts||[],liveProducts:products,liveCategories:categories,liveZones:zones,liveLoyaltyRule:rules[0]||null,liveUsers:staff.users||[],liveReviews:resenas||[],liveIngredients:ingredients,liveInventoryMovements:movements,liveRecipes:recipes,liveCashShifts:shifts,liveCashMovements:cashMovements,livePurchases:purchases,liveSuppliers:suppliers,liveMarketing:marketing,liveCombos:combos,liveRewards:rewards});
     }catch(error){console.error(error);this.toast('No se pudo actualizar la configuración');}
   }
   // Cerrar una liquidación significa que caja ya recibió el efectivo.
@@ -902,6 +915,13 @@ class Component extends DCLogic {
         botStyle:`flex:0 0 auto;min-width:62px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 8px;border-radius:12px;border:none;font-family:'Rubik',sans-serif;${active?'background:#F3F0E6;color:#10603A':'background:transparent;color:#bcd6c1'}`};
     });
 
+    // Interés durante el prelanzamiento. Una fila por dispositivo, así que
+    // "personas" es gente distinta y "toques" es cuántas veces le picaron.
+    // Recordatorio de lo que NO dice: son toques al botón, no mensajes
+    // enviados. En cuanto salen a WhatsApp dejamos de verlos.
+    const _taps=this.state.livePrelaunchTaps||[];
+    const _hoy=new Date().toDateString();
+    const _ultimo=_taps.length?Math.max(..._taps.map(t=>new Date(t.last_tap_at).getTime())):0;
     return {
       isLogin: this.state.rol==null, isApp: this.state.rol!=null,
       rol:this.state.rol||'Dueño', rolIni:(this.state.rol||'D').slice(0,1),
@@ -948,6 +968,11 @@ class Component extends DCLogic {
       isCaja: false,
       isInventario: route==='inventario',
       isReportes: route==='reportes',
+      prelanzHay: _taps.length>0,
+      prelanzPersonas: _taps.length,
+      prelanzToques: _taps.reduce((n,t)=>n+(Number(t.taps)||1),0),
+      prelanzHoy: _taps.filter(t=>new Date(t.first_tap_at).toDateString()===_hoy).length,
+      prelanzUltima: _ultimo?new Date(_ultimo).toLocaleString('es-MX',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'—',
       isConfig: route==='config',
       isOtro: !['pedidos','cocina','inventario','reportes','config'].includes(route),
       ...this.vmPedidos(), ...this.vmCocina(), ...this.vmCaja(phone), ...this.vmInventario(), ...this.vmReportes(phone), ...this.vmConfig(),
