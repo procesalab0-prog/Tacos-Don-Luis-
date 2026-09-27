@@ -7,6 +7,9 @@
   ::-webkit-scrollbar{width:9px;height:9px}
   ::-webkit-scrollbar-thumb{background:#c9bb9c;border-radius:8px}
   @keyframes dlpop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  /* El aviso se centra con translateX(-50%); dlpop anima transform y lo pisaba,
+     así que entraba corrido a la derecha y brincaba al centro. */
+  @keyframes dltoast{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translate(-50%,0)}}
   @keyframes dlsheet{from{transform:translateY(100%)}to{transform:translateY(0)}}
   @keyframes dlfade{from{opacity:0}to{opacity:1}}
   @keyframes dlspin{to{transform:rotate(360deg)}}
@@ -686,7 +689,7 @@
     </sc-if>
 
     <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
-      <div style="position:fixed;left:50%;transform:translateX(-50%);bottom:78px;z-index:90;background:#10603A;color:#fff;padding:16px 22px;border-radius:16px;box-shadow:0 14px 34px rgba(0,0,0,.34);font-weight:600;font-size:16px;line-height:1.4;display:flex;align-items:center;gap:12px;animation:dlpop .3s;width:max-content;max-width:92vw">
+      <div style="position:fixed;left:50%;transform:translateX(-50%);bottom:78px;z-index:90;background:#10603A;color:#fff;padding:16px 22px;border-radius:16px;box-shadow:0 14px 34px rgba(0,0,0,.34);font-weight:600;font-size:16px;line-height:1.4;display:flex;align-items:center;gap:12px;animation:dltoast .3s;width:max-content;max-width:92vw">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8FD694" stroke-width="2.4" style="flex:0 0 auto" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>{{ toast }}
       </div>
     </sc-if>
