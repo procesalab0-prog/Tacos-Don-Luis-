@@ -1,0 +1,47 @@
+begin;
+do $$
+declare b uuid; u uuid; d uuid; p public.products; payload jsonb; lines jsonb; r jsonb; r2 jsonb; oid uuid; aid uuid; sid uuid; shid uuid; expected numeric; bad boolean;
+begin
+ select branch_id,user_id into b,u from public.branch_memberships where is_active and role='owner' limit 1;
+ select user_id into d from public.branch_memberships where is_active and role='driver' and branch_id=b limit 1;
+ select * into p from public.products where branch_id=b and is_active limit 1;
+ perform set_config('request.jwt.claims',jsonb_build_object('sub',u,'role','authenticated')::text,true);
+ payload:=jsonb_build_object('client_request_id',gen_random_uuid(),'tracking_token_hash',gen_random_uuid()::text,'branch_id',b,'guest_name','PRUEBA PILOTO REVERTIDA','guest_phone','0000000000','is_demo',false,'fulfillment_type','pickup','payment_method','cash','payment_status','pending','subtotal',p.price*3,'discount_total',0,'delivery_fee',0,'total',p.price*3,'scheduled_for',now()+interval '2 hours','promised_at',now()+interval '2 hours');
+ lines:=jsonb_build_array(jsonb_build_object('product_id',p.id,'product_name',p.name,'unit_price',p.price,'quantity',1,'line_total',p.price,'notes','línea 1'),jsonb_build_object('product_id',p.id,'product_name',p.name,'unit_price',p.price,'quantity',2,'line_total',p.price*2,'notes','línea 2'));
+ r:=public.create_guest_order_atomic(payload,lines,0);oid:=(r->'order'->>'id')::uuid;
+ r2:=public.create_guest_order_atomic(payload,lines,0);
+ if r2->>'duplicate'<>'true' or r2->'order'->>'id'<>oid::text or (select count(*) from public.order_items where order_id=oid)<>2 then raise exception 'Atomic/idempotency test failed'; end if;
+ bad:=false;
+ begin perform public.create_guest_order_atomic(payload||jsonb_build_object('client_request_id',gen_random_uuid(),'tracking_token_hash',gen_random_uuid()::text),jsonb_build_array(jsonb_build_object('product_id',p.id,'quantity',1.5)),0);
+ exception when others then bad:=true;end;
+ if not bad or (select count(*) from public.orders where guest_phone='0000000000')<>1 then raise exception 'Rollback test failed'; end if;
+ insert into public.cash_shifts(branch_id,opening_amount) values(b,100) returning id into shid;
+ update public.orders set status='confirmed',promised_at=now()+interval '10 minutes' where id=oid;
+ if (select promised_at<>scheduled_for from public.orders where id=oid) then raise exception 'Schedule preservation failed';end if;
+ update public.orders set status='delivered' where id=oid;
+ insert into public.cash_movements(branch_id,cash_shift_id,movement_type,payment_method,amount,description) values(b,shid,'expense','cash',10,'Prueba revertida');
+ update public.cash_shifts set status='closed',counted_cash=90+p.price*3,expected_cash=99999 where id=shid returning expected_cash into expected;
+ if expected<>90+p.price*3 then raise exception 'Cash server calculation failed: %',expected; end if;
+ update public.orders set fulfillment_type='delivery',status='ready' where id=oid;
+ aid:=(public.assign_delivery(oid,d)).id;
+ perform set_config('request.jwt.claims',jsonb_build_object('sub',d,'role','authenticated')::text,true);
+ perform public.driver_advance_assignment(aid,'picked_up',null);
+ perform public.driver_advance_assignment(aid,'incident','Prueba revertida');
+ if (select status from public.orders where id=oid)<>'failed_delivery' then raise exception 'Incident test failed'; end if;
+ perform set_config('request.jwt.claims',jsonb_build_object('sub',u,'role','authenticated')::text,true);
+ perform public.assign_delivery(oid,d);
+ perform set_config('request.jwt.claims',jsonb_build_object('sub',d,'role','authenticated')::text,true);
+ perform public.driver_advance_assignment(aid,'picked_up',null);
+ perform public.driver_advance_assignment(aid,'delivered',null);
+ insert into public.driver_settlements(branch_id,driver_user_id,cash_amount,paid_amount,deliveries_count,folios) values(b,d,999999,999999,999,array['FALSO']) returning id into sid;
+ if (select cash_amount from public.driver_settlements where id=sid)=999999 or (select 'FALSO'=any(folios) from public.driver_settlements where id=sid) then raise exception 'Settlement canonical calculation failed';end if;
+ perform set_config('request.jwt.claims',jsonb_build_object('sub',u,'role','authenticated')::text,true);
+ update public.driver_settlements set status='settled' where id=sid;
+ -- Simular cocina sobre la membresía del propietario solo dentro de la transacción.
+ update public.branch_memberships set role='kitchen' where branch_id=b and user_id=u;
+ bad:=false;begin update public.orders set total=1 where id=oid;exception when others then bad:=true;end;
+ if not bad then raise exception 'Kitchen field protection failed';end if;
+ if has_function_privilege('anon','public.create_guest_order_atomic(jsonb,jsonb,integer)','execute') or has_function_privilege('authenticated','public.create_guest_order_atomic(jsonb,jsonb,integer)','execute') then raise exception 'RPC exposure test failed';end if;
+end $$;
+rollback;
+select 'PASS: atomic order, retries, rollback, schedule, cash, incident, reassignment, settlement, kitchen and RPC access; fixtures reverted' as verification;

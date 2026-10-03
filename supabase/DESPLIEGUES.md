@@ -130,3 +130,12 @@ inyecta sola. No hay que configurar variables a mano.
   expone el padrón de repartidores a quien no tiene por qué verlo.
 - Si un repartidor todavía no capturó sus datos, la tarjeta simplemente no aparece.
   La pantalla de seguimiento no se rompe.
+
+
+## Piloto — 2 de octubre de 2026
+
+La migración `pilot_order_cash_delivery_guards` se aplicó en Supabase. Fuentes revisables en `supabase/pilot/`; pruebas reversibles en `test_pilot.sql`. No volver a ejecutar las fuentes sin comprobar el historial de migraciones: ya existen sus triggers.
+
+El archivo `create-guest-order/index.ts` corresponde a la versión 10 publicada con autorización explícita del usuario. Se verificó el endpoint HTTP real con una sucursal demo aislada: creación de dos líneas, total correcto, reintento idempotente y rechazo de cantidad fraccionaria. Los pedidos demo se eliminaron y la sucursal de prueba quedó inactiva con su historial de auditoría.
+
+Frontend 2.26.0 integra las correcciones del piloto con las fotos y el prelanzamiento existentes. Google requiere cuenta, facturación, APIs, clave restringida e ID de mapa. Stripe se pospone.

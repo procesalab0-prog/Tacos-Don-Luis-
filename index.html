@@ -195,19 +195,7 @@
                 </div>
               </div>
 
-              <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;padding:18px 20px;box-shadow:0 2px 0 #ece2cc">
-                <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#D6453D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4M12 17h.01"></path></svg><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#10603A">Alertas de inventario</span></div>
-                <div style="display:flex;flex-direction:column;gap:10px">
-                  <sc-for list="{{ alertasInv }}" as="a" hint-placeholder-count="3">
-                    <div style="display:flex;align-items:center;gap:11px;background:{{ a.bg }};border:1px solid {{ a.bd }};border-radius:12px;padding:11px 13px">
-                      <span style="width:9px;height:9px;border-radius:50%;background:{{ a.dot }};flex:0 0 auto"></span>
-                      <span style="flex:1;font-weight:600;font-size:13.5px;color:#3a3120">{{ a.nombre }}</span>
-                      <span style="font-size:12.5px;font-weight:700;color:{{ a.dot }}">{{ a.txt }}</span>
-                    </div>
-                  </sc-for>
-                </div>
-                <button onClick="{{ goInv }}" style="margin-top:14px;width:100%;cursor:pointer;background:#fff;border:1.5px solid #10603A;color:#10603A;font-weight:700;font-size:13.5px;padding:10px;border-radius:12px" style-hover="background:#eaf4ec">Ir a inventario →</button>
-              </div>
+
             </div>
           </div>
         </sc-if>
@@ -430,69 +418,7 @@
           </div>
         </sc-if>
 
-        <sc-if value="{{ isInventario }}" hint-placeholder-val="{{ false }}">
-          <div style="animation:dlpop .35s ease both">
-            <div style="display:flex;gap:9px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px">
-              <sc-for list="{{ invTabs }}" as="t" hint-placeholder-count="4"><button onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}</button></sc-for>
-            </div>
-            <sc-if value="{{ showExist }}" hint-placeholder-val="{{ true }}">
-              <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;overflow:hidden;box-shadow:0 2px 0 #ece2cc">
-                <div style="display:grid;grid-template-columns:1.6fr .8fr .9fr .8fr 1.4fr;gap:8px;padding:13px 18px;background:#f3ead6;font-size:11.5px;font-weight:800;color:#8a7f66;letter-spacing:.03em;text-transform:uppercase">
-                  <span>Insumo</span><span>Existencia</span><span>Consumo hoy</span><span>Mínimo</span><span>Estado</span>
-                </div>
-                <sc-for list="{{ invRows }}" as="r" hint-placeholder-count="9">
-                  <div style="display:grid;grid-template-columns:1.6fr .8fr .9fr .8fr 1.4fr;gap:8px;padding:14px 18px;border-top:1px solid #efe6d2;align-items:center">
-                    <span style="font-weight:700;font-size:14px;color:#211E15">{{ r.n }}</span>
-                    <span style="font-weight:700;color:#10603A">{{ r.hay }} {{ r.u }}</span>
-                    <span style="color:#6a5f45">{{ r.dia }} {{ r.u }}</span>
-                    <span style="color:#9a8e70">{{ r.min }} {{ r.u }}</span>
-                    <span style="display:flex;align-items:center;gap:10px">
-                      <span style="flex:1;height:8px;background:#efe6d2;border-radius:999px;overflow:hidden;max-width:90px"><span style="display:block;height:100%;width:{{ r.pct }};background:{{ r.barC }};border-radius:999px"></span></span>
-                      <span style="background:{{ r.stBg }};color:{{ r.stC }};font-size:11.5px;font-weight:800;padding:3px 9px;border-radius:8px;white-space:nowrap">{{ r.st }}</span>
-                    </span>
-                  </div>
-                </sc-for>
-              </div>
-            </sc-if>
-            <sc-if value="{{ showMermas }}" hint-placeholder-val="{{ false }}">
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <sc-for list="{{ invMermas }}" as="m" hint-placeholder-count="3">
-                  <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-left:4px solid #D6453D;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-                    <span style="font-weight:700;font-size:14.5px;color:#211E15;min-width:150px">{{ m.prod }}</span>
-                    <span style="background:#fdeceb;color:#b23a32;font-weight:700;font-size:13px;padding:3px 10px;border-radius:8px">−{{ m.cant }}</span>
-                    <span style="color:#6a5f45;font-size:13.5px;flex:1;min-width:160px">{{ m.motivo }}</span>
-                    <span style="color:#9a8e70;font-size:12.5px">{{ m.hora }} · {{ m.mesero }}</span>
-                  </div>
-                </sc-for>
-              </div>
-            </sc-if>
-            <sc-if value="{{ showCompras }}" hint-placeholder-val="{{ false }}">
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <sc-for list="{{ invCompras }}" as="c" hint-placeholder-count="3">
-                  <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:15px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-                    <div style="flex:1;min-width:180px"><div style="font-weight:700;font-size:14.5px;color:#211E15">{{ c.prov }}</div><div style="color:#8a7f66;font-size:12.5px;margin-top:2px">{{ c.items }}</div></div>
-                    <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#10603A">{{ c.monto }}</span>
-                    <span style="background:{{ c.bg }};color:{{ c.c }};font-weight:800;font-size:12px;padding:5px 11px;border-radius:999px">{{ c.estado }}</span>
-                  </div>
-                </sc-for>
-              </div>
-            </sc-if>
-            <sc-if value="{{ showCosteo }}" hint-placeholder-val="{{ false }}">
-              <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:18px;overflow:hidden">
-                <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;gap:8px;padding:13px 18px;background:#f3ead6;font-size:11.5px;font-weight:800;color:#8a7f66;text-transform:uppercase"><span>Platillo</span><span>Precio</span><span>Costo</span><span>Utilidad</span><span>Margen</span></div>
-                <sc-for list="{{ invCosteo }}" as="c" hint-placeholder-count="6">
-                  <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;gap:8px;padding:14px 18px;border-top:1px solid #efe6d2;align-items:center">
-                    <span style="font-weight:700;font-size:14px;color:#211E15">{{ c.nombre }}</span>
-                    <span style="color:#6a5f45">{{ c.precio }}</span>
-                    <span style="color:#b23a32">{{ c.costo }}</span>
-                    <span style="font-weight:700;color:#10603A">{{ c.util }}</span>
-                    <span style="font-weight:800;color:{{ c.margenC }}">{{ c.margen }}</span>
-                  </div>
-                </sc-for>
-              </div>
-            </sc-if>
-          </div>
-        </sc-if>
+
 
         <sc-if value="{{ isClientes }}" hint-placeholder-val="{{ false }}">
           <div style="animation:dlpop .35s ease both;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;align-items:start">
@@ -636,7 +562,7 @@
               <sc-if value="{{ iaEmpty }}" hint-placeholder-val="{{ true }}">
                 <div style="text-align:center;padding:24px 10px;color:#8a7f66">
                   <div style="font-size:15px;font-weight:600;color:#3a3120">¡Hola! Soy tu asistente. 👨‍🍳</div>
-                  <div style="font-size:13.5px;margin-top:6px">Pregúntame sobre ventas, utilidad, inventario u horas pico. Prueba una sugerencia:</div>
+                  <div style="font-size:13.5px;margin-top:6px">Pregúntame sobre ventas, utilidad u horas pico. Prueba una sugerencia:</div>
                 </div>
               </sc-if>
               <sc-for list="{{ iaChat }}" as="m" hint-placeholder-count="0">
@@ -720,7 +646,7 @@ class Component extends DCLogic {
     chat:[], chatBusy:false, invTab:'existencias',
     logoTaps:0, showEasterEgg:false };
   // IMPORTANTE: incrementar esta versión en cada publicación a main.
-  static APP_VERSION = '2.25.3';
+  static APP_VERSION = '2.26.0';
   get propinaActual(){ return this.state.propinaPct!=null?this.state.propinaPct:parseInt(this.props.propinaSugerida||'10',10); }
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2})+' MXN'; }
@@ -733,7 +659,7 @@ class Component extends DCLogic {
   }
   componentWillUnmount(){ window.removeEventListener('resize',this._onR); }
   toast(m){ clearTimeout(this._t); this.setState({toast:m}); this._t=setTimeout(()=>this.setState({toast:null}),2600); }
-  go(r){ this.setState({route:r}); if(typeof window!=='undefined') window.scrollTo?.({top:0}); }
+  go(r){ if(r==='inventario')r='resumen'; this.setState({route:r}); if(typeof window!=='undefined') window.scrollTo?.({top:0}); }
 
   // ---------- easter egg: 6 toques en el logo TDL ----------
   tapLogo(){
@@ -832,7 +758,6 @@ class Component extends DCLogic {
     {id:'comandas',label:'Comandas',short:'Comanda',icon:'M9 2h6a2 2 0 0 1 2 2v0H7v0a2 2 0 0 1 2-2zM7 4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2M9 12h6M9 16h4'},
     {id:'cocina',label:'Cocina',short:'Cocina',icon:'M8 3v6M12 3v6M10 9v12M17 3c-1.5 0-3 1.5-3 4v5h3zM17 12v9'},
     {id:'caja',label:'Caja',short:'Caja',icon:'M2 7h20v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zM2 7l2-4h16l2 4M12 11v5M9 13h6'},
-    {id:'inventario',label:'Inventario',short:'Invent.',icon:'M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3M21 8H3M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8M9 12h6'},
     {id:'clientes',label:'Clientes',short:'Clientes',icon:'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75'},
     {id:'menu',label:'Menú digital',short:'Menú',icon:'M3 3h18v4H3zM3 10h18v11H3zM8 14h8M8 17h5'},
     {id:'empleados',label:'Empleados',short:'Equipo',icon:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 11l-3 3-1.5-1.5'},
@@ -884,7 +809,7 @@ class Component extends DCLogic {
     this._orders.unshift({id:this._seq++,mesa:mesa||'Para llevar',estado:'nueva',min:0,mesero:this.state.profile==='Mesero'?'Tú':'Sofía',items:cart});
     if(mesa){ const cons=this._consumos[mesa]||[]; cart.forEach(l=>cons.push({...l})); this._consumos[mesa]=cons;
       const m=this._mesas.find(x=>x.n===mesa); if(m&&m.estado==='libre')m.estado='ocupada'; }
-    this._ordenesHoy=(this._ordenesHoy||47); 
+    this._ordenesHoy=(this._ordenesHoy||47);
     this.setState({cart:[],route:'cocina'});
     this.toast('Comanda enviada a cocina ✓');
   }
@@ -910,36 +835,6 @@ class Component extends DCLogic {
     this._orders=this._orders.filter(o=>o.mesa!==n);
     this.setState({cajaMesa:null});
     this.toast('Mesa '+n+' cobrada y cerrada · '+this.short(total*(1+this.propinaActual/100)));
-  }
-
-  vmInventario(){
-    const tab=this.state.invTab;
-    const rows=this.inv.map(i=>{
-      const crit=i.hay<i.min, low=i.hay===i.min || i.hay<=i.min*1.2;
-      const st=crit?{txt:'Crítico',c:'#b23a32',bg:'#fdeceb'}:(i.hay<=i.min?{txt:'Al mínimo',c:'#8a6d12',bg:'#fdf6e3'}:(low?{txt:'Bajo',c:'#8a6d12',bg:'#fdf6e3'}:{txt:'Óptimo',c:'#10603A',bg:'#eaf4ec'}));
-      const pct=Math.min(100,Math.round(i.hay/Math.max(i.min*2,1)*100));
-      return {...i, st:st.txt, stC:st.c, stBg:st.bg, pct:pct+'%',
-        barC: crit?'#D6453D':(i.hay<=i.min?'#E0A526':'#28A54C')};
-    });
-    const invTabs=[['existencias','Existencias'],['mermas','Mermas'],['compras','Compras'],['costeo','Costeo']].map(([k,l])=>({label:l,active:k===tab,onClick:()=>this.setState({invTab:k}),
-      style:`cursor:pointer;padding:9px 16px;border-radius:11px;font-weight:700;font-size:13.5px;border:none;${k===tab?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35;border:1px solid #E6DCC5'}`}));
-    const mermas=[
-      {prod:'Tortilla de maíz',cant:'1.5 kg',motivo:'Quemadas en comal',hora:'12:40',mesero:'Cocina'},
-      {prod:'Cilantro',cant:'2 manojos',motivo:'En mal estado',hora:'09:15',mesero:'Diego'},
-      {prod:'Carne al pastor',cant:'0.4 kg',motivo:'Caída al piso',hora:'14:05',mesero:'Sofía'},
-    ];
-    const compras=[
-      {prov:'Carnicería El Torito',items:'Bistec, chorizo',monto:this.short(2450),estado:'Recibido',c:'#10603A',bg:'#eaf4ec'},
-      {prov:'Tortillería La Guadalupana',items:'Tortilla de maíz 30 kg',monto:this.short(690),estado:'En camino',c:'#8a6d12',bg:'#fdf6e3'},
-      {prov:'Abarrotes Don Chuy',items:'Refrescos, empaques',monto:this.short(1180),estado:'Pendiente',c:'#b23a32',bg:'#fdeceb'},
-    ];
-    const costeo=this.menu.filter(m=>!m.pendiente&&['pastor','bistec','chorizo','cabeza','costilla','gringa'].includes(m.id)).map(m=>{
-      const margen=Math.round((1-m.costo/m.precio)*100);
-      return {nombre:m.nombre,precio:this.short(m.precio),costo:this.short(m.costo),util:this.short(m.precio-m.costo),margen:margen+'%',
-        margenC: margen>=60?'#10603A':(margen>=50?'#8a6d12':'#b23a32')};
-    });
-    return {invTab:tab, invTabs, invRows:rows, invMermas:mermas, invCompras:compras, invCosteo:costeo,
-      showExist:tab==='existencias', showMermas:tab==='mermas', showCompras:tab==='compras', showCosteo:tab==='costeo'};
   }
 
   vmClientes(){
@@ -1041,7 +936,6 @@ class Component extends DCLogic {
       comandas:'Toma rápida de pedidos',
       cocina:'Tablero de preparación',
       caja:'Cobro y corte de caja',
-      inventario:'Existencias y compras',
       clientes:'Programa de lealtad',
       menu:'Vista pública para clientes',
       empleados:'Turno actual',
@@ -1114,16 +1008,15 @@ class Component extends DCLogic {
       isComandas: route==='comandas',
       isCocina: route==='cocina',
       isCaja: route==='caja',
-      isInventario: route==='inventario',
+
       isClientes: route==='clientes',
       isMenu: route==='menu',
       isEmpleados: route==='empleados',
       isIA: route==='ia',
       screenPlaceholder: false,
       kpis, ventasHora, topTacos, utilidad, horasPico, alertasInv,
-      goInv:()=>this.go('inventario'),
       ...this.vmMesas(phone), ...this.vmComanda(phone), ...this.vmCocina(), ...this.vmCaja(phone),
-      ...this.vmInventario(), ...this.vmClientes(), ...this.vmMenu(), ...this.vmEmpleados(), ...this.vmIA(),
+      ...this.vmClientes(), ...this.vmMenu(), ...this.vmEmpleados(), ...this.vmIA(),
     };
   }
 

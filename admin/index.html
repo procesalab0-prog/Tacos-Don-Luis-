@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Administración Don Luis</title><meta name="theme-color" content="#10603A"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Admin Don Luis"><link rel="manifest" href="/admin/don-luis-admin-251.webmanifest"><link rel="icon" href="/assets/sticker-inicio.png" type="image/png"><link rel="apple-touch-icon" href="/assets/sticker-inicio.png"><script>if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(console.error));</script><script>window.__resources={"https://unpkg.com/react@18.3.1/umd/react.production.min.js":"/assets/vendor/react-18.3.1.min.js","https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"/assets/vendor/react-dom-18.3.1.min.js"};</script><script src="../support.js"></script></head><body><x-dc><helmet><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style>
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Administración Don Luis</title><meta name="theme-color" content="#10603A"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Admin Don Luis"><link rel="manifest" href="/admin/don-luis-admin-251.webmanifest"><link rel="icon" href="/assets/sticker-inicio.png" type="image/png"><link rel="apple-touch-icon" href="/assets/sticker-inicio.png"><script>if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(console.error));</script><script>window.__resources={"https://unpkg.com/react@18.3.1/umd/react.production.min.js":"/assets/vendor/react-18.3.1.min.js","https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"/assets/vendor/react-dom-18.3.1.min.js"};</script><script src="../support.js"></script><link rel="stylesheet" href="/assets/pilot-visual.css?v=pilot1"></head><body><x-dc><helmet><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style>
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{font-family:'Rubik',system-ui,sans-serif;color:#211E15;background:#F3F0E6;-webkit-font-smoothing:antialiased}
@@ -73,7 +73,7 @@
   </sc-if>
 
   <div style="flex:1;min-width:0;display:flex;flex-direction:column">
-    <header style="position:sticky;top:0;z-index:20;background:rgba(243,240,230,.92);backdrop-filter:blur(8px);border-bottom:1px solid #E6DCC5;padding:12px 20px;display:flex;align-items:center;gap:14px">
+    <header class="dl-staff-header" style="position:sticky;top:0;z-index:20;background:rgba(243,240,230,.92);backdrop-filter:blur(8px);border-bottom:1px solid #E6DCC5;padding:12px 20px;display:flex;align-items:center;gap:14px">
       <sc-if value="{{ showBottomNav }}" hint-placeholder-val="{{ false }}"><span onClick="{{ onTapLogo }}" style="cursor:pointer;user-select:none;width:38px;height:38px;border-radius:12px;background:#F3F0E6;display:flex;align-items:center;justify-content:center;flex:0 0 auto;padding:2px"><img src="../assets/logo-don-luis-oficial.png" alt="Tacos Don Luis" style="width:100%;height:100%;object-fit:contain"></span></sc-if>
       <div style="flex:1;min-width:0"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:{{ showBottomNav ? '19px' : '23px' }};color:#10603A;line-height:1.05">{{ currentTitle }}</div><div style="font-size:12px;color:#9a8e70;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ currentSub }}</div></div>
       <button onClick="{{ toggleSonido }}" title="Alerta sonora" style="cursor:pointer;width:38px;height:38px;border-radius:12px;border:1px solid #E6DCC5;background:{{ sonido ? '#eaf4ec' : '#FFFDF7' }};color:{{ sonido ? '#10603A' : '#a99d80' }};display:flex;align-items:center;justify-content:center;flex:0 0 auto">
@@ -100,8 +100,8 @@
 
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px;align-items:start">
             <sc-for list="{{ pedidosCols }}" as="col" hint-placeholder-count="4">
-              <div style="{{ col.colStyle }}">
-                <div style="{{ col.headStyle }}"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px">{{ col.title }}</span><span style="background:rgba(255,255,255,.25);font-weight:800;font-size:12.5px;min-width:23px;height:23px;padding:0 7px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ col.count }}</span></div>
+              <div class="dl-board-column" style="{{ col.colStyle }}">
+                <div class="dl-board-head" style="{{ col.headStyle }}"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px">{{ col.title }}</span><span style="background:rgba(255,255,255,.25);font-weight:800;font-size:12.5px;min-width:23px;height:23px;padding:0 7px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ col.count }}</span></div>
                 <div style="display:flex;flex-direction:column;gap:11px;padding:12px 11px">
                   <sc-if value="{{ col.empty }}" hint-placeholder-val="{{ false }}"><div style="text-align:center;color:#b0a488;font-size:12.5px;padding:18px 6px">Sin pedidos</div></sc-if>
                   <sc-for list="{{ col.pedidos }}" as="p" hint-placeholder-count="0">
@@ -122,7 +122,7 @@
                       </div>
                       <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 13px;border-top:1px dotted #ece2cc;background:#fbf7ec">
                         <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;color:#10603A">{{ p.totalTxt }}</span>
-                        <span style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:{{ p.pagoC }}"><span style="width:7px;height:7px;border-radius:50%;background:{{ p.pagoC }}"></span>{{ p.pagoTxt }}</span>
+                        <button onClick="{{ p.onConfirmPayment }}" disabled="{{ p.paymentLocked }}" title="Confirmar pago recibido" style="cursor:pointer;border:0;background:transparent;display:flex;align-items:center;gap:5px;padding:6px 0;font-size:11px;font-weight:800;color:{{ p.pagoC }}"><span style="width:7px;height:7px;border-radius:50%;background:{{ p.pagoC }}"></span>{{ p.pagoTxt }}</button>
                       </div>
                       <sc-if value="{{ p.acciones }}" hint-placeholder-val="{{ true }}">
                         <div style="display:flex;gap:8px;padding:10px 13px 12px">
@@ -144,8 +144,8 @@
         <div style="animation:dlfade .3s ease both">
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;align-items:start">
             <sc-for list="{{ cocinaBoard }}" as="col" hint-placeholder-count="4">
-              <div style="{{ col.colStyle }}">
-                <div style="{{ col.headStyle }}"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px">{{ col.title }}</span><span style="background:rgba(255,255,255,.25);font-weight:800;font-size:13px;min-width:24px;height:24px;padding:0 7px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ col.count }}</span></div>
+              <div class="dl-board-column" style="{{ col.colStyle }}">
+                <div class="dl-board-head" style="{{ col.headStyle }}"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px">{{ col.title }}</span><span style="background:rgba(255,255,255,.25);font-weight:800;font-size:13px;min-width:24px;height:24px;padding:0 7px;border-radius:999px;display:flex;align-items:center;justify-content:center">{{ col.count }}</span></div>
                 <div style="display:flex;flex-direction:column;gap:11px;padding:12px 11px">
                   <sc-if value="{{ col.empty }}" hint-placeholder-val="{{ false }}"><div style="text-align:center;color:#b0a488;font-size:12.5px;padding:20px 6px">Sin órdenes</div></sc-if>
                   <sc-for list="{{ col.list }}" as="o" hint-placeholder-count="0">
@@ -174,82 +174,7 @@
         </div>
       </sc-if>
 
-      <sc-if value="{{ isCaja }}" hint-placeholder-val="{{ false }}">
-        <div style="animation:dlfade .3s ease both;display:grid;grid-template-columns:{{ cajaGrid }};gap:16px;align-items:start">
-          <div style="display:flex;flex-direction:column;gap:16px">
-            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:18px 20px;box-shadow:0 2px 0 #ece2cc">
-              <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#10603A;margin-bottom:14px">Ventas por canal · hoy</div>
-              <div style="display:flex;flex-direction:column;gap:13px">
-                <sc-for list="{{ cajaCanales }}" as="c" hint-placeholder-count="4">
-                  <div><div style="display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:5px"><span style="font-weight:600;color:#3a3120">{{ c.canal }}</span><span style="font-weight:700;color:#10603A">{{ c.montoTxt }} · {{ c.pctTxt }}</span></div><div style="height:9px;background:#efe6d2;border-radius:999px;overflow:hidden"><div style="height:100%;width:{{ c.pctTxt }};background:{{ c.c }};border-radius:999px"></div></div></div>
-                </sc-for>
-              </div>
-            </div>
-            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:18px 20px;box-shadow:0 2px 0 #ece2cc">
-              <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#10603A;margin-bottom:14px">Métodos de pago</div>
-              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:11px">
-                <sc-for list="{{ cajaMetodos }}" as="m" hint-placeholder-count="3">
-                  <div style="background:#fbf7ec;border:1px solid #eee3cc;border-radius:14px;padding:13px 14px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:7px"><span style="width:28px;height:28px;border-radius:8px;background:#10603A;color:#fff;display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path sc-camel-d="{{ m.icon }}"></path></svg></span><span style="font-size:12.5px;font-weight:700;color:#3a3120">{{ m.m }}</span></div><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:19px;color:#211E15">{{ m.vTxt }}</div><div style="font-size:11px;color:#9a8e70;margin-top:2px">{{ m.n }}</div></div>
-                </sc-for>
-              </div>
-            </div>
-            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:18px 20px;box-shadow:0 2px 0 #ece2cc">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px"><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:17px;color:#10603A">Liquidación de repartidores</span><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#1f6f8b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM18.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"></path></svg></div>
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <sc-for list="{{ cajaReps }}" as="r" hint-placeholder-count="2">
-                  <div style="display:flex;align-items:center;gap:12px;background:#fbf7ec;border:1px solid #eee3cc;border-radius:14px;padding:12px 14px">
-                    <span style="width:40px;height:40px;border-radius:50%;background:#1f6f8b;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex:0 0 auto">{{ r.ini }}</span>
-                    <div style="flex:1"><div style="font-weight:700;font-size:14px;color:#211E15">{{ r.nombre }}</div><div style="font-size:12px;color:#9a8e70">{{ r.entregas }} entregas · efectivo {{ r.efectivoTxt }}</div></div>
-                    <sc-if value="{{ r.liquidado }}" hint-placeholder-val="{{ false }}"><span style="background:#eaf4ec;color:#10603A;font-weight:800;font-size:12px;padding:6px 12px;border-radius:999px">Liquidado ✓</span></sc-if>
-                    <sc-if value="{{ r.pendiente }}" hint-placeholder-val="{{ true }}"><button onClick="{{ r.onLiquidar }}" style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:12px;padding:9px 14px;font-weight:700;font-size:12.5px">Liquidar</button></sc-if>
-                  </div>
-                </sc-for>
-              </div>
-            </div>
-          </div>
 
-          <div style="display:flex;flex-direction:column;gap:16px">
-            <div style="background:#0f3d24;border-radius:14px;padding:18px 20px;color:#eaf3ec">
-              <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#F2C230;margin-bottom:14px">Corte de caja · turno</div>
-              <div style="display:flex;flex-direction:column;gap:11px">
-                <sc-for list="{{ cajaCorte }}" as="c" hint-placeholder-count="4"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:600">{{ c.k }}</div><div style="font-size:11px;color:#8bb193">{{ c.sub }}</div></div><span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:16px">{{ c.v }}</span></div></sc-for>
-              </div>
-              <div style="border-top:1px dashed rgba(255,255,255,.2);margin-top:12px;padding-top:12px;display:flex;flex-direction:column;gap:8px">
-                <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#bcd6c1">Efectivo esperado</span><span style="font-weight:700">{{ cajaEsperado }}</span></div>
-                <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#bcd6c1">Efectivo recibido</span><span style="font-weight:700">{{ cajaRecibido }}</span></div>
-                <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:800;color:#F2C230"><span>Diferencia</span><span>{{ cajaDif }}</span></div>
-              </div>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:10px">
-              <button onClick="{{ onCashAction }}" style="cursor:pointer;background:#10603A;color:#fff;border:none;border-radius:14px;padding:14px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px">{{ cashActionTxt }}</button>
-              <button onClick="{{ onCashMovement }}" style="cursor:pointer;background:#fff;color:#10603A;border:1.5px solid #10603A;border-radius:14px;padding:12px;font-weight:700;font-size:13.5px">Registrar movimiento de efectivo</button>
-            </div>
-          </div>
-        </div>
-      </sc-if>
-
-      <sc-if value="{{ isInventario }}" hint-placeholder-val="{{ false }}">
-        <div style="animation:dlfade .3s ease both">
-          <div style="display:flex;gap:9px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px"><sc-for list="{{ invTabs }}" as="t" hint-placeholder-count="4"><button onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}</button></sc-for></div>
-          <sc-if value="{{ invExist }}" hint-placeholder-val="{{ true }}">
-            <div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;overflow:hidden">
-              <div style="display:grid;grid-template-columns:1.6fr .8fr .9fr .8fr 1.3fr;gap:8px;padding:12px 18px;background:#f3ead6;font-size:11px;font-weight:800;color:#8a7f66;text-transform:uppercase"><span>Insumo</span><span>Existencia</span><span>Consumo hoy</span><span>Mínimo</span><span>Estado</span></div>
-              <sc-for list="{{ invRows }}" as="r" hint-placeholder-count="10"><div style="display:grid;grid-template-columns:1.6fr .8fr .9fr .8fr 1.3fr;gap:8px;padding:13px 18px;border-top:1px solid #efe6d2;align-items:center"><span style="font-weight:700;font-size:13.5px;color:#211E15">{{ r.n }}</span><span style="font-weight:700;color:#10603A">{{ r.hay }} {{ r.u }}</span><span style="color:#6a5f45">{{ r.dia }} {{ r.u }}</span><span style="color:#9a8e70">{{ r.min }} {{ r.u }}</span><span style="display:flex;align-items:center;gap:9px"><span style="flex:1;height:8px;background:#efe6d2;border-radius:999px;overflow:hidden;max-width:70px"><span style="display:block;height:100%;width:{{ r.pct }};background:{{ r.barC }}"></span></span><span style="background:{{ r.stBg }};color:{{ r.stC }};font-size:11px;font-weight:800;padding:3px 8px;border-radius:8px;white-space:nowrap">{{ r.stT }}</span></span></div></sc-for>
-            </div>
-          </sc-if>
-          <sc-if value="{{ invRec }}" hint-placeholder-val="{{ false }}">
-            <div style="background:#eaf4ec;border:1px solid #cfe0c6;border-radius:12px;padding:11px 15px;font-size:12.5px;color:#10603A;font-weight:600;margin-bottom:12px">Al confirmar un pedido, el inventario descuenta los ingredientes según la receta.</div>
-            <div style="display:flex;flex-direction:column;gap:10px"><sc-for list="{{ invRecetas }}" as="r" hint-placeholder-count="4"><div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap"><span style="font-weight:700;font-size:14.5px;color:#211E15;min-width:160px">{{ r.plato }}</span><span style="flex:1;font-size:12.5px;color:#6a5f45;min-width:180px">{{ r.ing }}</span><span style="font-size:12px;color:#9a8e70">venta {{ r.venta }}</span><span style="background:#eaf4ec;color:#10603A;font-weight:700;font-size:12.5px;padding:4px 10px;border-radius:8px">costo {{ r.costo }}</span></div></sc-for></div>
-          </sc-if>
-          <sc-if value="{{ invMov }}" hint-placeholder-val="{{ false }}">
-            <div style="display:flex;flex-direction:column;gap:9px"><sc-for list="{{ invMovs }}" as="m" hint-placeholder-count="5"><div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:13px"><span style="width:9px;height:9px;border-radius:50%;background:{{ m.c }};flex:0 0 auto"></span><div style="flex:1"><div style="font-weight:700;font-size:13.5px;color:#211E15">{{ m.tipo }}</div><div style="font-size:12px;color:#8a7f66">{{ m.det }}</div></div><span style="font-weight:700;font-size:13px;color:{{ m.c }};white-space:nowrap">{{ m.cant }}</span><span style="font-size:11.5px;color:#9a8e70">{{ m.hora }}</span></div></sc-for></div>
-            <button onClick="{{ onInventoryAdjustment }}" style="cursor:pointer;margin-top:12px;background:#fff;border:1.5px solid #10603A;color:#10603A;border-radius:12px;padding:11px 16px;font-weight:700;font-size:13px">+ Registrar ajuste manual</button>
-          </sc-if>
-          <sc-if value="{{ invComp }}" hint-placeholder-val="{{ false }}">
-            <div style="display:flex;flex-direction:column;gap:10px"><sc-for list="{{ invCompras }}" as="c" hint-placeholder-count="3"><div style="background:#FFFDF7;border:1px solid #E6DCC5;border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div style="flex:1;min-width:170px"><div style="font-weight:700;font-size:14px;color:#211E15">{{ c.prov }}</div><div style="font-size:12px;color:#8a7f66;margin-top:2px">{{ c.items }}</div></div><span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:#10603A">{{ c.monto }}</span><span style="background:{{ c.bg }};color:{{ c.c }};font-weight:800;font-size:12px;padding:5px 11px;border-radius:999px">{{ c.estado }}</span></div></sc-for></div>
-          </sc-if>
-        </div>
-      </sc-if>
 
       <sc-if value="{{ isReportes }}" hint-placeholder-val="{{ false }}">
         <div style="animation:dlfade .3s ease both">
@@ -407,15 +332,15 @@
     </div>
   </sc-if></div></sc-if></x-dc><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
 class Component extends DCLogic {
-  static APP_VERSION = '2.25.3';
+  static APP_VERSION = '2.26.0';
   static SUPABASE_URL = 'https://qvzgwjddeybktpwqcoko.supabase.co';
   static SUPABASE_KEY = 'sb_publishable_1pT7S6metcF0q3Vz-Z2ZZA_i8wzb7kD';
   state = { rol:null, route:'pedidos', vw:1280, toast:null, sonido:true,
     canal:'todos', rechazoFor:null, aceptarFor:null, aceptarTiempo:20,configEditor:null,cfgSaving:false,cfgForm:{},
     asignarFor:null, asignando:false,
     authEmail:'',authPassword:'',authBusy:false,authError:null,session:null,live:false,branchId:null,logoTaps:0,showEasterEgg:false,
-    inviteMode:false,invitePassword:'',inviteConfirm:'',mediaUploading:false,liveSettings:null,liveProducts:null,liveStocks:null,
-    liveCashShifts:null,liveCashMovements:null,liveCustomers:null,livePurchases:null,liveSuppliers:null,liveUsers:null,liveReviews:null,liveSettlements:null,liveDriverAssignments:null,liveAccounts:null,livePrelaunchTaps:null,liveCategories:null,liveZones:null,liveLoyaltyRule:null,liveMarketing:null,liveCombos:null,liveRewards:null,liveIngredients:null,liveInventoryMovements:null,liveRecipes:null };
+    mediaUploading:false,livePrelaunchTaps:null,inviteMode:false,invitePassword:'',inviteConfirm:'',liveSettings:null,liveProducts:null,liveStocks:null,
+    liveCashShifts:null,liveCashMovements:null,liveCustomers:null,liveUsers:null,liveReviews:null,liveSettlements:null,liveDriverAssignments:null,liveAccounts:null,liveCategories:null,liveZones:null,liveLoyaltyRule:null,liveMarketing:null,liveCombos:null,liveRewards:null, };
 
   MXN(n){ return '$'+Number(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
   componentDidMount(){
@@ -425,7 +350,7 @@ class Component extends DCLogic {
     const hash=new URLSearchParams(location.hash.replace(/^#/,''));
     const inviteToken=hash.get('access_token');
     if(inviteToken&&['invite','recovery'].includes(hash.get('type'))){this.setState({inviteMode:true,session:{access_token:inviteToken,refresh_token:hash.get('refresh_token')}});return;}
-    const saved=JSON.parse(localStorage.getItem('donLuisStaffSession')||'null'); if(saved?.access_token)this.restoreSession(saved);
+    let saved=null;try{saved=JSON.parse(localStorage.getItem('donLuisStaffSession')||'null')}catch(_){localStorage.removeItem('donLuisStaffSession');} if(saved?.access_token)this.restoreSession(saved);
     this._sessionRefresh=setInterval(()=>{if(this.state.session)this.refreshCurrentSession();},5*60*1000);
   }
   componentWillUnmount(){ window.removeEventListener('resize',this._onR);document.removeEventListener('pointerdown',this._unlockAudio);clearInterval(this._livePoll); clearInterval(this._sessionRefresh);if(this._audioContext)try{this._audioContext.close();}catch(_){} }
@@ -440,7 +365,7 @@ class Component extends DCLogic {
     const now=ctx.currentTime;[[0,880],[.18,1175],[.36,880]].forEach(([delay,freq])=>{const osc=ctx.createOscillator(),gain=ctx.createGain();osc.type='sine';osc.frequency.value=freq;gain.gain.setValueAtTime(.0001,now+delay);gain.gain.exponentialRampToValueAtTime(.22,now+delay+.015);gain.gain.exponentialRampToValueAtTime(.0001,now+delay+.14);osc.connect(gain);gain.connect(ctx.destination);osc.start(now+delay);osc.stop(now+delay+.16);});
   }
   toggleSound(){const enabled=!this.state.sonido;localStorage.setItem('donLuisAdminSound',String(enabled));this.setState({sonido:enabled});if(enabled){this.playNewOrderSound(true);this.toast('Sonido de pedidos activado');}else this.toast('Sonido de pedidos desactivado');}
-  go(r){const allowed=this.rolNav();if(this.state.rol&&!allowed.includes(r)){this.toast('Tu rol no tiene acceso a esta sección');return;}this.setState({route:r});if(typeof window!=='undefined')window.scrollTo?.({top:0});}
+  go(r){const allowed=this.rolNav();if(this.state.rol&&!allowed.includes(r)){this.toast('Tu rol no tiene acceso a esta sección');return;}this.setState({route:r});if(['caja','repartidores','config'].includes(r))this.loadSettings();if(typeof window!=='undefined')window.scrollTo?.({top:0});}
   tapLogo(){ clearTimeout(this._logoTapTimer); const taps=(this.state.logoTaps||0)+1; if(taps>=6){this.setState({logoTaps:0,showEasterEgg:true});return;} this.setState({logoTaps:taps}); this._logoTapTimer=setTimeout(()=>this.setState({logoTaps:0}),1200); }
 
   async api(path,options={}){
@@ -511,23 +436,23 @@ class Component extends DCLogic {
       this.setState({session,branchId:membership.branch_id,rol:roleName,route:membership.role==='kitchen'?'cocina':'pedidos',live:true});
       await this.loadLiveOrders(session.access_token,membership.branch_id);
       await this.loadSettings(session.access_token,membership.branch_id);
-      clearInterval(this._livePoll); this._livePoll=setInterval(()=>this.loadLiveOrders(),10000);
+      clearInterval(this._livePoll); this._livePoll=setInterval(()=>{this.loadLiveOrders();if(['caja','repartidores'].includes(this.state.route))this.loadSettings();},10000);
       if(notify)this.toast('Sesión real iniciada');
     }catch(error){localStorage.removeItem('donLuisStaffSession');this.setState({session:null,live:false,rol:null});if(notify)this.toast(error.message);}
   }
   async loadLiveOrders(token=this.state.session?.access_token,branchId=this.state.branchId){
     if(!token||!branchId)return;
     try{
-      const select='id,folio,channel,fulfillment_type,status,payment_method,payment_status,guest_name,guest_phone,delivery_address,table_number,total,loyalty_points_redeemed,loyalty_discount,created_at,promised_at,scheduled_for,customer_notes,cancellation_reason,is_demo,assigned_driver_user_id,order_items(product_name,quantity,notes,line_total)';let rows=[],offset=0,page=[];do{page=await this.api('/rest/v1/orders?branch_id=eq.'+branchId+'&select='+select+'&order=created_at.desc&limit=1000&offset='+offset,{token});rows.push(...page);offset+=page.length;}while(page.length===1000);
+      const select='id,folio,channel,fulfillment_type,status,payment_method,payment_status,guest_name,guest_phone,delivery_address,table_number,total,loyalty_points_redeemed,loyalty_discount,created_at,completed_at,promised_at,scheduled_for,customer_notes,cancellation_reason,is_demo,assigned_driver_user_id,order_items(product_name,quantity,notes,line_total)';let rows=[],offset=0,page=[];do{page=await this.api('/rest/v1/orders?branch_id=eq.'+branchId+'&select='+select+'&order=created_at.desc&limit=1000&offset='+offset,{token});rows.push(...page);offset+=page.length;}while(page.length===1000);
       const pendingIds=new Set(rows.filter(o=>o.status==='pending_acceptance').map(o=>o.id));
       if(this._knownPendingIds){const hasNew=[...pendingIds].some(id=>!this._knownPendingIds.has(id));if(hasNew)this.playNewOrderSound();}
-      this._knownPendingIds=pendingIds;this._orders=rows.map(o=>this.mapRemoteOrder(o)); this.forceUpdate();
-    }catch(error){console.error(error);}
+      this._orderLoadError=false;this._knownPendingIds=pendingIds;this._orders=rows.map(o=>this.mapRemoteOrder(o)); this.forceUpdate();
+    }catch(error){console.error(error);if(!this._orderLoadError)this.toast('No se actualizaron los pedidos. Revisa la conexión; volveremos a intentar.');this._orderLoadError=true;}
   }
   async loadSettings(token=this.state.session?.access_token,branchId=this.state.branchId){
     if(!token||!branchId)return;
     try{
-      const [settings,products,categories,zones,rules,staff,resenas,ingredients,movements,recipes,shifts,cashMovements,purchases,suppliers,marketing,combos,rewards,liquidaciones,driverAssignments,accounts,interes]=await Promise.all([
+      const [settings,products,categories,zones,rules,staff,resenas,shifts,cashMovements,marketing,combos,rewards,liquidaciones,driverAssignments,accounts,interes]=await Promise.all([
         this.api('/rest/v1/business_settings?branch_id=eq.'+branchId+'&select=*',{token}),
         this.api('/rest/v1/products?branch_id=eq.'+branchId+'&select=*&order=sort_order,name',{token}),
         this.api('/rest/v1/categories?branch_id=eq.'+branchId+'&select=*&order=sort_order',{token}),
@@ -535,13 +460,8 @@ class Component extends DCLogic {
         this.api('/rest/v1/loyalty_rules?branch_id=eq.'+branchId+'&select=*&limit=1',{token}).catch(()=>[]),
         this.api('/functions/v1/staff-users?branch_id='+branchId,{token}).catch(()=>({users:[]})),
         this.api('/rest/v1/order_reviews?branch_id=eq.'+branchId+'&select=id,rating,comment,display_name,is_published,created_at&order=created_at.desc&limit=60',{token}).catch(()=>[]),
-        this.api('/rest/v1/ingredients?branch_id=eq.'+branchId+'&is_active=eq.true&select=id,name,unit,current_cost,inventory_stocks(quantity,minimum_quantity)&order=name',{token}).catch(()=>[]),
-        this.api('/rest/v1/inventory_movements?branch_id=eq.'+branchId+'&select=id,ingredient_id,movement_type,quantity,unit_cost,reason,created_at,ingredients(name,unit)&order=created_at.desc&limit=100',{token}).catch(()=>[]),
-        this.api('/rest/v1/recipes?select=product_id,ingredient_id,quantity,products!inner(branch_id,name,price),ingredients(name,unit,current_cost)&products.branch_id=eq.'+branchId,{token}).catch(()=>[]),
         this.api('/rest/v1/cash_shifts?branch_id=eq.'+branchId+'&select=*&order=opened_at.desc&limit=20',{token}).catch(()=>[]),
         this.api('/rest/v1/cash_movements?branch_id=eq.'+branchId+'&select=*&order=created_at.desc&limit=200',{token}).catch(()=>[]),
-        this.api('/rest/v1/purchase_orders?branch_id=eq.'+branchId+'&select=*,suppliers(name),purchase_order_items(description,quantity,unit,line_total)&order=created_at.desc&limit=50',{token}).catch(()=>[]),
-        this.api('/rest/v1/suppliers?branch_id=eq.'+branchId+'&select=*&order=name',{token}).catch(()=>[]),
         this.api('/rest/v1/marketing_content?branch_id=eq.'+branchId+'&select=*&order=sort_order',{token}).catch(()=>[]),
         this.api('/rest/v1/combos?branch_id=eq.'+branchId+'&select=*&order=sort_order',{token}).catch(()=>[]),
         this.api('/rest/v1/loyalty_rewards?branch_id=eq.'+branchId+'&select=*&order=sort_order',{token}).catch(()=>[]),
@@ -550,7 +470,7 @@ class Component extends DCLogic {
         this.api('/rest/v1/rpc/admin_list_active_accounts',{method:'POST',token,body:JSON.stringify({target_branch_id:branchId})}).catch(()=>[]),
         this.api('/rest/v1/prelaunch_whatsapp_taps?branch_id=eq.'+branchId+'&select=device_id,taps,first_tap_at,last_tap_at&order=first_tap_at.desc',{token}).catch(()=>[])
       ]);
-      this.setState({livePrelaunchTaps:interes||[],liveSettings:settings[0]||null,liveSettlements:liquidaciones||[],liveDriverAssignments:driverAssignments||[],liveAccounts:accounts||[],liveProducts:products,liveCategories:categories,liveZones:zones,liveLoyaltyRule:rules[0]||null,liveUsers:staff.users||[],liveReviews:resenas||[],liveIngredients:ingredients,liveInventoryMovements:movements,liveRecipes:recipes,liveCashShifts:shifts,liveCashMovements:cashMovements,livePurchases:purchases,liveSuppliers:suppliers,liveMarketing:marketing,liveCombos:combos,liveRewards:rewards});
+      this.setState({livePrelaunchTaps:interes||[],liveSettings:settings[0]||null,liveSettlements:liquidaciones||[],liveDriverAssignments:driverAssignments||[],liveAccounts:accounts||[],liveProducts:products,liveCategories:categories,liveZones:zones,liveLoyaltyRule:rules[0]||null,liveUsers:staff.users||[],liveReviews:resenas||[],liveCashShifts:shifts,liveCashMovements:cashMovements,liveMarketing:marketing,liveCombos:combos,liveRewards:rewards});
     }catch(error){console.error(error);this.toast('No se pudo actualizar la configuración');}
   }
   // Cerrar una liquidación significa que caja ya recibió el efectivo.
@@ -562,7 +482,7 @@ class Component extends DCLogic {
         body:JSON.stringify({status:'settled',settled_at:new Date().toISOString(),
           settled_by:this.state.session?.user?.id||null})});
       const l=(this.state.liveSettlements||[]).map(x=>x.id===id?{...x,status:'settled'}:x);
-      this.setState({liveSettlements:l});
+      this.setState({liveSettlements:l});await this.loadSettings();
       this.toast('Liquidación cerrada');
     }catch(error){this.toast(error.message||'No se pudo cerrar la liquidación');}
   }
@@ -763,17 +683,19 @@ class Component extends DCLogic {
       await this.loadSettings();
     }catch(error){this.toast(error.message);}
   }
+  shiftCashSales(shift){if(!shift)return 0;const start=new Date(shift.opened_at).getTime(),end=shift.closed_at?new Date(shift.closed_at).getTime():Infinity;return this.orders.filter(o=>!o.isDemo&&o.estado==='completado'&&o.pago.metodo==='efectivo'&&o.pago.estado==='pagado'&&o.canal!=='domicilio'&&new Date(o.completedAt).getTime()>=start&&new Date(o.completedAt).getTime()<=end).reduce((n,o)=>n+this.itemTotal(o),0)+(this.state.liveSettlements||[]).filter(l=>l.status==='settled'&&new Date(l.settled_at).getTime()>=start&&new Date(l.settled_at).getTime()<=end).reduce((n,l)=>n+Number(l.cash_amount||0),0);}
+  shiftExpected(shift){if(!shift)return 0;if(shift.status==='closed')return Number(shift.expected_cash||0);return Number(shift.opening_amount||0)+this.shiftCashSales(shift)+(this.state.liveCashMovements||[]).filter(m=>m.cash_shift_id===shift.id&&m.payment_method==='cash').reduce((n,m)=>n+(['expense','refund'].includes(m.movement_type)?-Number(m.amount):Number(m.amount)),0);}
   async cashAction(){
     const open=(this.state.liveCashShifts||[]).find(s=>s.status==='open');
     try{
       if(!open){
-        const amount=Number(window.prompt('Efectivo inicial de caja','0'));if(!Number.isFinite(amount)||amount<0)return this.toast('Monto no válido');
+        const input=window.prompt('Efectivo inicial de caja','0');if(input===null)return;const amount=Number(input);if(!Number.isFinite(amount)||amount<0)return this.toast('Monto no válido');
         await this.api('/rest/v1/cash_shifts',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({branch_id:this.state.branchId,opened_by:this.state.session.user.id,opening_amount:amount,status:'open'})});
         await this.loadSettings();return this.toast('Caja abierta correctamente');
       }
-      const sales=this.orders.filter(o=>o.estado==='completado'&&o.pago.metodo==='efectivo').reduce((n,o)=>n+this.itemTotal(o),0);
+      const sales=this.shiftCashSales(open);
       const movements=(this.state.liveCashMovements||[]).filter(m=>m.cash_shift_id===open.id&&m.payment_method==='cash').reduce((n,m)=>n+(m.movement_type==='expense'||m.movement_type==='refund'?-Number(m.amount):Number(m.amount)),0);
-      const expected=Number(open.opening_amount||0)+sales+movements;const counted=Number(window.prompt('Efectivo contado al cerrar',String(expected)));if(!Number.isFinite(counted)||counted<0)return this.toast('Monto no válido');
+      const expected=Number(open.opening_amount||0)+sales+movements;const input=window.prompt('Efectivo contado al cerrar',String(expected));if(input===null)return;const counted=Number(input);if(!Number.isFinite(counted)||counted<0)return this.toast('Monto no válido');
       const notes=window.prompt('Notas del corte (opcional)','')||null;
       await this.api('/rest/v1/cash_shifts?id=eq.'+open.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({closed_by:this.state.session.user.id,closed_at:new Date().toISOString(),expected_cash:expected,counted_cash:counted,status:'closed',notes})});
       await this.loadSettings();this.toast('Corte de caja guardado');
@@ -785,24 +707,18 @@ class Component extends DCLogic {
     const amount=Number(window.prompt('Monto','0'));if(!Number.isFinite(amount)||amount<=0)return this.toast('Monto no válido');const description=window.prompt('Concepto')?.trim();if(!description)return;
     try{await this.api('/rest/v1/cash_movements',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({branch_id:this.state.branchId,cash_shift_id:shift.id,movement_type,payment_method:'cash',amount,description,created_by:this.state.session.user.id})});await this.loadSettings();this.toast('Movimiento registrado');}catch(error){this.toast(error.message);}
   }
-  async inventoryAdjustment(){
-    const ingredients=this.state.liveIngredients||[];if(!ingredients.length)return this.toast('Primero agrega insumos a inventario');
-    const ingredient=ingredients[Number(window.prompt(ingredients.map((x,i)=>(i+1)+'. '+x.name+' ('+x.unit+')').join('\n')+'\n\nNúmero de insumo'))-1];if(!ingredient)return this.toast('Insumo no válido');
-    const quantity=Number(window.prompt('Cantidad. Usa positivo para entrada y negativo para salida','0'));if(!Number.isFinite(quantity)||quantity===0)return this.toast('Cantidad no válida');const reason=window.prompt('Motivo del ajuste')?.trim();if(!reason)return;
-    try{await this.api('/rest/v1/inventory_movements',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({branch_id:this.state.branchId,ingredient_id:ingredient.id,movement_type:'adjustment',quantity,reason,created_by:this.state.session.user.id})});await this.loadSettings();this.toast('Inventario actualizado');}catch(error){this.toast(error.message);}
-  }
   exportReports(orders){
     const esc=value=>'"'+String(value??'').replace(/"/g,'""')+'"';const rows=[['Folio','Fecha','Canal','Cliente','Total'],...orders.map(o=>[o.folio,o.createdAt||'',o.canal,o.cliente,this.itemTotal(o)])];const csv='\ufeff'+rows.map(r=>r.map(esc).join(',')).join('\n');const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='ventas-don-luis-'+new Date().toISOString().slice(0,10)+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);this.toast('Reporte exportado');
   }
   mapRemoteOrder(o){
-    const status={pending_acceptance:'nuevo',confirmed:'aceptado',preparing:'preparando',ready:'listo',assigned:'listo',on_the_way:'en_camino',delivered:'completado',rejected:'rechazado',cancelled:'cancelado'}[o.status]||o.status;
+    const status={pending_acceptance:'nuevo',confirmed:'aceptado',preparing:'preparando',ready:'listo',assigned:'listo',on_the_way:'en_camino',delivered:'completado',rejected:'rechazado',cancelled:'cancelado',failed_delivery:'listo'}[o.status]||o.status;
     const canal=o.fulfillment_type==='delivery'?'domicilio':o.fulfillment_type==='dine_in'?'establecimiento':(o.channel==='whatsapp'?'whatsapp':'recoger');
     const created=new Date(o.created_at); const min=Math.max(0,Math.floor((Date.now()-created.getTime())/60000));
     const addr=o.delivery_address||{}; const dir=canal==='domicilio'?[addr.street,addr.exterior_number,addr.neighborhood].filter(Boolean).join(' '):(canal==='establecimiento'?'Mesa '+(o.table_number||''):'Recoger en sucursal');
     const scheduledAt=o.scheduled_for||null;
     const programadoTxt=scheduledAt?'Programado: '+new Intl.DateTimeFormat('es-MX',{timeZone:'America/Mexico_City',weekday:'short',day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}).format(new Date(scheduledAt)):'';
     const puntos=Number(o.loyalty_points_redeemed)||0,metodo=o.payment_method==='transfer'?'transferencia':o.payment_method==='card_present'?'tarjeta':o.payment_method==='loyalty_points'?'puntos':'efectivo';
-    return {id:o.id,remoteStatus:o.status,assignedDriver:o.assigned_driver_user_id,createdAt:o.created_at,scheduledAt,programadoTxt,folio:'DL-'+o.folio,canal,estado:status,min,cliente:o.guest_name||(canal==='establecimiento'?'Mesa '+(o.table_number||''):'Cliente'),tel:o.guest_phone||'—',dir,notaPago:o.customer_notes||'',rechazoMotivo:o.cancellation_reason||'',pago:{metodo,puntos,descuentoPuntos:Number(o.loyalty_discount)||0,estado:o.payment_status==='paid'?'pagado':o.payment_status==='verification_pending'?'por_verificar':'pendiente'},items:(o.order_items||[]).map(i=>({q:i.quantity,nombre:i.product_name,nota:i.notes||'',lineTotal:Number(i.line_total)})),total:Number(o.total),tiempo:o.promised_at?Math.max(0,Math.round((new Date(o.promised_at)-created)/60000)):null};
+    return {id:o.id,remoteStatus:o.status,assignedDriver:o.status==='failed_delivery'?null:o.assigned_driver_user_id,isDemo:o.is_demo,createdAt:o.created_at,completedAt:o.completed_at,scheduledFor:o.scheduled_for,scheduledAt,programadoTxt,folio:'DL-'+o.folio,canal,estado:status,min,cliente:o.guest_name||(canal==='establecimiento'?'Mesa '+(o.table_number||''):'Cliente'),tel:o.guest_phone||'—',dir,notaPago:o.status==='failed_delivery'?'Incidencia de entrega · revisar y reasignar':o.customer_notes||'',rechazoMotivo:o.cancellation_reason||'',pago:{metodo,puntos,descuentoPuntos:Number(o.loyalty_discount)||0,estado:o.payment_status==='paid'?'pagado':o.payment_status==='verification_pending'?'por_verificar':'pendiente'},items:(o.order_items||[]).map(i=>({q:i.quantity,nombre:i.product_name,nota:i.notes||'',lineTotal:Number(i.line_total)})),total:Number(o.total),tiempo:o.promised_at?Math.max(0,Math.round((new Date(o.promised_at)-created)/60000)):null};
   }
   async patchOrder(o,changes,success){
     try{await this.api('/rest/v1/orders?id=eq.'+o.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(changes.remote||{})});await this.loadLiveOrders();this.toast(success);}catch(error){this.toast(error.message);}
@@ -822,9 +738,7 @@ class Component extends DCLogic {
     const o=this.state.asignarFor; if(!o||this.state.asignando)return;
     this.setState({asignando:true});
     try{
-      const yo=this.state.session?.user?.id;
-      await this.api('/rest/v1/driver_assignments',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({order_id:o.id,driver_user_id:driverUserId,assigned_by:yo,status:'assigned'})});
-      await this.api('/rest/v1/orders?id=eq.'+o.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({status:'assigned',assigned_driver_user_id:driverUserId})});
+      await this.api('/rest/v1/rpc/assign_delivery',{method:'POST',body:JSON.stringify({p_order_id:o.id,p_driver_id:driverUserId})});
       const quien=this.repartidores.find(r=>r.userId===driverUserId)?.nombre||'el repartidor';
       this.setState({asignarFor:null,asignando:false});
       await this.loadLiveOrders(); this.toast(o.folio+' asignado a '+quien);
@@ -870,6 +784,7 @@ class Component extends DCLogic {
     establecimiento:{txt:'En mesa',c:'#10603A',bg:'#eaf4ec',icon:'M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2M3 9v8M21 9v8M6 17v3M18 17v3'},
     whatsapp:{txt:'WhatsApp',c:'#128C4B',bg:'#e4f7ec',icon:'M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2z'},
   }[c]; }
+  confirmPayment(o){if(this.state.rol==='Cocina'||o.pago.estado==='pagado')return;if(!window.confirm('¿Ya recibiste y verificaste el pago de '+o.folio+' por '+this.MXN(o.total)+'?'))return;this.patchOrder(o,{remote:{payment_status:'paid'}},'Pago confirmado');}
   pagoMeta(p){ if(p.metodo==='puntos')return{txt:'Pagado con puntos',c:'#10603A'};if(p.estado==='pagado')return{txt:'Pagado',c:'#10603A'}; if(p.estado==='por_verificar')return{txt:'Transf. por verificar',c:'#E0A526'}; return{txt:p.puntos?'Por cobrar · '+p.puntos+' pts aplicados':'Por cobrar',c:'#b23a32'}; }
 
   // acciones
@@ -890,14 +805,13 @@ class Component extends DCLogic {
   get nav(){ return [
     {id:'pedidos',label:'Centro de pedidos',short:'Pedidos',icon:'M9 2h6a2 2 0 0 1 2 2v0H7a2 2 0 0 1 2-2zM7 4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2M9 12h6M9 16h4'},
     {id:'cocina',label:'Cocina',short:'Cocina',icon:'M8 3v6M12 3v6M10 9v12M17 3c-1.5 0-3 1.5-3 4v5h3zM17 12v9'},
-    {id:'inventario',label:'Inventario',short:'Invent.',icon:'M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3M21 8H3M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8'},
     {id:'reportes',label:'Reportes',short:'Reportes',icon:'M3 3v18h18M7 14l4-4 3 3 5-6'},
     {id:'config',label:'Configuración',short:'Config',icon:'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 0 1-4 0v-.1A1.6 1.6 0 0 0 6.6 19l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 4 12.6H3.9a2 2 0 0 1 0-4H4a1.6 1.6 0 0 0 1.5-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 11 3.9V3.9a2 2 0 0 1 4 0V4a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V12a1.6 1.6 0 0 0 1.5 1h.1a2 2 0 0 1 0 4H21a1.6 1.6 0 0 0-1.5 1z'},
   ]; }
   rolNav(){ const perms={
-    'Dueño':['pedidos','cocina','inventario','reportes','config'],
-    'Administrador':['pedidos','cocina','inventario','reportes','config'],
-    'Caja':['pedidos','reportes','inventario'],
+    'Dueño':['pedidos','cocina','reportes','config'],
+    'Administrador':['pedidos','cocina','reportes','config'],
+    'Caja':['pedidos','reportes'],
     'Cocina':['cocina'],
     'Mesero':['pedidos','cocina'],
   }; return perms[this.state.rol]||['pedidos']; }
@@ -906,7 +820,7 @@ class Component extends DCLogic {
     const vw=this.state.vw, phone=vw>0&&vw<820, route=this.state.route;
     const allowed=this.rolNav();
     const cur=this.nav.find(n=>n.id===route);
-    const subs={pedidos:'Todos los canales en un solo lugar',cocina:'Tablero de preparación',inventario:'Existencias y recetas',reportes:'Ventas, cortes y desempeño',config:'Negocio, horarios y usuarios'};
+    const subs={pedidos:'Todos los canales en un solo lugar',cocina:'Tablero de preparación',reportes:'Ventas, cortes y desempeño',config:'Negocio, horarios y usuarios'};
     const nuevosCount=this.orders.filter(o=>o.estado==='nuevo').length;
     const navItems=this.nav.filter(n=>allowed.includes(n.id)).map(n=>{
       const active=n.id===route; const badge=n.id==='pedidos'&&nuevosCount?String(nuevosCount):null;
@@ -965,8 +879,7 @@ class Component extends DCLogic {
       onCancelAsignar:()=>this.setState({asignarFor:null}),
       isPedidos: route==='pedidos',
       isCocina: route==='cocina',
-      isCaja: false,
-      isInventario: route==='inventario',
+
       isReportes: route==='reportes',
       prelanzHay: _taps.length>0,
       prelanzPersonas: _taps.length,
@@ -974,8 +887,8 @@ class Component extends DCLogic {
       prelanzHoy: _taps.filter(t=>new Date(t.first_tap_at).toDateString()===_hoy).length,
       prelanzUltima: _ultimo?new Date(_ultimo).toLocaleString('es-MX',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'—',
       isConfig: route==='config',
-      isOtro: !['pedidos','cocina','inventario','reportes','config'].includes(route),
-      ...this.vmPedidos(), ...this.vmCocina(), ...this.vmCaja(phone), ...this.vmInventario(), ...this.vmReportes(phone), ...this.vmConfig(),
+      isOtro: !['pedidos','cocina','reportes','config'].includes(route),
+      ...this.vmPedidos(), ...this.vmCocina(), ...this.vmCaja(phone), ...this.vmReportes(phone), ...this.vmConfig(),
     };
   }
 
@@ -984,9 +897,9 @@ class Component extends DCLogic {
     const cocinables=this.orders.filter(o=>['nuevo','aceptado','preparando','listo','rechazado'].includes(o.estado));
     const board=cols.map(([key,title,color])=>{
       const list=cocinables.filter(o=>o.estado===key).map(o=>{
-        const cm=this.canalMeta(o.canal); const late=o.min>15&&key!=='listo'; const prio=late||o.canal==='domicilio';
-        return {folio:o.folio,mesaTxt:o.canal==='establecimiento'?o.cliente:cm.txt,minTxt:o.min===0?'ahora':o.min+' min',late,prio,programadoTxt:o.programadoTxt,
-          promTxt:!o.scheduledAt&&o.tiempo?('promesa '+o.tiempo+' min'):'',
+        const cm=this.canalMeta(o.canal); const late=(!o.scheduledFor||new Date(o.scheduledFor)<=new Date())&&o.min>15&&key!=='listo'; const prio=late||o.canal==='domicilio';
+        return {folio:o.folio,mesaTxt:o.canal==='establecimiento'?o.cliente:cm.txt,programadoTxt:o.programadoTxt,minTxt:o.min===0?'ahora':o.min+' min',late,prio,
+          promTxt:o.scheduledFor?'Programado · '+new Date(o.scheduledFor).toLocaleString('es-MX',{timeZone:'America/Mexico_City',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):o.tiempo?('promesa '+o.tiempo+' min'):'',
           items:o.rechazoMotivo?[...o.items,{q:'',nombre:'Motivo: '+o.rechazoMotivo,nota:''}]:o.items,
           canAvanzar:!['listo','rechazado'].includes(key), canRetro:false,
           nextTxt:{nuevo:'Confirmar',aceptado:'Empezar',preparando:'¡Lista!'}[key]||'Avanzar',
@@ -1030,22 +943,8 @@ class Component extends DCLogic {
       });
     const cashTotal=hoy.filter(o=>o.pago.metodo==='efectivo').reduce((n,o)=>n+this.itemTotal(o),0),opening=Number(shift?.opening_amount||0),counted=Number(shift?.counted_cash||0);
     return {cajaCanales:canalVentas, cajaMetodos:metodos, cajaCorte:corte, cajaReps:repartidores,
-      cajaEsperado:this.MXN(opening+cashTotal), cajaRecibido:this.MXN(counted), cajaDif:this.MXN(counted-(opening+cashTotal)), cajaGrid:phone?'1fr':'1.4fr 1fr',
+      cajaEsperado:this.MXN(this.shiftExpected(shift)), cajaRecibido:this.MXN(counted), cajaDif:this.MXN(counted-this.shiftExpected(shift)), cajaGrid:phone?'1fr':'1.4fr 1fr',
       cashActionTxt:shift?.status==='open'?'Cerrar caja':'Abrir caja',onCashAction:()=>this.cashAction(),onCashMovement:()=>this.addCashMovement()};
-  }
-
-  vmInventario(){
-    const tab=this.state.invTab||'existencias';
-    const rows=(this.state.liveIngredients||[]).map(x=>{const stock=x.inventory_stocks?.[0]||{},today=(this.state.liveInventoryMovements||[]).filter(m=>m.ingredient_id===x.id&&new Date(m.created_at).toDateString()===new Date().toDateString()).reduce((n,m)=>n+Math.abs(Number(m.quantity)),0);return{n:x.name,u:x.unit,hay:Number(stock.quantity||0),dia:today,min:Number(stock.minimum_quantity||0)};}).map(i=>{const crit=i.hay<i.min;const st=crit?{t:'Crítico',c:'#b23a32',bg:'#fdeceb'}:(i.hay<=i.min?{t:'Al mínimo',c:'#8a6d12',bg:'#fdf6e3'}:{t:'Óptimo',c:'#10603A',bg:'#eaf4ec'});
-      return {...i,stT:st.t,stC:st.c,stBg:st.bg,barC:crit?'#D6453D':(i.hay<=i.min?'#E0A526':'#28A54C'),pct:Math.min(100,Math.round(i.hay/Math.max(i.min*2,1)*100))+'%'};});
-    const byProduct={};(this.state.liveRecipes||[]).forEach(r=>{const id=r.product_id;if(!byProduct[id])byProduct[id]={plato:r.products?.name||'Producto',venta:this.MXN(r.products?.price||0),cost:0,parts:[]};byProduct[id].cost+=Number(r.quantity)*Number(r.ingredients?.current_cost||0);byProduct[id].parts.push(r.quantity+' '+(r.ingredients?.unit||'')+' '+(r.ingredients?.name||'Insumo'));});
-    const recetas=Object.values(byProduct).map(r=>({plato:r.plato,venta:r.venta,costo:this.MXN(r.cost),ing:r.parts.join(' · ')}));
-    const movimientos=(this.state.liveInventoryMovements||[]).map(m=>{const positive=Number(m.quantity)>=0;return{tipo:{in:'Entrada',out:'Salida automática',waste:'Merma',adjustment:'Ajuste manual',reversal:'Reversión'}[m.movement_type]||m.movement_type,det:m.reason||m.ingredients?.name||'Movimiento',cant:(positive?'+':'')+m.quantity+' '+(m.ingredients?.unit||''),c:positive?'#10603A':(m.movement_type==='waste'?'#8a6d12':'#b23a32'),hora:new Date(m.created_at).toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'})};});
-    const compras=(this.state.livePurchases||[]).map(p=>({prov:p.suppliers?.name||'Proveedor',items:(p.purchase_order_items||[]).map(i=>i.description).join(', ')||p.notes||'Sin detalle',monto:this.MXN(p.total),estado:{draft:'Borrador',ordered:'Pedido',partially_received:'Recepción parcial',received:'Recibido',cancelled:'Cancelado'}[p.status]||p.status,c:p.status==='received'?'#10603A':p.status==='cancelled'?'#b23a32':'#8a6d12',bg:p.status==='received'?'#eaf4ec':p.status==='cancelled'?'#fdeceb':'#fdf6e3'}));
-    const tabs=[['existencias','Existencias'],['recetas','Recetas'],['movimientos','Movimientos'],['compras','Compras']].map(([k,l])=>({label:l,active:k===tab,onClick:()=>this.setState({invTab:k}),
-      style:`cursor:pointer;padding:9px 15px;border-radius:12px;font-weight:700;font-size:13.5px;border:none;${k===tab?'background:#10603A;color:#fff':'background:#fff;color:#5a4e35;border:1px solid #E6DCC5'}`}));
-    return {invTabs:tabs, invRows:rows, invRecetas:recetas, invMovs:movimientos, invCompras:compras,onInventoryAdjustment:()=>this.inventoryAdjustment(),
-      invExist:tab==='existencias', invRec:tab==='recetas', invMov:tab==='movimientos', invComp:tab==='compras'};
   }
 
   vmReportes(phone){
@@ -1116,10 +1015,10 @@ class Component extends DCLogic {
     const cols=[['nuevo','Nuevos','#D6453D'],['aceptado','Aceptados','#E0A526'],['preparando','En preparación','#1f6f8b'],['listo','Listos','#28A54C'],['en_camino','En camino','#7a5cc4'],['completado','Completados','#10603A'],['rechazado','Rechazados','#b23a32']];
     const pedidosCols=cols.map(([key,title,color])=>{
       const list=filt.filter(o=>o.estado===key).map(o=>{
-        const cm=this.canalMeta(o.canal), pm=this.pagoMeta(o.pago); const late=o.min>15&&['preparando','aceptado'].includes(key);
-        return {folio:o.folio,cliente:o.cliente,tel:o.tel,programadoTxt:o.programadoTxt,notaPago:o.notaPago,notaIcon:o.notaPago?.includes('AUTO PARA RECOGER:')?'🚗':'💵',minTxt:o.min===0?'ahora':'hace '+o.min+' min',late,
+        const cm=this.canalMeta(o.canal), pm=this.pagoMeta(o.pago); const late=(!o.scheduledFor||new Date(o.scheduledFor)<=new Date())&&o.min>15&&['preparando','aceptado'].includes(key);
+        return {folio:o.folio,cliente:o.cliente,tel:o.tel,notaPago:o.notaPago,notaIcon:o.notaPago?.includes('AUTO PARA RECOGER:')?'🚗':'💵',programadoTxt:o.programadoTxt,minTxt:o.min===0?'ahora':'hace '+o.min+' min',late,
           canalTxt:cm.txt,canalC:cm.c,canalBg:cm.bg,canalIcon:cm.icon,
-          items:o.rechazoMotivo?[...o.items,{q:'',nombre:'Motivo: '+o.rechazoMotivo,nota:'',lineTotal:0}]:o.items,totalTxt:this.MXN(this.itemTotal(o)),pagoTxt:pm.txt,pagoC:pm.c,
+          items:o.rechazoMotivo?[...o.items,{q:'',nombre:'Motivo: '+o.rechazoMotivo,nota:'',lineTotal:0}]:o.items,totalTxt:this.MXN(this.itemTotal(o)),pagoTxt:pm.txt+(o.pago.estado!=='pagado'&&this.state.rol!=='Cocina'?' · confirmar':''),pagoC:pm.c,paymentLocked:o.pago.estado==='pagado'||this.state.rol==='Cocina',onConfirmPayment:()=>this.confirmPayment(o),
           acciones:!['completado','rechazado'].includes(key)&&!(key==='listo'&&o.assignedDriver),esNuevo:key==='nuevo',hasWhatsApp:!!this.customerWhatsAppNumber(o.tel),
           primaryTxt:{nuevo:'Aceptar',aceptado:'Enviar a cocina',preparando:'Marcar listo',listo:o.canal==='domicilio'?'Asignar repartidor':'Entregar',en_camino:'Marcar entregado'}[key]||'Avanzar',
           primaryBg:key==='nuevo'?'#10603A':'#178049',

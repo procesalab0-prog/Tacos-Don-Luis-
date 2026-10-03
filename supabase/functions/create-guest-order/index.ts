@@ -31,7 +31,9 @@ Deno.serve(async (req: Request) => {
   if (req.method !== "POST") return reply(405, { error: "Método no permitido" });
 
   try {
-    const body = await req.json();
+    const raw = await req.text();
+    if (raw.length > 65536) return reply(413, {error: "El pedido es demasiado grande"});
+    const body = JSON.parse(raw);
     const requestId = String(body.requestId || "");
     const branchSlug = String(body.branchSlug || "punto-canada");
     const fulfillment = String(body.fulfillmentType || "");
@@ -42,7 +44,7 @@ Deno.serve(async (req: Request) => {
     const comboIds = Array.isArray(body.comboIds) ? body.comboIds.map(String).slice(0, 20) : [];
     const requestedLoyaltyPoints = Math.max(0, Math.floor(Number(body.loyaltyPoints) || 0));
 
-    if (!/^[0-9a-f-]{36}$/i.test(requestId)) return reply(400, { error: "Solicitud inválida" });
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(requestId)) return reply(400, { error: "Solicitud inválida" });
     if (!["pickup", "delivery"].includes(fulfillment)) return reply(400, { error: "Tipo de entrega inválido" });
     if (!["cash", "transfer", "card_present", "clip_simulated"].includes(paymentMethod)) return reply(400, { error: "Método de pago inválido" });
     if (!String(customer.name || "").trim() || !/\d{7,}/.test(String(customer.phone || "").replace(/\D/g, ""))) {
@@ -94,7 +96,7 @@ Deno.serve(async (req: Request) => {
 
     const { data: branch, error: branchError } = await supabase
       .from("branches")
-      .select("id,name,business_settings(*)")
+      .select("id,name,latitude,longitude,business_settings(*)")
       .eq("slug", branchSlug)
       .eq("is_active", true)
       .single();
@@ -113,12 +115,23 @@ Deno.serve(async (req: Request) => {
     if (fulfillment === "pickup" && !settings?.pickup_enabled) return reply(409, { error: "Los pedidos para recoger están pausados" });
     if (fulfillment === "delivery" && !settings?.delivery_enabled) return reply(409, { error: "Los envíos están pausados" });
 
+    const schedule = settings.weekly_schedule;
+    if(schedule && typeof schedule==="object"){
+      const at=new Date(scheduledForRaw||Date.now()),parts=Object.fromEntries(new Intl.DateTimeFormat("en-US",{timeZone:"America/Mexico_City",weekday:"short",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(at).map(p=>[p.type,p.value]));
+      const days=["sun","mon","tue","wed","thu","fri","sat"],day=days.indexOf(parts.weekday.toLowerCase().slice(0,3)),minutes=Number(parts.hour)*60+Number(parts.minute);
+      const tm=(v:any)=>{const m=String(v||"").match(/^(\d{2}):(\d{2})$/);return m?Number(m[1])*60+Number(m[2]):null};
+      const today=schedule[days[day]],previous=schedule[days[(day+6)%7]],open=tm(today?.open),close=tm(today?.close),prevOpen=tm(previous?.open),prevClose=tm(previous?.close);
+      const current=today?.enabled===true&&open!=null&&close!=null&&(close===open?true:close>open?minutes>=open&&minutes<close:minutes>=open);
+      const overnight=previous?.enabled===true&&prevOpen!=null&&prevClose!=null&&prevClose<prevOpen&&minutes<prevClose;
+      if(!current&&!overnight)return reply(409,{error:"Ese horario está fuera del servicio de la sucursal"});
+    }
     const normalized = items.map((item: any) => ({
       productId: String(item.productId || ""),
-      quantity: Math.max(1, Math.min(30, Number(item.quantity) || 1)),
+      quantity: Number(item.quantity),
       notes: String(item.notes || "").slice(0, 300),
       modifierOptionIds: Array.isArray(item.modifierOptionIds) ? item.modifierOptionIds.map(String) : [],
     }));
+    if (normalized.some((x:any) => !Number.isInteger(x.quantity) || x.quantity<1 || x.quantity>30 || x.modifierOptionIds.length>20 || new Set(x.modifierOptionIds).size!==x.modifierOptionIds.length)) return reply(400,{error:"Cantidad o modificaciones inválidas"});
     const productIds = [...new Set(normalized.map((x: any) => x.productId))];
     const { data: products, error: productError } = await supabase
       .from("products")
@@ -162,12 +175,26 @@ Deno.serve(async (req: Request) => {
     if (optionIds.length) {
       const { data, error } = await supabase
         .from("modifier_options")
-        .select("id,name,price_delta,is_available")
+        .select("id,name,price_delta,is_available,modifier_group_id")
         .in("id", optionIds);
       if (error || !data || data.length !== optionIds.length || data.some((o: any) => !o.is_available)) {
         return reply(400, { error: "Una modificación ya no está disponible" });
       }
       options = data;
+    }
+    const {data: productGroups,error: groupsError}=await supabase.from("product_modifier_groups").select("product_id,modifier_group_id,modifier_groups(id,branch_id,is_active,min_selections,max_selections)").in("product_id",productIds);
+    if(groupsError)throw groupsError;
+    for(const line of normalized){
+      const linked=(productGroups||[]).filter((g:any)=>g.product_id===line.productId);
+      for(const id of line.modifierOptionIds){
+        const option=options.find((o:any)=>o.id===id);
+        if(!linked.some((g:any)=>g.modifier_group_id===option?.modifier_group_id && g.modifier_groups?.is_active && g.modifier_groups?.branch_id===branch.id))return reply(400,{error:"Esa modificación no corresponde al producto"});
+      }
+      for(const link of linked){
+        const group:any=link.modifier_groups;if(!group?.is_active)continue;
+        const count=line.modifierOptionIds.filter((id:string)=>options.find((o:any)=>o.id===id)?.modifier_group_id===link.modifier_group_id).length;
+        if(count<Number(group.min_selections||0)||count>Number(group.max_selections||1))return reply(400,{error:"Revisa las opciones del producto"});
+      }
     }
     const optionMap = new Map(options.map((o: any) => [o.id, o]));
 
@@ -176,11 +203,21 @@ Deno.serve(async (req: Request) => {
     if (fulfillment === "delivery") {
       const { data, error } = await supabase
         .from("delivery_zones")
-        .select("id,fee,minimum_order,is_active")
+        .select("id,fee,minimum_order,is_active,min_distance_km,max_distance_km")
         .eq("id", body.deliveryZoneId)
         .eq("branch_id", branch.id)
         .single();
       if (error || !data?.is_active) return reply(400, { error: "Zona de entrega inválida" });
+      const lat=Number(body.address.latitude),lng=Number(body.address.longitude);
+      if(body.address.latitude==null || body.address.longitude==null || !Number.isFinite(lat)||!Number.isFinite(lng)||Math.abs(lat)>90||Math.abs(lng)>180) return reply(400,{error:"Marca el punto de entrega"});
+      if(branch.latitude==null||branch.longitude==null)return reply(409,{error:"La sucursal no tiene su ubicación configurada"});
+      const rad=(n:number)=>n*Math.PI/180;
+      const h=Math.sin(rad(lat-Number(branch.latitude))/2)**2+Math.cos(rad(Number(branch.latitude)))*Math.cos(rad(lat))*Math.sin(rad(lng-Number(branch.longitude))/2)**2;
+      const distance=6371*2*Math.atan2(Math.sqrt(h),Math.sqrt(Math.max(0,1-h)));
+      const {data: eligibleZones,error: zoneError}=await supabase.from("delivery_zones").select("id,max_distance_km").eq("branch_id",branch.id).eq("is_active",true).order("max_distance_km");
+      if(zoneError)throw zoneError;
+      const actualZone=eligibleZones?.find((z:any)=>distance<=Number(z.max_distance_km));
+      if(!actualZone||actualZone.id!==data.id)return reply(409,{error:"La zona no coincide con tu ubicación; vuelve a marcar el punto"});
       zone = data;
       deliveryFee = Number(data.fee);
     }
@@ -202,9 +239,7 @@ Deno.serve(async (req: Request) => {
     const scheduledFor = scheduledForRaw ? new Date(scheduledForRaw).toISOString() : null;
     const promisedAt = scheduledFor || new Date(Date.now() + eta * 60000).toISOString();
 
-    const { data: createdOrder, error: orderError } = await supabase
-      .from("orders")
-      .insert({
+    const orderPayload = {
         client_request_id: requestId,
         tracking_token_hash: trackingTokenHash,
         branch_id: branch.id,
@@ -225,8 +260,8 @@ Deno.serve(async (req: Request) => {
           exterior_number: String(body.address.exteriorNumber || "").slice(0, 30),
           neighborhood: String(body.address.neighborhood || "").slice(0, 120),
           references: String(body.address.references || "").slice(0, 300),
-          latitude: body.address.latitude || null,
-          longitude: body.address.longitude || null,
+          latitude: body.address.latitude ?? null,
+          longitude: body.address.longitude ?? null,
         } : null,
         delivery_zone_id: zone?.id || null,
         customer_notes: String(paymentMethod === "clip_simulated" ? "PAGO CLIP SIMULADO · DEMO · " + (body.customerNotes || "") : (body.customerNotes || "")).slice(0, 300),
@@ -234,69 +269,11 @@ Deno.serve(async (req: Request) => {
         discount_total: comboDiscount,
         delivery_fee: deliveryFee,
         total,
-      })
-      .select("id,folio,public_code,status,total,promised_at,loyalty_points_redeemed,loyalty_discount")
-      .single();
-
-    if (orderError || !createdOrder) {
-      if (orderError?.code === "23505") {
-        const { data: duplicate } = await supabase.from("orders")
-          .select("id,folio,public_code,status,total,promised_at,loyalty_points_redeemed,loyalty_discount")
-          .eq("client_request_id", requestId).single();
-        if (duplicate) return reply(200, { order: duplicate, trackingToken: secureTrackingToken, duplicate: true });
-      }
-      throw orderError || new Error("No fue posible crear el pedido");
-    }
-    let order = createdOrder;
-
-    const orderItems = pricedItems.map((line: any) => ({
-      order_id: order.id,
-      product_id: line.product.id,
-      product_name: line.product.name,
-      unit_price: line.unitPrice,
-      quantity: line.quantity,
-      notes: line.notes || null,
-      line_total: line.lineTotal,
-    }));
-    const { data: insertedItems, error: itemsError } = await supabase
-      .from("order_items").insert(orderItems).select("id,product_id");
-    if (itemsError || !insertedItems) {
-      await supabase.from("orders").delete().eq("id", order.id);
-      throw itemsError || new Error("No fue posible guardar los productos");
-    }
-
-    const modifierRows: any[] = [];
-    insertedItems.forEach((saved: any) => {
-      const source = pricedItems.find((line: any) => line.product.id === saved.product_id);
-      source?.selected.forEach((option: any) => modifierRows.push({
-        order_item_id: saved.id,
-        modifier_option_id: option.id,
-        option_name: option.name,
-        price_delta: option.price_delta,
-      }));
-    });
-    if (modifierRows.length) await supabase.from("order_item_modifiers").insert(modifierRows);
-
-    await supabase.from("order_status_history").insert({
-      order_id: order.id,
-      from_status: null,
-      to_status: "pending_acceptance",
-      note: "Pedido recibido desde la web",
-    });
-
-    if (requestedLoyaltyPoints > 0 && customerId) {
-      const { data: pointsResult, error: pointsError } = await supabase.rpc(
-        "apply_loyalty_points_to_order",
-        { p_order_id: order.id, p_customer_id: customerId, p_requested_points: requestedLoyaltyPoints },
-      );
-      if (pointsError) {
-        await supabase.from("orders").delete().eq("id", order.id);
-        return reply(409, { error: pointsError.message || "No fue posible aplicar los puntos" });
-      }
-      order = { ...order, total: Number(pointsResult.total), loyalty_points_redeemed: Number(pointsResult.points_used), loyalty_discount: Number(pointsResult.discount) };
-    }
-
-    return reply(201, { order, trackingToken: secureTrackingToken });
+      };
+    const lines = pricedItems.map((line:any)=>({product_id:line.product.id,product_name:line.product.name,unit_price:line.unitPrice,quantity:line.quantity,notes:line.notes||null,line_total:line.lineTotal,modifiers:line.selected}));
+    const {data: result,error: transactionError}=await supabase.rpc("create_guest_order_atomic",{p_order:orderPayload,p_lines:lines,p_points:requestedLoyaltyPoints});
+    if(transactionError)return reply(409,{error:transactionError.message||"No se pudo registrar el pedido"});
+    return reply(result.duplicate?200:201,{...result,trackingToken:secureTrackingToken});
   } catch (error) {
     console.error(error);
     return reply(500, { error: "No pudimos registrar el pedido. Intenta nuevamente." });

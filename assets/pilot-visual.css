@@ -1,0 +1,45 @@
+/* Identidad Don Luis: papel cálido, tinta verde y acentos de taquería. */
+:root{--dl-ink:#164e36;--dl-paper:#fffcf5;--dl-border:#e4d9c3;--dl-ease:cubic-bezier(.2,.75,.3,1)}
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}
+button{touch-action:manipulation;transition:transform .16s var(--dl-ease),box-shadow .2s ease,filter .2s ease}
+button:active:not(:disabled){transform:translateY(1px) scale(.985)}
+button:disabled{cursor:wait;opacity:.6}
+button:focus-visible,a:focus-visible{outline:3px solid #dfa82c;outline-offset:3px}
+input:focus,textarea:focus,select:focus{outline:2px solid #10603a;outline-offset:2px}
+input,textarea,select{transition:border-color .18s ease,outline-color .18s ease}
+@media(hover:hover){button:hover:not(:disabled){filter:brightness(1.025);box-shadow:0 4px 12px #143d2712}}
+@keyframes dl-enter{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.order,.availability,.turn-card,.detail,.dl-field-row{animation:dl-enter .25s var(--dl-ease) both}
+.order{border-width:1px;border-radius:18px;box-shadow:0 3px 12px #34271508}
+.order.road{border-left:4px solid #307b98}
+.order-head b{letter-spacing:.01em}.address{line-height:1.55}
+.section-title{font-size:11px;letter-spacing:.08em}
+.shell{box-shadow:0 0 48px #3427150d;background:#f6f2e8}
+.login{background:radial-gradient(ellipse at 15% 0,#287747 0,transparent 50%),#104f34}
+.login .mark{background:transparent;border-radius:0;width:148px;height:148px;padding:0}
+.login-card{border-radius:22px;border-color:#ffffff35;box-shadow:0 14px 40px #06281728}
+.top{background:#104f34;box-shadow:0 3px 12px #143d2712}
+.tabs{background:#fffcf5;box-shadow:0 -4px 18px #34271507}
+.tab{border-radius:12px;transition:color .18s,background .18s}.tab.active{background:#edf2e7}
+.turn-card{background:#104f34;border:1px solid #ffffff18}
+.primary{box-shadow:0 3px 0 #082d1917}
+.dl-check,.check{opacity:.8}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+.dl-public-main h1{letter-spacing:-.025em;text-wrap:balance}
+.dl-public-main h2{letter-spacing:-.015em}
+.dl-public-main button{min-height:40px}
+.dl-public-main input{min-height:46px}
+.dl-public-main .dl-hero{border-radius:0 0 28px 28px;isolation:isolate}
+.dl-public-main .dl-hero>img{object-fit:cover!important}
+.dl-public-main .dl-hero>div:last-child{padding-bottom:32px!important}
+.dl-public-main .dl-hero button{box-shadow:0 4px 14px #09221418}
+@media(min-width:700px){.dl-public-main .dl-hero{aspect-ratio:auto!important}}
+
+.dl-staff-header{box-shadow:0 4px 14px #35271506}
+.dl-admin-main button{min-height:36px}
+.dl-admin-main input{min-height:44px}
+.dl-board-column{background:#f5efdf!important;border-color:#e4d8c0!important;box-shadow:0 3px 12px #34271505}
+.dl-board-head{font-family:'Fredoka',sans-serif;letter-spacing:.015em;min-height:48px}
+.dl-admin-main>div{animation:dl-enter .22s var(--dl-ease) both}
