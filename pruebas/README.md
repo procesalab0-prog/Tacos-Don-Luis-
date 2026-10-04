@@ -32,7 +32,7 @@ En admin ese mensaje no existía hasta 2.19.0.
 **4-seguimiento** — que un enlace de un pedido que no existe avise y limpie el
 token, y que una caída de red avise pero conserve el token y siga reintentando.
 
-## Tres trampas al escribir escenarios nuevos
+## Cuatro trampas al escribir escenarios nuevos
 
 - **El token de seguimiento debe ser hexadecimal.** `/^[a-f0-9]{64}$/`. Un token
   con otras letras se descarta antes de llamar al servidor, y la prueba mide
@@ -48,3 +48,9 @@ token, y que una caída de red avise pero conserve el token y siga reintentando.
   con la bandera apagada para poder ejercitar lo de abajo, que es el código que
   tiene que funcionar el día del lanzamiento. La pantalla de prelanzamiento en
   sí la cubre la prueba 1, que carga la página tal cual está.
+- **La entrada animada cambia tamaños por un instante.** Al abrir el cliente,
+  la pantalla de carga pasa al Hero con una animación de ~1.2 s y los botones
+  entran escalados. Si una prueba mide tamaños o posiciones en ese momento,
+  reporta botones de 27 px que en realidad miden lo normal. Esperar a que
+  `body` ya no tenga la clase `dl-intro` y a que `#dl-loading-screen` esté
+  oculto, como hace la prueba 1.

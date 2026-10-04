@@ -13,6 +13,10 @@ const ANCHOS=[320,390,430];
       await p.route(/fonts\.(googleapis|gstatic)\.com/,r=>r.abort());
       await p.goto('http://localhost:8850'+ruta,{waitUntil:'networkidle'}).catch(()=>{});
       await p.waitForTimeout(2200);
+      // La entrada animada (carga → Hero) escala los botones mientras entran;
+      // medirlos a media animación da tamaños falsos. Se espera a que termine.
+      await p.waitForFunction(() => !document.body.classList.contains('dl-intro') &&
+        (document.getElementById('dl-loading-screen')?.hidden ?? true), null, { timeout: 8000 }).catch(() => {});
       const d=await p.evaluate(()=>{
         const W=document.documentElement.clientWidth;
         const desb=[];
