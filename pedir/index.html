@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pide en Tacos Don Luis · Punto Cañada, León</title><meta name="description" content="Pide tacos, quesadillas y tortas de Tacos Don Luis. Pasa a recoger en Punto Cañada o pide a domicilio en la zona norte de León. Preparados al momento."><meta property="og:type" content="website"><meta property="og:site_name" content="Tacos Don Luis"><meta property="og:title" content="Pide en Tacos Don Luis · Punto Cañada"><meta property="og:description" content="Tacos, quesadillas y tortas hechas al momento. Recoge en Punto Cañada o pide a domicilio en la zona norte de León."><meta property="og:image" content="https://tacosdonluis.app/assets/hero-pedir.jpg"><meta property="og:image:alt" content="Tacos recién hechos de Tacos Don Luis"><meta property="og:url" content="https://tacosdonluis.app/pedir/"><meta property="og:locale" content="es_MX"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://tacosdonluis.app/assets/hero-pedir.jpg"><link rel="canonical" href="https://tacosdonluis.app/pedir/"><meta name="theme-color" content="#10603A"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Don Luis"><link rel="manifest" href="/pedir/manifest.webmanifest"><link rel="icon" href="/assets/pwa/pedir-192.png" type="image/png"><link rel="apple-touch-icon" href="/assets/pwa/pedir-192.png"><script>if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(console.error));</script><script>window.__resources={"https://unpkg.com/react@18.3.1/umd/react.production.min.js":"/assets/vendor/react-18.3.1.min.js","https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"/assets/vendor/react-dom-18.3.1.min.js"};</script><script src="../support.js" defer></script><style>
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="author" content="ProcesaLab"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pide en Tacos Don Luis · Punto Cañada, León</title><meta name="description" content="Pide tacos, quesadillas y tortas de Tacos Don Luis. Pasa a recoger en Punto Cañada o pide a domicilio en la zona norte de León. Preparados al momento."><meta property="og:type" content="website"><meta property="og:site_name" content="Tacos Don Luis"><meta property="og:title" content="Pide en Tacos Don Luis · Punto Cañada"><meta property="og:description" content="Tacos, quesadillas y tortas hechas al momento. Recoge en Punto Cañada o pide a domicilio en la zona norte de León."><meta property="og:image" content="https://tacosdonluis.app/assets/hero-pedir.jpg"><meta property="og:image:alt" content="Tacos recién hechos de Tacos Don Luis"><meta property="og:url" content="https://tacosdonluis.app/pedir/"><meta property="og:locale" content="es_MX"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://tacosdonluis.app/assets/hero-pedir.jpg"><link rel="canonical" href="https://tacosdonluis.app/pedir/"><meta name="theme-color" content="#10603A"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Don Luis"><link rel="manifest" href="/pedir/manifest.webmanifest"><link rel="icon" href="/assets/pwa/pedir-192.png" type="image/png"><link rel="apple-touch-icon" href="/assets/pwa/pedir-192.png"><script>if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(console.error));</script><script>window.__resources={"https://unpkg.com/react@18.3.1/umd/react.production.min.js":"/assets/vendor/react-18.3.1.min.js","https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"/assets/vendor/react-dom-18.3.1.min.js"};</script><script src="../support.js" defer></script><style>
   html,body{margin:0}
   #dl-loading-screen{position:fixed;inset:0;z-index:2147483647;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;padding:32px 24px;background:#F3F0E6;color:#10603A;text-align:center;opacity:1;transition:opacity .32s ease}
   #dl-loading-screen[hidden]{display:none}
@@ -34,12 +34,31 @@
   body.dl-intro [data-in-d="1"]{animation-delay:.30s} body.dl-intro [data-in-d="2"]{animation-delay:.38s}
   body.dl-intro [data-in-d="3"]{animation-delay:.46s} body.dl-intro [data-in-d="4"]{animation-delay:.54s}
   body.dl-intro [data-in-d="5"]{animation-delay:.62s} body.dl-intro [data-in-d="6"]{animation-delay:.70s}
+  /* Crédito «Diseño y desarrollo: ProcesaLab» (paquete oficial de ProcesaLab).
+     Las imágenes se usan como máscara para pintarlas con los colores de Don
+     Luis. Proporciones del paquete, sin tocar: palabra 1200×129 a 1em de alto,
+     engrane de 1.43em separado .46em; el engrane da una vuelta cada 9 s. */
+  .pl-credito{display:inline-block;font-size:12px;line-height:1.2}
+  .pl-credito a{display:inline-flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px 8px;min-height:44px;color:inherit;text-decoration:none}
+  .pl-credito .pl-logo{display:inline-flex;align-items:center;gap:.46em;font-size:11px;opacity:.85;transition:opacity .2s}
+  .pl-credito a:hover .pl-logo,.pl-credito a:focus-visible .pl-logo{opacity:1}
+  .pl-credito .pl-logo i{display:block;flex:none;-webkit-mask:var(--pl-m) center/contain no-repeat;mask:var(--pl-m) center/contain no-repeat}
+  .pl-credito .pl-palabra{--pl-m:url(/assets/brand/procesalab-palabra-blanco.png);width:9.302em;height:1em;background:var(--pl-palabra,#fff)}
+  .pl-credito .pl-engrane{--pl-m:url(/assets/brand/procesalab-engrane-blanco.png);width:1.43em;height:1.43em;background:var(--pl-engrane,#fff);animation:plEngrane 9s linear infinite}
+  @keyframes plEngrane{to{transform:rotate(360deg)}}
+  @media(prefers-reduced-motion:reduce){.pl-credito .pl-engrane{animation:none}}
+  .pl-credito.pl-oscuro{color:#9fc3a7;--pl-palabra:#F3F0E6;--pl-engrane:#F2C230}   /* sobre verde oscuro */
+  .pl-credito.pl-carga{color:#10603A;--pl-palabra:#10603A;--pl-engrane:#D6453D}     /* sobre crema */
+  .pl-credito.pl-carga span:first-child{opacity:.72}
+  .pl-credito.pl-carga .pl-logo{font-size:15px;opacity:1}
+  #dl-loading-screen .pl-credito{position:absolute;left:0;right:0;bottom:calc(14px + env(safe-area-inset-bottom));text-align:center;font-size:13px}
   .dl-intro-ring{position:fixed;z-index:2147483647;border:3px solid #F2C230;border-radius:50%;pointer-events:none;animation:dl-ring .55s cubic-bezier(.2,.75,.3,1) forwards}
 </style>
 <link rel="stylesheet" href="/assets/pilot-visual.css?v=pilot1"><script src="/assets/maps-config.js"></script><script src="/assets/google-maps.js"></script></head><body>
 <div id="dl-loading-screen" role="status" aria-live="polite" aria-atomic="true" hidden>
   <img src="../assets/logo-don-luis-oficial.png" alt="Tacos Don Luis" width="512" height="512" fetchpriority="high">
   <p>Lo bueno se está preparando<span aria-hidden="true"><span class="dl-loading-dot">.</span><span class="dl-loading-dot">.</span><span class="dl-loading-dot">.</span></span><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)">…</span></p>
+  <small class="pl-credito pl-carga"><a href="https://procesa-lab-web.vercel.app" target="_blank" rel="noopener" aria-label="Diseño y desarrollo: ProcesaLab"><span>Diseño y desarrollo:</span><span class="pl-logo" aria-hidden="true"><i class="pl-palabra"></i><i class="pl-engrane"></i></span></a></small>
 </div>
 <script>
 (() => {
@@ -188,7 +207,7 @@
             </sc-for>
           </div>
           <div style="font-size:12.5px;color:#bdd6c3;line-height:1.55">Punto Cañada, León, Gto.<br><a href="tel:+524775222095" style="color:#eaf3ec;font-weight:700;display:inline-flex;align-items:center;min-height:44px">Tel. 477 522 2095</a></div>
-          <a href="https://procesa-lab-web.vercel.app/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;min-height:44px;margin:0;color:#9fc3a7;font-size:10px;text-decoration:none;letter-spacing:.02em">By ProcesaLab</a>
+          <small class="pl-credito pl-oscuro"><a href="https://procesa-lab-web.vercel.app" target="_blank" rel="noopener" aria-label="Diseño y desarrollo: ProcesaLab"><span>Diseño y desarrollo:</span><span class="pl-logo" aria-hidden="true"><i class="pl-palabra"></i><i class="pl-engrane"></i></span></a></small>
         </div>
       </section>
     </sc-if>
@@ -351,7 +370,7 @@
               </sc-for>
             </div>
             <div style="display:flex;gap:14px;margin:16px 0;font-size:13px;font-weight:600"><button onClick="{{ onOpenPrivacidad }}" style="cursor:pointer;background:none;border:none;padding:12px 4px;min-height:44px;font-family:'Rubik',sans-serif;font-size:13px;font-weight:600;color:#eaf3ec;text-decoration:underline">Aviso de privacidad</button></div>
-            <div style="font-size:12px;color:#8bb193;line-height:1.5">Punto Cañada, León, Gto. · <a href="tel:+524775222095" style="color:#cfe3d3;display:inline-flex;align-items:center;min-height:44px;padding:2px 0">Tel. 477 522 2095</a><br>© 2026 Tacos Don Luis<br><a href="https://procesa-lab-web.vercel.app/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;min-height:44px;margin-top:3px;color:#9fc3a7;font-size:10px;text-decoration:none;letter-spacing:.02em">By ProcesaLab</a></div>
+            <div style="font-size:12px;color:#8bb193;line-height:1.5">Punto Cañada, León, Gto. · <a href="tel:+524775222095" style="color:#cfe3d3;display:inline-flex;align-items:center;min-height:44px;padding:2px 0">Tel. 477 522 2095</a><br>© 2026 Tacos Don Luis<br><small class="pl-credito pl-oscuro"><a href="https://procesa-lab-web.vercel.app" target="_blank" rel="noopener" aria-label="Diseño y desarrollo: ProcesaLab"><span>Diseño y desarrollo:</span><span class="pl-logo" aria-hidden="true"><i class="pl-palabra"></i><i class="pl-engrane"></i></span></a></small></div>
           </footer>
         </div>
       </sc-if>
